@@ -13,8 +13,8 @@ function TextImageBlock(rawProps: Record<string, unknown>) {
   const imagePosition = (rawProps.imagePosition as string) || 'right'
   const ctaLabel = rawProps.ctaLabel as string | undefined
   const ctaHref = rawProps.ctaHref as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   const isImageLeft = imagePosition === 'left'
 
@@ -25,7 +25,7 @@ function TextImageBlock(rawProps: Record<string, unknown>) {
           {/* Text Content */}
           <div className={isImageLeft ? 'md:order-2' : 'md:order-1'}>
             {heading && (
-              <h2 className="text-4xl md:text-5xl text-white mb-6 leading-tight">
+              <h2 className="text-4xl md:text-5xl text-base-content mb-6 leading-tight">
                 {heading}
                 {headingAccent && (
                   <>
@@ -37,7 +37,7 @@ function TextImageBlock(rawProps: Record<string, unknown>) {
             )}
 
             {text && (
-              <p className="text-lg leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg leading-relaxed mb-8" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {text}
               </p>
             )}
@@ -45,8 +45,7 @@ function TextImageBlock(rawProps: Record<string, unknown>) {
             {ctaLabel && ctaHref && (
               <Link
                 href={ctaHref}
-                className="inline-block px-8 py-3 rounded-md font-medium transition-transform hover:scale-105"
-                style={{ backgroundColor: accent, color: bg }}
+                className={`inline-block px-8 py-3 rounded-md font-medium transition-transform hover:scale-105{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
               >
                 {ctaLabel}
               </Link>
@@ -86,8 +85,8 @@ export const TextImageBlockDefinition: BlockDefinition = {
     imagePosition: 'right',
     ctaLabel: 'Learn More',
     ctaHref: '/features',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Heading', type: 'text' },

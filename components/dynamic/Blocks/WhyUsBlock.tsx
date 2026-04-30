@@ -19,9 +19,9 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
   const ctaHref = (rawProps.ctaHref as string) || '/contact'
   const imageUrl = rawProps.imageUrl as string | undefined
   const imageAlt = (rawProps.imageAlt as string) || ''
-  const bg = (rawProps.bgColor as string) || '#1f1d1d'
-  const cardBg = (rawProps.cardBgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let items: string[] = []
   try {
@@ -38,14 +38,14 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
         {(heading || heading2 || subtitle) && (
           <div className="text-center mb-20">
             {(heading || heading2) && (
-              <h2 className="text-4xl md:text-5xl text-white mb-6">
+              <h2 className="text-4xl md:text-5xl text-base-content mb-6">
                 {heading && heading}
                 {heading && heading2 && <br />}
                 {heading2 && heading2}
               </h2>
             )}
             {subtitle && (
-              <p className="text-xl max-w-3xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-xl max-w-3xl mx-auto" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -57,7 +57,7 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
           {/* Left */}
           <div>
             {(sectionTitle || sectionTitleAccent) && (
-              <h3 className="text-3xl text-white mb-8">
+              <h3 className="text-3xl text-base-content mb-8">
                 {sectionTitle}
                 {sectionTitleAccent && (
                   <> <span style={{ color: accent }}>{sectionTitleAccent}</span></>
@@ -77,7 +77,7 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
                       className="w-2 h-2 rounded-full flex-shrink-0"
                       style={{ backgroundColor: accent }}
                     />
-                    <p className="font-medium" style={{ color: 'rgba(255,255,255,0.9)' }}>
+                    <p className="font-medium" style={{ color: 'oklch(var(--bc) / 0.9)' }}>
                       {item}
                     </p>
                   </div>
@@ -86,7 +86,7 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
             )}
 
             {description && (
-              <p className="leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="leading-relaxed mb-6" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {description}
               </p>
             )}
@@ -94,8 +94,7 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
             {ctaLabel && (
               <Link
                 href={ctaHref}
-                className="inline-block px-8 py-4 rounded-md text-lg font-medium transition-all hover:scale-105"
-                style={{ backgroundColor: accent, color: bg }}
+                className={`inline-block px-8 py-4 rounded-md text-lg font-medium transition-all hover:scale-105{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
               >
                 {ctaLabel}
               </Link>
@@ -121,11 +120,11 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
               <div
                 className="w-full h-full flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(255,255,255,0.04)',
-                  border: '1px dashed rgba(255,255,255,0.1)',
+                  backgroundColor: 'oklch(var(--bc) / 0.04)',
+                  border: '1px dashed oklch(var(--bc) / 0.1)',
                 }}
               >
-                <span className="text-sm" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                <span className="text-sm" style={{ color: 'oklch(var(--bc) / 0.2)' }}>
                   Image URL not set
                 </span>
               </div>
@@ -167,9 +166,9 @@ export const WhyUsBlockDefinition: BlockDefinition = {
     imageUrl:
       'https://images.unsplash.com/photo-1692613018920-e7e17813da9e?auto=format&fit=crop&w=1080&q=80',
     imageAlt: 'Architectural technology visualization',
-    bgColor: '#1f1d1d',
-    cardBgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Top Heading Line 1', type: 'text' },

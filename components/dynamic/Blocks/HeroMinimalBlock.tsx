@@ -13,8 +13,8 @@ function HeroMinimalBlock(rawProps: Record<string, unknown>) {
   const title = (rawProps.title as string) || 'Section Title'
   const subtitle = rawProps.subtitle as string | undefined
   const align = (rawProps.align as string) || 'left'
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   const alignClass = align === 'center' ? 'text-center' : 'text-left'
   const maxWClass = align === 'center' ? 'max-w-3xl mx-auto' : 'max-w-3xl'
@@ -32,10 +32,10 @@ function HeroMinimalBlock(rawProps: Record<string, unknown>) {
             </p>
           )}
 
-          <h1 className="text-5xl md:text-6xl text-white mb-6">{title}</h1>
+          <h1 className="text-5xl md:text-6xl text-base-content mb-6">{title}</h1>
 
           {subtitle && (
-            <p className={`text-xl ${maxWClass}`} style={{ color: 'rgba(255,255,255,0.7)' }}>
+            <p className={`text-xl ${maxWClass}`} style={{ color: 'oklch(var(--bc) / 0.7)' }}>
               {subtitle}
             </p>
           )}
@@ -56,8 +56,8 @@ export const HeroMinimalBlockDefinition: BlockDefinition = {
     subtitle:
       'Exploring the future of digital transformation in architecture, engineering, construction, and operations.',
     align: 'left',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     badge: {

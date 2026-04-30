@@ -12,9 +12,9 @@ interface ResourceItem {
 function DownloadResourcesBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let resources: ResourceItem[] = []
   try {
@@ -29,16 +29,16 @@ function DownloadResourcesBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-6xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
-            {subtitle && <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>{subtitle}</p>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
+            {subtitle && <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>{subtitle}</p>}
           </div>
         )}
 
         <div className="grid md:grid-cols-3 gap-6">
           {resources.map((resource, i) => (
             <Link key={i} href={resource.href} className="rounded-lg p-6 hover:-translate-y-1 transition" style={{ backgroundColor: cardBg }}>
-              <h3 className="text-xl text-white font-bold mb-2">{resource.title}</h3>
-              {resource.description && <p style={{ color: 'rgba(255,255,255,0.7)' }}>{resource.description}</p>}
+              <h3 className="text-xl text-base-content font-bold mb-2">{resource.title}</h3>
+              {resource.description && <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{resource.description}</p>}
               <div className="mt-4 font-semibold" style={{ color: accent }}>Download / View →</div>
             </Link>
           ))}
@@ -56,9 +56,9 @@ export const DownloadResourcesBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Resources',
     subtitle: 'Guides, reports, and useful assets',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
     resources: JSON.stringify([
       { title: 'Security Whitepaper', href: '/resources/security-whitepaper', description: 'Enterprise security baseline and controls.' },
       { title: 'Platform Overview', href: '/resources/platform-overview', description: 'A concise overview of the product.' },

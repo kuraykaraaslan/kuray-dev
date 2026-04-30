@@ -1,6 +1,8 @@
 'use client'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { BlockDefinition } from '../types'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 // Matches Clients section:
 //   - Badge + heading
@@ -18,9 +20,9 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
   const heading = (rawProps.heading as string) || 'Trusted by Industry Leaders'
   const partnersLabel = rawProps.partnersLabel as string | undefined
   const partnersNote = rawProps.partnersNote as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#1f1d1d'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let testimonials: Testimonial[] = []
   try {
@@ -51,7 +53,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
               {badge}
             </p>
           )}
-          <h2 className="text-4xl md:text-5xl text-white">{heading}</h2>
+          <h2 className="text-4xl md:text-5xl text-base-content">{heading}</h2>
         </div>
 
         {/* Testimonials */}
@@ -69,34 +71,19 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
                 className="w-full max-w-4xl rounded-2xl p-10 relative"
                 style={{ backgroundColor: cardBg }}
               >
-                {/* Quote mark */}
-                <div
-                  className="text-5xl leading-none mb-6 opacity-40 font-serif"
-                  style={{ color: accent }}
-                >
-                  &ldquo;
-                </div>
-
                 {/* Stars */}
                 <div className="flex gap-1 mb-6">
                   {Array.from({ length: 5 }).map((_, si) => (
-                    <svg
-                      key={si}
-                      className="w-4 h-4"
-                      fill={accent}
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
+                    <FontAwesomeIcon key={si} icon={faStar} />
                   ))}
                 </div>
 
                 {/* Quote */}
                 <p
                   className="text-lg leading-relaxed mb-8 italic"
-                  style={{ color: 'rgba(255,255,255,0.8)' }}
+                  style={{ color: 'oklch(var(--bc) / 0.8)' }}
                 >
-                  &ldquo;{t.quote}&rdquo;
+                  {t.quote}
                 </p>
 
                 {/* Attribution */}
@@ -108,7 +95,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
                     {initials}
                   </div>
                   <div>
-                    <p className="text-white font-semibold">{t.name}</p>
+                    <p className="text-base-content font-semibold">{t.name}</p>
                     <p className="text-sm" style={{ color: accent }}>
                       {t.company}
                     </p>
@@ -125,7 +112,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
             {partnersLabel && (
               <p
                 className="text-sm uppercase tracking-widest mb-8"
-                style={{ color: 'rgba(255,255,255,0.4)' }}
+                style={{ color: 'oklch(var(--bc) / 0.4)' }}
               >
                 {partnersLabel}
               </p>
@@ -134,15 +121,15 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
               {partners.map((name) => (
                 <div
                   key={name}
-                  className="px-6 py-3 rounded-lg text-sm font-medium border border-white/10 hover:border-white/20 hover:text-white/70 transition-all"
-                  style={{ backgroundColor: cardBg, color: 'rgba(255,255,255,0.5)' }}
+                  className="px-6 py-3 rounded-lg text-sm font-medium border border-white/10 hover:border-white/20 hover:text-base-content/70 transition-all"
+                  style={{ backgroundColor: cardBg, color: 'oklch(var(--bc) / 0.5)' }}
                 >
                   {name}
                 </div>
               ))}
             </div>
             {partnersNote && (
-              <p className="mt-6 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <p className="mt-6 text-sm" style={{ color: 'oklch(var(--bc) / 0.3)' }}>
                 {partnersNote}
               </p>
             )}
@@ -176,9 +163,9 @@ export const TestimonialsBlockDefinition: BlockDefinition = {
     partnersLabel: 'Our Partners',
     partners: JSON.stringify(defaultPartners),
     partnersNote: '…and many more industry-leading organizations across 7 countries.',
-    bgColor: '#282626',
-    cardBgColor: '#1f1d1d',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
   },
   schema: {
     badge: { label: 'Badge (above heading)', type: 'text', placeholder: 'Our Clients' },

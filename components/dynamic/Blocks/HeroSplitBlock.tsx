@@ -22,8 +22,8 @@ function HeroSplitBlock(rawProps: Record<string, unknown>) {
   const imageUrl = rawProps.imageUrl as string | undefined
   const imageAlt = (rawProps.imageAlt as string) || title
   const imagePosition = (rawProps.imagePosition as string) || 'right'
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   const textCol = (
     <div>
@@ -33,22 +33,22 @@ function HeroSplitBlock(rawProps: Record<string, unknown>) {
         </p>
       )}
 
-      <h1 className="text-5xl md:text-6xl text-white mb-6 leading-tight">{title}</h1>
+      <h1 className="text-5xl md:text-6xl text-base-content mb-6 leading-tight">{title}</h1>
 
       {hook && (
-        <p className="text-2xl mb-6" style={{ color: 'rgba(255,255,255,0.8)' }}>
+        <p className="text-2xl mb-6" style={{ color: 'oklch(var(--bc) / 0.8)' }}>
           {hook}
         </p>
       )}
 
       {subheading && (
-        <p className="text-xl mb-4" style={{ color: 'rgba(255,255,255,0.7)' }}>
+        <p className="text-xl mb-4" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
           {subheading}
         </p>
       )}
 
       {description && (
-        <p className="leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
+        <p className="leading-relaxed mb-8" style={{ color: 'oklch(var(--bc) / 0.6)' }}>
           {description}
         </p>
       )}
@@ -59,7 +59,6 @@ function HeroSplitBlock(rawProps: Record<string, unknown>) {
             <Link
               href={primaryCtaHref}
               className="inline-block px-8 py-4 rounded-md text-lg font-medium transition-all hover:scale-105"
-              style={{ backgroundColor: accent, color: bg }}
             >
               {primaryCtaLabel}
             </Link>
@@ -67,8 +66,8 @@ function HeroSplitBlock(rawProps: Record<string, unknown>) {
           {secondaryCtaLabel && (
             <Link
               href={secondaryCtaHref}
-              className="inline-block px-8 py-4 border-2 rounded-md text-lg font-medium text-white transition-all hover:border-white/60"
-              style={{ borderColor: 'rgba(255,255,255,0.3)' }}
+              className="inline-block px-8 py-4 border-2 rounded-md text-lg font-medium text-base-content transition-all hover:border-white/60"
+              style={{ borderColor: 'oklch(var(--bc) / 0.3)' }}
             >
               {secondaryCtaLabel}
             </Link>
@@ -90,9 +89,9 @@ function HeroSplitBlock(rawProps: Record<string, unknown>) {
   ) : (
     <div
       className="h-[400px] md:h-[500px] rounded-lg flex items-center justify-center"
-      style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.15)' }}
+      style={{ backgroundColor: 'oklch(var(--bc) / 0.05)', border: '1px dashed oklch(var(--bc) / 0.15)' }}
     >
-      <span className="text-sm" style={{ color: 'rgba(255,255,255,0.25)' }}>
+      <span className="text-sm" style={{ color: 'oklch(var(--bc) / 0.25)' }}>
         Image URL not set
       </span>
     </div>
@@ -139,8 +138,8 @@ export const HeroSplitBlockDefinition: BlockDefinition = {
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1080&q=80',
     imageAlt: 'Product visualization',
     imagePosition: 'right',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     tagline: {

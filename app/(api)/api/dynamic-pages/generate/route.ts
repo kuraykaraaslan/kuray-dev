@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import AIPageGeneratorService from '@/services/AIPageGeneratorService'
+import AIPageGeneratorService from '@/services/DynamicPageService/AIPageGeneratorService'
 import DynamicPageService from '@/services/DynamicPageService'
-import UserSessionService from '@/services/AuthService/UserSessionService'
+import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 
 // Turns "facebook-landing-page" → "Create a landing page about: facebook landing page"
 // so the AI treats it as a topic, not a slug or filename.
@@ -16,7 +16,7 @@ function expandPrompt(raw: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    await UserSessionService.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })
+    await AuthMiddleware.authenticateUserByRequest({ request })
 
     const body = await request.json()
     const { prompt, save = false } = body as { prompt: string; save?: boolean }

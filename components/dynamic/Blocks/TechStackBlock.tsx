@@ -11,8 +11,8 @@ interface TechItem {
 function TechStackBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
 
   let technologies: TechItem[] = []
   try {
@@ -27,9 +27,9 @@ function TechStackBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -41,10 +41,10 @@ function TechStackBlock(rawProps: Record<string, unknown>) {
             <div key={i} className="rounded-lg p-6" style={{ backgroundColor: cardBg }}>
               <div className="flex items-center gap-4 mb-3">
                 {tech.icon && <span className="text-3xl">{tech.icon}</span>}
-                <h3 className="text-xl text-white font-bold">{tech.name}</h3>
+                <h3 className="text-xl text-base-content font-bold">{tech.name}</h3>
               </div>
               {tech.description && (
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>{tech.description}</p>
+                <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{tech.description}</p>
               )}
             </div>
           ))}
@@ -62,8 +62,8 @@ export const TechStackBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Technology Stack',
     subtitle: 'Built with modern, scalable tools',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
+    bgColor: '',
+    cardBgColor: '',
     technologies: JSON.stringify([
       { name: 'Next.js', icon: '▲', description: 'Fast, modern React applications' },
       { name: 'TypeScript', icon: 'TS', description: 'Type-safe development' },

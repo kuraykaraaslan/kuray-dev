@@ -18,9 +18,9 @@ interface TeamMember {
 function TeamMembersBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let members: TeamMember[] = []
   try {
@@ -35,9 +35,9 @@ function TeamMembersBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -63,13 +63,13 @@ function TeamMembersBlock(rawProps: Record<string, unknown>) {
               )}
 
               <div className="p-6">
-                <h3 className="text-xl text-white font-bold mb-1">{member.name}</h3>
+                <h3 className="text-xl text-base-content font-bold mb-1">{member.name}</h3>
                 <p className="text-sm mb-3" style={{ color: accent }}>
                   {member.title}
                 </p>
 
                 {member.bio && (
-                  <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                  <p className="text-sm mb-4" style={{ color: 'oklch(var(--bc) / 0.6)' }}>
                     {member.bio}
                   </p>
                 )}
@@ -110,9 +110,9 @@ export const TeamMembersBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Meet the Team',
     subtitle: 'Great people building great products',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
     members: JSON.stringify([
       {
         name: 'John Doe',

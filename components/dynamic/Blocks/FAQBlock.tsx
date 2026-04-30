@@ -35,9 +35,9 @@ function parseFaqs(value: unknown): FAQItem[] {
 function FAQBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   const faqs = useMemo(() => parseFaqs(rawProps.faqs), [rawProps.faqs])
 
@@ -52,13 +52,13 @@ function FAQBlock(rawProps: Record<string, unknown>) {
         {(heading || subtitle) && (
           <div className="text-center mb-16">
             {heading && (
-              <h2 className="text-4xl md:text-5xl text-white mb-4">
+              <h2 className="text-4xl md:text-5xl text-base-content mb-4">
                 {heading}
               </h2>
             )}
 
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -91,7 +91,7 @@ function FAQBlock(rawProps: Record<string, unknown>) {
                   }}
                   className="w-full px-6 py-4 flex items-center justify-between gap-4 hover:opacity-80 transition text-left"
                 >
-                  <h3 className="text-lg text-white font-medium">
+                  <h3 className="text-lg text-base-content font-medium">
                     {faq.question}
                   </h3>
 
@@ -116,7 +116,7 @@ function FAQBlock(rawProps: Record<string, unknown>) {
                       className="px-6 pb-4 pt-4 border-t"
                       style={{
                         borderColor: accent,
-                        color: 'rgba(255,255,255,0.7)',
+                        color: 'oklch(var(--bc) / 0.7)',
                       }}
                     >
                       {faq.answer}
@@ -140,9 +140,9 @@ export const FAQBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Frequently Asked Questions',
     subtitle: 'Find answers to common questions',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
     faqs: JSON.stringify([
       {
         question: 'What is this product?',

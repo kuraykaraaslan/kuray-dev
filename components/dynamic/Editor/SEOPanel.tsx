@@ -20,11 +20,6 @@ interface Props {
   onChangeMetadata: (v: MetadataFields) => void
 }
 
-const inputBase: React.CSSProperties = {
-  backgroundColor: '#282626',
-  border: '1px solid rgba(255,255,255,0.1)',
-}
-
 export default function SEOPanel({
   description,
   keywords,
@@ -53,14 +48,13 @@ export default function SEOPanel({
     onChangeMetadata({ ...metadata, [key]: value })
   }
 
+  const inputCls = 'w-full px-3 py-2 rounded-md text-sm text-base-content outline-none bg-base-300 border border-base-content/10'
+
   return (
-    <div
-      className="w-72 flex-shrink-0 flex flex-col border-l overflow-y-auto"
-      style={{ backgroundColor: '#1f1d1d', borderColor: 'rgba(255,255,255,0.08)' }}
-    >
-      <div className="px-4 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <p className="text-sm font-semibold text-white">SEO & Metadata</p>
-        <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
+    <div className="w-72 flex-shrink-0 flex flex-col border-l border-base-content/10 overflow-y-auto bg-base-200">
+      <div className="px-4 py-4 border-b border-base-content/10">
+        <p className="text-sm font-semibold text-base-content">SEO & Metadata</p>
+        <p className="text-xs mt-0.5 text-base-content/40">
           Search engines and social media preview settings.
         </p>
       </div>
@@ -68,7 +62,7 @@ export default function SEOPanel({
       <div className="p-4 space-y-5">
         {/* Meta Description */}
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <label className="block text-xs font-medium mb-1.5 text-base-content/55">
             Meta Description
           </label>
           <textarea
@@ -76,17 +70,16 @@ export default function SEOPanel({
             placeholder="Brief description for search engines…"
             rows={3}
             onChange={(e) => onChangeDescription(e.target.value)}
-            className="w-full px-3 py-2 rounded-md text-sm text-white outline-none resize-none"
-            style={inputBase}
+            className={`${inputCls} resize-none`}
           />
-          <p className="text-[11px] mt-1" style={{ color: description.length > 160 ? '#ff6b6b' : 'rgba(255,255,255,0.3)' }}>
+          <p className={`text-[11px] mt-1 ${description.length > 160 ? 'text-error' : 'text-base-content/30'}`}>
             {description.length}/160
           </p>
         </div>
 
         {/* Keywords */}
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <label className="block text-xs font-medium mb-1.5 text-base-content/55">
             Keywords
           </label>
           <div className="flex gap-2">
@@ -96,13 +89,11 @@ export default function SEOPanel({
               placeholder="Add keyword…"
               onChange={(e) => setKwInput(e.target.value)}
               onKeyDown={onKeyDown}
-              className="flex-1 px-3 py-2 rounded-md text-sm text-white outline-none"
-              style={inputBase}
+              className={`flex-1 ${inputCls}`}
             />
             <button
               onClick={addKeyword}
-              className="px-3 py-2 rounded-md text-sm font-bold"
-              style={{ backgroundColor: '#ffc418', color: '#282626' }}
+              className="px-3 py-2 rounded-md text-sm font-bold bg-primary text-primary-content"
             >
               +
             </button>
@@ -112,18 +103,12 @@ export default function SEOPanel({
               {keywords.map((kw) => (
                 <span
                   key={kw}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs"
-                  style={{
-                    backgroundColor: '#282626',
-                    color: 'rgba(255,255,255,0.7)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                  }}
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-base-300 text-base-content/70 border border-base-content/10"
                 >
                   {kw}
                   <button
                     onClick={() => onChangeKeywords(keywords.filter((k) => k !== kw))}
-                    className="leading-none hover:text-white"
-                    style={{ color: 'rgba(255,255,255,0.4)' }}
+                    className="leading-none hover:text-base-content text-base-content/40"
                   >
                     ×
                   </button>
@@ -134,60 +119,56 @@ export default function SEOPanel({
         </div>
 
         {/* Open Graph */}
-        <div className="pt-2 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-          <p className="text-xs font-semibold mb-3" style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <div className="pt-2 border-t border-base-content/10">
+          <p className="text-xs font-semibold mb-3 text-base-content/55">
             Open Graph
           </p>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>OG Title</label>
+              <label className="block text-xs mb-1 text-base-content/40">OG Title</label>
               <input
                 type="text"
                 value={metadata.ogTitle ?? ''}
                 placeholder="Override page title"
                 onChange={(e) => updateMeta('ogTitle', e.target.value)}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                style={inputBase}
+                className={inputCls}
               />
             </div>
             <div>
-              <label className="block text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>OG Description</label>
+              <label className="block text-xs mb-1 text-base-content/40">OG Description</label>
               <textarea
                 value={metadata.ogDescription ?? ''}
                 placeholder="Override meta description"
                 rows={2}
                 onChange={(e) => updateMeta('ogDescription', e.target.value)}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none resize-none"
-                style={inputBase}
+                className={`${inputCls} resize-none`}
               />
             </div>
             <div>
-              <label className="block text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>OG Image URL</label>
+              <label className="block text-xs mb-1 text-base-content/40">OG Image URL</label>
               <input
                 type="url"
                 value={metadata.ogImage ?? ''}
                 placeholder="https://…"
                 onChange={(e) => updateMeta('ogImage', e.target.value)}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                style={inputBase}
+                className={inputCls}
               />
             </div>
           </div>
         </div>
 
         {/* Twitter Card */}
-        <div className="pt-2 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-          <p className="text-xs font-semibold mb-3" style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <div className="pt-2 border-t border-base-content/10">
+          <p className="text-xs font-semibold mb-3 text-base-content/55">
             Twitter Card
           </p>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Card Type</label>
+              <label className="block text-xs mb-1 text-base-content/40">Card Type</label>
               <select
                 value={metadata.twitterCard ?? 'summary_large_image'}
                 onChange={(e) => updateMeta('twitterCard', e.target.value)}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                style={inputBase}
+                className={inputCls}
               >
                 <option value="summary">summary</option>
                 <option value="summary_large_image">summary_large_image</option>
@@ -196,25 +177,23 @@ export default function SEOPanel({
               </select>
             </div>
             <div>
-              <label className="block text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Twitter Title</label>
+              <label className="block text-xs mb-1 text-base-content/40">Twitter Title</label>
               <input
                 type="text"
                 value={metadata.twitterTitle ?? ''}
                 placeholder="Override title"
                 onChange={(e) => updateMeta('twitterTitle', e.target.value)}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                style={inputBase}
+                className={inputCls}
               />
             </div>
             <div>
-              <label className="block text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>Twitter Description</label>
+              <label className="block text-xs mb-1 text-base-content/40">Twitter Description</label>
               <textarea
                 value={metadata.twitterDescription ?? ''}
                 placeholder="Override description"
                 rows={2}
                 onChange={(e) => updateMeta('twitterDescription', e.target.value)}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none resize-none"
-                style={inputBase}
+                className={`${inputCls} resize-none`}
               />
             </div>
           </div>

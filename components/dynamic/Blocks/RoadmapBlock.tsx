@@ -12,9 +12,9 @@ interface RoadmapItem {
 function RoadmapBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let milestones: RoadmapItem[] = []
   try {
@@ -29,9 +29,9 @@ function RoadmapBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-5xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -42,21 +42,20 @@ function RoadmapBlock(rawProps: Record<string, unknown>) {
           {milestones.map((milestone, i) => (
             <div key={i} className="flex gap-6 items-start">
               <div
-                className="min-w-24 px-4 py-2 rounded-full text-center font-bold"
-                style={{ backgroundColor: accent, color: bg }}
+                className={`min-w-24 px-4 py-2 rounded-full text-center font-bold{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
               >
                 {milestone.quarter}
               </div>
               <div className="flex-1 rounded-lg p-6" style={{ backgroundColor: cardBg }}>
                 <div className="flex items-center justify-between gap-4 mb-2">
-                  <h3 className="text-2xl text-white font-bold">{milestone.title}</h3>
+                  <h3 className="text-2xl text-base-content font-bold">{milestone.title}</h3>
                   {milestone.status && (
                     <span className="text-xs font-semibold uppercase" style={{ color: accent }}>
                       {milestone.status}
                     </span>
                   )}
                 </div>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>{milestone.description}</p>
+                <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{milestone.description}</p>
               </div>
             </div>
           ))}
@@ -74,9 +73,9 @@ export const RoadmapBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Product Roadmap',
     subtitle: 'What we are building next',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
     milestones: JSON.stringify([
       {
         quarter: 'Q2 2026',

@@ -12,8 +12,8 @@ interface Step {
 
 function StepsBlock(rawProps: Record<string, unknown>) {
   const heading = (rawProps.heading as string) || 'How It Works'
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let steps: Step[] = []
   try {
@@ -33,7 +33,7 @@ function StepsBlock(rawProps: Record<string, unknown>) {
   return (
     <section className="py-20 px-6 md:px-12 lg:px-20" style={{ backgroundColor: bg }}>
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl md:text-5xl text-white text-center mb-16">{heading}</h2>
+        <h2 className="text-4xl md:text-5xl text-base-content text-center mb-16">{heading}</h2>
 
         <div className="relative">
           {/* Connecting line */}
@@ -43,13 +43,12 @@ function StepsBlock(rawProps: Record<string, unknown>) {
             {steps.map((step, i) => (
               <div key={i} className="flex flex-col items-center text-center">
                 <div
-                  className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold mb-4 relative z-10"
-                  style={{ backgroundColor: accent, color: bg }}
+                  className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold mb-4 relative z-10{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
                 >
                   {step.number}
                 </div>
-                <h3 className="text-2xl text-white mb-2">{step.title}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.7)' }}>{step.description}</p>
+                <h3 className="text-2xl text-base-content mb-2">{step.title}</h3>
+                <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{step.description}</p>
               </div>
             ))}
           </div>
@@ -74,8 +73,8 @@ export const StepsBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'How It Works',
     steps: JSON.stringify(defaultSteps, null, 2),
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Section Heading', type: 'text' },

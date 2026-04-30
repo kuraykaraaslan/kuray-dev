@@ -11,7 +11,7 @@ interface GalleryImage {
 function ImageGalleryBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
 
   let images: GalleryImage[] = []
   try {
@@ -26,8 +26,8 @@ function ImageGalleryBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
-            {subtitle && <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>{subtitle}</p>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
+            {subtitle && <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>{subtitle}</p>}
           </div>
         )}
 
@@ -51,7 +51,7 @@ export const ImageGalleryBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Gallery',
     subtitle: 'A glimpse into our work and culture',
-    bgColor: '#282626',
+    bgColor: '',
     images: JSON.stringify([
       { src: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop', alt: 'Office' },
       { src: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop', alt: 'Team' },

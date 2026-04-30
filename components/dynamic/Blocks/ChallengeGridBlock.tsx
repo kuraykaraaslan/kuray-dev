@@ -16,9 +16,9 @@ function ChallengeGridBlock(rawProps: Record<string, unknown>) {
   const headingAccent = rawProps.headingAccent as string | undefined
   const subtitle1 = rawProps.subtitle1 as string | undefined
   const subtitle2 = rawProps.subtitle2 as string | undefined
-  const bg = (rawProps.bgColor as string) || '#1f1d1d'
-  const cardBg = (rawProps.cardBgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let challenges: ChallengeItem[] = []
   try {
@@ -34,7 +34,7 @@ function ChallengeGridBlock(rawProps: Record<string, unknown>) {
         {(heading || subtitle1 || subtitle2) && (
           <div className="text-center mb-16">
             {heading && (
-              <h2 className="text-4xl md:text-5xl text-white mb-4">
+              <h2 className="text-4xl md:text-5xl text-base-content mb-4">
                 {heading}
                 {headingAccent && (
                   <> <span style={{ color: accent }}>{headingAccent}</span></>
@@ -42,12 +42,12 @@ function ChallengeGridBlock(rawProps: Record<string, unknown>) {
               </h2>
             )}
             {subtitle1 && (
-              <p className="text-lg mb-2" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg mb-2" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle1}
               </p>
             )}
             {subtitle2 && (
-              <p className="text-base max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <p className="text-base max-w-2xl mx-auto" style={{ color: 'oklch(var(--bc) / 0.6)' }}>
                 {subtitle2}
               </p>
             )}
@@ -66,9 +66,9 @@ function ChallengeGridBlock(rawProps: Record<string, unknown>) {
                   className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
                   style={{ backgroundColor: accent }}
                 />
-                <h3 className="text-2xl text-white">{item.title}</h3>
+                <h3 className="text-2xl text-base-content">{item.title}</h3>
               </div>
-              <p className="pl-6 leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="pl-6 leading-relaxed" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {item.description}
               </p>
             </div>
@@ -115,9 +115,9 @@ export const ChallengeGridBlockDefinition: BlockDefinition = {
     subtitle2:
       "Most AECO organizations don't fail because of a lack of tools. They fail because systems don't talk, teams don't align, and decisions are made with incomplete or unreliable data.",
     challenges: JSON.stringify(defaultChallenges, null, 2),
-    bgColor: '#1f1d1d',
-    cardBgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Heading (white part)', type: 'text' },

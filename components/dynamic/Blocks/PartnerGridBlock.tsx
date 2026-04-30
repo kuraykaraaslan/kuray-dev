@@ -11,8 +11,8 @@ interface PartnerItem {
 function PartnerGridBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
 
   let partners: PartnerItem[] = []
   try {
@@ -27,8 +27,8 @@ function PartnerGridBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
-            {subtitle && <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>{subtitle}</p>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
+            {subtitle && <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>{subtitle}</p>}
           </div>
         )}
 
@@ -37,9 +37,9 @@ function PartnerGridBlock(rawProps: Record<string, unknown>) {
             <div key={i} className="rounded-lg p-6" style={{ backgroundColor: cardBg }}>
               <div className="flex items-center gap-4 mb-3">
                 {partner.icon && <span className="text-3xl">{partner.icon}</span>}
-                <h3 className="text-2xl text-white font-bold">{partner.name}</h3>
+                <h3 className="text-2xl text-base-content font-bold">{partner.name}</h3>
               </div>
-              {partner.description && <p style={{ color: 'rgba(255,255,255,0.7)' }}>{partner.description}</p>}
+              {partner.description && <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{partner.description}</p>}
             </div>
           ))}
         </div>
@@ -56,8 +56,8 @@ export const PartnerGridBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Partner Ecosystem',
     subtitle: 'Trusted collaborators and integrations',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
+    bgColor: '',
+    cardBgColor: '',
     partners: JSON.stringify([
       { name: 'Cloud Partners', icon: '☁️', description: 'Infrastructure and hosting partners' },
       { name: 'System Integrators', icon: '🔧', description: 'Implementation and services partners' },

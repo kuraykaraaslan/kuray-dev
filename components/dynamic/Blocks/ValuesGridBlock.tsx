@@ -10,8 +10,8 @@ interface ValueItem {
 function ValuesGridBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
 
   let values: ValueItem[] = []
   try {
@@ -26,16 +26,16 @@ function ValuesGridBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
-            {subtitle && <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>{subtitle}</p>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
+            {subtitle && <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>{subtitle}</p>}
           </div>
         )}
 
         <div className="grid md:grid-cols-3 gap-6">
           {values.map((value, i) => (
             <div key={i} className="rounded-lg p-6" style={{ backgroundColor: cardBg }}>
-              <h3 className="text-2xl text-white font-bold mb-3">{value.title}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.7)' }}>{value.description}</p>
+              <h3 className="text-2xl text-base-content font-bold mb-3">{value.title}</h3>
+              <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{value.description}</p>
             </div>
           ))}
         </div>
@@ -52,8 +52,8 @@ export const ValuesGridBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'What We Stand For',
     subtitle: 'Principles that guide how we build and support products',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
+    bgColor: '',
+    cardBgColor: '',
     values: JSON.stringify([
       { title: 'Clarity', description: 'Clear interfaces, clear processes, clear outcomes.' },
       { title: 'Reliability', description: 'Systems that are dependable under real enterprise load.' },

@@ -39,9 +39,7 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
       <div
         className="absolute inset-0 z-10 pointer-events-none transition-all"
         style={{
-          outline: isSelected
-            ? '2px solid #ffc418'
-            : '2px solid transparent',
+          outline: isSelected ? '2px solid oklch(var(--p))' : '2px solid transparent',
           outlineOffset: '-2px',
         }}
       />
@@ -51,10 +49,7 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
         className={`absolute top-2 right-2 z-20 flex items-center gap-1.5 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
       >
         {/* Type label */}
-        <span
-          className="px-2 py-1 rounded text-xs font-medium"
-          style={{ backgroundColor: 'rgba(0,0,0,0.75)', color: 'rgba(255,255,255,0.7)' }}
-        >
+        <span className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70">
           {def.label}
         </span>
 
@@ -62,8 +57,7 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
         <div
           {...attributes}
           {...listeners}
-          className="px-2 py-1 rounded text-xs font-medium cursor-grab active:cursor-grabbing"
-          style={{ backgroundColor: 'rgba(0,0,0,0.75)', color: 'rgba(255,255,255,0.7)' }}
+          className="px-2 py-1 rounded text-xs font-medium cursor-grab active:cursor-grabbing bg-black/75 text-white/70"
           onClick={(e) => e.stopPropagation()}
           title="Drag to reorder"
         >
@@ -72,8 +66,7 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
 
         {/* Delete */}
         <button
-          className="px-2 py-1 rounded text-xs font-medium"
-          style={{ backgroundColor: 'rgba(220,38,38,0.85)', color: 'white' }}
+          className="px-2 py-1 rounded text-xs font-medium bg-error/85 text-error-content"
           onClick={(e) => {
             e.stopPropagation()
             onDelete()
@@ -101,7 +94,7 @@ export default function Canvas({ sections, selectedId, onSelect, onDelete }: Can
     return (
       <div className="flex flex-col items-center justify-center py-40 gap-3">
         <div className="text-4xl opacity-20">+</div>
-        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+        <p className="text-sm text-base-content/30">
           Add blocks from the left panel to build your page.
         </p>
       </div>

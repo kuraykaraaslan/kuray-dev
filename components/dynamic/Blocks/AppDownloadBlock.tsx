@@ -13,8 +13,8 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
   const googlePlayLabel = (rawProps.googlePlayLabel as string) || 'Get it on'
   const googlePlayName = (rawProps.googlePlayName as string) || 'Google Play'
   const badgeNote = rawProps.badgeNote as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
   const badgeBg = (rawProps.badgeBgColor as string) || '#000000'
 
   return (
@@ -22,7 +22,7 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-3xl mx-auto text-center">
 
         {/* Heading */}
-        <h2 className="text-4xl md:text-5xl text-white mb-4 leading-tight">
+        <h2 className="text-4xl md:text-5xl text-base-content mb-4 leading-tight">
           {heading}
           {headingAccent && (
             <> <span style={{ color: accent }}>{headingAccent}</span></>
@@ -31,7 +31,7 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
 
         {/* Subtitle */}
         {subtitle && (
-          <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
+          <p className="text-lg mb-10 max-w-xl mx-auto" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
             {subtitle}
           </p>
         )}
@@ -45,7 +45,7 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3.5 px-6 py-3.5 rounded-xl transition-all hover:scale-105 hover:opacity-90 min-w-[200px]"
-            style={{ backgroundColor: badgeBg, border: '1px solid rgba(255,255,255,0.15)' }}
+            style={{ backgroundColor: badgeBg, border: '1px solid oklch(var(--bc) / 0.15)' }}
           >
             {/* Apple logo */}
             <svg width="28" height="28" viewBox="0 0 814 1000" fill="white">
@@ -53,8 +53,8 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
             </svg>
 
             <div className="text-left">
-              <p className="text-[10px] leading-none text-white/60 tracking-wide">{appStoreLabel}</p>
-              <p className="text-lg font-semibold leading-tight text-white">{appStoreName}</p>
+              <p className="text-[10px] leading-none text-base-content/60 tracking-wide">{appStoreLabel}</p>
+              <p className="text-lg font-semibold leading-tight text-base-content">{appStoreName}</p>
             </div>
           </a>
 
@@ -64,7 +64,7 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3.5 px-6 py-3.5 rounded-xl transition-all hover:scale-105 hover:opacity-90 min-w-[200px]"
-            style={{ backgroundColor: badgeBg, border: '1px solid rgba(255,255,255,0.15)' }}
+            style={{ backgroundColor: badgeBg, border: '1px solid oklch(var(--bc) / 0.15)' }}
           >
             {/* Google Play logo */}
             <svg width="26" height="28" viewBox="0 0 512 512" fill="none">
@@ -75,15 +75,15 @@ function AppDownloadBlock(rawProps: Record<string, unknown>) {
             </svg>
 
             <div className="text-left">
-              <p className="text-[10px] leading-none text-white/60 tracking-wide">{googlePlayLabel}</p>
-              <p className="text-lg font-semibold leading-tight text-white">{googlePlayName}</p>
+              <p className="text-[10px] leading-none text-base-content/60 tracking-wide">{googlePlayLabel}</p>
+              <p className="text-lg font-semibold leading-tight text-base-content">{googlePlayName}</p>
             </div>
           </a>
         </div>
 
         {/* Optional note */}
         {badgeNote && (
-          <p className="mt-6 text-sm" style={{ color: 'rgba(255,255,255,0.35)' }}>
+          <p className="mt-6 text-sm" style={{ color: 'oklch(var(--bc) / 0.35)' }}>
             {badgeNote}
           </p>
         )}
@@ -114,8 +114,8 @@ export const AppDownloadBlockDefinition: BlockDefinition = {
     googlePlayLabel: 'Get it on',
     googlePlayName: 'Google Play',
     badgeNote: 'Free to download. Available on iOS 15+ and Android 10+.',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
     badgeBgColor: '#000000',
   },
   schema: {

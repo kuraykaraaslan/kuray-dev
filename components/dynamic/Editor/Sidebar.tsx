@@ -38,7 +38,7 @@ function BlockPreview({ def, anchorY, sidebarRight }: PreviewProps) {
         borderRadius: 8,
         overflow: 'hidden',
         boxShadow: '0 8px 32px rgba(0,0,0,0.7)',
-        border: '1px solid rgba(255,196,24,0.3)',
+        border: '1px solid oklch(var(--p) / 0.3)',
       }}
     >
       <div
@@ -55,6 +55,7 @@ function BlockPreview({ def, anchorY, sidebarRight }: PreviewProps) {
 
       {/* Label gradient */}
       <div
+        className="text-primary"
         style={{
           position: 'absolute',
           bottom: 0,
@@ -64,7 +65,6 @@ function BlockPreview({ def, anchorY, sidebarRight }: PreviewProps) {
           background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)',
           fontSize: 11,
           fontWeight: 600,
-          color: '#ffc418',
           letterSpacing: '0.06em',
         }}
       >
@@ -137,14 +137,10 @@ export default function Sidebar({ onAdd }: Props) {
   return (
     <div
       ref={sidebarRef}
-      className="w-60 flex-shrink-0 flex flex-col border-r overflow-y-auto"
-      style={{ backgroundColor: '#1f1d1d', borderColor: 'rgba(255,255,255,0.08)' }}
+      className="w-60 flex-shrink-0 flex flex-col border-r border-base-content/10 overflow-y-auto bg-base-200"
     >
-      <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <p
-          className="text-xs font-semibold tracking-widest"
-          style={{ color: 'rgba(255,255,255,0.4)' }}
-        >
+      <div className="px-4 py-3 border-b border-base-content/10">
+        <p className="text-xs font-semibold tracking-widest text-base-content/40">
           BLOCKS
         </p>
       </div>
@@ -155,8 +151,7 @@ export default function Sidebar({ onAdd }: Props) {
             {/* Category header */}
             <button
               onClick={() => toggleCategory(cat)}
-              className="w-full flex items-center justify-between px-4 py-2 transition-colors"
-              style={{ color: 'rgba(255,255,255,0.5)' }}
+              className="w-full flex items-center justify-between px-4 py-2 transition-colors text-base-content/50"
             >
               <span className="text-xs font-semibold uppercase tracking-widest">{cat}</span>
               <Chevron open={open[cat] ?? true} />
@@ -167,34 +162,23 @@ export default function Sidebar({ onAdd }: Props) {
               <div className="px-3 pb-2 space-y-1.5">
                 {grouped[cat].map((def) => {
                   const isCustom = cat === 'Custom'
+                  const isHovered = hovered?.def.type === def.type
                   return (
                     <button
                       key={def.type}
                       onClick={() => onAdd(def.type)}
                       onMouseEnter={(e) => handleMouseEnter(def, e)}
                       onMouseLeave={() => setHovered(null)}
-                      className="w-full text-left p-2.5 rounded-lg transition-all hover:scale-[1.02]"
-                      style={{
-                        backgroundColor: isCustom ? 'rgba(255,196,24,0.05)' : '#282626',
-                        border: `1px solid ${
-                          hovered?.def.type === def.type
-                            ? 'rgba(255,196,24,0.5)'
-                            : isCustom
-                              ? 'rgba(255,196,24,0.2)'
-                              : 'rgba(255,255,255,0.07)'
-                        }`,
-                      }}
+                      className={`w-full text-left p-2.5 rounded-lg transition-all hover:scale-[1.02] border ${
+                        isCustom
+                          ? 'bg-primary/5 border-primary/20'
+                          : 'bg-base-300 border-base-content/10'
+                      } ${isHovered ? 'border-primary/50' : ''}`}
                     >
-                      <div
-                        className="text-sm font-medium mb-0.5"
-                        style={{ color: isCustom ? '#ffc418' : 'white' }}
-                      >
+                      <div className={`text-sm font-medium mb-0.5 ${isCustom ? 'text-primary' : 'text-base-content'}`}>
                         {def.label}
                       </div>
-                      <div
-                        className="text-xs leading-snug"
-                        style={{ color: 'rgba(255,255,255,0.38)' }}
-                      >
+                      <div className="text-xs leading-snug text-base-content/40">
                         {def.description}
                       </div>
                     </button>

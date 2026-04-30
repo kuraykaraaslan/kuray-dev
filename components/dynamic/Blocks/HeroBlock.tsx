@@ -16,8 +16,8 @@ function HeroBlock(rawProps: Record<string, unknown>) {
   const subtitle = rawProps.subtitle as string | undefined
   const ctaLabel = rawProps.ctaLabel as string | undefined
   const ctaHref = (rawProps.ctaHref as string) || '/contact'
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   return (
     <section className="px-6 md:px-12 lg:px-20 py-20" style={{ backgroundColor: bg }}>
@@ -28,7 +28,7 @@ function HeroBlock(rawProps: Record<string, unknown>) {
           </p>
         )}
 
-        <h1 className="text-5xl md:text-6xl text-white mb-6 leading-tight">
+        <h1 className="text-5xl md:text-6xl text-base-content mb-6 leading-tight">
           {title}
           {titleAccent && (
             <>
@@ -39,7 +39,7 @@ function HeroBlock(rawProps: Record<string, unknown>) {
         </h1>
 
         {subtitle && (
-          <p className="text-xl max-w-3xl mx-auto mb-10" style={{ color: 'rgba(255,255,255,0.7)' }}>
+          <p className="text-xl max-w-3xl mx-auto mb-10" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
             {subtitle}
           </p>
         )}
@@ -47,8 +47,7 @@ function HeroBlock(rawProps: Record<string, unknown>) {
         {ctaLabel && (
           <Link
             href={ctaHref}
-            className="inline-block px-10 py-4 rounded-md text-lg font-medium hover:scale-105 transition-transform"
-            style={{ backgroundColor: accent, color: bg }}
+            className={`inline-block px-10 py-4 rounded-md text-lg font-medium hover:scale-105 transition-transform{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
           >
             {ctaLabel}
           </Link>
@@ -71,8 +70,8 @@ export const HeroBlockDefinition: BlockDefinition = {
       'Explore our full suite of AI-powered tools — designed to automate, accelerate, and elevate every stage of your project.',
     ctaLabel: 'Request a Demo',
     ctaHref: '/contact',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     tagline: { label: 'Tagline (above title)', type: 'text', placeholder: 'Optional small label' },

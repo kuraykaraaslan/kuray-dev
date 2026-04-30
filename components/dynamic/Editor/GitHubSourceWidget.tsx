@@ -113,11 +113,11 @@ export default function GitHubSourceWidget({ pageId }: Props) {
       {/* Status flash */}
       {status && (
         <span
-          className="text-xs px-2 py-1 rounded"
-          style={{
-            backgroundColor: status.type === 'success' ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
-            color: status.type === 'success' ? '#4ade80' : '#f87171',
-          }}
+          className={`text-xs px-2 py-1 rounded ${
+            status.type === 'success'
+              ? 'bg-success/15 text-success'
+              : 'bg-error/15 text-error'
+          }`}
         >
           {status.msg}
         </span>
@@ -125,12 +125,11 @@ export default function GitHubSourceWidget({ pageId }: Props) {
 
       {/* Trigger button */}
       <button
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all"
-        style={{
-          backgroundColor: linked ? 'rgba(255,196,24,0.1)' : 'rgba(255,255,255,0.06)',
-          border: linked ? '1px solid rgba(255,196,24,0.3)' : '1px solid rgba(255,255,255,0.1)',
-          color: linked ? '#ffc418' : 'rgba(255,255,255,0.5)',
-        }}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all border ${
+          linked
+            ? 'bg-primary/10 border-primary/30 text-primary'
+            : 'bg-base-content/5 border-base-content/10 text-base-content/50'
+        }`}
         onClick={() => setOpen((v) => !v)}
         disabled={generating || linking}
       >
@@ -146,39 +145,34 @@ export default function GitHubSourceWidget({ pageId }: Props) {
 
       {/* Dropdown */}
       {open && (
-        <div
-          className="absolute top-full right-0 mt-1.5 w-72 rounded-xl shadow-2xl z-50"
-          style={{ backgroundColor: '#1a1818', border: '1px solid rgba(255,255,255,0.1)' }}
-        >
+        <div className="absolute top-full right-0 mt-1.5 w-72 rounded-xl shadow-2xl z-50 bg-base-200 border border-base-content/10">
           {/* Current source info */}
-          <div className="px-4 pt-4 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <p className="text-xs font-semibold text-white mb-1">GitHub Source</p>
+          <div className="px-4 pt-4 pb-3 border-b border-base-content/10">
+            <p className="text-xs font-semibold text-base-content mb-1">GitHub Source</p>
             {linked ? (
               <>
                 <a
                   href={linked.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs hover:text-yellow-400 transition-colors"
-                  style={{ color: '#ffc418' }}
+                  className="text-xs text-primary hover:text-primary/70 transition-colors"
                 >
                   {linked.repoFullName} ↗
                 </a>
-                <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                <p className="text-xs mt-0.5 text-base-content/30">
                   Last modified {new Date(linked.fileLastModifiedAt).toLocaleDateString()}
                 </p>
               </>
             ) : (
-              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>No promotion linked</p>
+              <p className="text-xs text-base-content/35">No promotion linked</p>
             )}
           </div>
 
           {/* Picker */}
-          <div className="px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <p className="text-xs mb-2" style={{ color: 'rgba(255,255,255,0.4)' }}>Link a promotion</p>
+          <div className="px-4 py-3 border-b border-base-content/10">
+            <p className="text-xs mb-2 text-base-content/40">Link a promotion</p>
             <select
-              className="w-full rounded-lg px-2.5 py-1.5 text-xs text-white outline-none"
-              style={{ backgroundColor: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="w-full rounded-lg px-2.5 py-1.5 text-xs text-base-content outline-none bg-base-content/5 border border-base-content/10"
               defaultValue={linked?.id ?? ''}
               onChange={(e) => linkPromotion(e.target.value || null)}
               disabled={linking}
@@ -201,12 +195,7 @@ export default function GitHubSourceWidget({ pageId }: Props) {
           {linked && (
             <div className="px-4 py-3">
               <button
-                className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all"
-                style={{
-                  backgroundColor: 'rgba(255,196,24,0.1)',
-                  border: '1px solid rgba(255,196,24,0.25)',
-                  color: '#ffc418',
-                }}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-medium transition-all bg-primary/10 border border-primary/25 text-primary"
                 onClick={regenerate}
                 disabled={generating}
               >
@@ -216,7 +205,7 @@ export default function GitHubSourceWidget({ pageId }: Props) {
                   '✦ Regenerate page from promote.md'
                 )}
               </button>
-              <p className="text-xs mt-2 text-center" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <p className="text-xs mt-2 text-center text-base-content/25">
                 Overwrites blocks. Reload after generation.
               </p>
             </div>

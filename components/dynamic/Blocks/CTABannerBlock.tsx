@@ -10,9 +10,9 @@ function CTABannerBlock(rawProps: Record<string, unknown>) {
   const subtitle = rawProps.subtitle as string | undefined
   const ctaLabel = rawProps.ctaLabel as string | undefined
   const ctaHref = (rawProps.ctaHref as string) || '/contact'
-  const bg = (rawProps.bgColor as string) || '#ffc418'
-  const textColor = (rawProps.textColor as string) || '#282626'
-  const btnBg = (rawProps.buttonBgColor as string) || '#282626'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--p))'
+  const textColor = (rawProps.textColor as string) || 'oklch(var(--b2))'
+  const btnBg = (rawProps.buttonBgColor as string) || 'oklch(var(--b2))'
   const btnText = (rawProps.buttonTextColor as string) || '#ffffff'
 
   return (
@@ -56,9 +56,9 @@ export const CTABannerBlockDefinition: BlockDefinition = {
     subtitle: "Let's build the digital infrastructure your projects deserve.",
     ctaLabel: 'Talk to an Expert',
     ctaHref: '/contact',
-    bgColor: '#ffc418',
-    textColor: '#282626',
-    buttonBgColor: '#282626',
+    bgColor: '',
+    textColor: '',
+    buttonBgColor: '',
     buttonTextColor: '#ffffff',
   },
   schema: {

@@ -554,17 +554,23 @@ model ChatMessage {
   @@index([createdAt])
 }
 
+enum DynamicPageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 model DynamicPage {
-  dynamicPageId String   @id @default(cuid())
-  slug          String   @unique
+  dynamicPageId String            @id @default(cuid())
+  slug          String            @unique
   title         String
   description   String?
   keywords      String[]
-  sections      Json     @default("[]")
+  sections      Json              @default("[]")
   metadata      Json? // { ogTitle, ogDescription, ogImage, twitterTitle, twitterDescription, twitterCard }
-  isPublished   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  status        DynamicPageStatus @default(DRAFT)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
   @@index([slug])
 }

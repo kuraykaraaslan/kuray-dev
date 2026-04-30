@@ -1,20 +1,12 @@
 import { z } from 'zod'
+import { PageMetadataSchema } from '../types/content/PageTypes'
 
-const BlockDataSchema = z.object({
+const PageSectionSchema = z.object({
   id: z.string(),
   type: z.string(),
   order: z.number(),
   props: z.record(z.unknown()),
 })
-
-const MetadataSchema = z.object({
-  ogTitle: z.string().optional(),
-  ogDescription: z.string().optional(),
-  ogImage: z.string().optional(),
-  twitterTitle: z.string().optional(),
-  twitterDescription: z.string().optional(),
-  twitterCard: z.string().optional(),
-}).optional()
 
 export const CreateDynamicPageSchema = z.object({
   slug: z
@@ -24,8 +16,8 @@ export const CreateDynamicPageSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   keywords: z.array(z.string()).default([]),
-  sections: z.array(BlockDataSchema).default([]),
-  metadata: MetadataSchema,
+  sections: z.array(PageSectionSchema).default([]),
+  metadata: PageMetadataSchema,
   isPublished: z.boolean().default(false),
 })
 
@@ -38,8 +30,8 @@ export const UpdateDynamicPageSchema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional(),
   keywords: z.array(z.string()).optional(),
-  sections: z.array(BlockDataSchema).optional(),
-  metadata: MetadataSchema,
+  sections: z.array(PageSectionSchema).optional(),
+  metadata: PageMetadataSchema,
   isPublished: z.boolean().optional(),
 })
 
@@ -52,8 +44,7 @@ export const DynamicPageParamsSchema = z.object({
   dynamicSlugF: z.string().optional()
 })
 
-export type BlockData = z.infer<typeof BlockDataSchema>
+export type PageSection = z.infer<typeof PageSectionSchema>
 export type CreateDynamicPageRequest = z.infer<typeof CreateDynamicPageSchema>
 export type UpdateDynamicPageRequest = z.infer<typeof UpdateDynamicPageSchema>
-export type PageMetadata = z.infer<typeof MetadataSchema>
 export type DynamicPageParams = z.infer<typeof DynamicPageParamsSchema>

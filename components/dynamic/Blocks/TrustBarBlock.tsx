@@ -6,8 +6,8 @@ import type { BlockDefinition } from '../types'
 
 function TrustBarBlock(rawProps: Record<string, unknown>) {
   const label = rawProps.label as string | undefined
-  const bg = (rawProps.bgColor as string) || '#1f1d1d'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let items: string[] = []
   try {
@@ -23,7 +23,7 @@ function TrustBarBlock(rawProps: Record<string, unknown>) {
         {label && (
           <p
             className="text-center text-sm mb-6 uppercase tracking-widest"
-            style={{ color: 'rgba(255,255,255,0.5)' }}
+            style={{ color: 'oklch(var(--bc) / 0.5)' }}
           >
             {label}
           </p>
@@ -33,7 +33,7 @@ function TrustBarBlock(rawProps: Record<string, unknown>) {
             <div key={i} className="flex items-center gap-6 md:gap-10">
               <span
                 className="text-sm md:text-base font-medium"
-                style={{ color: 'rgba(255,255,255,0.7)' }}
+                style={{ color: 'oklch(var(--bc) / 0.7)' }}
               >
                 {item}
               </span>
@@ -68,8 +68,8 @@ export const TrustBarBlockDefinition: BlockDefinition = {
   defaultProps: {
     label: 'Built for Complex AECO Environments',
     items: JSON.stringify(defaultItems),
-    bgColor: '#1f1d1d',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     label: {
@@ -84,8 +84,8 @@ export const TrustBarBlockDefinition: BlockDefinition = {
       value: JSON.stringify(defaultItems),
       placeholder: '["Item 1","Item 2","Item 3"]',
     },
-    bgColor: { label: 'Background Color', type: 'color', value: '#1f1d1d' },
-    accentColor: { label: 'Accent Color', type: 'color', value: '#ffc418' },
+    bgColor: { label: 'Background Color', type: 'color', value: '' },
+    accentColor: { label: 'Accent Color', type: 'color', value: '' },
   },
   Component: TrustBarBlock,
 }

@@ -64,7 +64,7 @@ export async function Page({ params }: Props) {
     const sections = Array.isArray(page.sections) ? (page.sections as unknown as BlockData[]) : []
 
     return (
-        <main className="min-h-screen" style={{ backgroundColor: 'var(--color-base-100)' }}>
+        <main className="min-h-screen bg-base-100">
             <DynamicPageRenderer sections={sections} />
         </main>
     )

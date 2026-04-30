@@ -7,13 +7,13 @@ function AnnouncementStripBlock(rawProps: Record<string, unknown>) {
   const message = (rawProps.message as string) || 'Announcement'
   const ctaLabel = rawProps.ctaLabel as string | undefined
   const ctaHref = rawProps.ctaHref as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   return (
     <section className="px-6 md:px-12 lg:px-20 py-4" style={{ backgroundColor: bg }}>
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 rounded-lg px-5 py-4" style={{ backgroundColor: '#323030' }}>
-        <p className="text-white">{message}</p>
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 rounded-lg px-5 py-4 bg-base-300">
+        <p className="text-base-content">{message}</p>
         {ctaLabel && ctaHref && (
           <Link href={ctaHref} className="font-medium" style={{ color: accent }}>
             {ctaLabel}
@@ -33,8 +33,8 @@ export const AnnouncementStripBlockDefinition: BlockDefinition = {
     message: 'New: enterprise SSO, audit logs, and granular permissions are now available.',
     ctaLabel: 'View Details',
     ctaHref: '/updates',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     message: { label: 'Message', type: 'text' },

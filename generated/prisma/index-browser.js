@@ -465,7 +465,7 @@ exports.Prisma.DynamicPageScalarFieldEnum = {
   keywords: 'keywords',
   sections: 'sections',
   metadata: 'metadata',
-  isPublished: 'isPublished',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -540,6 +540,12 @@ exports.ChatSessionStatus = exports.$Enums.ChatSessionStatus = {
   ACTIVE: 'ACTIVE',
   CLOSED: 'CLOSED',
   TAKEN_OVER: 'TAKEN_OVER'
+};
+
+exports.DynamicPageStatus = exports.$Enums.DynamicPageStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
 };
 
 exports.Prisma.ModelName = {

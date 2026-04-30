@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { BlockDefinition } from '../types'
 
 interface Achievement {
@@ -12,17 +12,18 @@ interface Achievement {
 function AchievementsBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
   const [counts, setCounts] = useState<Record<number, number>>({})
 
-  let achievements: Achievement[] = []
-  try {
-    const raw = rawProps.achievements
-    achievements = typeof raw === 'string' ? JSON.parse(raw) : (raw as Achievement[]) ?? []
-  } catch {
-    achievements = []
-  }
+  const achievements = useMemo<Achievement[]>(() => {
+    try {
+      const raw = rawProps.achievements
+      return typeof raw === 'string' ? JSON.parse(raw) : (raw as Achievement[]) ?? []
+    } catch {
+      return []
+    }
+  }, [rawProps.achievements])
 
   useEffect(() => {
     const targets: Record<number, number> = {}
@@ -54,9 +55,9 @@ function AchievementsBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -70,7 +71,7 @@ function AchievementsBlock(rawProps: Record<string, unknown>) {
                 {counts[i] !== undefined ? counts[i] : 0}
                 {achievement.suffix}
               </div>
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {achievement.label}
               </p>
             </div>
@@ -89,8 +90,8 @@ export const AchievementsBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Our Impact',
     subtitle: 'Trusted by thousands of companies worldwide',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
     achievements: JSON.stringify([
       { label: 'Happy Clients', value: '5000', suffix: '+' },
       { label: 'Projects Completed', value: '10000', suffix: '+' },

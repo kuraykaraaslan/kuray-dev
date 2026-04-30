@@ -17,9 +17,9 @@ function CardGridBlock(rawProps: Record<string, unknown>) {
   const headingAccent = rawProps.headingAccent as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
   const columns = (rawProps.columns as string) || '2'
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let cards: Card[] = []
   try {
@@ -42,7 +42,7 @@ function CardGridBlock(rawProps: Record<string, unknown>) {
         {(heading || subtitle) && (
           <div className="text-center mb-16">
             {heading && (
-              <h2 className="text-4xl md:text-5xl text-white mb-4">
+              <h2 className="text-4xl md:text-5xl text-base-content mb-4">
                 {heading}
                 {headingAccent && (
                   <> <span style={{ color: accent }}>{headingAccent}</span></>
@@ -50,7 +50,7 @@ function CardGridBlock(rawProps: Record<string, unknown>) {
               </h2>
             )}
             {subtitle && (
-              <p className="text-lg max-w-3xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg max-w-3xl mx-auto" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -62,8 +62,8 @@ function CardGridBlock(rawProps: Record<string, unknown>) {
             const inner = (
               <>
                 {card.icon && <div className="text-3xl mb-4">{card.icon}</div>}
-                <h3 className="text-2xl text-white mb-3">{card.title}</h3>
-                <p className="leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                <h3 className="text-2xl text-base-content mb-3">{card.title}</h3>
+                <p className="leading-relaxed" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                   {card.description}
                 </p>
               </>
@@ -132,9 +132,9 @@ export const CardGridBlockDefinition: BlockDefinition = {
       'From design to operations, we provide the tools and expertise you need to achieve outstanding results.',
     columns: '2',
     cards: JSON.stringify(defaultCards, null, 2),
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Heading (white part)', type: 'text' },

@@ -12,8 +12,8 @@ function FeatureGrid(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
   const cols = (rawProps.columns as string) || '3'
-  const bg = (rawProps.bgColor as string) || '#1f1d1d'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let features: Feature[] = []
   try {
@@ -39,9 +39,9 @@ function FeatureGrid(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              <p className="text-lg max-w-2xl mx-auto" style={{ color: 'oklch(var(--bc) / 0.65)' }}>
                 {subtitle}
               </p>
             )}
@@ -52,12 +52,12 @@ function FeatureGrid(rawProps: Record<string, unknown>) {
           {features.map((feature, i) => (
             <div
               key={i}
-              className="p-8 rounded-lg border-t-2"
-              style={{ backgroundColor: '#282626', borderTopColor: accent }}
+              className="p-8 rounded-lg border-t-2 bg-base-300"
+              style={{ borderTopColor: accent || 'oklch(var(--p))' }}
             >
               {feature.icon && <div className="text-3xl mb-4">{feature.icon}</div>}
-              <h3 className="text-xl text-white mb-3">{feature.title}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm leading-relaxed">
+              <h3 className="text-xl text-base-content mb-3">{feature.title}</h3>
+              <p style={{ color: 'oklch(var(--bc) / 0.6)' }} className="text-sm leading-relaxed">
                 {feature.description}
               </p>
             </div>
@@ -96,8 +96,8 @@ export const FeatureGridDefinition: BlockDefinition = {
     subtitle: 'Everything you need to accelerate your workflow.',
     columns: '3',
     features: JSON.stringify(defaultFeatures, null, 2),
-    bgColor: '#1f1d1d',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Section Title', type: 'text', placeholder: 'Key Features' },

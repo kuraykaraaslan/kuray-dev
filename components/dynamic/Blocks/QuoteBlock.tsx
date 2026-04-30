@@ -6,8 +6,8 @@ function QuoteBlock(rawProps: Record<string, unknown>) {
   const quote = (rawProps.quote as string) || 'Your quote here.'
   const author = rawProps.author as string | undefined
   const role = rawProps.role as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   return (
     <section className="py-20 px-6 md:px-12 lg:px-20" style={{ backgroundColor: bg }}>
@@ -15,12 +15,12 @@ function QuoteBlock(rawProps: Record<string, unknown>) {
         <div className="text-6xl mb-6" style={{ color: accent }}>
           “
         </div>
-        <blockquote className="text-3xl md:text-4xl text-white leading-tight mb-8">
+        <blockquote className="text-3xl md:text-4xl text-base-content leading-tight mb-8">
           {quote}
         </blockquote>
         {(author || role) && (
-          <div style={{ color: 'rgba(255,255,255,0.7)' }}>
-            {author && <div className="text-lg font-semibold text-white">{author}</div>}
+          <div style={{ color: 'oklch(var(--bc) / 0.7)' }}>
+            {author && <div className="text-lg font-semibold text-base-content">{author}</div>}
             {role && <div className="text-sm mt-1">{role}</div>}
           </div>
         )}
@@ -38,8 +38,8 @@ export const QuoteBlockDefinition: BlockDefinition = {
     quote: 'Enterprise-grade software should feel powerful, not complicated.',
     author: 'AvantLeap Team',
     role: 'Product Philosophy',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     quote: { label: 'Quote', type: 'textarea' },

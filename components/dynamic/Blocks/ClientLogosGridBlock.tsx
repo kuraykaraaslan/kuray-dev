@@ -11,8 +11,8 @@ interface ClientLogo {
 function ClientLogosGridBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
 
   let clients: ClientLogo[] = []
   try {
@@ -27,9 +27,9 @@ function ClientLogosGridBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -48,13 +48,13 @@ function ClientLogosGridBlock(rawProps: Record<string, unknown>) {
                   {client.logo ? (
                     <img src={client.logo} alt={client.name} className="max-h-12 object-contain" />
                   ) : (
-                    <span className="text-white font-semibold">{client.name}</span>
+                    <span className="text-base-content font-semibold">{client.name}</span>
                   )}
                 </a>
               ) : client.logo ? (
                 <img src={client.logo} alt={client.name} className="max-h-12 object-contain" />
               ) : (
-                <span className="text-white font-semibold">{client.name}</span>
+                <span className="text-base-content font-semibold">{client.name}</span>
               )}
             </div>
           ))}
@@ -72,8 +72,8 @@ export const ClientLogosGridBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Trusted By',
     subtitle: 'Teams and enterprises that rely on us',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
+    bgColor: '',
+    cardBgColor: '',
     clients: JSON.stringify([
       { name: 'Acme Corp' },
       { name: 'Nimbus' },

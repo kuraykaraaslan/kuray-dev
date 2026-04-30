@@ -1,6 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import axiosInstance from '@/libs/axios'
+import { toast } from 'react-toastify'
 import {
   DndContext,
   closestCenter,
@@ -17,67 +20,63 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable'
 import { v4 as uuidv4 } from 'uuid'
-import type { BlockData } from '../types'
 import { getAllBlockDefinitions } from '../BlockRegistry'
 import Canvas from './Canvas'
 import Sidebar from './Sidebar'
 import PropsPanel from './PropsPanel'
-import SEOPanel from './SEOPanel'
 import BlockBuilderPanel from './BlockBuilderPanel'
+import DynamicSelect from '@/components/common/Forms/DynamicSelect'
+import type { PageSection } from '@/types/content/PageTypes'
+import type { DynamicPageStatus } from '@/types/content/PageTypes'
 
-interface MetadataFields {
-  ogTitle?: string
-  ogDescription?: string
-  ogImage?: string
-  twitterTitle?: string
-  twitterDescription?: string
-  twitterCard?: string
-}
+export default function DynamicPageEditor() {
+  const params = useParams<{ pageId: string }>()
+  const router = useRouter()
+  const pageId = params?.pageId
 
-interface Props {
-  pageId: string
-  title: string
-  slug: string
-  isPublished: boolean
-  description?: string
-  keywords?: string[]
-  metadata?: MetadataFields
-  initialSections: BlockData[]
-  topBarExtra?: React.ReactNode
-  onSave: (data: {
-    title: string
-    slug: string
-    isPublished: boolean
-    description: string
-    keywords: string[]
-    metadata: MetadataFields
-    sections: BlockData[]
-  }) => Promise<void>
-}
-
-export default function DynamicPageEditor({
-  title: initialTitle,
-  slug: initialSlug,
-  isPublished: initialPublished,
-  description: initialDescription = '',
-  keywords: initialKeywords = [],
-  metadata: initialMetadata = {},
-  initialSections,
-  topBarExtra,
-  onSave,
-}: Props) {
-  const [sections, setSections] = useState<BlockData[]>(
-    [...initialSections].sort((a, b) => a.order - b.order)
+  const mode: 'create' | 'edit' = useMemo(
+    () => (pageId === 'create' ? 'create' : 'edit'),
+    [pageId]
   )
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [title, setTitle] = useState(initialTitle)
-  const [slug, setSlug] = useState(initialSlug)
-  const [isPublished, setIsPublished] = useState(initialPublished)
-  const [description, setDescription] = useState(initialDescription)
-  const [keywords, setKeywords] = useState<string[]>(initialKeywords)
-  const [metadata, setMetadata] = useState<MetadataFields>(initialMetadata)
-  const [showSEO, setShowSEO] = useState(false)
+
+  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+
+  const [sections, setSections] = useState<PageSection[]>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [title, setTitle] = useState('')
+  const [slug, setSlug] = useState('')
+  const [status, setStatus] = useState<DynamicPageStatus>('DRAFT')
+
+  // Load page (edit mode)
+  useEffect(() => {
+    if (mode === 'create') {
+      setLoading(false)
+      return
+    }
+
+    let cancelled = false
+    axiosInstance
+      .get(`/api/dynamic-pages/${pageId}`)
+      .then((res) => {
+        if (cancelled) return
+        const raw = res.data.page
+        setTitle(raw.title ?? '')
+        setSlug(raw.slug ?? '')
+        setStatus(raw.status ?? 'DRAFT')
+        setSections(
+          Array.isArray(raw.sections)
+            ? (raw.sections as PageSection[]).sort((a, b) => a.order - b.order)
+            : []
+        )
+      })
+      .catch(() => toast.error('Failed to load page'))
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+
+    return () => { cancelled = true }
+  }, [pageId, mode])
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -87,7 +86,6 @@ export default function DynamicPageEditor({
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (!over || active.id === over.id) return
-
     setSections((prev) => {
       const oldIndex = prev.findIndex((b) => b.id === active.id)
       const newIndex = prev.findIndex((b) => b.id === over.id)
@@ -98,15 +96,14 @@ export default function DynamicPageEditor({
   const addBlock = (type: string) => {
     const def = getAllBlockDefinitions().find((d) => d.type === type)
     if (!def) return
-
-    const newBlock: BlockData = {
+    const newSection: PageSection = {
       id: uuidv4(),
       type,
       order: sections.length,
       props: { ...def.defaultProps },
     }
-    setSections((prev) => [...prev, newBlock])
-    setSelectedId(newBlock.id)
+    setSections((prev) => [...prev, newSection])
+    setSelectedId(newSection.id)
   }
 
   const deleteBlock = (id: string) => {
@@ -121,9 +118,28 @@ export default function DynamicPageEditor({
   }
 
   const handleSave = async () => {
+    if (!title.trim()) { toast.error('Title is required'); return }
+    if (!slug.trim()) { toast.error('Slug is required'); return }
+
+    const body = {
+      title,
+      slug,
+      status,
+      sections: sections.map((s, i) => ({ ...s, order: i })),
+    }
+
     setSaving(true)
     try {
-      await onSave({ title, slug, isPublished, description, keywords, metadata, sections })
+      if (mode === 'create') {
+        const res = await axiosInstance.post('/api/dynamic-pages', body)
+        toast.success('Page created')
+        router.replace(`/admin/pages/${res.data.page.dynamicPageId}`)
+      } else {
+        await axiosInstance.patch(`/api/dynamic-pages/${pageId}`, body)
+        toast.success('Page saved')
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message ?? 'Failed to save page')
     } finally {
       setSaving(false)
     }
@@ -131,70 +147,58 @@ export default function DynamicPageEditor({
 
   const selectedBlock = sections.find((b) => b.id === selectedId) ?? null
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-base-200">
+        <span className="loading loading-spinner loading-md text-base-content/40" />
+      </div>
+    )
+  }
+
   return (
-    <div
-      className="fixed inset-0 z-40 flex flex-col"
-      style={{ top: '64px', backgroundColor: '#282626' }}
-    >
+    <div className="fixed inset-0 z-40 flex flex-col bg-base-300" style={{ top: '64px' }}>
       {/* Top bar */}
-      <div
-        className="flex items-center gap-4 px-4 py-3 border-b flex-shrink-0"
-        style={{ backgroundColor: '#1f1d1d', borderColor: 'rgba(255,255,255,0.08)' }}
-      >
+      <div className="flex items-center gap-4 px-4 py-3 border-b border-base-content/10 flex-shrink-0 bg-base-200">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Page title"
-          className="flex-1 px-3 py-1.5 rounded-md text-sm text-white outline-none min-w-0"
-          style={{ backgroundColor: '#282626', border: '1px solid rgba(255,255,255,0.1)' }}
+          className="flex-1 px-3 py-1.5 rounded-md text-sm text-base-content outline-none min-w-0 bg-base-300 border border-base-content/10"
         />
 
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            /products/
-          </span>
+          <span className="text-xs text-base-content/40">/</span>
           <input
             type="text"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
             placeholder="slug"
-            className="w-32 px-3 py-1.5 rounded-md text-sm text-white outline-none"
-            style={{ backgroundColor: '#282626', border: '1px solid rgba(255,255,255,0.1)' }}
+            className="w-40 px-3 py-1.5 rounded-md text-sm text-base-content outline-none bg-base-300 border border-base-content/10"
           />
         </div>
 
-        <label className="flex items-center gap-2 cursor-pointer flex-shrink-0">
-          <input
-            type="checkbox"
-            checked={isPublished}
-            onChange={(e) => setIsPublished(e.target.checked)}
-            className="w-4 h-4 rounded"
-            style={{ accentColor: '#ffc418' }}
-          />
-          <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>
-            Published
-          </span>
-        </label>
+        <DynamicSelect
+          options={[
+            { label: 'Draft', value: 'DRAFT' },
+            { label: 'Published', value: 'PUBLISHED' },
+            { label: 'Archived', value: 'ARCHIVED' },
+          ]}
+          selectedValue={status}
+          onValueChange={(v) => setStatus(v as DynamicPageStatus)}
+        />
 
         <button
-          onClick={() => { setShowSEO((v) => !v); setSelectedId(null) }}
-          className="px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0"
-          style={{
-            backgroundColor: showSEO ? '#ffc418' : 'rgba(255,255,255,0.08)',
-            color: showSEO ? '#282626' : 'rgba(255,255,255,0.7)',
-          }}
+          onClick={() => router.push('/admin/pages')}
+          className="px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0 bg-base-content/10 text-base-content/70"
         >
-          SEO
+          Cancel
         </button>
-
-        {topBarExtra}
 
         <button
           onClick={handleSave}
-          disabled={saving}
-          className="px-5 py-1.5 rounded-md text-sm font-medium transition-all disabled:opacity-50 flex-shrink-0"
-          style={{ backgroundColor: '#ffc418', color: '#282626' }}
+          disabled={saving || loading}
+          className="px-5 py-1.5 rounded-md text-sm font-medium transition-all disabled:opacity-50 flex-shrink-0 bg-primary text-primary-content"
         >
           {saving ? 'Saving…' : 'Save'}
         </button>
@@ -217,23 +221,14 @@ export default function DynamicPageEditor({
               <Canvas
                 sections={sections}
                 selectedId={selectedId}
-                onSelect={(id) => { setSelectedId(id); setShowSEO(false) }}
+                onSelect={(id) => setSelectedId(id)}
                 onDelete={deleteBlock}
               />
             </SortableContext>
           </DndContext>
         </div>
 
-        {showSEO ? (
-          <SEOPanel
-            description={description}
-            keywords={keywords}
-            metadata={metadata}
-            onChangeDescription={setDescription}
-            onChangeKeywords={setKeywords}
-            onChangeMetadata={setMetadata}
-          />
-        ) : selectedBlock?.type === 'custom' ? (
+        {selectedBlock?.type === 'custom' ? (
           <BlockBuilderPanel
             block={selectedBlock}
             onChange={(props) => updateBlockProps(selectedBlock.id, props)}

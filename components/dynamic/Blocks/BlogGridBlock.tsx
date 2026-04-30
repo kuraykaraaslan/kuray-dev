@@ -14,9 +14,9 @@ interface BlogPost {
 function BlogGridBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let posts: BlogPost[] = []
   try {
@@ -31,8 +31,8 @@ function BlogGridBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
-            {subtitle && <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>{subtitle}</p>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
+            {subtitle && <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>{subtitle}</p>}
           </div>
         )}
 
@@ -44,9 +44,9 @@ function BlogGridBlock(rawProps: Record<string, unknown>) {
                   {post.category}
                 </div>
               )}
-              <h3 className="text-2xl text-white font-bold mb-3">{post.title}</h3>
-              {post.date && <p className="text-sm mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>{post.date}</p>}
-              {post.excerpt && <p style={{ color: 'rgba(255,255,255,0.7)' }}>{post.excerpt}</p>}
+              <h3 className="text-2xl text-base-content font-bold mb-3">{post.title}</h3>
+              {post.date && <p className="text-sm mb-3" style={{ color: 'oklch(var(--bc) / 0.5)' }}>{post.date}</p>}
+              {post.excerpt && <p style={{ color: 'oklch(var(--bc) / 0.7)' }}>{post.excerpt}</p>}
             </Link>
           ))}
         </div>
@@ -63,9 +63,9 @@ export const BlogGridBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Latest Insights',
     subtitle: 'Read our latest thought leadership content',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
     posts: JSON.stringify([
       { title: 'How to Scale Enterprise Workflows', category: 'Operations', date: 'Apr 2026', href: '/blog/scale-workflows', excerpt: 'Key patterns for scaling cross-functional operations.' },
       { title: 'Security Checklist for Modern Platforms', category: 'Security', date: 'Mar 2026', href: '/blog/security-checklist', excerpt: 'Practical controls for enterprise-grade applications.' },

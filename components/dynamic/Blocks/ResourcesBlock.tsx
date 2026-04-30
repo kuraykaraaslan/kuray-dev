@@ -14,9 +14,9 @@ interface Resource {
 function ResourcesBlock(rawProps: Record<string, unknown>) {
   const heading = rawProps.heading as string | undefined
   const subtitle = rawProps.subtitle as string | undefined
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const cardBg = (rawProps.cardBgColor as string) || '#323030'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const cardBg = (rawProps.cardBgColor as string) || 'oklch(var(--b3))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   let resources: Resource[] = []
   try {
@@ -31,9 +31,9 @@ function ResourcesBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-6xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
-            {heading && <h2 className="text-4xl md:text-5xl text-white mb-4">{heading}</h2>}
+            {heading && <h2 className="text-4xl md:text-5xl text-base-content mb-4">{heading}</h2>}
             {subtitle && (
-              <p className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <p className="text-lg" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
                 {subtitle}
               </p>
             )}
@@ -52,16 +52,15 @@ function ResourcesBlock(rawProps: Record<string, unknown>) {
                 {resource.icon && <span className="text-3xl">{resource.icon}</span>}
                 {resource.type && (
                   <span
-                    className="text-xs font-semibold px-3 py-1 rounded-full"
-                    style={{ backgroundColor: accent, color: bg }}
+                    className={`text-xs font-semibold px-3 py-1 rounded-full{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
                   >
                     {resource.type}
                   </span>
                 )}
               </div>
-              <h3 className="text-lg text-white font-bold mb-2">{resource.title}</h3>
+              <h3 className="text-lg text-base-content font-bold mb-2">{resource.title}</h3>
               {resource.description && (
-                <p style={{ color: 'rgba(255,255,255,0.6)' }}>{resource.description}</p>
+                <p style={{ color: 'oklch(var(--bc) / 0.6)' }}>{resource.description}</p>
               )}
               <div className="mt-4 font-semibold" style={{ color: accent }}>
                 Learn More →
@@ -82,9 +81,9 @@ export const ResourcesBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Resources & Documentation',
     subtitle: 'Everything you need to get started',
-    bgColor: '#282626',
-    cardBgColor: '#323030',
-    accentColor: '#ffc418',
+    bgColor: '',
+    cardBgColor: '',
+    accentColor: '',
     resources: JSON.stringify([
       {
         title: 'Getting Started Guide',

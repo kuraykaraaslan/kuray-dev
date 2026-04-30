@@ -1,5 +1,5 @@
 import { prisma } from '@/libs/prisma'
-import type { BlockData, DynamicPageParams } from '@/dtos/DynamicPageDTO'
+import type { PageSection, DynamicPageParams } from '@/dtos/DynamicPageDTO'
 
 export default class DynamicPageService {
   static async getAll() {
@@ -43,7 +43,7 @@ export default class DynamicPageService {
     title: string
     description?: string
     keywords?: string[]
-    sections?: BlockData[]
+    sections?: PageSection[]
     metadata?: Record<string, unknown>
     isPublished?: boolean
   }) {
@@ -67,7 +67,7 @@ export default class DynamicPageService {
       title?: string
       description?: string
       keywords?: string[]
-      sections?: BlockData[]
+      sections?: PageSection[]
       metadata?: Record<string, unknown>
       isPublished?: boolean
     }

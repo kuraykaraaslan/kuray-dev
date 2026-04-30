@@ -8,8 +8,8 @@ function NewsletterSignupBlock(rawProps: Record<string, unknown>) {
   const subtitle = rawProps.subtitle as string | undefined
   const placeholder = (rawProps.placeholder as string) || 'Enter your email'
   const buttonLabel = (rawProps.buttonLabel as string) || 'Subscribe'
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
@@ -25,17 +25,16 @@ function NewsletterSignupBlock(rawProps: Record<string, unknown>) {
   return (
     <section className="py-16 px-6 md:px-12 lg:px-20" style={{ backgroundColor: bg }}>
       <div className="max-w-2xl mx-auto text-center">
-        {heading && <h2 className="text-3xl md:text-4xl text-white mb-4">{heading}</h2>}
+        {heading && <h2 className="text-3xl md:text-4xl text-base-content mb-4">{heading}</h2>}
         {subtitle && (
-          <p className="text-lg mb-8" style={{ color: 'rgba(255,255,255,0.7)' }}>
+          <p className="text-lg mb-8" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
             {subtitle}
           </p>
         )}
 
         {submitted ? (
           <div
-            className="p-4 rounded-md text-center font-medium"
-            style={{ backgroundColor: accent, color: bg }}
+            className={`p-4 rounded-md text-center font-medium{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
           >
             ✓ Thank you! Check your email for confirmation.
           </div>
@@ -46,14 +45,13 @@ function NewsletterSignupBlock(rawProps: Record<string, unknown>) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 px-4 py-3 rounded-md text-white border border-white/20 focus:border-white/50 focus:outline-none"
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              className="flex-1 px-4 py-3 rounded-md text-base-content border border-white/20 focus:border-white/50 focus:outline-none"
+              style={{ backgroundColor: 'oklch(var(--bc) / 0.1)' }}
               required
             />
             <button
               type="submit"
-              className="px-8 py-3 rounded-md font-medium transition-transform hover:scale-105"
-              style={{ backgroundColor: accent, color: bg }}
+              className={`px-8 py-3 rounded-md font-medium transition-transform hover:scale-105{!accent ? ' bg-primary text-primary-content' : ''}`} style={accent ? { backgroundColor: accent, color: 'oklch(var(--pc))' } : undefined}
             >
               {buttonLabel}
             </button>
@@ -74,8 +72,8 @@ export const NewsletterSignupBlockDefinition: BlockDefinition = {
     subtitle: 'Subscribe to our newsletter for the latest updates and insights.',
     placeholder: 'Enter your email address',
     buttonLabel: 'Subscribe',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     heading: { label: 'Heading', type: 'text' },

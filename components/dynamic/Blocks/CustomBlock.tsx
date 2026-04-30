@@ -15,17 +15,17 @@ function CustomBlockComponent(props: Record<string, unknown>) {
   if (!template) {
     return (
       <div
+        className="bg-base-300"
         style={{
           padding: '4rem 2rem',
           textAlign: 'center',
-          backgroundColor: '#282626',
-          border: '2px dashed rgba(255,196,24,0.2)',
+          border: '2px dashed oklch(var(--p) / 0.2)',
         }}
       >
-        <p style={{ color: 'rgba(255,196,24,0.6)', fontSize: 13, marginBottom: 6, fontWeight: 600 }}>
+        <p style={{ color: 'oklch(var(--p) / 0.6)', fontSize: 13, marginBottom: 6, fontWeight: 600 }}>
           Custom Block
         </p>
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>
+        <p style={{ color: 'oklch(var(--bc) / 0.3)', fontSize: 12 }}>
           Select this block and open the Block Builder to define fields and HTML template.
         </p>
       </div>

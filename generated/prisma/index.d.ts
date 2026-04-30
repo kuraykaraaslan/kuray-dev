@@ -242,6 +242,15 @@ export const ChatSessionStatus: {
 
 export type ChatSessionStatus = (typeof ChatSessionStatus)[keyof typeof ChatSessionStatus]
 
+
+export const DynamicPageStatus: {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type DynamicPageStatus = (typeof DynamicPageStatus)[keyof typeof DynamicPageStatus]
+
 }
 
 export type OTPMethod = $Enums.OTPMethod
@@ -275,6 +284,10 @@ export const AppointmentStatus: typeof $Enums.AppointmentStatus
 export type ChatSessionStatus = $Enums.ChatSessionStatus
 
 export const ChatSessionStatus: typeof $Enums.ChatSessionStatus
+
+export type DynamicPageStatus = $Enums.DynamicPageStatus
+
+export const DynamicPageStatus: typeof $Enums.DynamicPageStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -36085,7 +36098,7 @@ export namespace Prisma {
     slug: string | null
     title: string | null
     description: string | null
-    isPublished: boolean | null
+    status: $Enums.DynamicPageStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -36095,7 +36108,7 @@ export namespace Prisma {
     slug: string | null
     title: string | null
     description: string | null
-    isPublished: boolean | null
+    status: $Enums.DynamicPageStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -36108,7 +36121,7 @@ export namespace Prisma {
     keywords: number
     sections: number
     metadata: number
-    isPublished: number
+    status: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -36120,7 +36133,7 @@ export namespace Prisma {
     slug?: true
     title?: true
     description?: true
-    isPublished?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -36130,7 +36143,7 @@ export namespace Prisma {
     slug?: true
     title?: true
     description?: true
-    isPublished?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -36143,7 +36156,7 @@ export namespace Prisma {
     keywords?: true
     sections?: true
     metadata?: true
-    isPublished?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -36229,7 +36242,7 @@ export namespace Prisma {
     keywords: string[]
     sections: JsonValue
     metadata: JsonValue | null
-    isPublished: boolean
+    status: $Enums.DynamicPageStatus
     createdAt: Date
     updatedAt: Date
     _count: DynamicPageCountAggregateOutputType | null
@@ -36259,7 +36272,7 @@ export namespace Prisma {
     keywords?: boolean
     sections?: boolean
     metadata?: boolean
-    isPublished?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dynamicPage"]>
@@ -36272,7 +36285,7 @@ export namespace Prisma {
     keywords?: boolean
     sections?: boolean
     metadata?: boolean
-    isPublished?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dynamicPage"]>
@@ -36285,7 +36298,7 @@ export namespace Prisma {
     keywords?: boolean
     sections?: boolean
     metadata?: boolean
-    isPublished?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dynamicPage"]>
@@ -36298,12 +36311,12 @@ export namespace Prisma {
     keywords?: boolean
     sections?: boolean
     metadata?: boolean
-    isPublished?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DynamicPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dynamicPageId" | "slug" | "title" | "description" | "keywords" | "sections" | "metadata" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPage"]>
+  export type DynamicPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dynamicPageId" | "slug" | "title" | "description" | "keywords" | "sections" | "metadata" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPage"]>
 
   export type $DynamicPagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DynamicPage"
@@ -36316,7 +36329,7 @@ export namespace Prisma {
       keywords: string[]
       sections: Prisma.JsonValue
       metadata: Prisma.JsonValue | null
-      isPublished: boolean
+      status: $Enums.DynamicPageStatus
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dynamicPage"]>
@@ -36749,7 +36762,7 @@ export namespace Prisma {
     readonly keywords: FieldRef<"DynamicPage", 'String[]'>
     readonly sections: FieldRef<"DynamicPage", 'Json'>
     readonly metadata: FieldRef<"DynamicPage", 'Json'>
-    readonly isPublished: FieldRef<"DynamicPage", 'Boolean'>
+    readonly status: FieldRef<"DynamicPage", 'DynamicPageStatus'>
     readonly createdAt: FieldRef<"DynamicPage", 'DateTime'>
     readonly updatedAt: FieldRef<"DynamicPage", 'DateTime'>
   }
@@ -37569,7 +37582,7 @@ export namespace Prisma {
     keywords: 'keywords',
     sections: 'sections',
     metadata: 'metadata',
-    isPublished: 'isPublished',
+    status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -37802,6 +37815,20 @@ export namespace Prisma {
    * Reference to a field of type 'ChatSessionStatus[]'
    */
   export type ListEnumChatSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatSessionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DynamicPageStatus'
+   */
+  export type EnumDynamicPageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DynamicPageStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'DynamicPageStatus[]'
+   */
+  export type ListEnumDynamicPageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DynamicPageStatus[]'>
     
   /**
    * Deep Input Types
@@ -39972,7 +39999,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"DynamicPage">
     sections?: JsonFilter<"DynamicPage">
     metadata?: JsonNullableFilter<"DynamicPage">
-    isPublished?: BoolFilter<"DynamicPage"> | boolean
+    status?: EnumDynamicPageStatusFilter<"DynamicPage"> | $Enums.DynamicPageStatus
     createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
   }
@@ -39985,7 +40012,7 @@ export namespace Prisma {
     keywords?: SortOrder
     sections?: SortOrder
     metadata?: SortOrderInput | SortOrder
-    isPublished?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40001,7 +40028,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"DynamicPage">
     sections?: JsonFilter<"DynamicPage">
     metadata?: JsonNullableFilter<"DynamicPage">
-    isPublished?: BoolFilter<"DynamicPage"> | boolean
+    status?: EnumDynamicPageStatusFilter<"DynamicPage"> | $Enums.DynamicPageStatus
     createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
   }, "dynamicPageId" | "slug">
@@ -40014,7 +40041,7 @@ export namespace Prisma {
     keywords?: SortOrder
     sections?: SortOrder
     metadata?: SortOrderInput | SortOrder
-    isPublished?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DynamicPageCountOrderByAggregateInput
@@ -40033,7 +40060,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"DynamicPage">
     sections?: JsonWithAggregatesFilter<"DynamicPage">
     metadata?: JsonNullableWithAggregatesFilter<"DynamicPage">
-    isPublished?: BoolWithAggregatesFilter<"DynamicPage"> | boolean
+    status?: EnumDynamicPageStatusWithAggregatesFilter<"DynamicPage"> | $Enums.DynamicPageStatus
     createdAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
   }
@@ -42453,7 +42480,7 @@ export namespace Prisma {
     keywords?: DynamicPageCreatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: boolean
+    status?: $Enums.DynamicPageStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42466,7 +42493,7 @@ export namespace Prisma {
     keywords?: DynamicPageCreatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: boolean
+    status?: $Enums.DynamicPageStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42479,7 +42506,7 @@ export namespace Prisma {
     keywords?: DynamicPageUpdatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42492,7 +42519,7 @@ export namespace Prisma {
     keywords?: DynamicPageUpdatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42505,7 +42532,7 @@ export namespace Prisma {
     keywords?: DynamicPageCreatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: boolean
+    status?: $Enums.DynamicPageStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42518,7 +42545,7 @@ export namespace Prisma {
     keywords?: DynamicPageUpdatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42531,7 +42558,7 @@ export namespace Prisma {
     keywords?: DynamicPageUpdatekeywordsInput | string[]
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44226,6 +44253,13 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type EnumDynamicPageStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DynamicPageStatus | EnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDynamicPageStatusFilter<$PrismaModel> | $Enums.DynamicPageStatus
+  }
+
   export type DynamicPageCountOrderByAggregateInput = {
     dynamicPageId?: SortOrder
     slug?: SortOrder
@@ -44234,7 +44268,7 @@ export namespace Prisma {
     keywords?: SortOrder
     sections?: SortOrder
     metadata?: SortOrder
-    isPublished?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44244,7 +44278,7 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    isPublished?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44254,7 +44288,7 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    isPublished?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44283,6 +44317,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type EnumDynamicPageStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DynamicPageStatus | EnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDynamicPageStatusWithAggregatesFilter<$PrismaModel> | $Enums.DynamicPageStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDynamicPageStatusFilter<$PrismaModel>
+    _max?: NestedEnumDynamicPageStatusFilter<$PrismaModel>
   }
 
   export type UserSessionCreateNestedManyWithoutUserInput = {
@@ -45301,6 +45345,10 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type EnumDynamicPageStatusFieldUpdateOperationsInput = {
+    set?: $Enums.DynamicPageStatus
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -45659,6 +45707,13 @@ export namespace Prisma {
     _min?: NestedEnumChatSessionStatusFilter<$PrismaModel>
     _max?: NestedEnumChatSessionStatusFilter<$PrismaModel>
   }
+
+  export type NestedEnumDynamicPageStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.DynamicPageStatus | EnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDynamicPageStatusFilter<$PrismaModel> | $Enums.DynamicPageStatus
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -45681,6 +45736,16 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumDynamicPageStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DynamicPageStatus | EnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DynamicPageStatus[] | ListEnumDynamicPageStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumDynamicPageStatusWithAggregatesFilter<$PrismaModel> | $Enums.DynamicPageStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDynamicPageStatusFilter<$PrismaModel>
+    _max?: NestedEnumDynamicPageStatusFilter<$PrismaModel>
   }
 
   export type UserSessionCreateWithoutUserInput = {

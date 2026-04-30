@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import openai from '@/libs/openai'
-import UserSessionService from '@/services/AuthService/UserSessionService'
 import type { CustomFieldSchema } from '@/components/dynamic/Blocks/CustomBlock'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 

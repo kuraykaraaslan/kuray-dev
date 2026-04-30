@@ -21,11 +21,6 @@ const FIELD_TYPES: CustomFieldSchema['type'][] = [
   'boolean',
 ]
 
-const inputBase: React.CSSProperties = {
-  backgroundColor: '#282626',
-  border: '1px solid rgba(255,255,255,0.1)',
-}
-
 export default function BlockBuilderPanel({ block, onChange }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('ai')
   const templateRef = useRef<HTMLTextAreaElement>(null)
@@ -107,37 +102,33 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
     { id: 'values', label: 'Values' },
   ]
 
+  const inputCls = 'w-full px-3 py-2 rounded-md text-sm text-base-content outline-none bg-base-300 border border-base-content/10'
+
   return (
-    <div
-      className="w-80 flex-shrink-0 flex flex-col border-l overflow-hidden"
-      style={{ backgroundColor: '#1f1d1d', borderColor: 'rgba(255,255,255,0.08)' }}
-    >
+    <div className="w-80 flex-shrink-0 flex flex-col border-l border-base-content/10 overflow-hidden bg-base-200">
       {/* Header */}
-      <div className="px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <p className="text-sm font-semibold text-white">Custom Block</p>
-        <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+      <div className="px-4 py-3 border-b border-base-content/10">
+        <p className="text-sm font-semibold text-base-content">Custom Block</p>
+        <p className="text-xs mt-0.5 text-base-content/35">
           Define fields → write template → fill values
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+      <div className="flex border-b border-base-content/10 flex-shrink-0">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className="flex-1 py-2.5 text-xs font-medium transition-colors"
-            style={{
-              color: activeTab === tab.id ? '#ffc418' : 'rgba(255,255,255,0.4)',
-              borderBottom: activeTab === tab.id ? '2px solid #ffc418' : '2px solid transparent',
-            }}
+            className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 ${
+              activeTab === tab.id
+                ? 'text-primary border-primary'
+                : 'text-base-content/40 border-transparent'
+            }`}
           >
             {tab.label}
             {tab.id === 'fields' && schema.length > 0 && (
-              <span
-                className="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px]"
-                style={{ backgroundColor: 'rgba(255,196,24,0.15)', color: '#ffc418' }}
-              >
+              <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] bg-primary/15 text-primary">
                 {schema.length}
               </span>
             )}
@@ -150,33 +141,24 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
         {activeTab === 'ai' && (
           <div className="p-4 space-y-4">
             {/* Heading */}
-            <div
-              className="rounded-lg p-3 space-y-2"
-              style={{ backgroundColor: 'rgba(255,196,24,0.06)', border: '1px solid rgba(255,196,24,0.15)' }}
-            >
-              <p className="text-xs font-semibold" style={{ color: '#ffc418' }}>
+            <div className="rounded-lg p-3 space-y-2 bg-primary/5 border border-primary/15">
+              <p className="text-xs font-semibold text-primary">
                 ✦ Generate with AI
               </p>
-              <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              <p className="text-[11px] text-base-content/40">
                 Describe the component. AI generates fields + a Tailwind template that matches the site theme.
               </p>
               {/* Theme hint */}
               <div className="grid grid-cols-2 gap-x-3 gap-y-1 pt-1">
                 {[
-                  ['BG', '#282626'],
-                  ['Card', '#323030'],
-                  ['Accent', '#ffc418'],
-                  ['Text', 'rgba(255,255,255,0.7)'],
+                  ['BG', 'bg-base-200'],
+                  ['Card', 'bg-base-300'],
+                  ['Accent', 'bg-primary'],
+                  ['Text', 'text-base-content/70'],
                 ].map(([name, val]) => (
                   <div key={name} className="flex items-center gap-1.5">
-                    <span
-                      className="w-3 h-3 rounded-sm flex-shrink-0 border"
-                      style={{
-                        backgroundColor: val,
-                        borderColor: 'rgba(255,255,255,0.15)',
-                      }}
-                    />
-                    <span className="text-[10px] font-mono truncate" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                    <span className={`w-3 h-3 rounded-sm flex-shrink-0 border border-base-content/15 ${val}`} />
+                    <span className="text-[10px] font-mono truncate text-base-content/35">
                       {name}: {val}
                     </span>
                   </div>
@@ -186,10 +168,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
 
             {/* Prompt */}
             <div>
-              <label
-                className="block text-xs font-medium mb-1.5"
-                style={{ color: 'rgba(255,255,255,0.55)' }}
-              >
+              <label className="block text-xs font-medium mb-1.5 text-base-content/55">
                 What should this block do?
               </label>
               <textarea
@@ -203,17 +182,16 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                   'e.g. "A hero section with a headline, short description, a CTA button URL, and a yellow accent color picker"'
                 }
                 disabled={aiLoading}
-                className="w-full px-3 py-2 rounded-md text-sm text-white outline-none resize-none"
-                style={{ ...inputBase, opacity: aiLoading ? 0.5 : 1 }}
+                className={`${inputCls} resize-none ${aiLoading ? 'opacity-50' : ''}`}
               />
-              <p className="text-[10px] mt-1" style={{ color: 'rgba(255,255,255,0.2)' }}>
+              <p className="text-[10px] mt-1 text-base-content/20">
                 ⌘ Enter to generate
               </p>
             </div>
 
             {/* Error */}
             {aiError && (
-              <p className="text-xs px-3 py-2 rounded-md" style={{ backgroundColor: 'rgba(220,38,38,0.1)', color: 'rgba(220,38,38,0.8)' }}>
+              <p className="text-xs px-3 py-2 rounded-md bg-error/10 text-error/80">
                 {aiError}
               </p>
             )}
@@ -222,8 +200,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
             <button
               onClick={generateWithAI}
               disabled={aiLoading || !aiPrompt.trim()}
-              className="w-full py-2.5 rounded-lg text-sm font-semibold transition-all disabled:opacity-40"
-              style={{ backgroundColor: '#ffc418', color: '#1f1d1d' }}
+              className="w-full py-2.5 rounded-lg text-sm font-semibold transition-all disabled:opacity-40 bg-primary text-primary-content"
             >
               {aiLoading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -240,9 +217,9 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
 
             {/* Divider */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
-              <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.25)' }}>or build manually</span>
-              <div className="flex-1 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+              <div className="flex-1 h-px bg-base-content/10" />
+              <span className="text-[10px] text-base-content/25">or build manually</span>
+              <div className="flex-1 h-px bg-base-content/10" />
             </div>
 
             {/* Manual tab shortcuts */}
@@ -251,12 +228,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className="py-2 rounded-md text-xs font-medium capitalize transition-colors"
-                  style={{
-                    backgroundColor: '#282626',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    color: 'rgba(255,255,255,0.5)',
-                  }}
+                  className="py-2 rounded-md text-xs font-medium capitalize transition-colors bg-base-300 border border-base-content/10 text-base-content/50"
                 >
                   {tab}
                 </button>
@@ -269,7 +241,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
         {activeTab === 'fields' && (
           <div className="p-4 space-y-3">
             {schema.length === 0 && (
-              <p className="text-xs text-center py-6" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <p className="text-xs text-center py-6 text-base-content/30">
                 No fields yet. Add a field to get started.
               </p>
             )}
@@ -277,21 +249,16 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
             {schema.map((field, i) => (
               <div
                 key={i}
-                className="p-3 rounded-lg space-y-2.5"
-                style={{ backgroundColor: '#282626', border: '1px solid rgba(255,255,255,0.07)' }}
+                className="p-3 rounded-lg space-y-2.5 bg-base-300 border border-base-content/10"
               >
                 {/* Field token + remove */}
                 <div className="flex items-center justify-between">
-                  <span
-                    className="px-1.5 py-0.5 rounded text-[11px] font-mono"
-                    style={{ backgroundColor: 'rgba(255,196,24,0.1)', color: '#ffc418' }}
-                  >
+                  <span className="px-1.5 py-0.5 rounded text-[11px] font-mono bg-primary/10 text-primary">
                     {`{{${field.key || '…'}}}`}
                   </span>
                   <button
                     onClick={() => removeField(i)}
-                    className="text-[11px] px-2 py-0.5 rounded transition-colors"
-                    style={{ backgroundColor: 'rgba(220,38,38,0.12)', color: 'rgba(220,38,38,0.8)' }}
+                    className="text-[11px] px-2 py-0.5 rounded transition-colors bg-error/12 text-error/80"
                   >
                     Remove
                   </button>
@@ -300,10 +267,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                 {/* Key + Label */}
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label
-                      className="block text-[10px] mb-1"
-                      style={{ color: 'rgba(255,255,255,0.4)' }}
-                    >
+                    <label className="block text-[10px] mb-1 text-base-content/40">
                       Key
                     </label>
                     <input
@@ -312,24 +276,19 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                       onChange={(e) =>
                         updateField(i, { key: e.target.value.replace(/[^a-zA-Z0-9_]/g, '') })
                       }
-                      className="w-full px-2 py-1.5 rounded text-xs text-white outline-none font-mono"
-                      style={inputBase}
+                      className="w-full px-2 py-1.5 rounded text-xs text-base-content outline-none font-mono bg-base-200 border border-base-content/10"
                       placeholder="myField"
                     />
                   </div>
                   <div>
-                    <label
-                      className="block text-[10px] mb-1"
-                      style={{ color: 'rgba(255,255,255,0.4)' }}
-                    >
+                    <label className="block text-[10px] mb-1 text-base-content/40">
                       Label
                     </label>
                     <input
                       type="text"
                       value={field.label}
                       onChange={(e) => updateField(i, { label: e.target.value })}
-                      className="w-full px-2 py-1.5 rounded text-xs text-white outline-none"
-                      style={inputBase}
+                      className="w-full px-2 py-1.5 rounded text-xs text-base-content outline-none bg-base-200 border border-base-content/10"
                       placeholder="My Field"
                     />
                   </div>
@@ -337,10 +296,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
 
                 {/* Type */}
                 <div>
-                  <label
-                    className="block text-[10px] mb-1"
-                    style={{ color: 'rgba(255,255,255,0.4)' }}
-                  >
+                  <label className="block text-[10px] mb-1 text-base-content/40">
                     Type
                   </label>
                   <select
@@ -348,8 +304,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                     onChange={(e) =>
                       updateField(i, { type: e.target.value as CustomFieldSchema['type'] })
                     }
-                    className="w-full px-2 py-1.5 rounded text-xs text-white outline-none"
-                    style={inputBase}
+                    className="w-full px-2 py-1.5 rounded text-xs text-base-content outline-none bg-base-200 border border-base-content/10"
                   >
                     {FIELD_TYPES.map((t) => (
                       <option key={t} value={t}>
@@ -363,18 +318,13 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
 
             <button
               onClick={addField}
-              className="w-full py-2.5 rounded-lg text-xs font-medium transition-all"
-              style={{
-                backgroundColor: 'rgba(255,196,24,0.07)',
-                border: '1px dashed rgba(255,196,24,0.3)',
-                color: '#ffc418',
-              }}
+              className="w-full py-2.5 rounded-lg text-xs font-medium transition-all bg-primary/5 border border-dashed border-primary/30 text-primary"
             >
               + Add Field
             </button>
 
             {schema.length > 0 && (
-              <p className="text-[10px] text-center" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <p className="text-[10px] text-center text-base-content/25">
                 Switch to Template tab to use these fields
               </p>
             )}
@@ -387,7 +337,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
             {/* Token chips */}
             {schema.length > 0 && (
               <div>
-                <p className="text-[10px] mb-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                <p className="text-[10px] mb-2 text-base-content/35">
                   Click a token to insert at cursor:
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -395,12 +345,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                     <button
                       key={f.key}
                       onClick={() => insertToken(f.key)}
-                      className="px-2 py-0.5 rounded text-[11px] font-mono transition-all hover:opacity-80"
-                      style={{
-                        backgroundColor: 'rgba(255,196,24,0.1)',
-                        color: '#ffc418',
-                        border: '1px solid rgba(255,196,24,0.2)',
-                      }}
+                      className="px-2 py-0.5 rounded text-[11px] font-mono transition-all hover:opacity-80 bg-primary/10 text-primary border border-primary/20"
                       title={`Insert {{${f.key}}}`}
                     >
                       {`{{${f.key}}}`}
@@ -411,18 +356,15 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
             )}
 
             {schema.length === 0 && (
-              <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <p className="text-[11px] text-base-content/30">
                 Tip: Add fields first, then use{' '}
-                <span className="font-mono text-yellow-400/50">{'{{key}}'}</span> in your template.
+                <span className="font-mono text-primary/50">{'{{key}}'}</span> in your template.
               </p>
             )}
 
             {/* Template textarea */}
             <div>
-              <label
-                className="block text-xs font-medium mb-1.5"
-                style={{ color: 'rgba(255,255,255,0.55)' }}
-              >
+              <label className="block text-xs font-medium mb-1.5 text-base-content/55">
                 HTML Template
               </label>
               <textarea
@@ -430,21 +372,21 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                 value={template}
                 onChange={(e) => updateTemplate(e.target.value)}
                 rows={18}
-                placeholder={`<section class="py-20 bg-gray-900 text-center">
-  <h1 class="text-4xl font-bold text-white">
+                placeholder={`<section class="py-20 bg-base-200 text-center">
+  <h1 class="text-4xl font-bold text-base-content">
     {{title}}
   </h1>
-  <p class="mt-4 text-gray-400">
+  <p class="mt-4 text-base-content/60">
     {{subtitle}}
   </p>
 </section>`}
-                className="w-full px-3 py-2 rounded-md text-xs text-white outline-none resize-y font-mono"
-                style={{ ...inputBase, lineHeight: '1.6', minHeight: 200 }}
+                className={`${inputCls} resize-y font-mono text-xs`}
+                style={{ lineHeight: '1.6', minHeight: 200 }}
                 spellCheck={false}
               />
             </div>
 
-            <p className="text-[11px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
+            <p className="text-[11px] text-base-content/25">
               Tailwind CSS classes work. Standard HTML attributes supported.
             </p>
           </div>
@@ -454,22 +396,16 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
         {activeTab === 'values' && (
           <div className="p-4 space-y-4">
             {schema.length === 0 && (
-              <p className="text-xs text-center py-6" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              <p className="text-xs text-center py-6 text-base-content/30">
                 Define fields in the Fields tab first.
               </p>
             )}
 
             {schema.map((field) => (
               <div key={field.key}>
-                <label
-                  className="flex items-center gap-1.5 text-xs font-medium mb-1.5"
-                  style={{ color: 'rgba(255,255,255,0.55)' }}
-                >
+                <label className="flex items-center gap-1.5 text-xs font-medium mb-1.5 text-base-content/55">
                   {field.label}
-                  <span
-                    className="font-mono text-[10px]"
-                    style={{ color: 'rgba(255,196,24,0.5)' }}
-                  >
+                  <span className="font-mono text-[10px] text-primary/50">
                     {`{{${field.key}}}`}
                   </span>
                 </label>
@@ -479,8 +415,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                     type="text"
                     value={(block.props[field.key] as string) ?? ''}
                     onChange={(e) => updateValue(field.key, e.target.value)}
-                    className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                    style={inputBase}
+                    className={inputCls}
                   />
                 )}
 
@@ -489,8 +424,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                     value={(block.props[field.key] as string) ?? ''}
                     onChange={(e) => updateValue(field.key, e.target.value)}
                     rows={3}
-                    className="w-full px-3 py-2 rounded-md text-sm text-white outline-none resize-none"
-                    style={inputBase}
+                    className={`${inputCls} resize-none`}
                   />
                 )}
 
@@ -499,8 +433,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                     type="url"
                     value={(block.props[field.key] as string) ?? ''}
                     onChange={(e) => updateValue(field.key, e.target.value)}
-                    className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                    style={inputBase}
+                    className={inputCls}
                   />
                 )}
 
@@ -510,15 +443,13 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                       type="color"
                       value={(block.props[field.key] as string) ?? '#000000'}
                       onChange={(e) => updateValue(field.key, e.target.value)}
-                      className="w-9 h-8 rounded cursor-pointer border-0 p-0.5"
-                      style={{ backgroundColor: 'transparent' }}
+                      className="w-9 h-8 rounded cursor-pointer border-0 p-0.5 bg-transparent"
                     />
                     <input
                       type="text"
                       value={(block.props[field.key] as string) ?? ''}
                       onChange={(e) => updateValue(field.key, e.target.value)}
-                      className="flex-1 px-3 py-2 rounded-md text-sm text-white outline-none font-mono"
-                      style={inputBase}
+                      className={`flex-1 ${inputCls}`}
                     />
                   </div>
                 )}
@@ -529,10 +460,9 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                       type="checkbox"
                       checked={(block.props[field.key] as boolean) ?? false}
                       onChange={(e) => updateValue(field.key, e.target.checked)}
-                      className="w-4 h-4 rounded"
-                      style={{ accentColor: '#ffc418' }}
+                      className="w-4 h-4 rounded accent-primary"
                     />
-                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                    <span className="text-sm text-base-content/60">
                       Enabled
                     </span>
                   </label>
@@ -543,8 +473,7 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
                     type="number"
                     value={(block.props[field.key] as number) ?? 0}
                     onChange={(e) => updateValue(field.key, Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-md text-sm text-white outline-none"
-                    style={inputBase}
+                    className={inputCls}
                   />
                 )}
               </div>

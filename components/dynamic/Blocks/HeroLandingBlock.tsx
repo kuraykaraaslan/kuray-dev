@@ -22,8 +22,8 @@ function HeroLandingBlock(rawProps: Record<string, unknown>) {
   const secondaryCtaHref = (rawProps.secondaryCtaHref as string) || '/solutions'
   const imageUrl = rawProps.imageUrl as string | undefined
   const imageAlt = (rawProps.imageAlt as string) || ''
-  const bg = (rawProps.bgColor as string) || '#282626'
-  const accent = (rawProps.accentColor as string) || '#ffc418'
+  const bg = (rawProps.bgColor as string) || 'oklch(var(--b2))'
+  const accent = (rawProps.accentColor as string) || 'oklch(var(--p))'
 
   return (
     <section
@@ -33,7 +33,7 @@ function HeroLandingBlock(rawProps: Record<string, unknown>) {
       <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
         {/* Left: Text */}
         <div className="space-y-6">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl text-base-content leading-tight">
             {titleLine1}
             {titleLine2 && <span className="block">{titleLine2}</span>}
             {titleAccent && <span className="block" style={{ color: accent }}>{titleAccent}</span>}
@@ -41,13 +41,13 @@ function HeroLandingBlock(rawProps: Record<string, unknown>) {
           </h1>
 
           {subtitle && (
-            <p className="text-xl leading-relaxed" style={{ color: 'rgba(255,255,255,0.8)' }}>
+            <p className="text-xl leading-relaxed" style={{ color: 'oklch(var(--bc) / 0.8)' }}>
               {subtitle}
             </p>
           )}
 
           {description && (
-            <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            <p className="text-lg leading-relaxed" style={{ color: 'oklch(var(--bc) / 0.7)' }}>
               {description}
             </p>
           )}
@@ -58,7 +58,6 @@ function HeroLandingBlock(rawProps: Record<string, unknown>) {
                 <Link
                   href={primaryCtaHref}
                   className="px-8 py-4 rounded-md text-lg font-medium transition-all hover:scale-105 text-center"
-                  style={{ backgroundColor: accent, color: bg }}
                 >
                   {primaryCtaLabel}
                 </Link>
@@ -66,7 +65,7 @@ function HeroLandingBlock(rawProps: Record<string, unknown>) {
               {secondaryCtaLabel && (
                 <Link
                   href={secondaryCtaHref}
-                  className="px-8 py-4 border-2 rounded-md text-lg font-medium text-white border-white/30 hover:border-white/60 transition-all text-center"
+                  className="px-8 py-4 border-2 rounded-md text-lg font-medium text-base-content border-white/30 hover:border-white/60 transition-all text-center"
                 >
                   {secondaryCtaLabel}
                 </Link>
@@ -96,12 +95,12 @@ function HeroLandingBlock(rawProps: Record<string, unknown>) {
               <div
                 className="w-full h-full flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(255,255,255,0.04)',
-                  border: '1px dashed rgba(255,255,255,0.1)',
+                  backgroundColor: 'oklch(var(--bc) / 0.04)',
+                  border: '1px dashed oklch(var(--bc) / 0.1)',
                   borderRadius: '8px',
                 }}
               >
-                <span className="text-sm" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                <span className="text-sm" style={{ color: 'oklch(var(--bc) / 0.2)' }}>
                   Image URL not set
                 </span>
               </div>
@@ -140,8 +139,8 @@ export const HeroLandingBlockDefinition: BlockDefinition = {
     imageUrl:
       'https://images.unsplash.com/photo-1750969185331-e03829f72c7d?auto=format&fit=crop&w=1080&q=80',
     imageAlt: 'Digital network visualization',
-    bgColor: '#282626',
-    accentColor: '#ffc418',
+    bgColor: '',
+    accentColor: '',
   },
   schema: {
     titleLine1: { label: 'Title Line 1 (white)', type: 'text' },

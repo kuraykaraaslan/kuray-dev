@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react'
 
-export interface BlockData {
+export interface PageSection {
   id: string
   type: string
   order: number
