@@ -1,0 +1,36 @@
+import { NextResponse } from 'next/server'
+import DynamicPageService from '@/services/DynamicPageService'
+import UserSessionService from '@/services/AuthService/UserSessionService'
+import { CreateDynamicPageSchema } from '@/dtos/DynamicPageDTO'
+
+export async function GET() {
+  try {
+    const pages = await DynamicPageService.getAll()
+    return NextResponse.json({ pages })
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error'
+    return NextResponse.json({ message: msg }, { status: 500 })
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    UserSessionService.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })
+
+    const body = await request.json()
+    const parsed = CreateDynamicPageSchema.safeParse(body)
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.errors.map((e) => e.message).join(', ') },
+        { status: 400 }
+      )
+    }
+
+    const page = await DynamicPageService.create(parsed.data)
+    return NextResponse.json({ page }, { status: 201 })
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error'
+    return NextResponse.json({ message: msg }, { status: 500 })
+  }
+}

@@ -32,7 +32,13 @@ async function getPost(postSlug: string, lang: string) {
   try {
     const cached = await redisInstance.get(post_cacheKey)
     if (cached) {
-      return PostWithDataSchema.parse(JSON.parse(cached)) as PostWithData
+      const parsed = PostWithDataSchema.safeParse(JSON.parse(cached))
+      if (parsed.success) {
+        return parsed.data as PostWithData
+      }
+
+      // Self-heal stale cache payloads from older schema versions.
+      await redisInstance.del(post_cacheKey)
     }
   } catch (error) {
     console.error('Error fetching post from Redis cache:', error)
@@ -45,8 +51,10 @@ async function getPost(postSlug: string, lang: string) {
     lang,
   })
 
-  //cache 
-  await redisInstance.set(post_cacheKey, JSON.stringify(response.posts[0]), 'EX', FRONTEND_CACHE_TTL)
+  //cache
+  if (response.posts[0]) {
+    await redisInstance.set(post_cacheKey, JSON.stringify(response.posts[0]), 'EX', FRONTEND_CACHE_TTL)
+  }
 
   return response.posts[0] || null
 }

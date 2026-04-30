@@ -158,6 +158,27 @@ describe('PostService', () => {
       expect(result.total).toBe(1)
     })
 
+    it('selects the category fields required by the post schema', async () => {
+      prismaMock.$transaction.mockResolvedValueOnce([[mockPost], 1])
+
+      await PostService.getAllPosts({ page: 0, pageSize: 10 })
+
+      expect(prismaMock.post.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          select: expect.objectContaining({
+            category: expect.objectContaining({
+              select: expect.objectContaining({
+                description: true,
+                keywords: true,
+                createdAt: true,
+                updatedAt: true,
+              }),
+            }),
+          }),
+        }),
+      )
+    })
+
     it('returns empty list when no posts', async () => {
       prismaMock.$transaction.mockResolvedValueOnce([[], 0])
 

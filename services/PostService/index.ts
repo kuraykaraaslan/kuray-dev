@@ -38,8 +38,12 @@ export default class PostService {
       select: {
         categoryId: true,
         title: true,
+        description: true,
         slug: true,
         image: true,
+        keywords: true,
+        createdAt: true,
+        updatedAt: true,
       },
     },
     author: {

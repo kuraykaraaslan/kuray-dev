@@ -555,3 +555,18 @@ model ChatMessage {
   @@index([chatSessionId])
   @@index([createdAt])
 }
+
+model DynamicPage {
+  dynamicPageId  String           @id @default(cuid())
+  slug           String           @unique
+  title          String
+  description    String?
+  keywords       String[]
+  sections       Json             @default("[]")
+  metadata       Json? // { ogTitle, ogDescription, ogImage, twitterTitle, twitterDescription, twitterCard }
+  isPublished    Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([slug])
+}

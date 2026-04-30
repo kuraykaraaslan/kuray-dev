@@ -159,6 +159,11 @@ export type ChatSession = $Result.DefaultSelection<Prisma.$ChatSessionPayload>
  * A single message inside a ChatSession.
  */
 export type ChatMessage = $Result.DefaultSelection<Prisma.$ChatMessagePayload>
+/**
+ * Model DynamicPage
+ * 
+ */
+export type DynamicPage = $Result.DefaultSelection<Prisma.$DynamicPagePayload>
 
 /**
  * Enums
@@ -681,6 +686,16 @@ export class PrismaClient<
     * ```
     */
   get chatMessage(): Prisma.ChatMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dynamicPage`: Exposes CRUD operations for the **DynamicPage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DynamicPages
+    * const dynamicPages = await prisma.dynamicPage.findMany()
+    * ```
+    */
+  get dynamicPage(): Prisma.DynamicPageDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1143,7 +1158,8 @@ export namespace Prisma {
     ApiKey: 'ApiKey',
     ActivityPubFollower: 'ActivityPubFollower',
     ChatSession: 'ChatSession',
-    ChatMessage: 'ChatMessage'
+    ChatMessage: 'ChatMessage',
+    DynamicPage: 'DynamicPage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1159,7 +1175,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userSession" | "userSocialAccount" | "verificationToken" | "post" | "postSeries" | "postSeriesEntry" | "postTranslation" | "category" | "categoryTranslation" | "comment" | "contactForm" | "subscription" | "campaign" | "setting" | "project" | "projectTranslation" | "appointment" | "like" | "testimonial" | "pushSubscription" | "geoAnalytics" | "shortLink" | "shortLinkClick" | "media" | "apiKey" | "activityPubFollower" | "chatSession" | "chatMessage"
+      modelProps: "user" | "userSession" | "userSocialAccount" | "verificationToken" | "post" | "postSeries" | "postSeriesEntry" | "postTranslation" | "category" | "categoryTranslation" | "comment" | "contactForm" | "subscription" | "campaign" | "setting" | "project" | "projectTranslation" | "appointment" | "like" | "testimonial" | "pushSubscription" | "geoAnalytics" | "shortLink" | "shortLinkClick" | "media" | "apiKey" | "activityPubFollower" | "chatSession" | "chatMessage" | "dynamicPage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3309,6 +3325,80 @@ export namespace Prisma {
           }
         }
       }
+      DynamicPage: {
+        payload: Prisma.$DynamicPagePayload<ExtArgs>
+        fields: Prisma.DynamicPageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DynamicPageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DynamicPageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>
+          }
+          findFirst: {
+            args: Prisma.DynamicPageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DynamicPageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>
+          }
+          findMany: {
+            args: Prisma.DynamicPageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>[]
+          }
+          create: {
+            args: Prisma.DynamicPageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>
+          }
+          createMany: {
+            args: Prisma.DynamicPageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DynamicPageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>[]
+          }
+          delete: {
+            args: Prisma.DynamicPageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>
+          }
+          update: {
+            args: Prisma.DynamicPageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>
+          }
+          deleteMany: {
+            args: Prisma.DynamicPageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DynamicPageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DynamicPageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>[]
+          }
+          upsert: {
+            args: Prisma.DynamicPageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPagePayload>
+          }
+          aggregate: {
+            args: Prisma.DynamicPageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDynamicPage>
+          }
+          groupBy: {
+            args: Prisma.DynamicPageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DynamicPageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DynamicPageCountArgs<ExtArgs>
+            result: $Utils.Optional<DynamicPageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3446,6 +3536,7 @@ export namespace Prisma {
     activityPubFollower?: ActivityPubFollowerOmit
     chatSession?: ChatSessionOmit
     chatMessage?: ChatMessageOmit
+    dynamicPage?: DynamicPageOmit
   }
 
   /* Types for Logging */
@@ -35980,6 +36071,1059 @@ export namespace Prisma {
 
 
   /**
+   * Model DynamicPage
+   */
+
+  export type AggregateDynamicPage = {
+    _count: DynamicPageCountAggregateOutputType | null
+    _min: DynamicPageMinAggregateOutputType | null
+    _max: DynamicPageMaxAggregateOutputType | null
+  }
+
+  export type DynamicPageMinAggregateOutputType = {
+    dynamicPageId: string | null
+    slug: string | null
+    title: string | null
+    description: string | null
+    isPublished: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DynamicPageMaxAggregateOutputType = {
+    dynamicPageId: string | null
+    slug: string | null
+    title: string | null
+    description: string | null
+    isPublished: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DynamicPageCountAggregateOutputType = {
+    dynamicPageId: number
+    slug: number
+    title: number
+    description: number
+    keywords: number
+    sections: number
+    metadata: number
+    isPublished: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DynamicPageMinAggregateInputType = {
+    dynamicPageId?: true
+    slug?: true
+    title?: true
+    description?: true
+    isPublished?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DynamicPageMaxAggregateInputType = {
+    dynamicPageId?: true
+    slug?: true
+    title?: true
+    description?: true
+    isPublished?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DynamicPageCountAggregateInputType = {
+    dynamicPageId?: true
+    slug?: true
+    title?: true
+    description?: true
+    keywords?: true
+    sections?: true
+    metadata?: true
+    isPublished?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DynamicPageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DynamicPage to aggregate.
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPages to fetch.
+     */
+    orderBy?: DynamicPageOrderByWithRelationInput | DynamicPageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DynamicPageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DynamicPages
+    **/
+    _count?: true | DynamicPageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DynamicPageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DynamicPageMaxAggregateInputType
+  }
+
+  export type GetDynamicPageAggregateType<T extends DynamicPageAggregateArgs> = {
+        [P in keyof T & keyof AggregateDynamicPage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDynamicPage[P]>
+      : GetScalarType<T[P], AggregateDynamicPage[P]>
+  }
+
+
+
+
+  export type DynamicPageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DynamicPageWhereInput
+    orderBy?: DynamicPageOrderByWithAggregationInput | DynamicPageOrderByWithAggregationInput[]
+    by: DynamicPageScalarFieldEnum[] | DynamicPageScalarFieldEnum
+    having?: DynamicPageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DynamicPageCountAggregateInputType | true
+    _min?: DynamicPageMinAggregateInputType
+    _max?: DynamicPageMaxAggregateInputType
+  }
+
+  export type DynamicPageGroupByOutputType = {
+    dynamicPageId: string
+    slug: string
+    title: string
+    description: string | null
+    keywords: string[]
+    sections: JsonValue
+    metadata: JsonValue | null
+    isPublished: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: DynamicPageCountAggregateOutputType | null
+    _min: DynamicPageMinAggregateOutputType | null
+    _max: DynamicPageMaxAggregateOutputType | null
+  }
+
+  type GetDynamicPageGroupByPayload<T extends DynamicPageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DynamicPageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DynamicPageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DynamicPageGroupByOutputType[P]>
+            : GetScalarType<T[P], DynamicPageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DynamicPageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    dynamicPageId?: boolean
+    slug?: boolean
+    title?: boolean
+    description?: boolean
+    keywords?: boolean
+    sections?: boolean
+    metadata?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dynamicPage"]>
+
+  export type DynamicPageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    dynamicPageId?: boolean
+    slug?: boolean
+    title?: boolean
+    description?: boolean
+    keywords?: boolean
+    sections?: boolean
+    metadata?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dynamicPage"]>
+
+  export type DynamicPageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    dynamicPageId?: boolean
+    slug?: boolean
+    title?: boolean
+    description?: boolean
+    keywords?: boolean
+    sections?: boolean
+    metadata?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dynamicPage"]>
+
+  export type DynamicPageSelectScalar = {
+    dynamicPageId?: boolean
+    slug?: boolean
+    title?: boolean
+    description?: boolean
+    keywords?: boolean
+    sections?: boolean
+    metadata?: boolean
+    isPublished?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DynamicPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dynamicPageId" | "slug" | "title" | "description" | "keywords" | "sections" | "metadata" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPage"]>
+
+  export type $DynamicPagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DynamicPage"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      dynamicPageId: string
+      slug: string
+      title: string
+      description: string | null
+      keywords: string[]
+      sections: Prisma.JsonValue
+      metadata: Prisma.JsonValue | null
+      isPublished: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dynamicPage"]>
+    composites: {}
+  }
+
+  type DynamicPageGetPayload<S extends boolean | null | undefined | DynamicPageDefaultArgs> = $Result.GetResult<Prisma.$DynamicPagePayload, S>
+
+  type DynamicPageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DynamicPageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DynamicPageCountAggregateInputType | true
+    }
+
+  export interface DynamicPageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DynamicPage'], meta: { name: 'DynamicPage' } }
+    /**
+     * Find zero or one DynamicPage that matches the filter.
+     * @param {DynamicPageFindUniqueArgs} args - Arguments to find a DynamicPage
+     * @example
+     * // Get one DynamicPage
+     * const dynamicPage = await prisma.dynamicPage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DynamicPageFindUniqueArgs>(args: SelectSubset<T, DynamicPageFindUniqueArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DynamicPage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DynamicPageFindUniqueOrThrowArgs} args - Arguments to find a DynamicPage
+     * @example
+     * // Get one DynamicPage
+     * const dynamicPage = await prisma.dynamicPage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DynamicPageFindUniqueOrThrowArgs>(args: SelectSubset<T, DynamicPageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DynamicPage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageFindFirstArgs} args - Arguments to find a DynamicPage
+     * @example
+     * // Get one DynamicPage
+     * const dynamicPage = await prisma.dynamicPage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DynamicPageFindFirstArgs>(args?: SelectSubset<T, DynamicPageFindFirstArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DynamicPage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageFindFirstOrThrowArgs} args - Arguments to find a DynamicPage
+     * @example
+     * // Get one DynamicPage
+     * const dynamicPage = await prisma.dynamicPage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DynamicPageFindFirstOrThrowArgs>(args?: SelectSubset<T, DynamicPageFindFirstOrThrowArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DynamicPages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DynamicPages
+     * const dynamicPages = await prisma.dynamicPage.findMany()
+     * 
+     * // Get first 10 DynamicPages
+     * const dynamicPages = await prisma.dynamicPage.findMany({ take: 10 })
+     * 
+     * // Only select the `dynamicPageId`
+     * const dynamicPageWithDynamicPageIdOnly = await prisma.dynamicPage.findMany({ select: { dynamicPageId: true } })
+     * 
+     */
+    findMany<T extends DynamicPageFindManyArgs>(args?: SelectSubset<T, DynamicPageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DynamicPage.
+     * @param {DynamicPageCreateArgs} args - Arguments to create a DynamicPage.
+     * @example
+     * // Create one DynamicPage
+     * const DynamicPage = await prisma.dynamicPage.create({
+     *   data: {
+     *     // ... data to create a DynamicPage
+     *   }
+     * })
+     * 
+     */
+    create<T extends DynamicPageCreateArgs>(args: SelectSubset<T, DynamicPageCreateArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DynamicPages.
+     * @param {DynamicPageCreateManyArgs} args - Arguments to create many DynamicPages.
+     * @example
+     * // Create many DynamicPages
+     * const dynamicPage = await prisma.dynamicPage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DynamicPageCreateManyArgs>(args?: SelectSubset<T, DynamicPageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DynamicPages and returns the data saved in the database.
+     * @param {DynamicPageCreateManyAndReturnArgs} args - Arguments to create many DynamicPages.
+     * @example
+     * // Create many DynamicPages
+     * const dynamicPage = await prisma.dynamicPage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DynamicPages and only return the `dynamicPageId`
+     * const dynamicPageWithDynamicPageIdOnly = await prisma.dynamicPage.createManyAndReturn({
+     *   select: { dynamicPageId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DynamicPageCreateManyAndReturnArgs>(args?: SelectSubset<T, DynamicPageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DynamicPage.
+     * @param {DynamicPageDeleteArgs} args - Arguments to delete one DynamicPage.
+     * @example
+     * // Delete one DynamicPage
+     * const DynamicPage = await prisma.dynamicPage.delete({
+     *   where: {
+     *     // ... filter to delete one DynamicPage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DynamicPageDeleteArgs>(args: SelectSubset<T, DynamicPageDeleteArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DynamicPage.
+     * @param {DynamicPageUpdateArgs} args - Arguments to update one DynamicPage.
+     * @example
+     * // Update one DynamicPage
+     * const dynamicPage = await prisma.dynamicPage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DynamicPageUpdateArgs>(args: SelectSubset<T, DynamicPageUpdateArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DynamicPages.
+     * @param {DynamicPageDeleteManyArgs} args - Arguments to filter DynamicPages to delete.
+     * @example
+     * // Delete a few DynamicPages
+     * const { count } = await prisma.dynamicPage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DynamicPageDeleteManyArgs>(args?: SelectSubset<T, DynamicPageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DynamicPages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DynamicPages
+     * const dynamicPage = await prisma.dynamicPage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DynamicPageUpdateManyArgs>(args: SelectSubset<T, DynamicPageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DynamicPages and returns the data updated in the database.
+     * @param {DynamicPageUpdateManyAndReturnArgs} args - Arguments to update many DynamicPages.
+     * @example
+     * // Update many DynamicPages
+     * const dynamicPage = await prisma.dynamicPage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DynamicPages and only return the `dynamicPageId`
+     * const dynamicPageWithDynamicPageIdOnly = await prisma.dynamicPage.updateManyAndReturn({
+     *   select: { dynamicPageId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DynamicPageUpdateManyAndReturnArgs>(args: SelectSubset<T, DynamicPageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DynamicPage.
+     * @param {DynamicPageUpsertArgs} args - Arguments to update or create a DynamicPage.
+     * @example
+     * // Update or create a DynamicPage
+     * const dynamicPage = await prisma.dynamicPage.upsert({
+     *   create: {
+     *     // ... data to create a DynamicPage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DynamicPage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DynamicPageUpsertArgs>(args: SelectSubset<T, DynamicPageUpsertArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DynamicPages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageCountArgs} args - Arguments to filter DynamicPages to count.
+     * @example
+     * // Count the number of DynamicPages
+     * const count = await prisma.dynamicPage.count({
+     *   where: {
+     *     // ... the filter for the DynamicPages we want to count
+     *   }
+     * })
+    **/
+    count<T extends DynamicPageCountArgs>(
+      args?: Subset<T, DynamicPageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DynamicPageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DynamicPage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DynamicPageAggregateArgs>(args: Subset<T, DynamicPageAggregateArgs>): Prisma.PrismaPromise<GetDynamicPageAggregateType<T>>
+
+    /**
+     * Group by DynamicPage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DynamicPageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DynamicPageGroupByArgs['orderBy'] }
+        : { orderBy?: DynamicPageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DynamicPageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDynamicPageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DynamicPage model
+   */
+  readonly fields: DynamicPageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DynamicPage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DynamicPageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DynamicPage model
+   */
+  interface DynamicPageFieldRefs {
+    readonly dynamicPageId: FieldRef<"DynamicPage", 'String'>
+    readonly slug: FieldRef<"DynamicPage", 'String'>
+    readonly title: FieldRef<"DynamicPage", 'String'>
+    readonly description: FieldRef<"DynamicPage", 'String'>
+    readonly keywords: FieldRef<"DynamicPage", 'String[]'>
+    readonly sections: FieldRef<"DynamicPage", 'Json'>
+    readonly metadata: FieldRef<"DynamicPage", 'Json'>
+    readonly isPublished: FieldRef<"DynamicPage", 'Boolean'>
+    readonly createdAt: FieldRef<"DynamicPage", 'DateTime'>
+    readonly updatedAt: FieldRef<"DynamicPage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DynamicPage findUnique
+   */
+  export type DynamicPageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Filter, which DynamicPage to fetch.
+     */
+    where: DynamicPageWhereUniqueInput
+  }
+
+  /**
+   * DynamicPage findUniqueOrThrow
+   */
+  export type DynamicPageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Filter, which DynamicPage to fetch.
+     */
+    where: DynamicPageWhereUniqueInput
+  }
+
+  /**
+   * DynamicPage findFirst
+   */
+  export type DynamicPageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Filter, which DynamicPage to fetch.
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPages to fetch.
+     */
+    orderBy?: DynamicPageOrderByWithRelationInput | DynamicPageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DynamicPages.
+     */
+    cursor?: DynamicPageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DynamicPages.
+     */
+    distinct?: DynamicPageScalarFieldEnum | DynamicPageScalarFieldEnum[]
+  }
+
+  /**
+   * DynamicPage findFirstOrThrow
+   */
+  export type DynamicPageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Filter, which DynamicPage to fetch.
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPages to fetch.
+     */
+    orderBy?: DynamicPageOrderByWithRelationInput | DynamicPageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DynamicPages.
+     */
+    cursor?: DynamicPageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DynamicPages.
+     */
+    distinct?: DynamicPageScalarFieldEnum | DynamicPageScalarFieldEnum[]
+  }
+
+  /**
+   * DynamicPage findMany
+   */
+  export type DynamicPageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Filter, which DynamicPages to fetch.
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPages to fetch.
+     */
+    orderBy?: DynamicPageOrderByWithRelationInput | DynamicPageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DynamicPages.
+     */
+    cursor?: DynamicPageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DynamicPages.
+     */
+    distinct?: DynamicPageScalarFieldEnum | DynamicPageScalarFieldEnum[]
+  }
+
+  /**
+   * DynamicPage create
+   */
+  export type DynamicPageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * The data needed to create a DynamicPage.
+     */
+    data: XOR<DynamicPageCreateInput, DynamicPageUncheckedCreateInput>
+  }
+
+  /**
+   * DynamicPage createMany
+   */
+  export type DynamicPageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DynamicPages.
+     */
+    data: DynamicPageCreateManyInput | DynamicPageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DynamicPage createManyAndReturn
+   */
+  export type DynamicPageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * The data used to create many DynamicPages.
+     */
+    data: DynamicPageCreateManyInput | DynamicPageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DynamicPage update
+   */
+  export type DynamicPageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * The data needed to update a DynamicPage.
+     */
+    data: XOR<DynamicPageUpdateInput, DynamicPageUncheckedUpdateInput>
+    /**
+     * Choose, which DynamicPage to update.
+     */
+    where: DynamicPageWhereUniqueInput
+  }
+
+  /**
+   * DynamicPage updateMany
+   */
+  export type DynamicPageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DynamicPages.
+     */
+    data: XOR<DynamicPageUpdateManyMutationInput, DynamicPageUncheckedUpdateManyInput>
+    /**
+     * Filter which DynamicPages to update
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * Limit how many DynamicPages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DynamicPage updateManyAndReturn
+   */
+  export type DynamicPageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * The data used to update DynamicPages.
+     */
+    data: XOR<DynamicPageUpdateManyMutationInput, DynamicPageUncheckedUpdateManyInput>
+    /**
+     * Filter which DynamicPages to update
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * Limit how many DynamicPages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DynamicPage upsert
+   */
+  export type DynamicPageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * The filter to search for the DynamicPage to update in case it exists.
+     */
+    where: DynamicPageWhereUniqueInput
+    /**
+     * In case the DynamicPage found by the `where` argument doesn't exist, create a new DynamicPage with this data.
+     */
+    create: XOR<DynamicPageCreateInput, DynamicPageUncheckedCreateInput>
+    /**
+     * In case the DynamicPage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DynamicPageUpdateInput, DynamicPageUncheckedUpdateInput>
+  }
+
+  /**
+   * DynamicPage delete
+   */
+  export type DynamicPageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Filter which DynamicPage to delete.
+     */
+    where: DynamicPageWhereUniqueInput
+  }
+
+  /**
+   * DynamicPage deleteMany
+   */
+  export type DynamicPageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DynamicPages to delete
+     */
+    where?: DynamicPageWhereInput
+    /**
+     * Limit how many DynamicPages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DynamicPage without action
+   */
+  export type DynamicPageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPage
+     */
+    select?: DynamicPageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPage
+     */
+    omit?: DynamicPageOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -36417,6 +37561,22 @@ export namespace Prisma {
   export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
 
 
+  export const DynamicPageScalarFieldEnum: {
+    dynamicPageId: 'dynamicPageId',
+    slug: 'slug',
+    title: 'title',
+    description: 'description',
+    keywords: 'keywords',
+    sections: 'sections',
+    metadata: 'metadata',
+    isPublished: 'isPublished',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DynamicPageScalarFieldEnum = (typeof DynamicPageScalarFieldEnum)[keyof typeof DynamicPageScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -36431,6 +37591,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -38792,6 +39959,83 @@ export namespace Prisma {
     sources?: JsonNullableWithAggregatesFilter<"ChatMessage">
     adminUserId?: StringNullableWithAggregatesFilter<"ChatMessage"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ChatMessage"> | Date | string
+  }
+
+  export type DynamicPageWhereInput = {
+    AND?: DynamicPageWhereInput | DynamicPageWhereInput[]
+    OR?: DynamicPageWhereInput[]
+    NOT?: DynamicPageWhereInput | DynamicPageWhereInput[]
+    dynamicPageId?: StringFilter<"DynamicPage"> | string
+    slug?: StringFilter<"DynamicPage"> | string
+    title?: StringFilter<"DynamicPage"> | string
+    description?: StringNullableFilter<"DynamicPage"> | string | null
+    keywords?: StringNullableListFilter<"DynamicPage">
+    sections?: JsonFilter<"DynamicPage">
+    metadata?: JsonNullableFilter<"DynamicPage">
+    isPublished?: BoolFilter<"DynamicPage"> | boolean
+    createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
+    updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
+  }
+
+  export type DynamicPageOrderByWithRelationInput = {
+    dynamicPageId?: SortOrder
+    slug?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    keywords?: SortOrder
+    sections?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DynamicPageWhereUniqueInput = Prisma.AtLeast<{
+    dynamicPageId?: string
+    slug?: string
+    AND?: DynamicPageWhereInput | DynamicPageWhereInput[]
+    OR?: DynamicPageWhereInput[]
+    NOT?: DynamicPageWhereInput | DynamicPageWhereInput[]
+    title?: StringFilter<"DynamicPage"> | string
+    description?: StringNullableFilter<"DynamicPage"> | string | null
+    keywords?: StringNullableListFilter<"DynamicPage">
+    sections?: JsonFilter<"DynamicPage">
+    metadata?: JsonNullableFilter<"DynamicPage">
+    isPublished?: BoolFilter<"DynamicPage"> | boolean
+    createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
+    updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
+  }, "dynamicPageId" | "slug">
+
+  export type DynamicPageOrderByWithAggregationInput = {
+    dynamicPageId?: SortOrder
+    slug?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    keywords?: SortOrder
+    sections?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DynamicPageCountOrderByAggregateInput
+    _max?: DynamicPageMaxOrderByAggregateInput
+    _min?: DynamicPageMinOrderByAggregateInput
+  }
+
+  export type DynamicPageScalarWhereWithAggregatesInput = {
+    AND?: DynamicPageScalarWhereWithAggregatesInput | DynamicPageScalarWhereWithAggregatesInput[]
+    OR?: DynamicPageScalarWhereWithAggregatesInput[]
+    NOT?: DynamicPageScalarWhereWithAggregatesInput | DynamicPageScalarWhereWithAggregatesInput[]
+    dynamicPageId?: StringWithAggregatesFilter<"DynamicPage"> | string
+    slug?: StringWithAggregatesFilter<"DynamicPage"> | string
+    title?: StringWithAggregatesFilter<"DynamicPage"> | string
+    description?: StringNullableWithAggregatesFilter<"DynamicPage"> | string | null
+    keywords?: StringNullableListFilter<"DynamicPage">
+    sections?: JsonWithAggregatesFilter<"DynamicPage">
+    metadata?: JsonNullableWithAggregatesFilter<"DynamicPage">
+    isPublished?: BoolWithAggregatesFilter<"DynamicPage"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -41201,6 +42445,97 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DynamicPageCreateInput = {
+    dynamicPageId?: string
+    slug: string
+    title: string
+    description?: string | null
+    keywords?: DynamicPageCreatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageUncheckedCreateInput = {
+    dynamicPageId?: string
+    slug: string
+    title: string
+    description?: string | null
+    keywords?: DynamicPageCreatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageUpdateInput = {
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: DynamicPageUpdatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageUncheckedUpdateInput = {
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: DynamicPageUpdatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageCreateManyInput = {
+    dynamicPageId?: string
+    slug: string
+    title: string
+    description?: string | null
+    keywords?: DynamicPageCreatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageUpdateManyMutationInput = {
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: DynamicPageUpdatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageUncheckedUpdateManyInput = {
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: DynamicPageUpdatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -42867,6 +44202,88 @@ export namespace Prisma {
     adminUserId?: SortOrder
     createdAt?: SortOrder
   }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type DynamicPageCountOrderByAggregateInput = {
+    dynamicPageId?: SortOrder
+    slug?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    keywords?: SortOrder
+    sections?: SortOrder
+    metadata?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DynamicPageMaxOrderByAggregateInput = {
+    dynamicPageId?: SortOrder
+    slug?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DynamicPageMinOrderByAggregateInput = {
+    dynamicPageId?: SortOrder
+    slug?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    isPublished?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
 
   export type UserSessionCreateNestedManyWithoutUserInput = {
     create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
@@ -43875,6 +45292,15 @@ export namespace Prisma {
     update?: XOR<XOR<ChatSessionUpdateToOneWithWhereWithoutMessagesInput, ChatSessionUpdateWithoutMessagesInput>, ChatSessionUncheckedUpdateWithoutMessagesInput>
   }
 
+  export type DynamicPageCreatekeywordsInput = {
+    set: string[]
+  }
+
+  export type DynamicPageUpdatekeywordsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -44232,6 +45658,29 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumChatSessionStatusFilter<$PrismaModel>
     _max?: NestedEnumChatSessionStatusFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type UserSessionCreateWithoutUserInput = {

@@ -457,6 +457,19 @@ exports.Prisma.ChatMessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.DynamicPageScalarFieldEnum = {
+  dynamicPageId: 'dynamicPageId',
+  slug: 'slug',
+  title: 'title',
+  description: 'description',
+  keywords: 'keywords',
+  sections: 'sections',
+  metadata: 'metadata',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -464,6 +477,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -554,7 +571,8 @@ exports.Prisma.ModelName = {
   ApiKey: 'ApiKey',
   ActivityPubFollower: 'ActivityPubFollower',
   ChatSession: 'ChatSession',
-  ChatMessage: 'ChatMessage'
+  ChatMessage: 'ChatMessage',
+  DynamicPage: 'DynamicPage'
 };
 
 /**
