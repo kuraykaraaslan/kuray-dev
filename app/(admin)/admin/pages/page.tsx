@@ -16,7 +16,7 @@ interface DynamicPageRow extends Record<string, unknown> {
   dynamicPageId: string
   title: string
   slug: string
-  isPublished: boolean
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
   updatedAt: string
 }
 
@@ -63,19 +63,24 @@ const PagesPage = () => {
     { key: 'title', header: 'Title', accessor: (p) => p.title },
     { key: 'slug', header: 'Slug', accessor: (p) => p.slug },
     {
-      key: 'isPublished',
+      key: 'status',
       header: 'Status',
-      accessor: (p) => (
-        <span
-          className="px-2 py-0.5 rounded text-xs font-medium"
-          style={{
-            backgroundColor: p.isPublished ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.08)',
-            color: p.isPublished ? '#4ade80' : 'rgba(255,255,255,0.4)',
-          }}
-        >
-          {p.isPublished ? 'Published' : 'Draft'}
-        </span>
-      ),
+      accessor: (p) => {
+        const colors: Record<string, { bg: string; text: string; label: string }> = {
+          PUBLISHED: { bg: 'rgba(34,197,94,0.15)', text: '#4ade80', label: 'Published' },
+          DRAFT: { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.4)', label: 'Draft' },
+          ARCHIVED: { bg: 'rgba(156,163,175,0.15)', text: 'rgba(156,163,175,0.6)', label: 'Archived' },
+        }
+        const c = colors[p.status] ?? colors.DRAFT
+        return (
+          <span
+            className="px-2 py-0.5 rounded text-xs font-medium"
+            style={{ backgroundColor: c.bg, color: c.text }}
+          >
+            {c.label}
+          </span>
+        )
+      },
     },
     {
       key: 'updatedAt',

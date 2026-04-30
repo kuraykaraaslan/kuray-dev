@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const page = await DynamicPageService.getBySlug(mergedSlug)
 
-    if (!page || !page.isPublished) {
+    if (!page || page.status !== 'PUBLISHED') {
         return { title: 'Not Found' }
     }
 
@@ -57,7 +57,7 @@ export async function Page({ params }: Props) {
 
     const page = await DynamicPageService.getBySlug(mergedSlug)
 
-    if (!page || !page.isPublished) {
+    if (!page || page.status !== 'PUBLISHED') {
         notFound()
     }
 

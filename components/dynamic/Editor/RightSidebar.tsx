@@ -1,15 +1,17 @@
 'use client'
 
-import type { BlockData } from '../types'
 import PropsPanel from './PropsPanel'
 import BlockBuilderPanel from './BlockBuilderPanel'
+import { useEditorStore, selectSelectedBlock } from './stores/editorStore'
 
-interface Props {
-  block: BlockData | null
-  onChange: (props: Record<string, unknown>) => void
-}
+export default function RightSidebar() {
+  const block = useEditorStore(selectSelectedBlock)
+  const updateBlockProps = useEditorStore((s) => s.updateBlockProps)
 
-export default function RightSidebar({ block, onChange }: Props) {
+  const onChange = (props: Record<string, unknown>) => {
+    if (block) updateBlockProps(block.id, props)
+  }
+
   if (block?.type === 'custom') {
     return <BlockBuilderPanel block={block} onChange={onChange} />
   }

@@ -4,6 +4,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { BlockData } from '../types'
 import { getBlock } from '../BlockRegistry'
+import { useEditorStore } from './stores/editorStore'
 
 interface SortableBlockProps {
   block: BlockData
@@ -48,12 +49,10 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
       <div
         className={`absolute top-2 right-2 z-20 flex items-center gap-1.5 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
       >
-        {/* Type label */}
         <span className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70">
           {def.label}
         </span>
 
-        {/* Drag handle */}
         <div
           {...attributes}
           {...listeners}
@@ -64,7 +63,6 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
           ⠿
         </div>
 
-        {/* Delete */}
         <button
           className="px-2 py-1 rounded text-xs font-medium bg-error/85 text-error-content"
           onClick={(e) => {
@@ -82,14 +80,12 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
   )
 }
 
-interface CanvasProps {
-  sections: BlockData[]
-  selectedId: string | null
-  onSelect: (id: string) => void
-  onDelete: (id: string) => void
-}
+export default function Canvas() {
+  const sections = useEditorStore((s) => s.sections)
+  const selectedId = useEditorStore((s) => s.selectedId)
+  const setSelectedId = useEditorStore((s) => s.setSelectedId)
+  const deleteBlock = useEditorStore((s) => s.deleteBlock)
 
-export default function Canvas({ sections, selectedId, onSelect, onDelete }: CanvasProps) {
   if (sections.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-40 gap-3">
@@ -110,8 +106,8 @@ export default function Canvas({ sections, selectedId, onSelect, onDelete }: Can
           key={block.id}
           block={block}
           isSelected={selectedId === block.id}
-          onSelect={() => onSelect(block.id)}
-          onDelete={() => onDelete(block.id)}
+          onSelect={() => setSelectedId(block.id)}
+          onDelete={() => deleteBlock(block.id)}
         />
       ))}
     </div>

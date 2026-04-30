@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         keywords: generated.keywords,
         sections: generated.sections,
         metadata: generated.metadata,
-        isPublished: false,
+        status: 'DRAFT',
       })
       return NextResponse.json({ page, generated }, { status: 201 })
     }

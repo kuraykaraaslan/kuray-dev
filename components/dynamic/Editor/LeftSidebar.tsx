@@ -4,11 +4,10 @@ import { useState, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { getAllBlockDefinitions } from '../BlockRegistry'
 import type { BlockDefinition } from '../types'
+import { useEditorStore } from './stores/editorStore'
 
-// Category display order — Custom is pinned first
 const CATEGORY_ORDER = ['Custom', 'Hero', 'Content', 'Process', 'Trust & Social Proof', 'CTA']
 
-// Preview: renders block at full 1280px width then scales to 320px thumbnail
 const PREVIEW_WIDTH = 320
 const INNER_WIDTH = 1280
 const SCALE = PREVIEW_WIDTH / INNER_WIDTH
@@ -53,7 +52,6 @@ function BlockPreview({ def, anchorY, sidebarRight }: PreviewProps) {
         <Component {...defaultProps} />
       </div>
 
-      {/* Label gradient */}
       <div
         className="text-primary"
         style={{
@@ -75,7 +73,6 @@ function BlockPreview({ def, anchorY, sidebarRight }: PreviewProps) {
   )
 }
 
-// Chevron icon
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg
@@ -94,17 +91,13 @@ function Chevron({ open }: { open: boolean }) {
   )
 }
 
-interface Props {
-  onAdd: (type: string) => void
-}
-
-export default function LeftSidebar({ onAdd }: Props) {
+export default function LeftSidebar() {
+  const addBlock = useEditorStore((s) => s.addBlock)
   const defs = getAllBlockDefinitions()
   const sidebarRef = useRef<HTMLDivElement>(null)
 
   const [hovered, setHovered] = useState<{ def: BlockDefinition; y: number } | null>(null)
 
-  // Build ordered category map
   const grouped = defs.reduce<Record<string, BlockDefinition[]>>((acc, def) => {
     const cat = def.category ?? 'Other'
     if (!acc[cat]) acc[cat] = []
@@ -117,7 +110,6 @@ export default function LeftSidebar({ onAdd }: Props) {
     ...Object.keys(grouped).filter((c) => !CATEGORY_ORDER.includes(c)),
   ]
 
-  // All categories open by default
   const [open, setOpen] = useState<Record<string, boolean>>(
     () => Object.fromEntries(orderedCategories.map((c) => [c, true]))
   )
@@ -148,7 +140,6 @@ export default function LeftSidebar({ onAdd }: Props) {
       <div className="py-2">
         {orderedCategories.map((cat) => (
           <div key={cat}>
-            {/* Category header */}
             <button
               onClick={() => toggleCategory(cat)}
               className="w-full flex items-center justify-between px-4 py-2 transition-colors text-base-content/50"
@@ -157,7 +148,6 @@ export default function LeftSidebar({ onAdd }: Props) {
               <Chevron open={open[cat] ?? true} />
             </button>
 
-            {/* Block list */}
             {(open[cat] ?? true) && (
               <div className="px-3 pb-2 space-y-1.5">
                 {grouped[cat].map((def) => {
@@ -166,7 +156,7 @@ export default function LeftSidebar({ onAdd }: Props) {
                   return (
                     <button
                       key={def.type}
-                      onClick={() => onAdd(def.type)}
+                      onClick={() => addBlock(def.type)}
                       onMouseEnter={(e) => handleMouseEnter(def, e)}
                       onMouseLeave={() => setHovered(null)}
                       className={`w-full text-left p-2.5 rounded-lg transition-all hover:scale-[1.02] border ${

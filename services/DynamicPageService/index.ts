@@ -1,5 +1,6 @@
 import { prisma } from '@/libs/prisma'
-import type { PageSection, DynamicPageParams } from '@/dtos/DynamicPageDTO'
+import type { BlockData, DynamicPageParams } from '@/dtos/DynamicPageDTO'
+import type { DynamicPageStatus } from '@/types/content/PageTypes'
 
 export default class DynamicPageService {
   static async getAll() {
@@ -12,14 +13,14 @@ export default class DynamicPageService {
         description: true,
         keywords: true,
         metadata: true,
-        isPublished: true,
+        status: true,
         createdAt: true,
         updatedAt: true,
       },
     })
   }
 
-  static async mergeParams(params: DynamicPageParams) : Promise<string> {
+  static async mergeParams(params: DynamicPageParams): Promise<string> {
     const { dynamicSlugA, dynamicSlugB, dynamicSlugC, dynamicSlugD, dynamicSlugE, dynamicSlugF } = params
     return [dynamicSlugA, dynamicSlugB, dynamicSlugC, dynamicSlugD, dynamicSlugE, dynamicSlugF]
       .filter((slug): slug is string => typeof slug === 'string')
@@ -43,9 +44,9 @@ export default class DynamicPageService {
     title: string
     description?: string
     keywords?: string[]
-    sections?: PageSection[]
+    sections?: BlockData[]
     metadata?: Record<string, unknown>
-    isPublished?: boolean
+    status?: DynamicPageStatus
   }) {
     return prisma.dynamicPage.create({
       data: {
@@ -55,7 +56,7 @@ export default class DynamicPageService {
         keywords: data.keywords ?? [],
         sections: (data.sections ?? []) as object[],
         metadata: data.metadata as object | undefined,
-        isPublished: data.isPublished ?? false,
+        status: data.status ?? 'DRAFT',
       },
     })
   }
@@ -67,9 +68,9 @@ export default class DynamicPageService {
       title?: string
       description?: string
       keywords?: string[]
-      sections?: PageSection[]
+      sections?: BlockData[]
       metadata?: Record<string, unknown>
-      isPublished?: boolean
+      status?: DynamicPageStatus
     }
   ) {
     return prisma.dynamicPage.update({
@@ -81,7 +82,7 @@ export default class DynamicPageService {
         ...(data.keywords !== undefined && { keywords: data.keywords }),
         ...(data.sections !== undefined && { sections: data.sections as object[] }),
         ...(data.metadata !== undefined && { metadata: data.metadata as object }),
-        ...(data.isPublished !== undefined && { isPublished: data.isPublished }),
+        ...(data.status !== undefined && { status: data.status }),
       },
     })
   }

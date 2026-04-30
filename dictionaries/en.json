@@ -1098,8 +1098,13 @@
       "close": "Close"
     },
     "selects": {
+      "select_option": "Select",
       "select_user": "Select User",
-      "select_category": "Select Category"
+      "select_category": "Select Category",
+      "select_post": "Select Post",
+      "select_project": "Select Project",
+      "select_status": "Select Status",
+      "select_role": "Select Role"
     },
     "dynamic_comma_text": {
       "placeholder": "Type and add with comma or Enter...",

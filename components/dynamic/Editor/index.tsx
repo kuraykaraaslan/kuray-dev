@@ -1,27 +1,48 @@
 'use client'
 
-import { DndContext, closestCenter } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useEffect, useMemo } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import Canvas from './Canvas'
 import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar'
 import EditorTopBar from './EditorTopBar'
-import { useEditorState } from './hooks/useEditorState'
+import { useEditorStore } from './stores/editorStore'
 
 export default function DynamicPageEditor() {
-  const {
-    loading, saving,
-    sections,
-    selectedId, setSelectedId, selectedBlock,
-    title, setTitle,
-    slug, setSlug,
-    status, setStatus,
-    sensors,
-    handleDragEnd,
-    addBlock, deleteBlock, updateBlockProps,
-    handleSave,
-    router,
-  } = useEditorState()
+  const params = useParams<{ pageId: string }>()
+  const router = useRouter()
+  const pageId = params?.pageId
+  const mode = useMemo<'create' | 'edit'>(
+    () => (pageId === 'create' ? 'create' : 'edit'),
+    [pageId]
+  )
+
+  const loading = useEditorStore((s) => s.loading)
+  const sections = useEditorStore((s) => s.sections)
+  const handleDragEnd = useEditorStore((s) => s.handleDragEnd)
+  const loadPage = useEditorStore((s) => s.loadPage)
+  const handleSave = useEditorStore((s) => s.handleSave)
+  const reset = useEditorStore((s) => s.reset)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  useEffect(() => {
+    loadPage(pageId)
+    return () => reset()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId])
 
   if (loading) {
     return (
@@ -34,20 +55,12 @@ export default function DynamicPageEditor() {
   return (
     <div className="fixed inset-0 z-40 flex flex-col bg-base-300" style={{ top: '64px' }}>
       <EditorTopBar
-        title={title}
-        onTitleChange={setTitle}
-        slug={slug}
-        onSlugChange={setSlug}
-        status={status}
-        onStatusChange={setStatus}
-        saving={saving}
-        loading={loading}
-        onSave={handleSave}
+        onSave={() => handleSave(mode, pageId, router)}
         onCancel={() => router.push('/admin/pages')}
       />
 
       <div className="flex flex-1 min-h-0">
-        <LeftSidebar onAdd={addBlock} />
+        <LeftSidebar />
 
         <div className="flex-1 overflow-y-auto">
           <DndContext
@@ -59,20 +72,12 @@ export default function DynamicPageEditor() {
               items={sections.map((b) => b.id)}
               strategy={verticalListSortingStrategy}
             >
-              <Canvas
-                sections={sections}
-                selectedId={selectedId}
-                onSelect={(id) => setSelectedId(id)}
-                onDelete={deleteBlock}
-              />
+              <Canvas />
             </SortableContext>
           </DndContext>
         </div>
 
-        <RightSidebar
-          block={selectedBlock}
-          onChange={(props) => selectedBlock && updateBlockProps(selectedBlock.id, props)}
-        />
+        <RightSidebar />
       </div>
     </div>
   )

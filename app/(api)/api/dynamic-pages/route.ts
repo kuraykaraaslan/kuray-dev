@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import DynamicPageService from '@/services/DynamicPageService'
 import UserSessionService from '@/services/AuthService/UserSessionService'
 import { CreateDynamicPageSchema } from '@/dtos/DynamicPageDTO'
+import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 
 export async function GET() {
   try {
@@ -15,7 +16,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    UserSessionService.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })
+    await AuthMiddleware.authenticateUserByRequest({ request })
 
     const body = await request.json()
     const parsed = CreateDynamicPageSchema.safeParse(body)
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ page }, { status: 201 })
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Error in POST /api/dynamic-pages:', error)
     return NextResponse.json({ message: msg }, { status: 500 })
   }
 }

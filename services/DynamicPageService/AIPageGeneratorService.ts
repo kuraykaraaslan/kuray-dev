@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import openai from '@/libs/openai'
-import type { PageSection } from '@/dtos/DynamicPageDTO'
+import type { BlockData } from '@/dtos/DynamicPageDTO'
 import type { DynamicPage } from '@/types/content/PageTypes'
 
 
@@ -202,7 +202,7 @@ async function fillBlock(
   selected: SelectedBlock,
   meta: BlockMeta,
   userPrompt: string,
-): Promise<PageSection | null> {
+): Promise<BlockData | null> {
   const propsHint = buildPropsHint(meta)
 
   const system = `You are a web content writer. Fill ALL props for a single landing page block.
@@ -288,8 +288,8 @@ export default class AIPageGeneratorService {
     )
 
     // Step 4: Assemble final page, drop failed blocks
-    const sections: PageSection[] = filledBlocks
-      .filter((b): b is PageSection => b !== null)
+    const sections: BlockData[] = filledBlocks
+      .filter((b): b is BlockData => b !== null)
       .sort((a, b) => a.order - b.order)
 
     if (sections.length === 0) {

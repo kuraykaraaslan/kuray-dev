@@ -50,6 +50,7 @@ import { MilestoneCardsBlockDefinition } from './Blocks/MilestoneCardsBlock'
 import { DownloadResourcesBlockDefinition } from './Blocks/DownloadResourcesBlock'
 import { CustomBlockDefinition } from './Blocks/CustomBlock'
 import { AppDownloadBlockDefinition } from './Blocks/AppDownloadBlock'
+import { FrontendHireMeBlockDefinition } from './Blocks/FrontendHireMeBlock'
 
 const REGISTRY: Record<string, BlockDefinition> = {
   // Custom
@@ -126,6 +127,7 @@ const REGISTRY: Record<string, BlockDefinition> = {
   // Media
   [VideoGalleryBlockDefinition.type]: VideoGalleryBlockDefinition,
   [ImageGalleryBlockDefinition.type]: ImageGalleryBlockDefinition,
+  
 }
 
 export function getBlock(type: string): BlockDefinition | undefined {

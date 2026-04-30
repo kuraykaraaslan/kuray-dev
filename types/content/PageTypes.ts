@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const DynamicPageStatusEnum = z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED'])
 
-export const PageSectionSchema = z.object({
+export const BlockDataSchema = z.object({
   id: z.string(),
   type: z.string(),
   order: z.number(),
@@ -33,7 +33,7 @@ export const DynamicPageSchema = z.object({
     slug: z.string(),
     description: z.string(),
     keywords: z.array(z.string()),
-    sections: z.array(PageSectionSchema),
+    sections: z.array(BlockDataSchema),
     metadata: PageMetadataSchema,
     status: DynamicPageStatusEnum,
     createdAt: z.preprocess((arg) => {
@@ -50,7 +50,7 @@ export const DynamicPageSchema = z.object({
     }, z.date()),
 })
 
-export type PageSection = z.infer<typeof PageSectionSchema>
+export type BlockData = z.infer<typeof BlockDataSchema>
 export type DynamicPage = z.infer<typeof DynamicPageSchema>
 export type PageMetadata = z.infer<typeof PageMetadataSchema>
 export type DynamicPageStatus = z.infer<typeof DynamicPageStatusEnum>

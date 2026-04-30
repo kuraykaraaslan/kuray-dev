@@ -1,11 +1,5 @@
 import type { ComponentType } from 'react'
-
-export interface BlockData {
-  id: string
-  type: string
-  order: number
-  props: Record<string, unknown>
-}
+export type { BlockData } from '@/types/content/PageTypes'
 
 export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'json' | 'img'
 
