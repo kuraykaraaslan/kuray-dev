@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ generated })
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Error in AI page generation:', error)
     return NextResponse.json({ message: msg }, { status: 500 })
   }
 }

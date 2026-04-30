@@ -34,7 +34,7 @@ interface SelectionResult {
   selectedBlocks: SelectedBlock[]
 }
 
-const BLOCKS_DIR = path.join(process.cwd(), 'components/DynamicPage/Blocks')
+const BLOCKS_DIR = path.join(process.cwd(), 'components/dynamic/Blocks')
 
 // Parse a single block .tsx file to extract type, description, and prop schema
 async function parseBlockFile(filePath: string): Promise<BlockMeta | null> {

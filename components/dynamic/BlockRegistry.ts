@@ -50,7 +50,15 @@ import { MilestoneCardsBlockDefinition } from './Blocks/MilestoneCardsBlock'
 import { DownloadResourcesBlockDefinition } from './Blocks/DownloadResourcesBlock'
 import { CustomBlockDefinition } from './Blocks/CustomBlock'
 import { AppDownloadBlockDefinition } from './Blocks/AppDownloadBlock'
+import { FrontendWelcomeBlockDefinition } from './Blocks/FrontendWelcomeBlock'
+import { FrontendServicesBlockDefinition } from './Blocks/FrontendServicesBlock'
+import { FrontendPlatformsBlockDefinition } from './Blocks/FrontendPlatformsBlock'
+import { FrontendLiveTestimonialsBlockDefinition } from './Blocks/FrontendLiveTestimonialsBlock'
+import { FrontendGitContributionsBlockDefinition } from './Blocks/FrontendGitContributionsBlock'
 import { FrontendHireMeBlockDefinition } from './Blocks/FrontendHireMeBlock'
+import { FrontendCareerTimelineBlockDefinition } from './Blocks/FrontendCareerTimelineBlock'
+import { FrontendToolboxBlockDefinition } from './Blocks/FrontendToolboxBlock'
+import { FrontendProjectsBlockDefinition } from './Blocks/FrontendProjectsBlock'
 
 const REGISTRY: Record<string, BlockDefinition> = {
   // Custom
@@ -127,7 +135,17 @@ const REGISTRY: Record<string, BlockDefinition> = {
   // Media
   [VideoGalleryBlockDefinition.type]: VideoGalleryBlockDefinition,
   [ImageGalleryBlockDefinition.type]: ImageGalleryBlockDefinition,
-  
+
+  // Frontend (portfolio-specific live blocks)
+  [FrontendWelcomeBlockDefinition.type]: FrontendWelcomeBlockDefinition,
+  [FrontendServicesBlockDefinition.type]: FrontendServicesBlockDefinition,
+  [FrontendPlatformsBlockDefinition.type]: FrontendPlatformsBlockDefinition,
+  [FrontendLiveTestimonialsBlockDefinition.type]: FrontendLiveTestimonialsBlockDefinition,
+  [FrontendGitContributionsBlockDefinition.type]: FrontendGitContributionsBlockDefinition,
+  [FrontendHireMeBlockDefinition.type]: FrontendHireMeBlockDefinition,
+  [FrontendCareerTimelineBlockDefinition.type]: FrontendCareerTimelineBlockDefinition,
+  [FrontendToolboxBlockDefinition.type]: FrontendToolboxBlockDefinition,
+  [FrontendProjectsBlockDefinition.type]: FrontendProjectsBlockDefinition,
 }
 
 export function getBlock(type: string): BlockDefinition | undefined {
