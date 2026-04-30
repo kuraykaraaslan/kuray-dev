@@ -98,7 +98,7 @@ interface Props {
   onAdd: (type: string) => void
 }
 
-export default function Sidebar({ onAdd }: Props) {
+export default function LeftSidebar({ onAdd }: Props) {
   const defs = getAllBlockDefinitions()
   const sidebarRef = useRef<HTMLDivElement>(null)
 
