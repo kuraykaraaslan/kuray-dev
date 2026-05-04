@@ -132,7 +132,7 @@ function buildPropsHint(meta: BlockMeta): string {
         return `${p.name} (${p.label}) — one of: ${p.options.join(' | ')}`
       }
       if (p.fieldType === 'color') {
-        return `${p.name} (${p.label}) — hex color`
+        return null // skip color props — blocks use theme defaults when empty
       }
       if (p.fieldType === 'img' || p.fieldType === 'url' && p.name.toLowerCase().includes('image')) {
         return null // skip image props
@@ -221,7 +221,7 @@ OUTPUT: Valid JSON only, no markdown fences. Schema:
 RULES:
 1. Fill EVERY prop listed — never empty, never placeholder text
 2. JSON array props: provide 3-5 items, all topic-specific
-3. bgColor = "#282626", accentColor = "#ffc418"
+3. Do NOT include any color props (bgColor, accentColor, etc.) — omit them entirely so blocks use theme defaults
 4. Do NOT include imageUrl or imageAlt props
 5. CTA hrefs: use /contact or /solutions
 6. Write in the same language as the page topic`

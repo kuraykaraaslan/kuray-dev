@@ -160,16 +160,25 @@ export default function PropsPanel({ block, onChange }: Props) {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={(localProps[key] as string) ?? (field.value as string) ?? '#000000'}
+                  value={(localProps[key] as string) || '#000000'}
                   onChange={(e) => update(key, e.target.value)}
                   className="w-9 h-8 rounded cursor-pointer border-0 p-0.5 bg-transparent"
                 />
                 <input
                   type="text"
-                  value={(localProps[key] as string) ?? (field.value as string) ?? ''}
+                  value={(localProps[key] as string) ?? ''}
                   onChange={(e) => update(key, e.target.value)}
                   className={`flex-1 ${inputCls}`}
                 />
+                {(localProps[key] as string) && (
+                  <button
+                    onClick={() => update(key, '')}
+                    className="text-xs px-2 py-1 rounded text-base-content/40 hover:text-error transition-colors"
+                    title="Clear color"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
             )}
 

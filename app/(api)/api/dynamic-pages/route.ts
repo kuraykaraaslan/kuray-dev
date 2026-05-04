@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import DynamicPageService from '@/services/DynamicPageService'
-import UserSessionService from '@/services/AuthService/UserSessionService'
 import { CreateDynamicPageSchema } from '@/dtos/DynamicPageDTO'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 
