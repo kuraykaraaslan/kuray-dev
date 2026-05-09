@@ -17,8 +17,6 @@ export const CreateProjectRequestSchema = z.object({
   platforms: z.array(z.string()).default([]),
   technologies: z.array(z.string()).default([]),
   content: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date().nullable(),
   projectLinks: z.array(z.string()).default([]),
 })
 

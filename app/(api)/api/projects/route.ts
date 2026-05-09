@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
     const parsedData = CreateProjectRequestSchema.safeParse(data)
 
     if (!parsedData.success) {
+      console.error('Validation failed:', parsedData.error.errors)
       return NextResponse.json(
         {
           message: parsedData.error.errors.map((err) => err.message).join(', '),

@@ -24,6 +24,7 @@ import {
   CONTENT_SCORE_RULES,
   SLUG_SCORE_RULES,
 } from '@/components/common/Forms/ContentScoreBar/rules'
+import DynamicDate from '@/components/common/Forms/DynamicDate'
 
 const PROJECT_TRANSLATION_FIELDS: TranslationFieldDef[] = [
   { key: 'title', label: 'Title' },
@@ -53,6 +54,8 @@ const SingleProject = () => {
   const [technologies, setTechnologies] = useState<string[]>([])
   const [status, setStatus] = useState('PUBLISHED')
   const [projectLinks, setProjectLinks] = useState<string[]>([])
+  const [createdAt, setCreatedAt] = useState<Date>(new Date())
+  const [updatedAt, setUpdatedAt] = useState<Date>(new Date())
 
   const tr = useTranslationState({ translationApiBase: `/api/projects/${routeProjectId}/translations` })
 
@@ -100,6 +103,8 @@ const SingleProject = () => {
         setStatus(project.status ?? 'PUBLISHED')
         setImage(project.image ?? '')
         setProjectLinks(Array.isArray(project.projectLinks) ? project.projectLinks : [])
+        setCreatedAt(project.createdAt ? new Date(project.createdAt) : new Date())
+        setUpdatedAt(project.updatedAt ? new Date(project.updatedAt) : new Date())
 
         tr.initTranslations(
           (translationsRes.data?.translations ?? []).map((t: any) => ({
@@ -287,6 +292,14 @@ const SingleProject = () => {
           <GenericElement label="Image">
             <ImageLoad image={image} setImage={setImage} uploadFolder="projects" toast={toast} />
           </GenericElement>
+
+          <GenericElement label="Created At">
+            <DynamicDate value={createdAt} onChange={setCreatedAt} />
+          </GenericElement>
+          <GenericElement label="Updated At">
+            <DynamicDate value={updatedAt} onChange={setUpdatedAt} />
+          </GenericElement>
+
         </>
       )}
     </Form>
