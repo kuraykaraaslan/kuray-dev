@@ -125,7 +125,7 @@ export default class ProjectService {
     })
   }
 
-  static async createProject(data: Omit<Project, 'projectId'>): Promise<Project> {
+  static async createProject(data: Omit<Project, 'projectId' | 'createdAt' | 'updatedAt' | 'deletedAt'>): Promise<Project> {
     // Validate Fields
     const { title, description, slug, image, platforms, technologies, projectLinks } = data
 
