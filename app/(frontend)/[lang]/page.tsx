@@ -1,16 +1,18 @@
+import DynamicPageRenderer from '@/components/dynamic/Renderer'
+import DynamicPageService from '@/services/DynamicPageService'
 import Welcome from '@/components/frontend/Features/Hero/Welcome'
 import Toolbox from '@/components/frontend/Features/Hero/Toolbox'
 import Contact from '@/components/frontend/Features/Hero/Contact'
 import ProjectsHero from '@/components/frontend/Features/Hero/Projects'
 import type { Metadata } from 'next'
 import MetadataHelper from '@/helpers/MetadataHelper'
-//import AppointmentCalendar from '@/components/frontend/Features/Appointments/AppointmentCalendar'; // Uncomment this line to enable the Appointment Calendar feature
 import ToastContainerClient from '@/components/common/UI/Toast/ToastContainerClient'
 import 'react-toastify/dist/ReactToastify.css'
 import OfflineIndicator from '@/components/common/UI/Indicators/OfflineIndicator'
 import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
 import { buildAlternates, buildLangUrl, getOgLocale } from '@/helpers/HreflangHelper'
 import { getPageMetadata } from '@/libs/localize/getDictionary'
+import type { BlockData } from '@/components/dynamic/types'
 
 const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
 
@@ -72,6 +74,24 @@ const HomePage = async ({ params }: Props) => {
       url,
       images: [`${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`],
     },
+  }
+
+  const rawDynamicPage = await DynamicPageService.getBySlug('')
+
+  if (rawDynamicPage?.status === 'PUBLISHED') {
+    const dynamicPage = DynamicPageService.applyTranslation(rawDynamicPage, lang)
+    const sections = Array.isArray(dynamicPage.sections)
+      ? (dynamicPage.sections as unknown as BlockData[])
+      : []
+
+    return (
+      <>
+        {MetadataHelper.generateJsonLdScripts(jsonLdMeta, { includeProfilePage: true })}
+        <DynamicPageRenderer sections={sections} />
+        <ToastContainerClient />
+        <OfflineIndicator />
+      </>
+    )
   }
 
   return (

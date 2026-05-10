@@ -12,13 +12,17 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
-    const mergedSlug = await DynamicPageService.mergeParams(await params)
+    const resolvedParams = await params
+    const lang = (resolvedParams as Record<string, string>).lang ?? 'en'
+    const mergedSlug = await DynamicPageService.mergeParams(resolvedParams)
 
-    const page = await DynamicPageService.getBySlug(mergedSlug)
+    const rawPage = await DynamicPageService.getBySlug(mergedSlug)
 
-    if (!page || page.status !== 'PUBLISHED') {
+    if (!rawPage || rawPage.status !== 'PUBLISHED') {
         return { title: 'Not Found' }
     }
+
+    const page = DynamicPageService.applyTranslation(rawPage, lang)
 
     const host = process.env.NEXT_PUBLIC_APPLICATION_HOST
     const meta = (page.metadata as Record<string, unknown> | null) || {}
@@ -53,14 +57,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function Page({ params }: Props) {
-    const mergedSlug = await DynamicPageService.mergeParams(await params)
+    const resolvedParams = await params
+    const lang = (resolvedParams as Record<string, string>).lang ?? 'en'
+    const mergedSlug = await DynamicPageService.mergeParams(resolvedParams)
 
-    const page = await DynamicPageService.getBySlug(mergedSlug)
+    const rawPage = await DynamicPageService.getBySlug(mergedSlug)
 
-    if (!page || page.status !== 'PUBLISHED') {
+    if (!rawPage || rawPage.status !== 'PUBLISHED') {
         notFound()
     }
 
+    const page = DynamicPageService.applyTranslation(rawPage, lang)
     const sections = Array.isArray(page.sections) ? (page.sections as unknown as BlockData[]) : []
 
     return (

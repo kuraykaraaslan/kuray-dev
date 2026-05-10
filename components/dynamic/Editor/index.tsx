@@ -46,7 +46,7 @@ export default function DynamicPageEditor() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-base-200">
+      <div className="fixed inset-0 z-40 flex items-center justify-center bg-base-200" style={{ top: '64px' }}>
         <span className="loading loading-spinner loading-md text-base-content/40" />
       </div>
     )

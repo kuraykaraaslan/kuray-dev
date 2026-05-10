@@ -1,6 +1,11 @@
 import { prisma } from '@/libs/prisma'
 import type { BlockData, DynamicPageParams } from '@/dtos/DynamicPageDTO'
 import type { DynamicPageStatus } from '@/types/content/PageTypes'
+import type { Prisma } from '@/generated/prisma'
+
+type DynamicPageWithTranslations = Prisma.DynamicPageGetPayload<{
+  include: { translations: true }
+}>
 
 export default class DynamicPageService {
   static async getAll() {
@@ -30,13 +35,27 @@ export default class DynamicPageService {
   static async getById(dynamicPageId: string) {
     return prisma.dynamicPage.findUnique({
       where: { dynamicPageId },
+      include: { translations: true },
     })
   }
 
   static async getBySlug(slug: string) {
     return prisma.dynamicPage.findUnique({
       where: { slug },
+      include: { translations: true },
     })
+  }
+
+  static applyTranslation(page: DynamicPageWithTranslations, lang: string): DynamicPageWithTranslations {
+    if (!page.translations?.length || lang === 'en') return page
+    const t = page.translations.find((tr) => tr.lang === lang)
+    if (!t) return page
+    return {
+      ...page,
+      title: t.title,
+      description: t.description ?? page.description,
+      sections: t.sections,
+    }
   }
 
   static async create(data: {
@@ -90,6 +109,40 @@ export default class DynamicPageService {
   static async delete(dynamicPageId: string) {
     return prisma.dynamicPage.delete({
       where: { dynamicPageId },
+    })
+  }
+
+  static async getTranslations(dynamicPageId: string) {
+    return prisma.dynamicPageTranslation.findMany({
+      where: { dynamicPageId },
+    })
+  }
+
+  static async upsertTranslation(
+    dynamicPageId: string,
+    lang: string,
+    data: { title: string; description?: string | null; sections: BlockData[] }
+  ) {
+    return prisma.dynamicPageTranslation.upsert({
+      where: { dynamicPageId_lang: { dynamicPageId, lang } },
+      create: {
+        dynamicPageId,
+        lang,
+        title: data.title,
+        description: data.description ?? null,
+        sections: data.sections as object[],
+      },
+      update: {
+        title: data.title,
+        description: data.description ?? null,
+        sections: data.sections as object[],
+      },
+    })
+  }
+
+  static async deleteTranslation(dynamicPageId: string, lang: string) {
+    return prisma.dynamicPageTranslation.delete({
+      where: { dynamicPageId_lang: { dynamicPageId, lang } },
     })
   }
 }

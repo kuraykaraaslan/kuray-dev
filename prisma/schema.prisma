@@ -305,6 +305,7 @@ model Project {
   status       String    @default("PUBLISHED")
   platforms    String[]  @default([])
   technologies String[]  @default([])
+  keywords     String[]  @default([])
   content      String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @default(now()) @updatedAt
@@ -574,5 +575,23 @@ model DynamicPage {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 
+  translations   DynamicPageTranslation[]
+
   @@index([slug])
+}
+
+model DynamicPageTranslation {
+  id             String   @id @default(cuid())
+  dynamicPageId  String
+  lang           String
+  title          String
+  description    String?
+  sections       Json     @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  dynamicPage DynamicPage @relation(fields: [dynamicPageId], references: [dynamicPageId], onDelete: Cascade)
+
+  @@unique([dynamicPageId, lang])
+  @@index([dynamicPageId])
 }

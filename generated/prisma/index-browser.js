@@ -304,6 +304,7 @@ exports.Prisma.ProjectScalarFieldEnum = {
   status: 'status',
   platforms: 'platforms',
   technologies: 'technologies',
+  keywords: 'keywords',
   content: 'content',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -470,6 +471,17 @@ exports.Prisma.DynamicPageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DynamicPageTranslationScalarFieldEnum = {
+  id: 'id',
+  dynamicPageId: 'dynamicPageId',
+  lang: 'lang',
+  title: 'title',
+  description: 'description',
+  sections: 'sections',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -578,7 +590,8 @@ exports.Prisma.ModelName = {
   ActivityPubFollower: 'ActivityPubFollower',
   ChatSession: 'ChatSession',
   ChatMessage: 'ChatMessage',
-  DynamicPage: 'DynamicPage'
+  DynamicPage: 'DynamicPage',
+  DynamicPageTranslation: 'DynamicPageTranslation'
 };
 
 /**

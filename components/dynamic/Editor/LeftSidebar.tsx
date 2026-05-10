@@ -93,6 +93,7 @@ function Chevron({ open }: { open: boolean }) {
 
 export default function LeftSidebar() {
   const addBlock = useEditorStore((s) => s.addBlock)
+  const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
   const defs = getAllBlockDefinitions()
   const sidebarRef = useRef<HTMLDivElement>(null)
 
@@ -125,6 +126,23 @@ export default function LeftSidebar() {
   )
 
   const sidebarRight = sidebarRef.current?.getBoundingClientRect().right ?? 240
+
+  if (isTranslationMode) {
+    return (
+      <div className="w-60 flex-shrink-0 flex flex-col border-r border-base-content/10 bg-base-200">
+        <div className="px-4 py-3 border-b border-base-content/10">
+          <p className="text-xs font-semibold tracking-widest text-base-content/40">BLOCKS</p>
+        </div>
+        <div className="flex-1 flex items-center justify-center p-4">
+          <p className="text-xs text-base-content/30 text-center leading-relaxed">
+            Block structure is locked in translation mode.
+            <br />
+            Only text content can be edited.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div

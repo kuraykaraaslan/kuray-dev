@@ -11,9 +11,10 @@ interface SortableBlockProps {
   isSelected: boolean
   onSelect: () => void
   onDelete: () => void
+  isTranslationMode?: boolean
 }
 
-function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockProps) {
+function SortableBlock({ block, isSelected, onSelect, onDelete, isTranslationMode }: SortableBlockProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: block.id,
   })
@@ -53,26 +54,30 @@ function SortableBlock({ block, isSelected, onSelect, onDelete }: SortableBlockP
           {def.label}
         </span>
 
-        <div
-          {...attributes}
-          {...listeners}
-          className="px-2 py-1 rounded text-xs font-medium cursor-grab active:cursor-grabbing bg-black/75 text-white/70"
-          onClick={(e) => e.stopPropagation()}
-          title="Drag to reorder"
-        >
-          ⠿
-        </div>
+        {!isTranslationMode && (
+          <div
+            {...attributes}
+            {...listeners}
+            className="px-2 py-1 rounded text-xs font-medium cursor-grab active:cursor-grabbing bg-black/75 text-white/70"
+            onClick={(e) => e.stopPropagation()}
+            title="Drag to reorder"
+          >
+            ⠿
+          </div>
+        )}
 
-        <button
-          className="px-2 py-1 rounded text-xs font-medium bg-error/85 text-error-content"
-          onClick={(e) => {
-            e.stopPropagation()
-            onDelete()
-          }}
-          title="Delete block"
-        >
-          ✕
-        </button>
+        {!isTranslationMode && (
+          <button
+            className="px-2 py-1 rounded text-xs font-medium bg-error/85 text-error-content"
+            onClick={(e) => {
+              e.stopPropagation()
+              onDelete()
+            }}
+            title="Delete block"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <Component {...block.props} />
@@ -85,6 +90,7 @@ export default function Canvas() {
   const selectedId = useEditorStore((s) => s.selectedId)
   const setSelectedId = useEditorStore((s) => s.setSelectedId)
   const deleteBlock = useEditorStore((s) => s.deleteBlock)
+  const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
 
   if (sections.length === 0) {
     return (
@@ -108,6 +114,7 @@ export default function Canvas() {
           isSelected={selectedId === block.id}
           onSelect={() => setSelectedId(block.id)}
           onDelete={() => deleteBlock(block.id)}
+          isTranslationMode={isTranslationMode}
         />
       ))}
     </div>

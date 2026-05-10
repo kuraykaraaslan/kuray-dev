@@ -164,6 +164,11 @@ export type ChatMessage = $Result.DefaultSelection<Prisma.$ChatMessagePayload>
  * 
  */
 export type DynamicPage = $Result.DefaultSelection<Prisma.$DynamicPagePayload>
+/**
+ * Model DynamicPageTranslation
+ * 
+ */
+export type DynamicPageTranslation = $Result.DefaultSelection<Prisma.$DynamicPageTranslationPayload>
 
 /**
  * Enums
@@ -709,6 +714,16 @@ export class PrismaClient<
     * ```
     */
   get dynamicPage(): Prisma.DynamicPageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dynamicPageTranslation`: Exposes CRUD operations for the **DynamicPageTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DynamicPageTranslations
+    * const dynamicPageTranslations = await prisma.dynamicPageTranslation.findMany()
+    * ```
+    */
+  get dynamicPageTranslation(): Prisma.DynamicPageTranslationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1172,7 +1187,8 @@ export namespace Prisma {
     ActivityPubFollower: 'ActivityPubFollower',
     ChatSession: 'ChatSession',
     ChatMessage: 'ChatMessage',
-    DynamicPage: 'DynamicPage'
+    DynamicPage: 'DynamicPage',
+    DynamicPageTranslation: 'DynamicPageTranslation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1188,7 +1204,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userSession" | "userSocialAccount" | "verificationToken" | "post" | "postSeries" | "postSeriesEntry" | "postTranslation" | "category" | "categoryTranslation" | "comment" | "contactForm" | "subscription" | "campaign" | "setting" | "project" | "projectTranslation" | "appointment" | "like" | "testimonial" | "pushSubscription" | "geoAnalytics" | "shortLink" | "shortLinkClick" | "media" | "apiKey" | "activityPubFollower" | "chatSession" | "chatMessage" | "dynamicPage"
+      modelProps: "user" | "userSession" | "userSocialAccount" | "verificationToken" | "post" | "postSeries" | "postSeriesEntry" | "postTranslation" | "category" | "categoryTranslation" | "comment" | "contactForm" | "subscription" | "campaign" | "setting" | "project" | "projectTranslation" | "appointment" | "like" | "testimonial" | "pushSubscription" | "geoAnalytics" | "shortLink" | "shortLinkClick" | "media" | "apiKey" | "activityPubFollower" | "chatSession" | "chatMessage" | "dynamicPage" | "dynamicPageTranslation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3412,6 +3428,80 @@ export namespace Prisma {
           }
         }
       }
+      DynamicPageTranslation: {
+        payload: Prisma.$DynamicPageTranslationPayload<ExtArgs>
+        fields: Prisma.DynamicPageTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DynamicPageTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DynamicPageTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.DynamicPageTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DynamicPageTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.DynamicPageTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.DynamicPageTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.DynamicPageTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DynamicPageTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.DynamicPageTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>
+          }
+          update: {
+            args: Prisma.DynamicPageTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.DynamicPageTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DynamicPageTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DynamicPageTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.DynamicPageTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DynamicPageTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.DynamicPageTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDynamicPageTranslation>
+          }
+          groupBy: {
+            args: Prisma.DynamicPageTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DynamicPageTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DynamicPageTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<DynamicPageTranslationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3550,6 +3640,7 @@ export namespace Prisma {
     chatSession?: ChatSessionOmit
     chatMessage?: ChatMessageOmit
     dynamicPage?: DynamicPageOmit
+    dynamicPageTranslation?: DynamicPageTranslationOmit
   }
 
   /* Types for Logging */
@@ -3933,6 +4024,37 @@ export namespace Prisma {
    */
   export type ChatSessionCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChatMessageWhereInput
+  }
+
+
+  /**
+   * Count Type DynamicPageCountOutputType
+   */
+
+  export type DynamicPageCountOutputType = {
+    translations: number
+  }
+
+  export type DynamicPageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | DynamicPageCountOutputTypeCountTranslationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DynamicPageCountOutputType without action
+   */
+  export type DynamicPageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageCountOutputType
+     */
+    select?: DynamicPageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DynamicPageCountOutputType without action
+   */
+  export type DynamicPageCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DynamicPageTranslationWhereInput
   }
 
 
@@ -20770,6 +20892,7 @@ export namespace Prisma {
     status: number
     platforms: number
     technologies: number
+    keywords: number
     content: number
     createdAt: number
     updatedAt: number
@@ -20814,6 +20937,7 @@ export namespace Prisma {
     status?: true
     platforms?: true
     technologies?: true
+    keywords?: true
     content?: true
     createdAt?: true
     updatedAt?: true
@@ -20903,6 +21027,7 @@ export namespace Prisma {
     status: string
     platforms: string[]
     technologies: string[]
+    keywords: string[]
     content: string
     createdAt: Date
     updatedAt: Date | null
@@ -20936,6 +21061,7 @@ export namespace Prisma {
     status?: boolean
     platforms?: boolean
     technologies?: boolean
+    keywords?: boolean
     content?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20954,6 +21080,7 @@ export namespace Prisma {
     status?: boolean
     platforms?: boolean
     technologies?: boolean
+    keywords?: boolean
     content?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20970,6 +21097,7 @@ export namespace Prisma {
     status?: boolean
     platforms?: boolean
     technologies?: boolean
+    keywords?: boolean
     content?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20986,6 +21114,7 @@ export namespace Prisma {
     status?: boolean
     platforms?: boolean
     technologies?: boolean
+    keywords?: boolean
     content?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -20993,7 +21122,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"projectId" | "title" | "description" | "slug" | "image" | "status" | "platforms" | "technologies" | "content" | "createdAt" | "updatedAt" | "projectLinks" | "deletedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"projectId" | "title" | "description" | "slug" | "image" | "status" | "platforms" | "technologies" | "keywords" | "content" | "createdAt" | "updatedAt" | "projectLinks" | "deletedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | Project$translationsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -21015,6 +21144,7 @@ export namespace Prisma {
       status: string
       platforms: string[]
       technologies: string[]
+      keywords: string[]
       content: string
       createdAt: Date
       updatedAt: Date | null
@@ -21452,6 +21582,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Project", 'String'>
     readonly platforms: FieldRef<"Project", 'String[]'>
     readonly technologies: FieldRef<"Project", 'String[]'>
+    readonly keywords: FieldRef<"Project", 'String[]'>
     readonly content: FieldRef<"Project", 'String'>
     readonly createdAt: FieldRef<"Project", 'DateTime'>
     readonly updatedAt: FieldRef<"Project", 'DateTime'>
@@ -36275,6 +36406,8 @@ export namespace Prisma {
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    translations?: boolean | DynamicPage$translationsArgs<ExtArgs>
+    _count?: boolean | DynamicPageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dynamicPage"]>
 
   export type DynamicPageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -36317,10 +36450,18 @@ export namespace Prisma {
   }
 
   export type DynamicPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dynamicPageId" | "slug" | "title" | "description" | "keywords" | "sections" | "metadata" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPage"]>
+  export type DynamicPageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | DynamicPage$translationsArgs<ExtArgs>
+    _count?: boolean | DynamicPageCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DynamicPageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type DynamicPageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $DynamicPagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DynamicPage"
-    objects: {}
+    objects: {
+      translations: Prisma.$DynamicPageTranslationPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       dynamicPageId: string
       slug: string
@@ -36726,6 +36867,7 @@ export namespace Prisma {
    */
   export interface Prisma__DynamicPageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    translations<T extends DynamicPage$translationsArgs<ExtArgs> = {}>(args?: Subset<T, DynamicPage$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -36782,6 +36924,10 @@ export namespace Prisma {
      */
     omit?: DynamicPageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+    /**
      * Filter, which DynamicPage to fetch.
      */
     where: DynamicPageWhereUniqueInput
@@ -36800,6 +36946,10 @@ export namespace Prisma {
      */
     omit?: DynamicPageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+    /**
      * Filter, which DynamicPage to fetch.
      */
     where: DynamicPageWhereUniqueInput
@@ -36817,6 +36967,10 @@ export namespace Prisma {
      * Omit specific fields from the DynamicPage
      */
     omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
     /**
      * Filter, which DynamicPage to fetch.
      */
@@ -36866,6 +37020,10 @@ export namespace Prisma {
      */
     omit?: DynamicPageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+    /**
      * Filter, which DynamicPage to fetch.
      */
     where?: DynamicPageWhereInput
@@ -36913,6 +37071,10 @@ export namespace Prisma {
      * Omit specific fields from the DynamicPage
      */
     omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
     /**
      * Filter, which DynamicPages to fetch.
      */
@@ -36962,6 +37124,10 @@ export namespace Prisma {
      */
     omit?: DynamicPageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+    /**
      * The data needed to create a DynamicPage.
      */
     data: XOR<DynamicPageCreateInput, DynamicPageUncheckedCreateInput>
@@ -37009,6 +37175,10 @@ export namespace Prisma {
      * Omit specific fields from the DynamicPage
      */
     omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
     /**
      * The data needed to update a DynamicPage.
      */
@@ -37076,6 +37246,10 @@ export namespace Prisma {
      */
     omit?: DynamicPageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+    /**
      * The filter to search for the DynamicPage to update in case it exists.
      */
     where: DynamicPageWhereUniqueInput
@@ -37102,6 +37276,10 @@ export namespace Prisma {
      */
     omit?: DynamicPageOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+    /**
      * Filter which DynamicPage to delete.
      */
     where: DynamicPageWhereUniqueInput
@@ -37122,6 +37300,30 @@ export namespace Prisma {
   }
 
   /**
+   * DynamicPage.translations
+   */
+  export type DynamicPage$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    where?: DynamicPageTranslationWhereInput
+    orderBy?: DynamicPageTranslationOrderByWithRelationInput | DynamicPageTranslationOrderByWithRelationInput[]
+    cursor?: DynamicPageTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DynamicPageTranslationScalarFieldEnum | DynamicPageTranslationScalarFieldEnum[]
+  }
+
+  /**
    * DynamicPage without action
    */
   export type DynamicPageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -37133,6 +37335,1108 @@ export namespace Prisma {
      * Omit specific fields from the DynamicPage
      */
     omit?: DynamicPageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DynamicPageTranslation
+   */
+
+  export type AggregateDynamicPageTranslation = {
+    _count: DynamicPageTranslationCountAggregateOutputType | null
+    _min: DynamicPageTranslationMinAggregateOutputType | null
+    _max: DynamicPageTranslationMaxAggregateOutputType | null
+  }
+
+  export type DynamicPageTranslationMinAggregateOutputType = {
+    id: string | null
+    dynamicPageId: string | null
+    lang: string | null
+    title: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DynamicPageTranslationMaxAggregateOutputType = {
+    id: string | null
+    dynamicPageId: string | null
+    lang: string | null
+    title: string | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DynamicPageTranslationCountAggregateOutputType = {
+    id: number
+    dynamicPageId: number
+    lang: number
+    title: number
+    description: number
+    sections: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DynamicPageTranslationMinAggregateInputType = {
+    id?: true
+    dynamicPageId?: true
+    lang?: true
+    title?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DynamicPageTranslationMaxAggregateInputType = {
+    id?: true
+    dynamicPageId?: true
+    lang?: true
+    title?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DynamicPageTranslationCountAggregateInputType = {
+    id?: true
+    dynamicPageId?: true
+    lang?: true
+    title?: true
+    description?: true
+    sections?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DynamicPageTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DynamicPageTranslation to aggregate.
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPageTranslations to fetch.
+     */
+    orderBy?: DynamicPageTranslationOrderByWithRelationInput | DynamicPageTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DynamicPageTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPageTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPageTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DynamicPageTranslations
+    **/
+    _count?: true | DynamicPageTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DynamicPageTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DynamicPageTranslationMaxAggregateInputType
+  }
+
+  export type GetDynamicPageTranslationAggregateType<T extends DynamicPageTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateDynamicPageTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDynamicPageTranslation[P]>
+      : GetScalarType<T[P], AggregateDynamicPageTranslation[P]>
+  }
+
+
+
+
+  export type DynamicPageTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DynamicPageTranslationWhereInput
+    orderBy?: DynamicPageTranslationOrderByWithAggregationInput | DynamicPageTranslationOrderByWithAggregationInput[]
+    by: DynamicPageTranslationScalarFieldEnum[] | DynamicPageTranslationScalarFieldEnum
+    having?: DynamicPageTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DynamicPageTranslationCountAggregateInputType | true
+    _min?: DynamicPageTranslationMinAggregateInputType
+    _max?: DynamicPageTranslationMaxAggregateInputType
+  }
+
+  export type DynamicPageTranslationGroupByOutputType = {
+    id: string
+    dynamicPageId: string
+    lang: string
+    title: string
+    description: string | null
+    sections: JsonValue
+    createdAt: Date
+    updatedAt: Date
+    _count: DynamicPageTranslationCountAggregateOutputType | null
+    _min: DynamicPageTranslationMinAggregateOutputType | null
+    _max: DynamicPageTranslationMaxAggregateOutputType | null
+  }
+
+  type GetDynamicPageTranslationGroupByPayload<T extends DynamicPageTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DynamicPageTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DynamicPageTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DynamicPageTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], DynamicPageTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DynamicPageTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dynamicPageId?: boolean
+    lang?: boolean
+    title?: boolean
+    description?: boolean
+    sections?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dynamicPage?: boolean | DynamicPageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dynamicPageTranslation"]>
+
+  export type DynamicPageTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dynamicPageId?: boolean
+    lang?: boolean
+    title?: boolean
+    description?: boolean
+    sections?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dynamicPage?: boolean | DynamicPageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dynamicPageTranslation"]>
+
+  export type DynamicPageTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dynamicPageId?: boolean
+    lang?: boolean
+    title?: boolean
+    description?: boolean
+    sections?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    dynamicPage?: boolean | DynamicPageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dynamicPageTranslation"]>
+
+  export type DynamicPageTranslationSelectScalar = {
+    id?: boolean
+    dynamicPageId?: boolean
+    lang?: boolean
+    title?: boolean
+    description?: boolean
+    sections?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DynamicPageTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dynamicPageId" | "lang" | "title" | "description" | "sections" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPageTranslation"]>
+  export type DynamicPageTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dynamicPage?: boolean | DynamicPageDefaultArgs<ExtArgs>
+  }
+  export type DynamicPageTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dynamicPage?: boolean | DynamicPageDefaultArgs<ExtArgs>
+  }
+  export type DynamicPageTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dynamicPage?: boolean | DynamicPageDefaultArgs<ExtArgs>
+  }
+
+  export type $DynamicPageTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DynamicPageTranslation"
+    objects: {
+      dynamicPage: Prisma.$DynamicPagePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      dynamicPageId: string
+      lang: string
+      title: string
+      description: string | null
+      sections: Prisma.JsonValue
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dynamicPageTranslation"]>
+    composites: {}
+  }
+
+  type DynamicPageTranslationGetPayload<S extends boolean | null | undefined | DynamicPageTranslationDefaultArgs> = $Result.GetResult<Prisma.$DynamicPageTranslationPayload, S>
+
+  type DynamicPageTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DynamicPageTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DynamicPageTranslationCountAggregateInputType | true
+    }
+
+  export interface DynamicPageTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DynamicPageTranslation'], meta: { name: 'DynamicPageTranslation' } }
+    /**
+     * Find zero or one DynamicPageTranslation that matches the filter.
+     * @param {DynamicPageTranslationFindUniqueArgs} args - Arguments to find a DynamicPageTranslation
+     * @example
+     * // Get one DynamicPageTranslation
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DynamicPageTranslationFindUniqueArgs>(args: SelectSubset<T, DynamicPageTranslationFindUniqueArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DynamicPageTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DynamicPageTranslationFindUniqueOrThrowArgs} args - Arguments to find a DynamicPageTranslation
+     * @example
+     * // Get one DynamicPageTranslation
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DynamicPageTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, DynamicPageTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DynamicPageTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationFindFirstArgs} args - Arguments to find a DynamicPageTranslation
+     * @example
+     * // Get one DynamicPageTranslation
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DynamicPageTranslationFindFirstArgs>(args?: SelectSubset<T, DynamicPageTranslationFindFirstArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DynamicPageTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationFindFirstOrThrowArgs} args - Arguments to find a DynamicPageTranslation
+     * @example
+     * // Get one DynamicPageTranslation
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DynamicPageTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, DynamicPageTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DynamicPageTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DynamicPageTranslations
+     * const dynamicPageTranslations = await prisma.dynamicPageTranslation.findMany()
+     * 
+     * // Get first 10 DynamicPageTranslations
+     * const dynamicPageTranslations = await prisma.dynamicPageTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dynamicPageTranslationWithIdOnly = await prisma.dynamicPageTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DynamicPageTranslationFindManyArgs>(args?: SelectSubset<T, DynamicPageTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DynamicPageTranslation.
+     * @param {DynamicPageTranslationCreateArgs} args - Arguments to create a DynamicPageTranslation.
+     * @example
+     * // Create one DynamicPageTranslation
+     * const DynamicPageTranslation = await prisma.dynamicPageTranslation.create({
+     *   data: {
+     *     // ... data to create a DynamicPageTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends DynamicPageTranslationCreateArgs>(args: SelectSubset<T, DynamicPageTranslationCreateArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DynamicPageTranslations.
+     * @param {DynamicPageTranslationCreateManyArgs} args - Arguments to create many DynamicPageTranslations.
+     * @example
+     * // Create many DynamicPageTranslations
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DynamicPageTranslationCreateManyArgs>(args?: SelectSubset<T, DynamicPageTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DynamicPageTranslations and returns the data saved in the database.
+     * @param {DynamicPageTranslationCreateManyAndReturnArgs} args - Arguments to create many DynamicPageTranslations.
+     * @example
+     * // Create many DynamicPageTranslations
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DynamicPageTranslations and only return the `id`
+     * const dynamicPageTranslationWithIdOnly = await prisma.dynamicPageTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DynamicPageTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, DynamicPageTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DynamicPageTranslation.
+     * @param {DynamicPageTranslationDeleteArgs} args - Arguments to delete one DynamicPageTranslation.
+     * @example
+     * // Delete one DynamicPageTranslation
+     * const DynamicPageTranslation = await prisma.dynamicPageTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one DynamicPageTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DynamicPageTranslationDeleteArgs>(args: SelectSubset<T, DynamicPageTranslationDeleteArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DynamicPageTranslation.
+     * @param {DynamicPageTranslationUpdateArgs} args - Arguments to update one DynamicPageTranslation.
+     * @example
+     * // Update one DynamicPageTranslation
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DynamicPageTranslationUpdateArgs>(args: SelectSubset<T, DynamicPageTranslationUpdateArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DynamicPageTranslations.
+     * @param {DynamicPageTranslationDeleteManyArgs} args - Arguments to filter DynamicPageTranslations to delete.
+     * @example
+     * // Delete a few DynamicPageTranslations
+     * const { count } = await prisma.dynamicPageTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DynamicPageTranslationDeleteManyArgs>(args?: SelectSubset<T, DynamicPageTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DynamicPageTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DynamicPageTranslations
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DynamicPageTranslationUpdateManyArgs>(args: SelectSubset<T, DynamicPageTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DynamicPageTranslations and returns the data updated in the database.
+     * @param {DynamicPageTranslationUpdateManyAndReturnArgs} args - Arguments to update many DynamicPageTranslations.
+     * @example
+     * // Update many DynamicPageTranslations
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DynamicPageTranslations and only return the `id`
+     * const dynamicPageTranslationWithIdOnly = await prisma.dynamicPageTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DynamicPageTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, DynamicPageTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DynamicPageTranslation.
+     * @param {DynamicPageTranslationUpsertArgs} args - Arguments to update or create a DynamicPageTranslation.
+     * @example
+     * // Update or create a DynamicPageTranslation
+     * const dynamicPageTranslation = await prisma.dynamicPageTranslation.upsert({
+     *   create: {
+     *     // ... data to create a DynamicPageTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DynamicPageTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DynamicPageTranslationUpsertArgs>(args: SelectSubset<T, DynamicPageTranslationUpsertArgs<ExtArgs>>): Prisma__DynamicPageTranslationClient<$Result.GetResult<Prisma.$DynamicPageTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DynamicPageTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationCountArgs} args - Arguments to filter DynamicPageTranslations to count.
+     * @example
+     * // Count the number of DynamicPageTranslations
+     * const count = await prisma.dynamicPageTranslation.count({
+     *   where: {
+     *     // ... the filter for the DynamicPageTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends DynamicPageTranslationCountArgs>(
+      args?: Subset<T, DynamicPageTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DynamicPageTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DynamicPageTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DynamicPageTranslationAggregateArgs>(args: Subset<T, DynamicPageTranslationAggregateArgs>): Prisma.PrismaPromise<GetDynamicPageTranslationAggregateType<T>>
+
+    /**
+     * Group by DynamicPageTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DynamicPageTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DynamicPageTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DynamicPageTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: DynamicPageTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DynamicPageTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDynamicPageTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DynamicPageTranslation model
+   */
+  readonly fields: DynamicPageTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DynamicPageTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DynamicPageTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    dynamicPage<T extends DynamicPageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DynamicPageDefaultArgs<ExtArgs>>): Prisma__DynamicPageClient<$Result.GetResult<Prisma.$DynamicPagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DynamicPageTranslation model
+   */
+  interface DynamicPageTranslationFieldRefs {
+    readonly id: FieldRef<"DynamicPageTranslation", 'String'>
+    readonly dynamicPageId: FieldRef<"DynamicPageTranslation", 'String'>
+    readonly lang: FieldRef<"DynamicPageTranslation", 'String'>
+    readonly title: FieldRef<"DynamicPageTranslation", 'String'>
+    readonly description: FieldRef<"DynamicPageTranslation", 'String'>
+    readonly sections: FieldRef<"DynamicPageTranslation", 'Json'>
+    readonly createdAt: FieldRef<"DynamicPageTranslation", 'DateTime'>
+    readonly updatedAt: FieldRef<"DynamicPageTranslation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DynamicPageTranslation findUnique
+   */
+  export type DynamicPageTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which DynamicPageTranslation to fetch.
+     */
+    where: DynamicPageTranslationWhereUniqueInput
+  }
+
+  /**
+   * DynamicPageTranslation findUniqueOrThrow
+   */
+  export type DynamicPageTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which DynamicPageTranslation to fetch.
+     */
+    where: DynamicPageTranslationWhereUniqueInput
+  }
+
+  /**
+   * DynamicPageTranslation findFirst
+   */
+  export type DynamicPageTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which DynamicPageTranslation to fetch.
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPageTranslations to fetch.
+     */
+    orderBy?: DynamicPageTranslationOrderByWithRelationInput | DynamicPageTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DynamicPageTranslations.
+     */
+    cursor?: DynamicPageTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPageTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPageTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DynamicPageTranslations.
+     */
+    distinct?: DynamicPageTranslationScalarFieldEnum | DynamicPageTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * DynamicPageTranslation findFirstOrThrow
+   */
+  export type DynamicPageTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which DynamicPageTranslation to fetch.
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPageTranslations to fetch.
+     */
+    orderBy?: DynamicPageTranslationOrderByWithRelationInput | DynamicPageTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DynamicPageTranslations.
+     */
+    cursor?: DynamicPageTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPageTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPageTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DynamicPageTranslations.
+     */
+    distinct?: DynamicPageTranslationScalarFieldEnum | DynamicPageTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * DynamicPageTranslation findMany
+   */
+  export type DynamicPageTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which DynamicPageTranslations to fetch.
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DynamicPageTranslations to fetch.
+     */
+    orderBy?: DynamicPageTranslationOrderByWithRelationInput | DynamicPageTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DynamicPageTranslations.
+     */
+    cursor?: DynamicPageTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DynamicPageTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DynamicPageTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DynamicPageTranslations.
+     */
+    distinct?: DynamicPageTranslationScalarFieldEnum | DynamicPageTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * DynamicPageTranslation create
+   */
+  export type DynamicPageTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DynamicPageTranslation.
+     */
+    data: XOR<DynamicPageTranslationCreateInput, DynamicPageTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * DynamicPageTranslation createMany
+   */
+  export type DynamicPageTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DynamicPageTranslations.
+     */
+    data: DynamicPageTranslationCreateManyInput | DynamicPageTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DynamicPageTranslation createManyAndReturn
+   */
+  export type DynamicPageTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many DynamicPageTranslations.
+     */
+    data: DynamicPageTranslationCreateManyInput | DynamicPageTranslationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DynamicPageTranslation update
+   */
+  export type DynamicPageTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DynamicPageTranslation.
+     */
+    data: XOR<DynamicPageTranslationUpdateInput, DynamicPageTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which DynamicPageTranslation to update.
+     */
+    where: DynamicPageTranslationWhereUniqueInput
+  }
+
+  /**
+   * DynamicPageTranslation updateMany
+   */
+  export type DynamicPageTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DynamicPageTranslations.
+     */
+    data: XOR<DynamicPageTranslationUpdateManyMutationInput, DynamicPageTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which DynamicPageTranslations to update
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * Limit how many DynamicPageTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DynamicPageTranslation updateManyAndReturn
+   */
+  export type DynamicPageTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update DynamicPageTranslations.
+     */
+    data: XOR<DynamicPageTranslationUpdateManyMutationInput, DynamicPageTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which DynamicPageTranslations to update
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * Limit how many DynamicPageTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DynamicPageTranslation upsert
+   */
+  export type DynamicPageTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DynamicPageTranslation to update in case it exists.
+     */
+    where: DynamicPageTranslationWhereUniqueInput
+    /**
+     * In case the DynamicPageTranslation found by the `where` argument doesn't exist, create a new DynamicPageTranslation with this data.
+     */
+    create: XOR<DynamicPageTranslationCreateInput, DynamicPageTranslationUncheckedCreateInput>
+    /**
+     * In case the DynamicPageTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DynamicPageTranslationUpdateInput, DynamicPageTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * DynamicPageTranslation delete
+   */
+  export type DynamicPageTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which DynamicPageTranslation to delete.
+     */
+    where: DynamicPageTranslationWhereUniqueInput
+  }
+
+  /**
+   * DynamicPageTranslation deleteMany
+   */
+  export type DynamicPageTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DynamicPageTranslations to delete
+     */
+    where?: DynamicPageTranslationWhereInput
+    /**
+     * Limit how many DynamicPageTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DynamicPageTranslation without action
+   */
+  export type DynamicPageTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DynamicPageTranslation
+     */
+    select?: DynamicPageTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DynamicPageTranslation
+     */
+    omit?: DynamicPageTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DynamicPageTranslationInclude<ExtArgs> | null
   }
 
 
@@ -37379,6 +38683,7 @@ export namespace Prisma {
     status: 'status',
     platforms: 'platforms',
     technologies: 'technologies',
+    keywords: 'keywords',
     content: 'content',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -37588,6 +38893,20 @@ export namespace Prisma {
   };
 
   export type DynamicPageScalarFieldEnum = (typeof DynamicPageScalarFieldEnum)[keyof typeof DynamicPageScalarFieldEnum]
+
+
+  export const DynamicPageTranslationScalarFieldEnum: {
+    id: 'id',
+    dynamicPageId: 'dynamicPageId',
+    lang: 'lang',
+    title: 'title',
+    description: 'description',
+    sections: 'sections',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DynamicPageTranslationScalarFieldEnum = (typeof DynamicPageTranslationScalarFieldEnum)[keyof typeof DynamicPageTranslationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -38982,6 +40301,7 @@ export namespace Prisma {
     status?: StringFilter<"Project"> | string
     platforms?: StringNullableListFilter<"Project">
     technologies?: StringNullableListFilter<"Project">
+    keywords?: StringNullableListFilter<"Project">
     content?: StringFilter<"Project"> | string
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
@@ -38999,6 +40319,7 @@ export namespace Prisma {
     status?: SortOrder
     platforms?: SortOrder
     technologies?: SortOrder
+    keywords?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
@@ -39019,6 +40340,7 @@ export namespace Prisma {
     status?: StringFilter<"Project"> | string
     platforms?: StringNullableListFilter<"Project">
     technologies?: StringNullableListFilter<"Project">
+    keywords?: StringNullableListFilter<"Project">
     content?: StringFilter<"Project"> | string
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
@@ -39036,6 +40358,7 @@ export namespace Prisma {
     status?: SortOrder
     platforms?: SortOrder
     technologies?: SortOrder
+    keywords?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
@@ -39058,6 +40381,7 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"Project"> | string
     platforms?: StringNullableListFilter<"Project">
     technologies?: StringNullableListFilter<"Project">
+    keywords?: StringNullableListFilter<"Project">
     content?: StringWithAggregatesFilter<"Project"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
@@ -40002,6 +41326,7 @@ export namespace Prisma {
     status?: EnumDynamicPageStatusFilter<"DynamicPage"> | $Enums.DynamicPageStatus
     createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
+    translations?: DynamicPageTranslationListRelationFilter
   }
 
   export type DynamicPageOrderByWithRelationInput = {
@@ -40015,6 +41340,7 @@ export namespace Prisma {
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    translations?: DynamicPageTranslationOrderByRelationAggregateInput
   }
 
   export type DynamicPageWhereUniqueInput = Prisma.AtLeast<{
@@ -40031,6 +41357,7 @@ export namespace Prisma {
     status?: EnumDynamicPageStatusFilter<"DynamicPage"> | $Enums.DynamicPageStatus
     createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
+    translations?: DynamicPageTranslationListRelationFilter
   }, "dynamicPageId" | "slug">
 
   export type DynamicPageOrderByWithAggregationInput = {
@@ -40063,6 +41390,77 @@ export namespace Prisma {
     status?: EnumDynamicPageStatusWithAggregatesFilter<"DynamicPage"> | $Enums.DynamicPageStatus
     createdAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
+  }
+
+  export type DynamicPageTranslationWhereInput = {
+    AND?: DynamicPageTranslationWhereInput | DynamicPageTranslationWhereInput[]
+    OR?: DynamicPageTranslationWhereInput[]
+    NOT?: DynamicPageTranslationWhereInput | DynamicPageTranslationWhereInput[]
+    id?: StringFilter<"DynamicPageTranslation"> | string
+    dynamicPageId?: StringFilter<"DynamicPageTranslation"> | string
+    lang?: StringFilter<"DynamicPageTranslation"> | string
+    title?: StringFilter<"DynamicPageTranslation"> | string
+    description?: StringNullableFilter<"DynamicPageTranslation"> | string | null
+    sections?: JsonFilter<"DynamicPageTranslation">
+    createdAt?: DateTimeFilter<"DynamicPageTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"DynamicPageTranslation"> | Date | string
+    dynamicPage?: XOR<DynamicPageScalarRelationFilter, DynamicPageWhereInput>
+  }
+
+  export type DynamicPageTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    dynamicPageId?: SortOrder
+    lang?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    sections?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    dynamicPage?: DynamicPageOrderByWithRelationInput
+  }
+
+  export type DynamicPageTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    dynamicPageId_lang?: DynamicPageTranslationDynamicPageIdLangCompoundUniqueInput
+    AND?: DynamicPageTranslationWhereInput | DynamicPageTranslationWhereInput[]
+    OR?: DynamicPageTranslationWhereInput[]
+    NOT?: DynamicPageTranslationWhereInput | DynamicPageTranslationWhereInput[]
+    dynamicPageId?: StringFilter<"DynamicPageTranslation"> | string
+    lang?: StringFilter<"DynamicPageTranslation"> | string
+    title?: StringFilter<"DynamicPageTranslation"> | string
+    description?: StringNullableFilter<"DynamicPageTranslation"> | string | null
+    sections?: JsonFilter<"DynamicPageTranslation">
+    createdAt?: DateTimeFilter<"DynamicPageTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"DynamicPageTranslation"> | Date | string
+    dynamicPage?: XOR<DynamicPageScalarRelationFilter, DynamicPageWhereInput>
+  }, "id" | "dynamicPageId_lang">
+
+  export type DynamicPageTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    dynamicPageId?: SortOrder
+    lang?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    sections?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DynamicPageTranslationCountOrderByAggregateInput
+    _max?: DynamicPageTranslationMaxOrderByAggregateInput
+    _min?: DynamicPageTranslationMinOrderByAggregateInput
+  }
+
+  export type DynamicPageTranslationScalarWhereWithAggregatesInput = {
+    AND?: DynamicPageTranslationScalarWhereWithAggregatesInput | DynamicPageTranslationScalarWhereWithAggregatesInput[]
+    OR?: DynamicPageTranslationScalarWhereWithAggregatesInput[]
+    NOT?: DynamicPageTranslationScalarWhereWithAggregatesInput | DynamicPageTranslationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DynamicPageTranslation"> | string
+    dynamicPageId?: StringWithAggregatesFilter<"DynamicPageTranslation"> | string
+    lang?: StringWithAggregatesFilter<"DynamicPageTranslation"> | string
+    title?: StringWithAggregatesFilter<"DynamicPageTranslation"> | string
+    description?: StringNullableWithAggregatesFilter<"DynamicPageTranslation"> | string | null
+    sections?: JsonWithAggregatesFilter<"DynamicPageTranslation">
+    createdAt?: DateTimeWithAggregatesFilter<"DynamicPageTranslation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DynamicPageTranslation"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -41341,6 +42739,7 @@ export namespace Prisma {
     status?: string
     platforms?: ProjectCreateplatformsInput | string[]
     technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -41358,6 +42757,7 @@ export namespace Prisma {
     status?: string
     platforms?: ProjectCreateplatformsInput | string[]
     technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -41375,6 +42775,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     platforms?: ProjectUpdateplatformsInput | string[]
     technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -41392,6 +42793,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     platforms?: ProjectUpdateplatformsInput | string[]
     technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -41409,6 +42811,7 @@ export namespace Prisma {
     status?: string
     platforms?: ProjectCreateplatformsInput | string[]
     technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -41425,6 +42828,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     platforms?: ProjectUpdateplatformsInput | string[]
     technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -41441,6 +42845,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     platforms?: ProjectUpdateplatformsInput | string[]
     technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42483,6 +43888,7 @@ export namespace Prisma {
     status?: $Enums.DynamicPageStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    translations?: DynamicPageTranslationCreateNestedManyWithoutDynamicPageInput
   }
 
   export type DynamicPageUncheckedCreateInput = {
@@ -42496,6 +43902,7 @@ export namespace Prisma {
     status?: $Enums.DynamicPageStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    translations?: DynamicPageTranslationUncheckedCreateNestedManyWithoutDynamicPageInput
   }
 
   export type DynamicPageUpdateInput = {
@@ -42509,6 +43916,7 @@ export namespace Prisma {
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: DynamicPageTranslationUpdateManyWithoutDynamicPageNestedInput
   }
 
   export type DynamicPageUncheckedUpdateInput = {
@@ -42522,6 +43930,7 @@ export namespace Prisma {
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: DynamicPageTranslationUncheckedUpdateManyWithoutDynamicPageNestedInput
   }
 
   export type DynamicPageCreateManyInput = {
@@ -42559,6 +43968,82 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationCreateInput = {
+    id?: string
+    lang: string
+    title: string
+    description?: string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    dynamicPage: DynamicPageCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type DynamicPageTranslationUncheckedCreateInput = {
+    id?: string
+    dynamicPageId: string
+    lang: string
+    title: string
+    description?: string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageTranslationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dynamicPage?: DynamicPageUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type DynamicPageTranslationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationCreateManyInput = {
+    id?: string
+    dynamicPageId: string
+    lang: string
+    title: string
+    description?: string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageTranslationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43569,6 +45054,7 @@ export namespace Prisma {
     status?: SortOrder
     platforms?: SortOrder
     technologies?: SortOrder
+    keywords?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -44260,6 +45746,16 @@ export namespace Prisma {
     not?: NestedEnumDynamicPageStatusFilter<$PrismaModel> | $Enums.DynamicPageStatus
   }
 
+  export type DynamicPageTranslationListRelationFilter = {
+    every?: DynamicPageTranslationWhereInput
+    some?: DynamicPageTranslationWhereInput
+    none?: DynamicPageTranslationWhereInput
+  }
+
+  export type DynamicPageTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type DynamicPageCountOrderByAggregateInput = {
     dynamicPageId?: SortOrder
     slug?: SortOrder
@@ -44327,6 +45823,47 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDynamicPageStatusFilter<$PrismaModel>
     _max?: NestedEnumDynamicPageStatusFilter<$PrismaModel>
+  }
+
+  export type DynamicPageScalarRelationFilter = {
+    is?: DynamicPageWhereInput
+    isNot?: DynamicPageWhereInput
+  }
+
+  export type DynamicPageTranslationDynamicPageIdLangCompoundUniqueInput = {
+    dynamicPageId: string
+    lang: string
+  }
+
+  export type DynamicPageTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    dynamicPageId?: SortOrder
+    lang?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    sections?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DynamicPageTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dynamicPageId?: SortOrder
+    lang?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DynamicPageTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    dynamicPageId?: SortOrder
+    lang?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserSessionCreateNestedManyWithoutUserInput = {
@@ -45081,6 +46618,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type ProjectCreatekeywordsInput = {
+    set: string[]
+  }
+
   export type ProjectCreateprojectLinksInput = {
     set: string[]
   }
@@ -45105,6 +46646,11 @@ export namespace Prisma {
   }
 
   export type ProjectUpdatetechnologiesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ProjectUpdatekeywordsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -45340,6 +46886,20 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type DynamicPageTranslationCreateNestedManyWithoutDynamicPageInput = {
+    create?: XOR<DynamicPageTranslationCreateWithoutDynamicPageInput, DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput> | DynamicPageTranslationCreateWithoutDynamicPageInput[] | DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput[]
+    connectOrCreate?: DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput | DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput[]
+    createMany?: DynamicPageTranslationCreateManyDynamicPageInputEnvelope
+    connect?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+  }
+
+  export type DynamicPageTranslationUncheckedCreateNestedManyWithoutDynamicPageInput = {
+    create?: XOR<DynamicPageTranslationCreateWithoutDynamicPageInput, DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput> | DynamicPageTranslationCreateWithoutDynamicPageInput[] | DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput[]
+    connectOrCreate?: DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput | DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput[]
+    createMany?: DynamicPageTranslationCreateManyDynamicPageInputEnvelope
+    connect?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+  }
+
   export type DynamicPageUpdatekeywordsInput = {
     set?: string[]
     push?: string | string[]
@@ -45347,6 +46907,48 @@ export namespace Prisma {
 
   export type EnumDynamicPageStatusFieldUpdateOperationsInput = {
     set?: $Enums.DynamicPageStatus
+  }
+
+  export type DynamicPageTranslationUpdateManyWithoutDynamicPageNestedInput = {
+    create?: XOR<DynamicPageTranslationCreateWithoutDynamicPageInput, DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput> | DynamicPageTranslationCreateWithoutDynamicPageInput[] | DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput[]
+    connectOrCreate?: DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput | DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput[]
+    upsert?: DynamicPageTranslationUpsertWithWhereUniqueWithoutDynamicPageInput | DynamicPageTranslationUpsertWithWhereUniqueWithoutDynamicPageInput[]
+    createMany?: DynamicPageTranslationCreateManyDynamicPageInputEnvelope
+    set?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    disconnect?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    delete?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    connect?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    update?: DynamicPageTranslationUpdateWithWhereUniqueWithoutDynamicPageInput | DynamicPageTranslationUpdateWithWhereUniqueWithoutDynamicPageInput[]
+    updateMany?: DynamicPageTranslationUpdateManyWithWhereWithoutDynamicPageInput | DynamicPageTranslationUpdateManyWithWhereWithoutDynamicPageInput[]
+    deleteMany?: DynamicPageTranslationScalarWhereInput | DynamicPageTranslationScalarWhereInput[]
+  }
+
+  export type DynamicPageTranslationUncheckedUpdateManyWithoutDynamicPageNestedInput = {
+    create?: XOR<DynamicPageTranslationCreateWithoutDynamicPageInput, DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput> | DynamicPageTranslationCreateWithoutDynamicPageInput[] | DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput[]
+    connectOrCreate?: DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput | DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput[]
+    upsert?: DynamicPageTranslationUpsertWithWhereUniqueWithoutDynamicPageInput | DynamicPageTranslationUpsertWithWhereUniqueWithoutDynamicPageInput[]
+    createMany?: DynamicPageTranslationCreateManyDynamicPageInputEnvelope
+    set?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    disconnect?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    delete?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    connect?: DynamicPageTranslationWhereUniqueInput | DynamicPageTranslationWhereUniqueInput[]
+    update?: DynamicPageTranslationUpdateWithWhereUniqueWithoutDynamicPageInput | DynamicPageTranslationUpdateWithWhereUniqueWithoutDynamicPageInput[]
+    updateMany?: DynamicPageTranslationUpdateManyWithWhereWithoutDynamicPageInput | DynamicPageTranslationUpdateManyWithWhereWithoutDynamicPageInput[]
+    deleteMany?: DynamicPageTranslationScalarWhereInput | DynamicPageTranslationScalarWhereInput[]
+  }
+
+  export type DynamicPageCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<DynamicPageCreateWithoutTranslationsInput, DynamicPageUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: DynamicPageCreateOrConnectWithoutTranslationsInput
+    connect?: DynamicPageWhereUniqueInput
+  }
+
+  export type DynamicPageUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<DynamicPageCreateWithoutTranslationsInput, DynamicPageUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: DynamicPageCreateOrConnectWithoutTranslationsInput
+    upsert?: DynamicPageUpsertWithoutTranslationsInput
+    connect?: DynamicPageWhereUniqueInput
+    update?: XOR<XOR<DynamicPageUpdateToOneWithWhereWithoutTranslationsInput, DynamicPageUpdateWithoutTranslationsInput>, DynamicPageUncheckedUpdateWithoutTranslationsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -47445,6 +49047,7 @@ export namespace Prisma {
     status?: string
     platforms?: ProjectCreateplatformsInput | string[]
     technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -47461,6 +49064,7 @@ export namespace Prisma {
     status?: string
     platforms?: ProjectCreateplatformsInput | string[]
     technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
     content: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
@@ -47493,6 +49097,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     platforms?: ProjectUpdateplatformsInput | string[]
     technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -47509,6 +49114,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     platforms?: ProjectUpdateplatformsInput | string[]
     technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -48039,6 +49645,134 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     takenOverBy?: NullableStringFieldUpdateOperationsInput | string | null
     summary?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationCreateWithoutDynamicPageInput = {
+    id?: string
+    lang: string
+    title: string
+    description?: string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput = {
+    id?: string
+    lang: string
+    title: string
+    description?: string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageTranslationCreateOrConnectWithoutDynamicPageInput = {
+    where: DynamicPageTranslationWhereUniqueInput
+    create: XOR<DynamicPageTranslationCreateWithoutDynamicPageInput, DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput>
+  }
+
+  export type DynamicPageTranslationCreateManyDynamicPageInputEnvelope = {
+    data: DynamicPageTranslationCreateManyDynamicPageInput | DynamicPageTranslationCreateManyDynamicPageInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DynamicPageTranslationUpsertWithWhereUniqueWithoutDynamicPageInput = {
+    where: DynamicPageTranslationWhereUniqueInput
+    update: XOR<DynamicPageTranslationUpdateWithoutDynamicPageInput, DynamicPageTranslationUncheckedUpdateWithoutDynamicPageInput>
+    create: XOR<DynamicPageTranslationCreateWithoutDynamicPageInput, DynamicPageTranslationUncheckedCreateWithoutDynamicPageInput>
+  }
+
+  export type DynamicPageTranslationUpdateWithWhereUniqueWithoutDynamicPageInput = {
+    where: DynamicPageTranslationWhereUniqueInput
+    data: XOR<DynamicPageTranslationUpdateWithoutDynamicPageInput, DynamicPageTranslationUncheckedUpdateWithoutDynamicPageInput>
+  }
+
+  export type DynamicPageTranslationUpdateManyWithWhereWithoutDynamicPageInput = {
+    where: DynamicPageTranslationScalarWhereInput
+    data: XOR<DynamicPageTranslationUpdateManyMutationInput, DynamicPageTranslationUncheckedUpdateManyWithoutDynamicPageInput>
+  }
+
+  export type DynamicPageTranslationScalarWhereInput = {
+    AND?: DynamicPageTranslationScalarWhereInput | DynamicPageTranslationScalarWhereInput[]
+    OR?: DynamicPageTranslationScalarWhereInput[]
+    NOT?: DynamicPageTranslationScalarWhereInput | DynamicPageTranslationScalarWhereInput[]
+    id?: StringFilter<"DynamicPageTranslation"> | string
+    dynamicPageId?: StringFilter<"DynamicPageTranslation"> | string
+    lang?: StringFilter<"DynamicPageTranslation"> | string
+    title?: StringFilter<"DynamicPageTranslation"> | string
+    description?: StringNullableFilter<"DynamicPageTranslation"> | string | null
+    sections?: JsonFilter<"DynamicPageTranslation">
+    createdAt?: DateTimeFilter<"DynamicPageTranslation"> | Date | string
+    updatedAt?: DateTimeFilter<"DynamicPageTranslation"> | Date | string
+  }
+
+  export type DynamicPageCreateWithoutTranslationsInput = {
+    dynamicPageId?: string
+    slug: string
+    title: string
+    description?: string | null
+    keywords?: DynamicPageCreatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.DynamicPageStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageUncheckedCreateWithoutTranslationsInput = {
+    dynamicPageId?: string
+    slug: string
+    title: string
+    description?: string | null
+    keywords?: DynamicPageCreatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.DynamicPageStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageCreateOrConnectWithoutTranslationsInput = {
+    where: DynamicPageWhereUniqueInput
+    create: XOR<DynamicPageCreateWithoutTranslationsInput, DynamicPageUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type DynamicPageUpsertWithoutTranslationsInput = {
+    update: XOR<DynamicPageUpdateWithoutTranslationsInput, DynamicPageUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<DynamicPageCreateWithoutTranslationsInput, DynamicPageUncheckedCreateWithoutTranslationsInput>
+    where?: DynamicPageWhereInput
+  }
+
+  export type DynamicPageUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: DynamicPageWhereInput
+    data: XOR<DynamicPageUpdateWithoutTranslationsInput, DynamicPageUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type DynamicPageUpdateWithoutTranslationsInput = {
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: DynamicPageUpdatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageUncheckedUpdateWithoutTranslationsInput = {
+    dynamicPageId?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: DynamicPageUpdatekeywordsInput | string[]
+    sections?: JsonNullValueInput | InputJsonValue
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48745,6 +50479,46 @@ export namespace Prisma {
     sources?: NullableJsonNullValueInput | InputJsonValue
     adminUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationCreateManyDynamicPageInput = {
+    id?: string
+    lang: string
+    title: string
+    description?: string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DynamicPageTranslationUpdateWithoutDynamicPageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationUncheckedUpdateWithoutDynamicPageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DynamicPageTranslationUncheckedUpdateManyWithoutDynamicPageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lang?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    sections?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
