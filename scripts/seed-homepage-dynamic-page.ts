@@ -17,94 +17,30 @@ function readDict(lang: string): any {
   return JSON.parse(fs.readFileSync(file, 'utf-8'))
 }
 
-const DEFAULT_CATEGORIES = [
-  {
-    label: 'Frontend',
-    tools: [
-      { name: 'React', icon: '⚛️', description: 'UI library' },
-      { name: 'Next.js', icon: '▲', description: 'Full-stack framework' },
-      { name: 'TypeScript', icon: 'TS', description: 'Type-safe JavaScript' },
-      { name: 'Tailwind CSS', icon: '🌊', description: 'Utility-first CSS' },
-    ],
-  },
-  {
-    label: 'Backend',
-    tools: [
-      { name: 'Node.js', icon: '🟢', description: 'JavaScript runtime' },
-      { name: 'PostgreSQL', icon: '🐘', description: 'Relational database' },
-      { name: 'Redis', icon: '🔴', description: 'In-memory cache' },
-      { name: 'Prisma', icon: '◆', description: 'ORM' },
-    ],
-  },
-  {
-    label: 'DevOps',
-    tools: [
-      { name: 'Docker', icon: '🐋', description: 'Containerization' },
-      { name: 'AWS', icon: '☁️', description: 'Cloud platform' },
-      { name: 'GitHub', icon: '🐙', description: 'Version control' },
-      { name: 'Linux', icon: '🐧', description: 'Server OS' },
-    ],
-  },
-]
-
 const EN_SECTIONS = [
   {
     id: 'homepage-welcome',
-    type: 'FrontendWelcomeBlock',
+    type: 'HeroWelcomeLiveBlock',
     order: 0,
-    props: {
-      greeting: 'Hi, I am',
-      name: 'Kuray Karaaslan',
-      title: 'Full-Stack Developer',
-      description: 'I design and build modern, scalable web applications. Available for freelance projects worldwide.',
-      ctaLabel: 'Contact Me',
-      ctaHref: '#contact',
-      secondaryLabel: 'View Projects',
-      secondaryHref: '#projects',
-      avatarUrl: '',
-      bgColor: '',
-    },
+    props: {},
   },
   {
     id: 'homepage-toolbox',
-    type: 'FrontendToolboxBlock',
+    type: 'HeroToolboxLiveBlock',
     order: 1,
-    props: {
-      heading: 'My Toolbox',
-      description: 'Technologies I work with regularly.',
-      bgColor: '',
-      categories: JSON.stringify(DEFAULT_CATEGORIES),
-    },
+    props: {},
   },
   {
     id: 'homepage-projects',
-    type: 'FrontendProjectsBlock',
+    type: 'HeroProjectsLiveBlock',
     order: 2,
-    props: {
-      heading: 'My Projects',
-      description: 'A selection of recent work.',
-      ctaLabel: 'View All Projects',
-      ctaHref: '/projects',
-      pageSize: 6,
-      bgColor: '',
-    },
+    props: {},
   },
   {
     id: 'homepage-contact',
-    type: 'ContactMethodsBlock',
+    type: 'HeroContactLiveBlock',
     order: 3,
-    props: {
-      heading: 'Get in Touch',
-      subtitle: 'I am available for freelance projects and collaborations.',
-      bgColor: '',
-      cardBgColor: '',
-      accentColor: '',
-      methods: JSON.stringify([
-        { label: 'Email', value: 'kuraykaraaslan@gmail.com', href: 'mailto:kuraykaraaslan@gmail.com' },
-        { label: 'LinkedIn', value: 'linkedin.com/in/kuraykaraaslan', href: 'https://linkedin.com/in/kuraykaraaslan' },
-        { label: 'GitHub', value: 'github.com/kuraykaraaslan', href: 'https://github.com/kuraykaraaslan' },
-      ]),
-    },
+    props: { bgColor: '' },
   },
 ]
 

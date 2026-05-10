@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = rawPage ? DynamicPageService.applyTranslation(rawPage, lang) : null
   const title = page?.title ?? 'Kuray Karaaslan'
   const description = page?.description ?? ''
-  const keywords = Array.isArray(rawPage?.keywords) ? rawPage.keywords as string[] : []
+  const keywords = Array.isArray(rawPage?.keywords) ? (rawPage.keywords as string[]) : []
 
   return {
     title,

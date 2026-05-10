@@ -59,6 +59,10 @@ import { FrontendHireMeBlockDefinition } from './Blocks/FrontendHireMeBlock'
 import { FrontendCareerTimelineBlockDefinition } from './Blocks/FrontendCareerTimelineBlock'
 import { FrontendToolboxBlockDefinition } from './Blocks/FrontendToolboxBlock'
 import { FrontendProjectsBlockDefinition } from './Blocks/FrontendProjectsBlock'
+import { HeroWelcomeLiveBlockDefinition } from './Blocks/HeroWelcomeLiveBlock'
+import { HeroToolboxLiveBlockDefinition } from './Blocks/HeroToolboxLiveBlock'
+import { HeroProjectsLiveBlockDefinition } from './Blocks/HeroProjectsLiveBlock'
+import { HeroContactLiveBlockDefinition } from './Blocks/HeroContactLiveBlock'
 
 const REGISTRY: Record<string, BlockDefinition> = {
   // Custom
@@ -146,6 +150,12 @@ const REGISTRY: Record<string, BlockDefinition> = {
   [FrontendCareerTimelineBlockDefinition.type]: FrontendCareerTimelineBlockDefinition,
   [FrontendToolboxBlockDefinition.type]: FrontendToolboxBlockDefinition,
   [FrontendProjectsBlockDefinition.type]: FrontendProjectsBlockDefinition,
+
+  // Hero Live (wraps actual portfolio components, content driven by i18n)
+  [HeroWelcomeLiveBlockDefinition.type]: HeroWelcomeLiveBlockDefinition,
+  [HeroToolboxLiveBlockDefinition.type]: HeroToolboxLiveBlockDefinition,
+  [HeroProjectsLiveBlockDefinition.type]: HeroProjectsLiveBlockDefinition,
+  [HeroContactLiveBlockDefinition.type]: HeroContactLiveBlockDefinition,
 }
 
 export function getBlock(type: string): BlockDefinition | undefined {
