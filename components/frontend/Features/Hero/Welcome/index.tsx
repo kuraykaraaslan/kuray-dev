@@ -7,18 +7,35 @@ import { Trans } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 
 const TypingEffect = dynamic(() => import('./Partials/TypingEffect'), { ssr: false })
-
 const MyImage = dynamic(() => import('./Partials/MyImageVideo'), { ssr: false })
 
-const Welcome = () => {
+export interface WelcomeProps {
+  typingPrefix?: string
+  typingSuffix?: string
+  typingTexts?: string[]
+  description?: string
+  ctaLabel?: string
+  ctaHref?: string
+  resumeLabel?: string
+  resumeUrl?: string
+}
+
+const Welcome = ({
+  typingPrefix,
+  typingSuffix,
+  typingTexts,
+  description,
+  ctaLabel,
+  ctaHref = '#contact',
+  resumeLabel,
+  resumeUrl,
+}: WelcomeProps = {}) => {
   const { t, i18n } = useTranslation()
 
   return (
     <div
       className="relative bg-base-200"
-      style={{
-        height: '100dvh',
-      }}
+      style={{ height: '100dvh' }}
       id="home"
     >
       <div
@@ -29,7 +46,6 @@ const Welcome = () => {
           justifyContent: 'center',
           alignItems: 'center',
           position: 'relative',
-
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.39'%3E%3Cpolygon fill='%23222222' points='800 100 0 200 0 800 1600 800 1600 200'/%3E%3Cpolygon fill='%23444444' points='800 200 0 400 0 800 1600 800 1600 400'/%3E%3Cpolygon fill='%23666666' points='800 300 0 600 0 800 1600 800 1600 600'/%3E%3Cpolygon fill='%23888888' points='1600 800 800 400 0 800'/%3E%3Cpolygon fill='%23aaaaaa' points='1280 800 800 500 320 800'/%3E%3Cpolygon fill='%23cccccc' points='533.3 800 1066.7 800 800 600'/%3E%3Cpolygon fill='%23EEE' points='684.1 800 914.3 800 800 700'/%3E%3C/g%3E%3C/svg%3E\")",
           backgroundAttachment: 'fixed',
@@ -39,34 +55,40 @@ const Welcome = () => {
         <div className="hero-content">
           <div className="flex-1 max-w-2xl md:me-4">
             <h1 className="font-bold relative overflow-hidden animate-shake text-5xl leading-normal h-32 md:h-16">
-              <TypingEffect />
+              <TypingEffect
+                prefix={typingPrefix}
+                suffix={typingSuffix}
+                texts={typingTexts}
+              />
             </h1>
+
             <h2 className="py-3 pb-6 leading-7 text-lg">
-              <p>
-                <Trans
-                  i18nKey="pages.hero.description"
-                  lang={i18n.language}
-                  components={{
-                    bold: <span className="font-bold" />,
-                  }}
-                />
-              </p>
+              {description ? (
+                <p dangerouslySetInnerHTML={{ __html: description }} />
+              ) : (
+                <p>
+                  <Trans
+                    i18nKey="pages.hero.description"
+                    lang={i18n.language}
+                    components={{ bold: <span className="font-bold" /> }}
+                  />
+                </p>
+              )}
             </h2>
 
-            <Link href="#contact" className="btn btn-primary hidden lg:inline-flex">
+            <Link href={ctaHref} className="btn btn-primary hidden lg:inline-flex">
               <FontAwesomeIcon icon={faArrowRight} className="mt-1" style={{ width: '1rem' }} />
-              {t('pages.hero.contact_me')}
+              {ctaLabel ?? t('pages.hero.contact_me')}
             </Link>
 
-            <Link
-              href="https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link"
-              target="_blank"
-            >
-              <p className="btn btn-ghost ms-2 lowercase hidden">
-                <FontAwesomeIcon icon={faLink} className="mt-1" style={{ width: '1rem' }} />
-                {t('pages.hero.resume')}
-              </p>
-            </Link>
+            {(resumeUrl || !ctaLabel) && (
+              <Link href={resumeUrl ?? 'https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link'} target="_blank">
+                <p className="btn btn-ghost ms-2 lowercase hidden">
+                  <FontAwesomeIcon icon={faLink} className="mt-1" style={{ width: '1rem' }} />
+                  {resumeLabel ?? t('pages.hero.resume')}
+                </p>
+              </Link>
+            )}
           </div>
 
           <MyImage />

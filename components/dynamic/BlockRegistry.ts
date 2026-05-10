@@ -1,11 +1,13 @@
 import type { BlockDefinition, DynamicPageBlockRecord } from './types'
 import { CustomBlockDefinition } from './Blocks/CustomBlock'
 import { ProseBlockDefinition } from './Blocks/ProseBlock'
+import { WelcomeBlockDefinition } from './Blocks/WelcomeBlock'
 
 // Code-level blocks (special / built-in)
 const CODE_BLOCKS: Record<string, BlockDefinition> = {
   [CustomBlockDefinition.type]: CustomBlockDefinition,
   [ProseBlockDefinition.type]: ProseBlockDefinition,
+  [WelcomeBlockDefinition.type]: WelcomeBlockDefinition,
 }
 
 export function getCodeBlock(type: string): BlockDefinition | undefined {

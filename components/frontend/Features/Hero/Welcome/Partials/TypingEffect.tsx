@@ -2,23 +2,35 @@
 import i18n from '@/libs/localize/localize'
 import { useState, useEffect, useMemo } from 'react'
 
-const TypingEffect = () => {
+interface TypingEffectProps {
+  texts?: string[]
+  prefix?: string
+  suffix?: string
+}
+
+const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix }: TypingEffectProps = {}) => {
   const { t } = i18n
 
   const prefersReducedMotion =
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const texts = useMemo(
-    () => [
-      t('pages.hero.typing_effect.text1'),
-      t('pages.hero.typing_effect.text2'),
-      t('pages.hero.typing_effect.text3'),
-      t('pages.hero.typing_effect.text4'),
-      t('pages.hero.typing_effect.text5'),
-      t('pages.hero.typing_effect.text6'),
-    ],
-    [i18n.language]
+    () =>
+      propTexts && propTexts.length > 0
+        ? propTexts
+        : [
+            t('pages.hero.typing_effect.text1'),
+            t('pages.hero.typing_effect.text2'),
+            t('pages.hero.typing_effect.text3'),
+            t('pages.hero.typing_effect.text4'),
+            t('pages.hero.typing_effect.text5'),
+            t('pages.hero.typing_effect.text6'),
+          ],
+    [propTexts, i18n.language]
   )
+
+  const prefix = propPrefix ?? t('pages.hero.typing_effect.prefix')
+  const suffix = propSuffix ?? t('pages.hero.typing_effect.suffix')
 
   const [textsIndex, setTextsIndex] = useState(0)
   const [letterIndex, setLetterIndex] = useState(0)
@@ -27,7 +39,7 @@ const TypingEffect = () => {
   const [renderedText, setRenderedText] = useState('')
 
   useEffect(() => {
-    if (prefersReducedMotion) return // skip animation entirely
+    if (prefersReducedMotion) return
 
     const current = texts[textsIndex]
     const delay = isDeleting ? 30 : 80
@@ -54,21 +66,19 @@ const TypingEffect = () => {
     return () => clearTimeout(timeout)
   }, [letterIndex, isDeleting, pause, textsIndex, texts, prefersReducedMotion])
 
-  // Reduced motion: show first text statically
   if (prefersReducedMotion) {
     return (
       <p className="text-3xl font-bold text-shadow-sm pb-2">
-        {t('pages.hero.typing_effect.prefix')}&nbsp;
+        {prefix}&nbsp;
         <span className="text-primary text-shadow-sm">{texts[0]}</span>
-        &nbsp;
-        {t('pages.hero.typing_effect.suffix')}
+        &nbsp;{suffix}
       </p>
     )
   }
 
   return (
     <p className="text-3xl font-bold text-shadow-sm pb-2">
-      {t('pages.hero.typing_effect.prefix')}&nbsp;
+      {prefix}&nbsp;
       <span
         className="text-primary text-shadow-sm"
         onMouseEnter={() => setPause(true)}
@@ -76,8 +86,7 @@ const TypingEffect = () => {
       >
         {renderedText === '' ? ' ' : renderedText}
       </span>
-      &nbsp;
-      {t('pages.hero.typing_effect.suffix')}
+      &nbsp;{suffix}
     </p>
   )
 }
