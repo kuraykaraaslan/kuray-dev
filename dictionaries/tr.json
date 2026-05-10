@@ -12,26 +12,6 @@
     "backend": "Backend"
   },
   "metadata": {
-    "home": {
-      "title": "Yazılım Geliştirici | Kuray Karaaslan",
-      "description": "Teknoloji bloguma hoş geldiniz! Ben Kuray Karaaslan, React, Next.js, Node.js, Java ve React Native konusunda yetenekli bir frontend, backend ve mobil geliştiriciyim. Geliştiricilerin ve teknoloji meraklılarının başarılı olmalarına yardımcı olmak için pratik kodlama eğitimleri, sektör içgörüleri ve UI/UX ipuçları paylaşıyorum. Güncel kalın, sorunları çözün ve teknoloji uzmanlığınızı benimle birlikte geliştirin!",
-      "keywords": [
-        "Kuray Karaaslan",
-        "Yazılım Geliştirici",
-        "Full Stack Geliştirici",
-        "React",
-        "Next.js",
-        "Node.js",
-        "TypeScript",
-        "Java",
-        "React Native",
-        "Web Geliştirme",
-        "Mobil Geliştirme",
-        "Teknoloji Blogu",
-        "İzmir",
-        "Türkiye"
-      ]
-    },
     "blog": {
       "title": "Blog | Kuray Karaaslan",
       "description": "Teknoloji bloguma hoş geldiniz! Ben Kuray Karaaslan, React, Next.js, Node.js, Java ve React Native konusunda yetenekli bir frontend, backend ve mobil geliştiriciyim. Geliştiricilerin ve teknoloji meraklılarının başarılı olmalarına yardımcı olmak için pratik kodlama eğitimleri, sektör içgörüleri ve UI/UX ipuçları paylaşıyorum.",

@@ -12,26 +12,6 @@
     "backend": "Taustaprogramm"
   },
   "metadata": {
-    "home": {
-      "title": "Tarkvaraarendaja | Kuray Karaaslan",
-      "description": "Tere tulemast minu tehnoloogia blogisse! Olen Kuray Karaaslan, frontend-, backend- ja mobiiliarendaja, kes on osav Reacti, Next.js, Node.js, Java ja React Native'i alal. Jagasin praktilisi kodeerimisõpetusi, tööstuse teadmisi ja UI/UX näpunäiteid, et aidata arendajatel ja tehnoloogiahuvilistel silma paista. Püsige kursis, lahendage probleeme ja kasvatage oma tehnoloogiaekspertiisi koos minuga!",
-      "keywords": [
-        "Kuray Karaaslan",
-        "Tarkvaraarendaja",
-        "Full Stack Arendaja",
-        "React",
-        "Next.js",
-        "Node.js",
-        "TypeScript",
-        "Java",
-        "React Native",
-        "Veebiarendus",
-        "Mobiiliarendus",
-        "Tehnoloogia Blogi",
-        "İzmir",
-        "Türgi"
-      ]
-    },
     "blog": {
       "title": "Blogi | Kuray Karaaslan",
       "description": "Tere tulemast minu tehnoloogia blogisse! Olen Kuray Karaaslan, frontend-, backend- ja mobiiliarendaja, kes on osav Reacti, Next.js, Node.js, Java ja React Native'i alal. Jagasin praktilisi kodeerimisõpetusi, tööstuse teadmisi ja UI/UX näpunäiteid, et aidata arendajatel ja tehnoloogiahuvilistel silma paista.",

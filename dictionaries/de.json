@@ -12,26 +12,6 @@
     "backend": "Backend"
   },
   "metadata": {
-    "home": {
-      "title": "Softwareentwickler | Kuray Karaaslan",
-      "description": "Willkommen in meinem Tech-Blog! Ich bin Kuray Karaaslan, ein Frontend-, Backend- und Mobile-Entwickler mit Fähigkeiten in React, Next.js, Node.js, Java und React Native. Ich teile praktische Programmier-Tutorials, Brancheneinblicke und UI/UX-Tipps, um Entwicklern und Technikbegeisterten zu helfen, sich zu verbessern. Bleiben Sie auf dem Laufenden, lösen Sie Probleme und erweitern Sie Ihr technisches Fachwissen mit mir!",
-      "keywords": [
-        "Kuray Karaaslan",
-        "Softwareentwickler",
-        "Full Stack Entwickler",
-        "React",
-        "Next.js",
-        "Node.js",
-        "TypeScript",
-        "Java",
-        "React Native",
-        "Webentwicklung",
-        "Mobile Entwicklung",
-        "Tech-Blog",
-        "İzmir",
-        "Türkei"
-      ]
-    },
     "blog": {
       "title": "Blog | Kuray Karaaslan",
       "description": "Willkommen in meinem Tech-Blog! Ich bin Kuray Karaaslan, ein Frontend-, Backend- und Mobile-Entwickler mit Fähigkeiten in React, Next.js, Node.js, Java und React Native. Ich teile praktische Programmier-Tutorials, Brancheneinblicke und UI/UX-Tipps, um Entwicklern und Technikbegeisterten zu helfen, sich zu verbessern.",

@@ -30,26 +30,6 @@
     "built_with": "Built with Next.js & TypeScript"
   },
   "metadata": {
-    "home": {
-      "title": "Software Developer | Kuray Karaaslan",
-      "description": "Welcome to my tech blog! I'm Kuray Karaaslan, a frontend, backend, and mobile developer skilled in React, Next.js, Node.js, Java, and React Native. I share practical coding tutorials, industry insights, and UI/UX tips to help developers and tech enthusiasts excel. Stay updated, solve problems, and grow your tech expertise with me!",
-      "keywords": [
-        "Kuray Karaaslan",
-        "Software Developer",
-        "Full Stack Developer",
-        "React",
-        "Next.js",
-        "Node.js",
-        "TypeScript",
-        "Java",
-        "React Native",
-        "Web Development",
-        "Mobile Development",
-        "Tech Blog",
-        "İzmir",
-        "Turkey"
-      ]
-    },
     "blog": {
       "title": "Blog | Kuray Karaaslan",
       "description": "Welcome to my tech blog! I'm Kuray Karaaslan, a frontend, backend, and mobile developer skilled in React, Next.js, Node.js, Java, and React Native. I share practical coding tutorials, industry insights, and UI/UX tips to help developers and tech enthusiasts excel.",
@@ -151,7 +131,7 @@
     "autocomplete_navigate": "navigate",
     "autocomplete_select": "select",
     "autocomplete_close": "close",
-    "select_language": "Select Language"  
+    "select_language": "Select Language"
   },
   "common": {
     "loading": "Loading...",

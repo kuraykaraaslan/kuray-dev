@@ -1,9 +1,5 @@
 import DynamicPageRenderer from '@/components/dynamic/Renderer'
 import DynamicPageService from '@/services/DynamicPageService'
-import Welcome from '@/components/frontend/Features/Hero/Welcome'
-import Toolbox from '@/components/frontend/Features/Hero/Toolbox'
-import Contact from '@/components/frontend/Features/Hero/Contact'
-import ProjectsHero from '@/components/frontend/Features/Hero/Projects'
 import type { Metadata } from 'next'
 import MetadataHelper from '@/helpers/MetadataHelper'
 import ToastContainerClient from '@/components/common/UI/Toast/ToastContainerClient'
@@ -11,8 +7,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import OfflineIndicator from '@/components/common/UI/Indicators/OfflineIndicator'
 import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
 import { buildAlternates, buildLangUrl, getOgLocale } from '@/helpers/HreflangHelper'
-import { getPageMetadata } from '@/libs/localize/getDictionary'
 import type { BlockData } from '@/components/dynamic/types'
+import { notFound } from 'next/navigation'
 
 const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
 
@@ -23,7 +19,12 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   const { canonical, languages } = buildAlternates(lang, '', [...AVAILABLE_LANGUAGES])
-  const { title, description, keywords } = await getPageMetadata(lang, 'home')
+
+  const rawPage = await DynamicPageService.getBySlug('')
+  const page = rawPage ? DynamicPageService.applyTranslation(rawPage, lang) : null
+  const title = page?.title ?? 'Kuray Karaaslan'
+  const description = page?.description ?? ''
+  const keywords = Array.isArray(rawPage?.keywords) ? rawPage.keywords as string[] : []
 
   return {
     title,
@@ -62,45 +63,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const HomePage = async ({ params }: Props) => {
   const { lang } = await params
   const url = buildLangUrl(lang, '')
-  const { title, description } = await getPageMetadata(lang, 'home')
+
+  const rawPage = await DynamicPageService.getBySlug('')
+  if (!rawPage || rawPage.status !== 'PUBLISHED') return notFound()
+
+  const page = DynamicPageService.applyTranslation(rawPage, lang)
+  const sections = Array.isArray(page.sections) ? (page.sections as unknown as BlockData[]) : []
 
   const jsonLdMeta: Metadata = {
-    title,
-    description,
+    title: page.title,
+    description: page.description ?? '',
     openGraph: {
-      title,
-      description,
+      title: page.title,
+      description: page.description ?? '',
       type: 'website',
       url,
       images: [`${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`],
     },
   }
 
-  const rawDynamicPage = await DynamicPageService.getBySlug('')
-
-  if (rawDynamicPage?.status === 'PUBLISHED') {
-    const dynamicPage = DynamicPageService.applyTranslation(rawDynamicPage, lang)
-    const sections = Array.isArray(dynamicPage.sections)
-      ? (dynamicPage.sections as unknown as BlockData[])
-      : []
-
-    return (
-      <>
-        {MetadataHelper.generateJsonLdScripts(jsonLdMeta, { includeProfilePage: true })}
-        <DynamicPageRenderer sections={sections} />
-        <ToastContainerClient />
-        <OfflineIndicator />
-      </>
-    )
-  }
-
   return (
     <>
       {MetadataHelper.generateJsonLdScripts(jsonLdMeta, { includeProfilePage: true })}
-      <Welcome />
-      <Toolbox />
-      <ProjectsHero />
-      <Contact />
+      <DynamicPageRenderer sections={sections} />
       <ToastContainerClient />
       <OfflineIndicator />
     </>
