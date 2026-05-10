@@ -1149,7 +1149,8 @@
       "group_system": "System",
       "item_settings": "Settings",
       "item_short_links": "Short Links",
-      "item_pages": "Pages"
+      "item_pages": "Pages",
+      "item_blocks": "Blocks"
     },
     "notifications": {
       "title": "Notifications",
