@@ -4,8 +4,11 @@ import { arrayMove } from '@dnd-kit/sortable'
 import type { DragEndEvent } from '@dnd-kit/core'
 import axiosInstance from '@/libs/axios'
 import { toast } from 'react-toastify'
-import { getAllBlockDefinitions } from '../../BlockRegistry'
+import { getCodeBlock } from '../../BlockRegistry'
 import type { BlockData, DynamicPageStatus, PageMetadata } from '@/types/content/PageTypes'
+import type { DynamicPageBlockRecord } from '../../types'
+
+export type { DynamicPageBlockRecord }
 import { DefaultPageMetadata } from '@/types/content/PageTypes'
 
 type Router = { push: (href: string) => void; replace: (href: string) => void }
@@ -30,6 +33,10 @@ interface EditorStore {
   backupOpen: boolean
   seoOpen: boolean
   translationOpen: boolean
+
+  // Block definitions (loaded from DB)
+  blockDefs: DynamicPageBlockRecord[]
+  loadBlockDefs: () => Promise<void>
 
   // Translation state
   pageId: string
@@ -84,6 +91,7 @@ const initialState = {
   enSections: [] as BlockData[],
   translationCache: {} as Record<string, TranslationEntry>,
   savedLangs: [] as string[],
+  blockDefs: [] as DynamicPageBlockRecord[],
 }
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
@@ -99,6 +107,15 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   setBackupOpen: (v) => set({ backupOpen: v }),
   setSeoOpen: (v) => set({ seoOpen: v }),
   setTranslationOpen: (v) => set({ translationOpen: v }),
+
+  loadBlockDefs: async () => {
+    try {
+      const res = await axiosInstance.get('/api/dynamic-pages/block-definitions')
+      set({ blockDefs: res.data.blocks ?? [] })
+    } catch {
+      // silently fail — editor still works with code blocks
+    }
+  },
 
   handleDragEnd: (event) => {
     if (get().activeLang !== 'en') return
@@ -118,13 +135,14 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   addBlock: (type) => {
     if (get().activeLang !== 'en') return
-    const def = getAllBlockDefinitions().find((d) => d.type === type)
-    if (!def) return
+    const codeBlock = getCodeBlock(type)
+    const dbBlock = get().blockDefs.find((d) => d.type === type)
+    const defaultProps = codeBlock?.defaultProps ?? dbBlock?.defaultProps ?? {}
     const newSection: BlockData = {
       id: uuidv4(),
       type,
       order: get().sections.length,
-      props: { ...def.defaultProps },
+      props: { ...defaultProps },
     }
     set((state) => ({
       sections: [...state.sections, newSection],

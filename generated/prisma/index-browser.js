@@ -458,6 +458,20 @@ exports.Prisma.ChatMessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.DynamicPageBlockScalarFieldEnum = {
+  blockId: 'blockId',
+  type: 'type',
+  label: 'label',
+  category: 'category',
+  description: 'description',
+  schema: 'schema',
+  defaultProps: 'defaultProps',
+  template: 'template',
+  isSystem: 'isSystem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.DynamicPageScalarFieldEnum = {
   dynamicPageId: 'dynamicPageId',
   slug: 'slug',
@@ -590,6 +604,7 @@ exports.Prisma.ModelName = {
   ActivityPubFollower: 'ActivityPubFollower',
   ChatSession: 'ChatSession',
   ChatMessage: 'ChatMessage',
+  DynamicPageBlock: 'DynamicPageBlock',
   DynamicPage: 'DynamicPage',
   DynamicPageTranslation: 'DynamicPageTranslation'
 };

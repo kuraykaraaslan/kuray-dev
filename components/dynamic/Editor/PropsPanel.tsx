@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import axiosInstance from '@/libs/axios'
-import type { BlockData } from '../types'
-import { getBlock } from '../BlockRegistry'
+import type { BlockData, FieldSchema } from '../types'
+import { getCodeBlock } from '../BlockRegistry'
+import { useEditorStore } from './stores/editorStore'
 
 interface Props {
   block: BlockData | null
@@ -13,23 +14,25 @@ interface Props {
 export default function PropsPanel({ block, onChange }: Props) {
   const [localProps, setLocalProps] = useState<Record<string, unknown>>({})
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
+  const blockDefs = useEditorStore((s) => s.blockDefs)
 
   useEffect(() => {
     if (!block) return
 
-    const def = getBlock(block.type)
-    const nextProps = { ...(def?.defaultProps ?? {}), ...(block.props ?? {}) }
+    const codeDef = getCodeBlock(block.type)
+    const dbDef = blockDefs.find((d) => d.type === block.type)
+    const defaultProps = codeDef?.defaultProps ?? dbDef?.defaultProps ?? {}
+    const schema = codeDef?.schema ?? dbDef?.schema ?? {}
+    const nextProps = { ...defaultProps, ...(block.props ?? {}) }
 
-    if (def?.schema) {
-      for (const [key, field] of Object.entries(def.schema)) {
-        if (nextProps[key] === undefined && field.value !== undefined) {
-          nextProps[key] = field.value
-        }
+    for (const [key, field] of Object.entries(schema as Record<string, FieldSchema>)) {
+      if (nextProps[key] === undefined && field.value !== undefined) {
+        nextProps[key] = field.value
       }
     }
 
     setLocalProps(nextProps)
-  }, [block?.id, block?.type])
+  }, [block?.id, block?.type, blockDefs])
 
   if (!block) {
     return (
@@ -41,8 +44,12 @@ export default function PropsPanel({ block, onChange }: Props) {
     )
   }
 
-  const def = getBlock(block.type)
+  const codeDef = getCodeBlock(block.type)
+  const dbDef = blockDefs.find((d) => d.type === block.type)
+  const def = codeDef ?? dbDef
   if (!def) return null
+
+  const schema = (codeDef?.schema ?? dbDef?.schema ?? {}) as Record<string, FieldSchema>
 
   const update = (key: string, value: unknown) => {
     const next = { ...localProps, [key]: value }
@@ -79,7 +86,7 @@ export default function PropsPanel({ block, onChange }: Props) {
       </div>
 
       <div className="p-4 space-y-5">
-        {Object.entries(def.schema).map(([key, field]) => (
+        {Object.entries(schema).map(([key, field]) => (
           <div key={key}>
             <label className="block text-xs font-medium mb-1.5 text-base-content/55">
               {field.label}

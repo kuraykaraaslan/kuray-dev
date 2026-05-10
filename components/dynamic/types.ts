@@ -22,3 +22,16 @@ export interface BlockDefinition {
   schema: Record<string, FieldSchema>
   Component: ComponentType<Record<string, unknown>>
 }
+
+// DB-stored block definition (no Component — resolved at runtime)
+export interface DynamicPageBlockRecord {
+  blockId: string
+  type: string
+  label: string
+  category: string
+  description: string
+  schema: Record<string, FieldSchema>
+  defaultProps: Record<string, unknown>
+  template: string
+  isSystem: boolean
+}

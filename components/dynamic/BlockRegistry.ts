@@ -1,18 +1,25 @@
-import type { BlockDefinition } from './types'
-import { ExampleBlockDefinition } from './Blocks/ExampleBlock'
+import type { BlockDefinition, DynamicPageBlockRecord } from './types'
 import { CustomBlockDefinition } from './Blocks/CustomBlock'
 
-const REGISTRY: Record<string, BlockDefinition> = {
-  [ExampleBlockDefinition.type]: ExampleBlockDefinition,
+// Code-level blocks (special / built-in)
+const CODE_BLOCKS: Record<string, BlockDefinition> = {
   [CustomBlockDefinition.type]: CustomBlockDefinition,
 }
 
-export function getBlock(type: string): BlockDefinition | undefined {
-  return REGISTRY[type]
+export function getCodeBlock(type: string): BlockDefinition | undefined {
+  return CODE_BLOCKS[type]
 }
 
-export function getAllBlockDefinitions(): BlockDefinition[] {
-  return Object.values(REGISTRY)
+export function getCodeBlocks(): BlockDefinition[] {
+  return Object.values(CODE_BLOCKS)
 }
 
-export default REGISTRY
+// Resolve a block definition from either code registry or DB records
+// Returns null if not found in either
+export function resolveBlockDef(
+  type: string,
+  dbDefs: DynamicPageBlockRecord[]
+): DynamicPageBlockRecord | BlockDefinition | null {
+  if (CODE_BLOCKS[type]) return CODE_BLOCKS[type]
+  return dbDefs.find((d) => d.type === type) ?? null
+}

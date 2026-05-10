@@ -557,6 +557,22 @@ model ChatMessage {
   @@index([createdAt])
 }
 
+model DynamicPageBlock {
+  blockId      String   @id @default(cuid())
+  type         String   @unique
+  label        String
+  category     String   @default("General")
+  description  String?
+  schema       Json     @default("{}")
+  defaultProps Json     @default("{}")
+  template     String   @default("")
+  isSystem     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([category])
+}
+
 enum DynamicPageStatus {
   DRAFT
   PUBLISHED

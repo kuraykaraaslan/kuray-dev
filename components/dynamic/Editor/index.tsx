@@ -30,6 +30,7 @@ export default function DynamicPageEditor() {
   const sections = useEditorStore((s) => s.sections)
   const handleDragEnd = useEditorStore((s) => s.handleDragEnd)
   const loadPage = useEditorStore((s) => s.loadPage)
+  const loadBlockDefs = useEditorStore((s) => s.loadBlockDefs)
   const handleSave = useEditorStore((s) => s.handleSave)
   const reset = useEditorStore((s) => s.reset)
 
@@ -39,6 +40,7 @@ export default function DynamicPageEditor() {
   )
 
   useEffect(() => {
+    loadBlockDefs()
     loadPage(pageId)
     return () => reset()
     // eslint-disable-next-line react-hooks/exhaustive-deps
