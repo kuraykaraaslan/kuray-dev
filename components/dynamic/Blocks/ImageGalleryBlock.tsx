@@ -32,7 +32,7 @@ function ImageGalleryBlock(rawProps: Record<string, unknown>) {
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {images.map((image, i) => (
+          {images.filter(img => img && typeof img.src === 'string' && img.src).map((image, i) => (
             <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden">
               <Image src={image.src} alt={image.alt} fill className="object-cover" />
             </div>
