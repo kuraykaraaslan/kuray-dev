@@ -1,10 +1,30 @@
 import { NextResponse } from 'next/server'
 import DynamicPageBlockService from '@/services/DynamicPageBlockService'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
+import { CODE_BLOCK_META } from '@/components/dynamic/CodeBlocksMeta'
 
 export async function GET() {
   try {
-    const blocks = await DynamicPageBlockService.getAll()
+    const dbBlocks = await DynamicPageBlockService.getAll()
+
+    const codeBlocks = CODE_BLOCK_META.map((meta) => ({
+      blockId: `code:${meta.type}`,
+      type: meta.type,
+      label: meta.label,
+      category: meta.category,
+      description: meta.description,
+      schema: meta.schema,
+      defaultProps: meta.defaultProps,
+      template: '',
+      isSystem: true,
+      source: 'code' as const,
+    }))
+
+    const blocks = [
+      ...codeBlocks,
+      ...dbBlocks.map((b) => ({ ...b, source: 'db' as const })),
+    ]
+
     return NextResponse.json({ blocks })
   } catch {
     return NextResponse.json({ message: 'Failed to fetch block definitions' }, { status: 500 })

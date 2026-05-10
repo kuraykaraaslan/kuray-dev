@@ -17,38 +17,51 @@ interface BlockRow extends Record<string, unknown> {
   category: string
   description: string
   isSystem: boolean
+  source: 'code' | 'db'
 }
 
 const BlocksPage = () => {
   const columns: ColumnDef<BlockRow>[] = [
     { key: 'label', header: 'Label', accessor: (b) => b.label },
-    { key: 'type', header: 'Type', accessor: (b) => (
-      <span className="font-mono text-xs text-base-content/60">{b.type}</span>
-    )},
+    {
+      key: 'type',
+      header: 'Type',
+      accessor: (b) => <span className="font-mono text-xs text-base-content/60">{b.type}</span>,
+    },
     { key: 'category', header: 'Category', accessor: (b) => b.category },
-    { key: 'description', header: 'Description', accessor: (b) => (
-      <span className="text-xs text-base-content/50 line-clamp-1">{b.description}</span>
-    )},
-    { key: 'isSystem', header: 'System', accessor: (b) => b.isSystem ? (
-      <span className="px-2 py-0.5 rounded text-xs font-medium bg-warning/15 text-warning">System</span>
-    ) : null },
+    {
+      key: 'description',
+      header: 'Description',
+      accessor: (b) => <span className="text-xs text-base-content/50 line-clamp-1">{b.description}</span>,
+    },
+    {
+      key: 'source',
+      header: 'Source',
+      accessor: (b) =>
+        b.source === 'code' ? (
+          <span className="px-2 py-0.5 rounded text-xs font-medium bg-info/15 text-info">Code</span>
+        ) : (
+          <span className="px-2 py-0.5 rounded text-xs font-medium bg-success/15 text-success">DB</span>
+        ),
+    },
   ]
 
   const actions: ActionButton<BlockRow>[] = [
     {
       label: 'Edit',
-      href: (b) => `/admin/blocks/${b.blockId}`,
+      href: (b) => (b.source === 'db' ? `/admin/blocks/${b.blockId}` : ''),
       className: 'btn-primary',
+      hidden: (b) => b.source === 'code',
     },
     {
       label: 'Delete',
       onClick: async (b) => {
-        if (b.isSystem) { alert('System blocks cannot be deleted.'); return }
         if (!confirm(`Delete block "${b.label}"?`)) return
         await axiosInstance.delete(`/api/dynamic-pages/block-definitions/${b.blockId}`)
       },
       className: 'text-danger',
       hideOnMobile: true,
+      hidden: (b) => b.source === 'code',
     },
   ]
 
@@ -64,9 +77,7 @@ const BlocksPage = () => {
         <TableHeader
           title="Block Definitions"
           searchPlaceholder="Search blocks…"
-          buttons={[
-            { label: 'New Block', href: '/admin/blocks/create' },
-          ]}
+          buttons={[{ label: 'New Block', href: '/admin/blocks/create' }]}
         />
         <TableBody />
         <TableFooter showingText="Showing" previousText="Previous" nextText="Next" />
