@@ -3,21 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faLink } from '@fortawesome/free-solid-svg-icons'
 import Link from '@/libs/i18n/Link'
 import dynamic from 'next/dynamic'
-import { Trans } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
+import type { BlockDefinition } from '@/components/dynamic/types'
 
 const TypingEffect = dynamic(() => import('./Partials/TypingEffect'), { ssr: false })
 const MyImage = dynamic(() => import('./Partials/MyImageVideo'), { ssr: false })
 
-export interface WelcomeProps {
+interface WelcomeProps {
   typingPrefix?: string
   typingSuffix?: string
-  typingTexts?: string[]
+  typingTexts?: unknown
   description?: string
   ctaLabel?: string
   ctaHref?: string
-  resumeLabel?: string
-  resumeUrl?: string
 }
 
 const Welcome = ({
@@ -26,18 +24,18 @@ const Welcome = ({
   typingTexts,
   description,
   ctaLabel,
-  ctaHref = '#contact',
-  resumeLabel,
-  resumeUrl,
-}: WelcomeProps = {}) => {
-  const { t, i18n } = useTranslation()
+  ctaHref,
+}: WelcomeProps) => {
+  const { t } = useTranslation()
+
+  const resolvedCtaLabel = ctaLabel ?? t('pages.hero.contact_me')
+  const resolvedCtaHref = ctaHref ?? '#contact'
+  const resolvedDescription = description ?? null
+
+  const resolvedTexts = Array.isArray(typingTexts) ? (typingTexts as string[]) : undefined
 
   return (
-    <div
-      className="relative bg-base-200"
-      style={{ height: '100dvh' }}
-      id="home"
-    >
+    <div className="relative bg-base-200" style={{ height: '100dvh' }} id="home">
       <div
         className="hero min-h-screen select-none group"
         style={{
@@ -58,37 +56,36 @@ const Welcome = ({
               <TypingEffect
                 prefix={typingPrefix}
                 suffix={typingSuffix}
-                texts={typingTexts}
+                texts={resolvedTexts}
               />
             </h1>
 
             <h2 className="py-3 pb-6 leading-7 text-lg">
-              {description ? (
-                <p dangerouslySetInnerHTML={{ __html: description }} />
+              {resolvedDescription ? (
+                <p dangerouslySetInnerHTML={{ __html: resolvedDescription }} />
               ) : (
                 <p>
-                  <Trans
-                    i18nKey="pages.hero.description"
-                    lang={i18n.language}
-                    components={{ bold: <span className="font-bold" /> }}
+                  <span
+                    dangerouslySetInnerHTML={{ __html: t('pages.hero.description') }}
                   />
                 </p>
               )}
             </h2>
 
-            <Link href={ctaHref} className="btn btn-primary hidden lg:inline-flex">
+            <Link href={resolvedCtaHref} className="btn btn-primary hidden lg:inline-flex">
               <FontAwesomeIcon icon={faArrowRight} className="mt-1" style={{ width: '1rem' }} />
-              {ctaLabel ?? t('pages.hero.contact_me')}
+              {resolvedCtaLabel}
             </Link>
 
-            {(resumeUrl || !ctaLabel) && (
-              <Link href={resumeUrl ?? 'https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link'} target="_blank">
-                <p className="btn btn-ghost ms-2 lowercase hidden">
-                  <FontAwesomeIcon icon={faLink} className="mt-1" style={{ width: '1rem' }} />
-                  {resumeLabel ?? t('pages.hero.resume')}
-                </p>
-              </Link>
-            )}
+            <Link
+              href="https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link"
+              target="_blank"
+            >
+              <p className="btn btn-ghost ms-2 lowercase hidden">
+                <FontAwesomeIcon icon={faLink} className="mt-1" style={{ width: '1rem' }} />
+                {t('pages.hero.resume')}
+              </p>
+            </Link>
           </div>
 
           <MyImage />
@@ -96,6 +93,30 @@ const Welcome = ({
       </div>
     </div>
   )
+}
+
+export const WelcomeBlockDefinition: BlockDefinition = {
+  type: 'WelcomeBlock',
+  label: 'Welcome / Hero',
+  description: 'Full-screen hero section with typing effect, description and CTA button.',
+  category: 'Hero',
+  defaultProps: {
+    typingPrefix: "I'm ready to",
+    typingSuffix: '',
+    typingTexts: ['solve problems', 'build products', 'create solutions', 'make a difference', 'be challenged', 'freelance'],
+    description: '<strong>Product-focused Full-Stack Developer</strong> with <strong>3+ years of experience</strong> delivering robust, scalable software solutions.',
+    ctaLabel: 'Contact me',
+    ctaHref: '#contact',
+  },
+  schema: {
+    typingPrefix: { label: 'Typing Prefix', type: 'text', placeholder: "I'm ready to" },
+    typingSuffix: { label: 'Typing Suffix', type: 'text', placeholder: '' },
+    typingTexts: { label: 'Rotating Texts (JSON array)', type: 'json', placeholder: '["solve problems", "build products"]' },
+    description: { label: 'Description (HTML)', type: 'textarea', placeholder: 'Your description...' },
+    ctaLabel: { label: 'CTA Button Label', type: 'text', placeholder: 'Contact me' },
+    ctaHref: { label: 'CTA Button URL', type: 'url', placeholder: '#contact' },
+  },
+  Component: Welcome as unknown as BlockDefinition['Component'],
 }
 
 export default Welcome

@@ -2,22 +2,25 @@
 import i18n from '@/libs/localize/localize'
 import { useState, useEffect, useMemo } from 'react'
 
-interface TypingEffectProps {
-  texts?: string[]
+interface Props {
   prefix?: string
   suffix?: string
+  texts?: string[]
 }
 
-const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix }: TypingEffectProps = {}) => {
+const TypingEffect = ({ prefix: prefixProp, suffix: suffixProp, texts: textsProp }: Props) => {
   const { t } = i18n
 
   const prefersReducedMotion =
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+  const prefix = prefixProp ?? t('pages.hero.typing_effect.prefix')
+  const suffix = suffixProp ?? t('pages.hero.typing_effect.suffix')
+
   const texts = useMemo(
     () =>
-      propTexts && propTexts.length > 0
-        ? propTexts
+      textsProp && textsProp.length > 0
+        ? textsProp
         : [
             t('pages.hero.typing_effect.text1'),
             t('pages.hero.typing_effect.text2'),
@@ -26,11 +29,8 @@ const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix
             t('pages.hero.typing_effect.text5'),
             t('pages.hero.typing_effect.text6'),
           ],
-    [propTexts, i18n.language]
+    [textsProp, i18n.language]
   )
-
-  const prefix = propPrefix ?? t('pages.hero.typing_effect.prefix')
-  const suffix = propSuffix ?? t('pages.hero.typing_effect.suffix')
 
   const [textsIndex, setTextsIndex] = useState(0)
   const [letterIndex, setLetterIndex] = useState(0)
@@ -44,7 +44,6 @@ const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix
     const current = texts[textsIndex]
     const delay = isDeleting ? 30 : 80
     const pauseAfterFull = 1000
-    const pauseAfterDelete = 300
 
     const handleTyping = () => {
       if (pause) return
@@ -57,7 +56,6 @@ const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix
       } else if (isDeleting && letterIndex === 0) {
         setIsDeleting(false)
         setTextsIndex((i) => (i + 1) % texts.length)
-        setTimeout(() => {}, pauseAfterDelete)
       }
     }
 
@@ -71,7 +69,7 @@ const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix
       <p className="text-3xl font-bold text-shadow-sm pb-2">
         {prefix}&nbsp;
         <span className="text-primary text-shadow-sm">{texts[0]}</span>
-        &nbsp;{suffix}
+        {suffix && <>&nbsp;{suffix}</>}
       </p>
     )
   }
@@ -86,7 +84,7 @@ const TypingEffect = ({ texts: propTexts, prefix: propPrefix, suffix: propSuffix
       >
         {renderedText === '' ? ' ' : renderedText}
       </span>
-      &nbsp;{suffix}
+      {suffix && <>&nbsp;{suffix}</>}
     </p>
   )
 }

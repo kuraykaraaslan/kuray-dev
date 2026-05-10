@@ -1,7 +1,7 @@
 import type { BlockDefinition, DynamicPageBlockRecord } from './types'
 import { CustomBlockDefinition } from './Blocks/CustomBlock'
 import { ProseBlockDefinition } from './Blocks/ProseBlock'
-import { WelcomeBlockDefinition } from './Blocks/WelcomeBlock'
+import { WelcomeBlockDefinition } from '@/components/frontend/Features/Hero/Welcome'
 
 // Code-level blocks (special / built-in)
 const CODE_BLOCKS: Record<string, BlockDefinition> = {
