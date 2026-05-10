@@ -2,33 +2,26 @@
 
 import { HeadlessModal } from '@/components/common/Modal'
 import DynamicText from '@/components/common/Forms/DynamicText'
+import ImageLoad from '@/components/common/UI/Images/ImageLoad'
 import type { PageMetadata } from '@/types/content/PageTypes'
 import { DefaultPageMetadata } from '@/types/content/PageTypes'
+import { useEditorStore } from './stores/editorStore'
 
-interface SeoModalProps {
-  open: boolean
-  onClose: () => void
-  description: string
-  onDescriptionChange: (v: string) => void
-  keywords: string[]
-  onKeywordsChange: (v: string[]) => void
-  metadata: PageMetadata
-  onMetadataChange: (v: PageMetadata) => void
-}
+export default function SeoModal() {
+  const {
+    seoOpen, setSeoOpen,
+    description, setDescription,
+    keywords, setKeywords,
+    metadata, setMetadata,
+  } = useEditorStore()
 
-export default function SeoModal({
-  open, onClose,
-  description, onDescriptionChange,
-  keywords, onKeywordsChange,
-  metadata, onMetadataChange,
-}: SeoModalProps) {
   const meta = metadata ?? DefaultPageMetadata
 
   const updateMeta = (key: keyof NonNullable<PageMetadata>, value: string) =>
-    onMetadataChange({ ...meta, [key]: value })
+    setMetadata({ ...meta, [key]: value })
 
   return (
-    <HeadlessModal open={open} onClose={onClose} title="SEO Settings" size="lg">
+    <HeadlessModal open={seoOpen} onClose={() => setSeoOpen(false)} title="SEO Settings" size="lg">
       <div className="space-y-6 p-1">
 
         <section className="space-y-3">
@@ -36,13 +29,13 @@ export default function SeoModal({
           <DynamicText
             label="Description"
             value={description}
-            setValue={onDescriptionChange}
+            setValue={setDescription}
             isTextarea
           />
           <DynamicText
             label="Keywords"
             value={keywords.join(', ')}
-            setValue={(v) => onKeywordsChange(v.split(',').map((s) => s.trim()).filter(Boolean))}
+            setValue={(v) => setKeywords(v.split(',').map((s) => s.trim()).filter(Boolean))}
             placeholder="keyword1, keyword2, keyword3"
           />
         </section>
@@ -62,11 +55,12 @@ export default function SeoModal({
             setValue={(v) => updateMeta('ogDescription', v)}
             isTextarea
           />
-          <DynamicText
-            label="OG Image URL"
-            value={meta?.ogImage ?? ''}
-            setValue={(v) => updateMeta('ogImage', v)}
-            placeholder="https://..."
+          <ImageLoad
+            label="OG Image"
+            image={meta?.ogImage ?? ''}
+            setImage={(v) => updateMeta('ogImage', v)}
+            uploadFolder="og"
+            aspect={1200 / 630}
           />
         </section>
 

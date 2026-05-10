@@ -151,7 +151,7 @@
     "autocomplete_navigate": "navigate",
     "autocomplete_select": "select",
     "autocomplete_close": "close",
-    "select_language": "Select Language"
+    "select_language": "Select Language"  
   },
   "common": {
     "loading": "Loading...",
@@ -1168,7 +1168,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Pages"
     },
     "notifications": {
       "title": "Notifications",
