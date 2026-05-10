@@ -111,7 +111,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   loadBlockDefs: async () => {
     try {
       const res = await axiosInstance.get('/api/dynamic-pages/block-definitions')
-      set({ blockDefs: res.data.blocks ?? [] })
+      const dbOnly = (res.data.blocks ?? []).filter((b: { source?: string }) => b.source !== 'code')
+      set({ blockDefs: dbOnly })
     } catch {
       // silently fail — editor still works with code blocks
     }

@@ -37,26 +37,4 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       content: '<h2>Section</h2><p>Start writing your content here...</p>',
     },
   },
-  {
-    type: 'WelcomeBlock',
-    label: 'Welcome / Hero',
-    category: 'Hero',
-    description: 'Full-screen hero section with typing effect, description and CTA button.',
-    schema: {
-      typingPrefix: { label: 'Typing Prefix', type: 'text', placeholder: "I'm ready to" },
-      typingSuffix: { label: 'Typing Suffix', type: 'text', placeholder: '' },
-      typingTexts: { label: 'Rotating Texts (JSON array)', type: 'json', placeholder: '["solve problems", "build products"]' },
-      description: { label: 'Description (HTML)', type: 'textarea', placeholder: 'Your description...' },
-      ctaLabel: { label: 'CTA Button Label', type: 'text', placeholder: 'Contact me' },
-      ctaHref: { label: 'CTA Button URL', type: 'url', placeholder: '#contact' },
-    },
-    defaultProps: {
-      typingPrefix: "I'm ready to",
-      typingSuffix: '',
-      typingTexts: ['solve problems', 'build products', 'create solutions', 'make a difference', 'be challenged', 'freelance'],
-      description: '<strong>Product-focused Full-Stack Developer</strong> with <strong>3+ years of experience</strong> delivering robust, scalable software solutions.',
-      ctaLabel: 'Contact me',
-      ctaHref: '#contact',
-    },
-  },
 ]
