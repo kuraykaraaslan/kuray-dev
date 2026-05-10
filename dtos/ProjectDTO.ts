@@ -16,6 +16,7 @@ export const CreateProjectRequestSchema = z.object({
   status: z.string().default('PUBLISHED'),
   platforms: z.array(z.string()).default([]),
   technologies: z.array(z.string()).default([]),
+  keywords: z.array(z.string()).default([]),
   content: z.string(),
   projectLinks: z.array(z.string()).default([]),
 })
@@ -38,6 +39,7 @@ export const ProjectResponseSchema = z.object({
   status: z.string().default('PUBLISHED'),
   platforms: z.array(z.string()).default([]),
   technologies: z.array(z.string()).default([]),
+  keywords: z.array(z.string()).default([]),
   content: z.string(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),

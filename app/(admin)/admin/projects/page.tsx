@@ -60,16 +60,16 @@ const ProjectPage = () => {
     },
     {
       label: <FontAwesomeIcon icon={faEye} size="sm" />,
-      href: (p) => `/project/${p.slug}`,
+      href: (p) => `/projects/${p.slug}`,
       className: 'btn-secondary',
       tooltip: t('common.view'),
     },
     {
       label: <FontAwesomeIcon icon={faTrash} size="sm" />,
       onClick: async (p) => {
-        if (!confirm(t('common.confirm_delete'))) return
         await axiosInstance.delete(`/api/projects/${p.projectId}`)
       },
+      confirm: 'common.confirm_delete',
       className: 'btn-error',
       hideOnMobile: true,
       tooltip: t('common.delete'),

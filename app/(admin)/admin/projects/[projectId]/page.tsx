@@ -23,6 +23,7 @@ import {
   DESCRIPTION_SCORE_RULES,
   CONTENT_SCORE_RULES,
   SLUG_SCORE_RULES,
+  KEYWORDS_SCORE_RULES,
 } from '@/components/common/Forms/ContentScoreBar/rules'
 import DynamicDate from '@/components/common/Forms/DynamicDate'
 
@@ -52,6 +53,7 @@ const SingleProject = () => {
   const [slug, setSlug] = useState('')
   const [platforms, setPlatforms] = useState<string[]>([])
   const [technologies, setTechnologies] = useState<string[]>([])
+  const [keywords, setKeywords] = useState<string[]>([])
   const [status, setStatus] = useState('PUBLISHED')
   const [projectLinks, setProjectLinks] = useState<string[]>([])
   const [createdAt, setCreatedAt] = useState<Date>(new Date())
@@ -62,7 +64,7 @@ const SingleProject = () => {
   const { clearAutoSave } = useDraftAutoSave({
     storageKey: 'projectCaches',
     id: routeProjectId,
-    data: { title, content, description, slug, platforms, technologies, status, image, projectLinks },
+    data: { title, content, description, slug, platforms, technologies, keywords, status, image, projectLinks },
     loading,
     onLoad: (draft) => {
       setTitle(draft.title || '')
@@ -71,6 +73,7 @@ const SingleProject = () => {
       setSlug(draft.slug || '')
       setPlatforms(draft.platforms || [])
       setTechnologies(draft.technologies || [])
+      setKeywords(draft.keywords || [])
       setStatus(draft.status || 'PUBLISHED')
       setImage(draft.image || '')
       setProjectLinks(draft.projectLinks || [])
@@ -100,6 +103,7 @@ const SingleProject = () => {
         setSlug(project.slug ?? '')
         setPlatforms(Array.isArray(project.platforms) ? project.platforms : [])
         setTechnologies(Array.isArray(project.technologies) ? project.technologies : [])
+        setKeywords(Array.isArray(project.keywords) ? project.keywords : [])
         setStatus(project.status ?? 'PUBLISHED')
         setImage(project.image ?? '')
         setProjectLinks(Array.isArray(project.projectLinks) ? project.projectLinks : [])
@@ -124,7 +128,7 @@ const SingleProject = () => {
   const handleClearDraft = () => {
     clearAutoSave()
     setTitle(''); setContent(''); setDescription(''); setSlug('')
-    setPlatforms([]); setTechnologies([]); setStatus('PUBLISHED'); setImage(''); setProjectLinks([])
+    setPlatforms([]); setTechnologies([]); setKeywords([]); setStatus('PUBLISHED'); setImage(''); setProjectLinks([])
     toast.info('Draft cleared')
   }
 
@@ -167,7 +171,7 @@ const SingleProject = () => {
     try {
       const body = {
         projectId: routeProjectId !== 'create' ? routeProjectId : undefined,
-        title, content, description, slug, platforms, technologies, status, image, projectLinks,
+        title, content, description, slug, platforms, technologies, keywords, status, image, projectLinks,
       }
       if (mode === 'create') {
         const res = await axiosInstance.post('/api/projects', body)
@@ -250,6 +254,17 @@ const SingleProject = () => {
         <>
           <CheckboxGroup label="Platforms" options={ALLOWED_PLATFORMS} selected={platforms} onChange={setPlatforms} />
           <CheckboxGroup label="Technologies" options={ALLOWED_TECHNOLOGIES} selected={technologies} onChange={setTechnologies} />
+
+          <div className="flex flex-col gap-1">
+            <DynamicText
+              label="Keywords"
+              placeholder="Keywords (comma separated)"
+              value={keywords.join(',')}
+              setValue={(v) => setKeywords(v.split(',').map((s) => s.trim()).filter(Boolean))}
+              size="md"
+            />
+            <ContentScoreBar value={keywords.join(',')} rules={KEYWORDS_SCORE_RULES} label="Anahtar Kelimeler" />
+          </div>
 
           <TableProvider<{ id: number; link: string }>
             localData={projectLinks.map((link, i) => ({ id: i, link }))}

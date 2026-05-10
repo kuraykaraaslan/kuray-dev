@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     const projectId = searchParams.get('projectId') || undefined
     const sortKey = searchParams.get('sortKey') || undefined
     const sortDir = (searchParams.get('sortDir') || 'desc') as 'asc' | 'desc'
+    const onlyPublished = searchParams.get('onlyPublished') === 'true'
 
     const result = await ProjectService.getAllProjects({
       page,
@@ -30,6 +31,7 @@ export async function GET(request: NextRequest) {
       projectId,
       sortKey,
       sortDir,
+      onlyPublished,
     })
 
     return NextResponse.json({ projects: result.projects, total: result.total, page, pageSize })
