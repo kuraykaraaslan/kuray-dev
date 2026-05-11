@@ -1,4 +1,5 @@
 import { prisma } from '@/libs/prisma'
+import redisInstance from '@/libs/redis'
 import type { BlockData, DynamicPageParams } from '@/dtos/DynamicPageDTO'
 import type { DynamicPageStatus } from '@/types/content/PageTypes'
 import type { Prisma } from '@/generated/prisma'
@@ -39,11 +40,33 @@ export default class DynamicPageService {
     })
   }
 
-  static async getBySlug(slug: string) {
-    return prisma.dynamicPage.findUnique({
+  static async getBySlug(slug: string): Promise<DynamicPageWithTranslations | null> {
+    const cacheKey = `pages:${slug}`
+    const cached = await redisInstance.get(cacheKey)
+    if (cached) {
+      const raw = JSON.parse(cached) as DynamicPageWithTranslations
+      return {
+        ...raw,
+        createdAt: new Date(raw.createdAt),
+        updatedAt: new Date(raw.updatedAt),
+        translations: raw.translations.map((t) => ({
+          ...t,
+          createdAt: new Date(t.createdAt),
+          updatedAt: new Date(t.updatedAt),
+        })),
+      }
+    }
+
+    const page = await prisma.dynamicPage.findUnique({
       where: { slug },
       include: { translations: true },
     })
+
+    if (page) {
+      await redisInstance.set(cacheKey, JSON.stringify(page), 'EX', 60 * 60)
+    }
+
+    return page
   }
 
   static applyTranslation(page: DynamicPageWithTranslations, lang: string): DynamicPageWithTranslations {
@@ -67,7 +90,7 @@ export default class DynamicPageService {
     metadata?: Record<string, unknown>
     status?: DynamicPageStatus
   }) {
-    return prisma.dynamicPage.create({
+    const page = await prisma.dynamicPage.create({
       data: {
         slug: data.slug,
         title: data.title,
@@ -78,6 +101,8 @@ export default class DynamicPageService {
         status: data.status ?? 'DRAFT',
       },
     })
+    await redisInstance.del('sitemap:pages')
+    return page
   }
 
   static async update(
@@ -92,7 +117,12 @@ export default class DynamicPageService {
       status?: DynamicPageStatus
     }
   ) {
-    return prisma.dynamicPage.update({
+    const existing = await prisma.dynamicPage.findUnique({
+      where: { dynamicPageId },
+      select: { slug: true },
+    })
+
+    const page = await prisma.dynamicPage.update({
       where: { dynamicPageId },
       data: {
         ...(data.slug !== undefined && { slug: data.slug }),
@@ -104,12 +134,30 @@ export default class DynamicPageService {
         ...(data.status !== undefined && { status: data.status }),
       },
     })
+
+    const keysToDelete = ['sitemap:pages']
+    if (existing) keysToDelete.push(`pages:${existing.slug}`)
+    if (data.slug && data.slug !== existing?.slug) keysToDelete.push(`pages:${data.slug}`)
+    await redisInstance.del(...keysToDelete)
+
+    return page
   }
 
   static async delete(dynamicPageId: string) {
-    return prisma.dynamicPage.delete({
+    const existing = await prisma.dynamicPage.findUnique({
+      where: { dynamicPageId },
+      select: { slug: true },
+    })
+
+    const page = await prisma.dynamicPage.delete({
       where: { dynamicPageId },
     })
+
+    const keysToDelete = ['sitemap:pages']
+    if (existing) keysToDelete.push(`pages:${existing.slug}`)
+    await redisInstance.del(...keysToDelete)
+
+    return page
   }
 
   static async getTranslations(dynamicPageId: string) {
@@ -123,7 +171,7 @@ export default class DynamicPageService {
     lang: string,
     data: { title: string; description?: string | null; sections: BlockData[] }
   ) {
-    return prisma.dynamicPageTranslation.upsert({
+    const result = await prisma.dynamicPageTranslation.upsert({
       where: { dynamicPageId_lang: { dynamicPageId, lang } },
       create: {
         dynamicPageId,
@@ -138,11 +186,23 @@ export default class DynamicPageService {
         sections: data.sections as object[],
       },
     })
+    await DynamicPageService.invalidateByPageId(dynamicPageId)
+    return result
   }
 
   static async deleteTranslation(dynamicPageId: string, lang: string) {
-    return prisma.dynamicPageTranslation.delete({
+    const result = await prisma.dynamicPageTranslation.delete({
       where: { dynamicPageId_lang: { dynamicPageId, lang } },
     })
+    await DynamicPageService.invalidateByPageId(dynamicPageId)
+    return result
+  }
+
+  private static async invalidateByPageId(dynamicPageId: string) {
+    const page = await prisma.dynamicPage.findUnique({
+      where: { dynamicPageId },
+      select: { slug: true },
+    })
+    if (page) await redisInstance.del(`pages:${page.slug}`)
   }
 }

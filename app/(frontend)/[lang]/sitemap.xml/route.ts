@@ -9,6 +9,7 @@ export async function GET() {
     `${BASE}/sitemap-static.xml`,
     `${BASE}/blog/sitemap.xml`,
     `${BASE}/projects/sitemap.xml`,
+    `${BASE}/pages/sitemap.xml`,
   ])
 
   return new NextResponse(xml, {

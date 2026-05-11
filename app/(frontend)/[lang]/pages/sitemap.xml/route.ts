@@ -1,11 +1,13 @@
-// app/sitemap-static.xml/route.ts
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+import { prisma } from '@/libs/prisma'
 import { getBaseUrl, renderUrlSet } from '@/helpers/SitemapGenerator'
 import redisInstance from '@/libs/redis'
 import type { SitemapUrl } from '@/types/common/SitemapTypes'
 
-const CACHE_KEY = 'sitemap:static'
-const CACHE_TTL = 24 * 60 * 60 // 1 day
+const CACHE_KEY = 'sitemap:pages'
+const CACHE_TTL = 60 * 60 // 1 hour
 
 export async function GET() {
   const cached = await redisInstance.get(CACHE_KEY)
@@ -16,13 +18,19 @@ export async function GET() {
   }
 
   const BASE = getBaseUrl()
-  const urls: SitemapUrl[] = [
-    { loc: `${BASE}/`, changefreq: 'daily', priority: 1.0 },
-    { loc: `${BASE}/about`, changefreq: 'monthly', priority: 0.5 },
-    { loc: `${BASE}/projects`, changefreq: 'weekly', priority: 0.8 },
-    { loc: `${BASE}/blog`, changefreq: 'daily', priority: 0.9 },
-    { loc: `${BASE}/contact`, changefreq: 'monthly', priority: 0.5 },
-  ]
+
+  const pages = await prisma.dynamicPage.findMany({
+    where: { status: 'PUBLISHED', NOT: { slug: '' } },
+    select: { slug: true, updatedAt: true },
+    orderBy: { updatedAt: 'desc' },
+  })
+
+  const urls: SitemapUrl[] = pages.map((p) => ({
+    loc: `${BASE}/${p.slug}`,
+    lastmod: p.updatedAt.toISOString(),
+    changefreq: 'monthly',
+    priority: 0.6,
+  }))
 
   const xml = renderUrlSet(urls)
   await redisInstance.set(CACHE_KEY, xml, 'EX', CACHE_TTL)
