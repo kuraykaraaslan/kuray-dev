@@ -31,7 +31,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
         if (response.status === 200 && response.data.user) {
           setUser(response.data.user)
 
-          // Check if user has admin role
           if (
             response.data.user.userRole !== 'ADMIN' &&
             response.data.user.userRole !== 'AUTHOR' &&
@@ -43,9 +42,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
           setIsAuthChecked(true)
         }
-      } catch (error) {
-        // Axios interceptor will handle redirect to login
+      } catch (error: any) {
         console.error('Auth check failed:', error)
+        if (error.response && error.response.status === 401) {
+          router.push('/auth/login?error=Please login to access the admin panel')
+        } else {
+          router.push('/auth/login?error=An error occurred while checking authentication')
+        }
+        setIsAuthChecked(true)
       }
     }
 
