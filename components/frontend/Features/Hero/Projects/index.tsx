@@ -58,6 +58,7 @@ const ProjectsHero = () => {
     platforms: [],
     technologies: [],
     content: '',
+    keywords: [],
     createdAt: new Date(),
     updatedAt: new Date(),
     projectLinks: ['https://github.com/kuraykaraaslan/'],
