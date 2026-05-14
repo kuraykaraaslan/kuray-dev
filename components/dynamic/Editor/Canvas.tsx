@@ -36,12 +36,16 @@ class BlockErrorBoundary extends Component<
 
 function ResizeHandle({ blockId }: { blockId: string }) {
   const updateBlockProps = useEditorStore((s) => s.updateBlockProps)
+  const snapshotForUndo = useEditorStore((s) => s.snapshotForUndo)
   const [dragging, setDragging] = useState(false)
   const [liveH, setLiveH] = useState(0)
 
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
+
+    // Snapshot before resize so Ctrl+Z can revert it
+    snapshotForUndo()
 
     const container = (e.currentTarget as HTMLElement).parentElement!
     const startY = e.clientY

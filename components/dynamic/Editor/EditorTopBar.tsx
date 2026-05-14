@@ -6,6 +6,7 @@ import type { DynamicPageStatus } from '@/types/content/PageTypes'
 import SeoModal from './SeoModal'
 import BackupModal from './BackupModal'
 import TranslationModal from './TranslationModal'
+import ShortcutsModal from './ShortcutsModal'
 import { useEditorStore } from './stores/editorStore'
 import type { PreviewMode } from './stores/editorStore'
 
@@ -36,6 +37,7 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
     isDirty,
     undo, redo,
     undoStack, redoStack,
+    setShowShortcuts,
   } = useEditorStore()
 
   const isTranslationMode = activeLang !== 'en'
@@ -159,6 +161,20 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
             <span className="text-[10px] text-warning/70 font-medium">Unsaved</span>
           )}
           <button
+            onClick={() => window.open(`/${slug}`, '_blank')}
+            title="Preview page in new tab"
+            className="px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0 bg-base-content/10 text-base-content/70 h-10"
+          >
+            ↗ Preview
+          </button>
+          <button
+            onClick={() => setShowShortcuts(true)}
+            title="Keyboard shortcuts (Ctrl+/)"
+            className="w-10 h-10 flex items-center justify-center rounded-md text-sm font-medium bg-base-content/10 text-base-content/70 hover:text-base-content transition-colors flex-shrink-0"
+          >
+            ?
+          </button>
+          <button
             onClick={onCancel}
             className="px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0 bg-base-content/10 text-base-content/70 h-10"
           >
@@ -177,6 +193,7 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
       <SeoModal />
       <BackupModal />
       <TranslationModal />
+      <ShortcutsModal />
     </>
   )
 }

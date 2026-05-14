@@ -33,8 +33,11 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   const [localProps, setLocalProps] = useState<Record<string, unknown>>({})
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
   const [jsonErrors, setJsonErrors] = useState<Record<string, boolean>>({})
+  const [fieldSearch, setFieldSearch] = useState('')
   const blockDefs = useEditorStore((s) => s.blockDefs)
+  const snapshotForUndo = useEditorStore((s) => s.snapshotForUndo)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hasSnapshotted = useRef(false)
   const { theme } = useThemeStore()
   const isDark = theme === 'dark'
 
@@ -55,14 +58,21 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
     setLocalProps(nextProps)
     setJsonErrors({})
+    setFieldSearch('')
+    hasSnapshotted.current = false
   }, [block?.id, block?.type, blockDefs])
 
   const update = useCallback((key: string, value: unknown) => {
+    // Snapshot once per block selection so the entire edit session is undoable in one step
+    if (!hasSnapshotted.current) {
+      snapshotForUndo()
+      hasSnapshotted.current = true
+    }
     const next = { ...localProps, [key]: value }
     setLocalProps(next)
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => onChange(next), 200)
-  }, [localProps, onChange])
+  }, [localProps, onChange, snapshotForUndo])
 
   if (!block) {
     return (
@@ -86,6 +96,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   if (!def) return null
 
   const schema = (codeDef?.schema ?? dbDef?.schema ?? {}) as Record<string, FieldSchema>
+  const defaultProps = codeDef?.defaultProps ?? dbDef?.defaultProps ?? {}
 
   const uploadImage = async (key: string, file: File, uploadFolder = 'content') => {
     const formData = new FormData()
@@ -105,8 +116,14 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
   const inputCls = 'w-full px-3 py-2 rounded-md text-sm text-base-content outline-none bg-base-300 border border-base-content/10'
 
-  // Partition schema into ungrouped and groups
-  const visibleEntries = Object.entries(schema).filter(([, f]) => shouldShow(f, localProps))
+  // Partition schema into ungrouped and groups (with optional search filter)
+  const visibleEntries = Object.entries(schema)
+    .filter(([, f]) => shouldShow(f, localProps))
+    .filter(([key, field]) => {
+      if (!fieldSearch.trim()) return true
+      const q = fieldSearch.toLowerCase()
+      return field.label.toLowerCase().includes(q) || key.toLowerCase().includes(q)
+    })
   const ungrouped = visibleEntries.filter(([, f]) => !f.group)
   const groupMap = visibleEntries
     .filter(([, f]) => f.group)
@@ -119,10 +136,21 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
   const renderField = (key: string, field: FieldSchema) => (
     <div key={key}>
-      <label className="block text-xs font-medium mb-1.5 text-base-content/55">
-        {field.label}
-        {field.required && <span className="text-error ml-0.5">*</span>}
-      </label>
+      <div className="flex items-center justify-between mb-1.5">
+        <label className="text-xs font-medium text-base-content/55">
+          {field.label}
+          {field.required && <span className="text-error ml-0.5">*</span>}
+        </label>
+        {defaultProps[key] !== undefined && (
+          <button
+            onClick={() => update(key, defaultProps[key])}
+            title="Reset to default"
+            className="text-[10px] text-base-content/25 hover:text-base-content/60 transition-colors px-1 rounded"
+          >
+            ↺
+          </button>
+        )}
+      </div>
 
       {field.type === 'text' && (
         <input
@@ -344,6 +372,18 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
         </div>
         {collapseButton}
       </div>
+
+      {Object.keys(schema).length > 4 && (
+        <div className="px-4 pt-3 pb-0 border-b border-base-content/10">
+          <input
+            type="text"
+            value={fieldSearch}
+            onChange={(e) => setFieldSearch(e.target.value)}
+            placeholder="Search fields…"
+            className="w-full text-xs bg-base-300 border border-base-content/10 rounded-md px-2.5 py-1.5 mb-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary/40 transition-colors"
+          />
+        </div>
+      )}
 
       <div className="p-4 space-y-5">
         {/* Ungrouped fields */}

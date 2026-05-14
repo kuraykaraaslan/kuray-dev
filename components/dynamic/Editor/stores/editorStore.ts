@@ -74,6 +74,7 @@ interface EditorStore {
   copyBlock: (id: string) => void
   pasteBlock: (atIndex?: number) => void
   clipboard: BlockData | null
+  snapshotForUndo: () => void
   undo: () => void
   redo: () => void
   loadPage: (pageId: string) => Promise<void>
@@ -287,6 +288,13 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         selectedId: newBlock.id,
       }
     })
+  },
+
+  snapshotForUndo: () => {
+    set((state) => ({
+      undoStack: [...state.undoStack.slice(-49), state.sections],
+      redoStack: [],
+    }))
   },
 
   updateBlockProps: (id, props) => {

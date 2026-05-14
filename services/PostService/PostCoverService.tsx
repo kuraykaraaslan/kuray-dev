@@ -1,169 +1,37 @@
-import { ImageResponse } from 'next/og'
-import redis from '@/libs/redis'
+import OGService from '@/services/OGService'
 import { PostWithData } from '@/types/content/BlogTypes'
 
+const CACHE_PREFIX = 'post:og:'
+
 export default class PostCoverService {
-  private static readonly CACHE_TTL = 60 * 60 * 24 * 7 // 7 days
-  private static readonly CACHE_PREFIX = 'post:og:'
-
-  /**
-   * Creates cache key.
-   */
   private static key(postId: string) {
-    return `${this.CACHE_PREFIX}${postId}`
+    return `${CACHE_PREFIX}${postId}`
   }
 
-  /**
-   * Clears all cache.
-   */
   static async resetAll() {
-    const keys = await redis.keys(`${this.CACHE_PREFIX}*`)
-    if (keys.length > 0) await redis.del(...keys)
-    return { cleared: keys.length }
+    return OGService.clearByPrefix(CACHE_PREFIX)
   }
 
-  /**
-   * Clears cache for a specific post.
-   */
   static async resetById(postId: string) {
-    const key = this.key(postId)
-    await redis.del(key)
+    await OGService.clearByKey(this.key(postId))
     return { cleared: true }
   }
 
-  /**
-   * Generates OG image or returns from cache.
-   */
   static async getImage(post: PostWithData): Promise<Response | null> {
     if (!post.postId) return null
 
-    const cacheKey = this.key(post.postId)
+    const title = post.title.length > 110 ? post.title.slice(0, 100) + '…' : post.title
 
-    const cached = await redis.get(cacheKey)
-    if (cached) {
-      // Convert cached data to buffer and return Response directly
-      const buffer = Buffer.from(cached, 'base64')
-      return new Response(
-        buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
-        {
-          status: 200,
-          headers: {
-            'Content-Type': 'image/png',
-            'Cache-Control': 'public, max-age=604800',
-          },
-        }
-      )
-    }
-
-    let title = post.title.length > 110 ? post.title.slice(0, 100) + '...' : post.title
-    title = title.split(':').join(':\n')
-
-    if (post.image) {
-      const res = new ImageResponse(
-        <img src={post.image} width={1200} height={630} alt={title} />,
-        { width: 1200, height: 630 }
-      )
-      const arrayBuffer = await res.arrayBuffer()
-      await redis.setex(cacheKey, this.CACHE_TTL, Buffer.from(arrayBuffer).toString('base64'))
-
-      // Return new Response after saving to cache
-      return new Response(arrayBuffer, {
-        status: 200,
-        headers: {
-          'Content-Type': 'image/png',
-          'Cache-Control': 'public, max-age=604800',
-        },
-      })
-    }
-
-    const calculateFontSize = (_title: string) => {
-      return 22
-    }
-
-    const svgBackground = encodeURIComponent(`
-      <svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 800 800'>
-        <rect fill='#000000' width='1200' height='630'/>
-        <g fill-opacity='0.26' opacity='0.36'>
-          <circle fill='#000000' cx='400' cy='400' r='600'/>
-          <circle fill='#150056' cx='400' cy='400' r='500'/>
-          <circle fill='#2900ac' cx='400' cy='400' r='400'/>
-          <circle fill='#4004ff' cx='400' cy='400' r='300'/>
-          <circle fill='#825aff' cx='400' cy='400' r='200'/>
-          <circle fill='#C3B0FF' cx='400' cy='400' r='100'/>
-        </g>
-      </svg>
-    `)
-
-    const header = (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '60px',
-          textAlign: 'center',
-          fontWeight: 'bold',
-          fontSize: calculateFontSize(title),
-          color: '#fff',
-          textShadow: '0px 4px 20px rgba(95, 95, 95, 0.4)',
-          boxSizing: 'border-box',
-        }}
-      >
-        <h1
-          style={{
-            lineHeight: 1.2,
-            fontStyle: 'italic',
-            margin: 0,
-            maxWidth: '1000px',
-            fontFamily: 'Inter, sans-serif',
-          }}
-        >
-          {title}
-        </h1>
-      </div>
-    )
-
-    const res = new ImageResponse(
-      <div
-        style={{
-          width: 1200,
-          height: 630,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#000000',
-          backgroundImage: `url("data:image/svg+xml,${svgBackground}")`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          fontFamily: 'Inter, sans-serif',
-        }}
-      >
-        {header}
-      </div>,
+    return OGService.generate(
       {
-        width: 1200,
-        height: 630,
-      }
-    )
-
-    const arrayBuffer = await res.arrayBuffer()
-    await redis.setex(cacheKey, this.CACHE_TTL, Buffer.from(arrayBuffer).toString('base64'))
-
-    // Return ArrayBuffer as Response
-    return new Response(arrayBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'image/png',
-        'Cache-Control': 'public, max-age=604800',
+        title,
+        coverImage: post.image ?? null,
+        badge: 'Blog Post',
       },
-    })
+      this.key(post.postId)
+    )
   }
 
-  /**
-   * Generate All OG Images (for testing or pre-generation)
-   */
   static async generateAllOgImages(posts: PostWithData[]) {
     for (const post of posts) {
       await this.getImage(post)

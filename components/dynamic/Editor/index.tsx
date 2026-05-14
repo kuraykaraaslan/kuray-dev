@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   DndContext,
@@ -13,11 +13,15 @@ import {
 } from '@dnd-kit/core'
 import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { toast } from 'react-toastify'
 import Canvas from './Canvas'
 import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar'
 import EditorTopBar from './EditorTopBar'
 import { useEditorStore } from './stores/editorStore'
+
+const DRAFT_KEY = (pageId: string) =>
+  pageId === 'create' ? 'dynamic_editor_draft_new' : `dynamic_editor_draft_${pageId}`
 
 export default function DynamicPageEditor() {
   const params = useParams<{ pageId: string }>()
@@ -46,8 +50,11 @@ export default function DynamicPageEditor() {
   const undo = useEditorStore((s) => s.undo)
   const redo = useEditorStore((s) => s.redo)
   const isDirty = useEditorStore((s) => s.isDirty)
+  const setShowShortcuts = useEditorStore((s) => s.setShowShortcuts)
 
   const [sidebarDrag, setSidebarDrag] = useState<{ type: string; label: string } | null>(null)
+  const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null)
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -61,18 +68,89 @@ export default function DynamicPageEditor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
 
+  // Check for saved draft after loading completes
+  useEffect(() => {
+    if (loading) return
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY(pageId))
+      if (!raw) return
+      const parsed = JSON.parse(raw)
+      if (parsed._savedAt) setDraftSavedAt(parsed._savedAt)
+    } catch { /* ignore */ }
+  }, [loading, pageId])
+
+  // Auto-save to localStorage 10s after last change while dirty
+  useEffect(() => {
+    if (!isDirty) {
+      // Clear draft when saved successfully
+      try { localStorage.removeItem(DRAFT_KEY(pageId)) } catch { /* ignore */ }
+      setDraftSavedAt(null)
+      return
+    }
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => {
+      const s = useEditorStore.getState()
+      try {
+        localStorage.setItem(DRAFT_KEY(pageId), JSON.stringify({
+          _savedAt: Date.now(),
+          title: s.title,
+          slug: s.slug,
+          status: s.status,
+          description: s.description,
+          keywords: s.keywords,
+          metadata: s.metadata,
+          sections: s.sections,
+          enSections: s.enSections,
+          translationCache: s.translationCache,
+          savedLangs: s.savedLangs,
+        }))
+      } catch { /* localStorage might be full */ }
+    }, 10_000)
+    return () => { if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current) }
+  }, [isDirty, sections, pageId])
+
+  const restoreDraft = useCallback(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY(pageId))
+      if (!raw) return
+      const parsed = JSON.parse(raw)
+      useEditorStore.setState({
+        title: parsed.title ?? '',
+        slug: parsed.slug ?? '',
+        status: parsed.status ?? 'DRAFT',
+        description: parsed.description ?? '',
+        keywords: parsed.keywords ?? [],
+        metadata: parsed.metadata,
+        sections: (parsed.sections ?? []).map((s: { order: number }, i: number) => ({ ...s, order: i })),
+        enSections: (parsed.enSections ?? []).map((s: { order: number }, i: number) => ({ ...s, order: i })),
+        translationCache: parsed.translationCache ?? {},
+        savedLangs: parsed.savedLangs ?? [],
+        isDirty: true,
+        selectedId: null,
+      })
+      setDraftSavedAt(null)
+      toast.success('Draft restored')
+    } catch {
+      toast.error('Failed to restore draft')
+    }
+  }, [pageId])
+
+  const discardDraft = useCallback(() => {
+    try { localStorage.removeItem(DRAFT_KEY(pageId)) } catch { /* ignore */ }
+    setDraftSavedAt(null)
+  }, [pageId])
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const ctrl = e.ctrlKey || e.metaKey
       const alt = e.altKey
       const tag = (e.target as HTMLElement).tagName
-
-      // Don't intercept shortcuts when typing inside an input/textarea
       const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(tag) || (e.target as HTMLElement).isContentEditable
 
       if (ctrl) {
         if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); return }
         if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); redo(); return }
+        if (e.key === '/') { e.preventDefault(); setShowShortcuts(true); return }
         if (!isEditing) {
           if (e.key === 's') { e.preventDefault(); handleSave(mode, pageId, router); return }
           if (e.key === 'd') {
@@ -110,7 +188,7 @@ export default function DynamicPageEditor() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [undo, redo, deleteBlock, duplicateBlock, copyBlock, pasteBlock, moveBlock, setSelectedId, handleSave, mode, pageId, router])
+  }, [undo, redo, deleteBlock, duplicateBlock, copyBlock, pasteBlock, moveBlock, setSelectedId, handleSave, setShowShortcuts, mode, pageId, router])
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -163,6 +241,29 @@ export default function DynamicPageEditor() {
         onSave={() => handleSave(mode, pageId, router)}
         onCancel={() => router.push('/admin/pages')}
       />
+
+      {/* Draft recovery banner */}
+      {draftSavedAt && (
+        <div className="flex-shrink-0 flex items-center justify-between gap-4 px-4 py-2 bg-warning/10 border-b border-warning/20">
+          <span className="text-xs text-warning font-medium">
+            Unsaved draft found — last auto-saved at {new Date(draftSavedAt).toLocaleTimeString()}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={restoreDraft}
+              className="px-3 py-1 text-xs rounded-md bg-warning text-warning-content font-medium hover:opacity-90 transition-opacity"
+            >
+              Restore
+            </button>
+            <button
+              onClick={discardDraft}
+              className="px-3 py-1 text-xs rounded-md bg-base-300 text-base-content/60 hover:text-base-content transition-colors"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
       <DndContext
         sensors={sensors}
