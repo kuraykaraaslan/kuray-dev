@@ -105,11 +105,24 @@ function PhotoWidget({ src, alt, action, actionUrl, mobileLayout }: PhotoWidgetP
 
 // ── Block ─────────────────────────────────────────────────────────────────────
 
+const HEADING_SIZE: Record<string, string> = {
+  'text-2xl': 'text-2xl', 'text-3xl': 'text-3xl', 'text-4xl': 'text-4xl',
+  'text-5xl': 'text-5xl', 'text-6xl': 'text-6xl', 'text-7xl': 'text-7xl', 'text-8xl': 'text-8xl',
+}
+
+const DESC_SIZE: Record<string, string> = {
+  'text-sm': 'text-sm', 'text-base': 'text-base', 'text-lg': 'text-lg',
+  'text-xl': 'text-xl', 'text-2xl': 'text-2xl', 'text-3xl': 'text-3xl',
+}
+
 function WelcomeBlock(rawProps: Record<string, unknown>) {
   const heading = (rawProps.heading as string) || 'Hello, I am Kuray'
   const description = (rawProps.description as string) || 'A passionate full-stack developer building modern web applications.'
   const ctaLabel = (rawProps.ctaLabel as string) || 'Contact Me'
   const ctaHref = (rawProps.ctaHref as string) || '#contact'
+
+  const headingSize = HEADING_SIZE[(rawProps.headingSize as string) || ''] ?? 'text-5xl'
+  const descSize    = DESC_SIZE[(rawProps.descSize as string) || '']    ?? 'text-lg'
 
   const photoSrc = (rawProps.photoSrc as string) || '/assets/img/kuraykaraaslan.jpg'
   const photoAlt = (rawProps.photoAlt as string) || 'Profile photo'
@@ -159,10 +172,10 @@ function WelcomeBlock(rawProps: Record<string, unknown>) {
           )}
 
           <div className="flex-1 max-w-2xl md:me-4">
-            <h1 className="font-bold text-5xl leading-normal animate-shake">
+            <h1 className={`font-bold ${headingSize} leading-normal animate-shake`}>
               {heading}
             </h1>
-            <h2 className="py-3 pb-6 leading-7 text-lg">
+            <h2 className={`py-3 pb-6 leading-7 ${descSize}`}>
               <p>{description}</p>
             </h2>
             <Link href={ctaHref} className="btn btn-primary hidden lg:inline-flex">
@@ -197,10 +210,24 @@ export const WelcomeBlockDefinition: BlockDefinition = {
     mobilePhoto: 'hidden',
     backgroundType: 'svg',
     backgroundImage: '',
+    headingSize: 'text-5xl',
+    descSize: 'text-lg',
   },
   schema: {
     heading: { label: 'Heading', type: 'text', placeholder: 'Hello, I am ...' },
+    headingSize: {
+      label: 'Heading Size',
+      type: 'select',
+      options: ['text-2xl', 'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl', 'text-7xl', 'text-8xl'],
+      value: 'text-5xl',
+    },
     description: { label: 'Description', type: 'textarea' },
+    descSize: {
+      label: 'Description Size',
+      type: 'select',
+      options: ['text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl'],
+      value: 'text-lg',
+    },
     ctaLabel: { label: 'Button Label', type: 'text' },
     ctaHref: { label: 'Button URL', type: 'url' },
     photoSrc: { label: 'Profile Photo', type: 'img', uploadFolder: 'profile' },
