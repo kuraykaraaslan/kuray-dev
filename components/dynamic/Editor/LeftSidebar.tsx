@@ -54,6 +54,7 @@ export default function LeftSidebar() {
   const blockDefs = useEditorStore((s) => s.blockDefs)
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState<{ def: AnyBlockDef; y: number } | null>(null)
+  const [collapsed, setCollapsed] = useState(false)
 
   const allDefs: AnyBlockDef[] = [...getCodeBlocks(), ...blockDefs]
 
@@ -79,11 +80,39 @@ export default function LeftSidebar() {
 
   const sidebarRight = sidebarRef.current?.getBoundingClientRect().right ?? 240
 
+  if (collapsed) {
+    return (
+      <div className="w-10 flex-shrink-0 flex flex-col border-r border-base-content/10 bg-base-200 items-center py-3 gap-3">
+        <button
+          onClick={() => setCollapsed(false)}
+          title="Expand blocks panel"
+          className="w-7 h-7 flex items-center justify-center rounded-md text-base-content/40 hover:text-base-content hover:bg-base-300 transition-colors"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <div className="flex-1 flex items-center">
+          <span className="text-[9px] font-semibold tracking-widest text-base-content/25 uppercase" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>Blocks</span>
+        </div>
+      </div>
+    )
+  }
+
   if (isTranslationMode) {
     return (
       <div className="w-60 flex-shrink-0 flex flex-col border-r border-base-content/10 bg-base-200">
-        <div className="px-4 py-3 border-b border-base-content/10">
+        <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
           <p className="text-xs font-semibold tracking-widest text-base-content/40">BLOCKS</p>
+          <button
+            onClick={() => setCollapsed(true)}
+            title="Collapse blocks panel"
+            className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
         <div className="flex-1 flex items-center justify-center p-4">
           <p className="text-xs text-base-content/30 text-center leading-relaxed">
@@ -96,8 +125,17 @@ export default function LeftSidebar() {
 
   return (
     <div ref={sidebarRef} className="w-60 flex-shrink-0 flex flex-col border-r border-base-content/10 overflow-y-auto bg-base-200">
-      <div className="px-4 py-3 border-b border-base-content/10">
+      <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
         <p className="text-xs font-semibold tracking-widest text-base-content/40">BLOCKS</p>
+        <button
+          onClick={() => setCollapsed(true)}
+          title="Collapse blocks panel"
+          className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
 
       <div className="py-2">

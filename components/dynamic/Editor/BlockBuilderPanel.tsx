@@ -8,6 +8,7 @@ import type { CustomFieldSchema } from '../Blocks/CustomBlock'
 interface Props {
   block: BlockData
   onChange: (props: Record<string, unknown>) => void
+  collapseButton?: React.ReactNode
 }
 
 type Tab = 'ai' | 'fields' | 'template' | 'values'
@@ -21,7 +22,7 @@ const FIELD_TYPES: CustomFieldSchema['type'][] = [
   'boolean',
 ]
 
-export default function BlockBuilderPanel({ block, onChange }: Props) {
+export default function BlockBuilderPanel({ block, onChange, collapseButton }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('ai')
   const templateRef = useRef<HTMLTextAreaElement>(null)
   const [aiPrompt, setAiPrompt] = useState('')
@@ -107,11 +108,14 @@ export default function BlockBuilderPanel({ block, onChange }: Props) {
   return (
     <div className="w-80 flex-shrink-0 flex flex-col border-l border-base-content/10 overflow-hidden bg-base-200">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-base-content/10">
-        <p className="text-sm font-semibold text-base-content">Custom Block</p>
-        <p className="text-xs mt-0.5 text-base-content/35">
-          Define fields → write template → fill values
-        </p>
+      <div className="px-4 py-3 border-b border-base-content/10 flex items-start justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-base-content">Custom Block</p>
+          <p className="text-xs mt-0.5 text-base-content/35">
+            Define fields → write template → fill values
+          </p>
+        </div>
+        {collapseButton}
       </div>
 
       {/* Tabs */}

@@ -5,13 +5,16 @@ import axiosInstance from '@/libs/axios'
 import type { BlockData, FieldSchema } from '../types'
 import { getCodeBlock } from '../BlockRegistry'
 import { useEditorStore } from './stores/editorStore'
+import RepeaterField from './RepeaterField'
+import IconPicker from './IconPicker'
 
 interface Props {
   block: BlockData | null
   onChange: (props: Record<string, unknown>) => void
+  collapseButton?: React.ReactNode
 }
 
-export default function PropsPanel({ block, onChange }: Props) {
+export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   const [localProps, setLocalProps] = useState<Record<string, unknown>>({})
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
   const blockDefs = useEditorStore((s) => s.blockDefs)
@@ -36,10 +39,16 @@ export default function PropsPanel({ block, onChange }: Props) {
 
   if (!block) {
     return (
-      <div className="w-72 flex-shrink-0 flex items-center justify-center border-l border-base-content/10 bg-base-200">
-        <p className="text-xs text-center px-6 text-base-content/30">
-          Click a block on the canvas to edit its properties.
-        </p>
+      <div className="w-72 flex-shrink-0 flex flex-col border-l border-base-content/10 bg-base-200">
+        <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
+          <p className="text-xs font-semibold tracking-widest text-base-content/40">PROPERTIES</p>
+          {collapseButton}
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-xs text-center px-6 text-base-content/30">
+            Click a block on the canvas to edit its properties.
+          </p>
+        </div>
       </div>
     )
   }
@@ -64,7 +73,7 @@ export default function PropsPanel({ block, onChange }: Props) {
 
     setUploadingKey(key)
     try {
-      const response = await axiosInstance.post('/api/aws', formData, {
+      const response = await axiosInstance.post('/api/media', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 
@@ -78,11 +87,14 @@ export default function PropsPanel({ block, onChange }: Props) {
 
   return (
     <div className="w-72 flex-shrink-0 flex flex-col border-l border-base-content/10 overflow-y-auto bg-base-200">
-      <div className="px-4 py-4 border-b border-base-content/10">
-        <p className="text-sm font-semibold text-base-content">{def.label}</p>
-        <p className="text-xs mt-0.5 text-base-content/40">
-          {def.description}
-        </p>
+      <div className="px-4 py-4 border-b border-base-content/10 flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-base-content">{def.label}</p>
+          <p className="text-xs mt-0.5 text-base-content/40">
+            {def.description}
+          </p>
+        </div>
+        {collapseButton}
       </div>
 
       <div className="p-4 space-y-5">
@@ -245,6 +257,27 @@ export default function PropsPanel({ block, onChange }: Props) {
                   }
                 }}
                 className={`${inputCls} resize-none font-mono text-xs`}
+              />
+            )}
+
+            {field.type === 'icon' && (
+              <IconPicker
+                value={(localProps[key] as string) || ''}
+                onChange={(name) => update(key, name)}
+              />
+            )}
+
+            {field.type === 'repeater' && field.fields && (
+              <RepeaterField
+                propKey={key}
+                subFields={field.fields}
+                items={
+                  Array.isArray(localProps[key])
+                    ? (localProps[key] as Record<string, unknown>[])
+                    : []
+                }
+                onChange={(next) => update(key, next)}
+                inputCls={inputCls}
               />
             )}
           </div>

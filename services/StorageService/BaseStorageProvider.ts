@@ -41,6 +41,12 @@ export abstract class BaseStorageProvider {
     'audios',
     'files',
     'content',
+    // block-level upload folders
+    'blocks',
+    'profile',
+    'backgrounds',
+    'platforms',
+    'services',
   ]
 
   static allowedExtensions = [

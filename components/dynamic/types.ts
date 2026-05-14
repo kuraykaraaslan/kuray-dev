@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 export type { BlockData } from '@/types/content/PageTypes'
 
-export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'json' | 'img'
+export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'json' | 'img' | 'repeater' | 'icon'
 
 export interface FieldSchema {
   label: string
@@ -11,6 +11,8 @@ export interface FieldSchema {
   placeholder?: string
   uploadFolder?: string
   accept?: string
+  /** Sub-field definitions for `type: 'repeater'` rows (supports one level of nesting) */
+  fields?: Record<string, FieldSchema>
 }
 
 export interface BlockDefinition {
