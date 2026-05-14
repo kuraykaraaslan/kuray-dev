@@ -23,10 +23,12 @@ const optVal = (o: FieldOption): string => (typeof o === 'string' ? o : o.value)
 /** Resolves FieldOption to its label string */
 const optLabel = (o: FieldOption): string => (typeof o === 'string' ? o : o.label)
 
-/** Returns true when all showIf conditions match current props */
+/** Returns true when all showIf conditions match current props. Values can be a single value or an array of allowed values. */
 function shouldShow(field: FieldSchema, props: Record<string, unknown>): boolean {
   if (!field.showIf) return true
-  return Object.entries(field.showIf).every(([k, v]) => props[k] === v)
+  return Object.entries(field.showIf).every(([k, v]) =>
+    Array.isArray(v) ? v.includes(props[k]) : props[k] === v
+  )
 }
 
 export default function PropsPanel({ block, onChange, collapseButton }: Props) {
@@ -34,6 +36,9 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
   const [jsonErrors, setJsonErrors] = useState<Record<string, boolean>>({})
   const [fieldSearch, setFieldSearch] = useState('')
+  const [dragOverKey, setDragOverKey] = useState<string | null>(null)
+  const groupOpenRef = useRef<Record<string, boolean>>({})
+  const localPropsRef = useRef<Record<string, unknown>>({})
   const blockDefs = useEditorStore((s) => s.blockDefs)
   const snapshotForUndo = useEditorStore((s) => s.snapshotForUndo)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -56,6 +61,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
       }
     }
 
+    localPropsRef.current = nextProps
     setLocalProps(nextProps)
     setJsonErrors({})
     setFieldSearch('')
@@ -63,16 +69,16 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   }, [block?.id, block?.type, blockDefs])
 
   const update = useCallback((key: string, value: unknown) => {
-    // Snapshot once per block selection so the entire edit session is undoable in one step
     if (!hasSnapshotted.current) {
       snapshotForUndo()
       hasSnapshotted.current = true
     }
-    const next = { ...localProps, [key]: value }
+    const next = { ...localPropsRef.current, [key]: value }
+    localPropsRef.current = next
     setLocalProps(next)
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => onChange(next), 200)
-  }, [localProps, onChange, snapshotForUndo])
+  }, [onChange, snapshotForUndo])
 
   if (!block) {
     return (
@@ -137,9 +143,17 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   const renderField = (key: string, field: FieldSchema) => (
     <div key={key}>
       <div className="flex items-center justify-between mb-1.5">
-        <label className="text-xs font-medium text-base-content/55">
+        <label className="text-xs font-medium text-base-content/55 flex items-center gap-1">
           {field.label}
           {field.required && <span className="text-error ml-0.5">*</span>}
+          {defaultProps[key] !== undefined &&
+            localProps[key] !== undefined &&
+            JSON.stringify(localProps[key]) !== JSON.stringify(defaultProps[key]) && (
+              <span
+                className="inline-block w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"
+                title="Modified from default"
+              />
+            )}
         </label>
         {defaultProps[key] !== undefined && (
           <button
@@ -174,18 +188,51 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
       {field.type === 'img' && (
         <div className="space-y-3">
-          {typeof localProps[key] === 'string' && (localProps[key] as string) ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={localProps[key] as string}
-              alt={field.label}
-              className="w-full h-32 object-cover rounded-md border border-base-content/10"
-            />
-          ) : (
-            <div className="w-full h-32 rounded-md border border-base-content/10 flex items-center justify-center text-xs text-center px-3 text-base-content/35">
-              No image selected
-            </div>
-          )}
+          <div
+            className="relative"
+            onDragOver={(e) => { e.preventDefault(); setDragOverKey(key) }}
+            onDragLeave={() => setDragOverKey(null)}
+            onDrop={async (e) => {
+              e.preventDefault()
+              setDragOverKey(null)
+              const file = e.dataTransfer.files?.[0]
+              if (file && file.type.startsWith('image/')) {
+                await uploadImage(key, file, field.uploadFolder || 'content')
+              }
+            }}
+          >
+            {typeof localProps[key] === 'string' && (localProps[key] as string) ? (
+              <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={localProps[key] as string}
+                  alt={field.label}
+                  className={`w-full h-32 object-cover rounded-md border transition-colors ${dragOverKey === key ? 'border-primary ring-2 ring-primary/30' : 'border-base-content/10'}`}
+                />
+                {dragOverKey === key && (
+                  <div className="absolute inset-0 rounded-md bg-primary/10 flex items-center justify-center pointer-events-none">
+                    <span className="text-xs font-medium text-primary">Drop to replace</span>
+                  </div>
+                )}
+                <button
+                  onClick={() => update(key, '')}
+                  className="absolute top-1.5 right-1.5 w-6 h-6 flex items-center justify-center rounded-full bg-black/60 text-white/80 hover:bg-error/80 hover:text-white transition-colors text-xs"
+                  title="Remove image"
+                >✕</button>
+              </div>
+            ) : (
+              <div className={`w-full h-32 rounded-md border-2 border-dashed flex flex-col items-center justify-center gap-1 transition-colors ${dragOverKey === key ? 'border-primary bg-primary/5' : 'border-base-content/10'}`}>
+                {dragOverKey === key ? (
+                  <span className="text-xs font-medium text-primary">Drop image here</span>
+                ) : (
+                  <>
+                    <span className="text-xs text-center px-3 text-base-content/35">No image selected</span>
+                    <span className="text-[10px] text-base-content/25">Drag & drop or use below</span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
           <input
             type="text"
@@ -278,20 +325,45 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
             onChange={(e) => update(key, e.target.checked)}
             className="w-4 h-4 rounded accent-primary"
           />
-          <span className="text-sm text-base-content/60">Enabled</span>
+          <span className="text-sm text-base-content/60">{field.placeholder || 'Enabled'}</span>
         </label>
       )}
 
       {field.type === 'number' && (
-        <input
-          type="number"
-          value={(localProps[key] as number) ?? (field.value as number) ?? 0}
-          min={field.min}
-          max={field.max}
-          step={field.step}
-          onChange={(e) => update(key, Number(e.target.value))}
-          className={inputCls}
-        />
+        field.min !== undefined && field.max !== undefined ? (
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <input
+                type="range"
+                value={(localProps[key] as number) ?? (field.value as number) ?? 0}
+                min={field.min}
+                max={field.max}
+                step={field.step ?? 1}
+                onChange={(e) => update(key, Number(e.target.value))}
+                className="flex-1 accent-primary h-1.5 cursor-pointer"
+              />
+              <input
+                type="number"
+                value={(localProps[key] as number) ?? (field.value as number) ?? 0}
+                min={field.min}
+                max={field.max}
+                step={field.step}
+                onChange={(e) => update(key, Number(e.target.value))}
+                className="w-16 px-2 py-1.5 rounded-md text-xs text-center bg-base-300 border border-base-content/10 text-base-content outline-none"
+              />
+            </div>
+          </div>
+        ) : (
+          <input
+            type="number"
+            value={(localProps[key] as number) ?? (field.value as number) ?? 0}
+            min={field.min}
+            max={field.max}
+            step={field.step}
+            onChange={(e) => update(key, Number(e.target.value))}
+            className={inputCls}
+          />
+        )
       )}
 
       {field.type === 'select' && (
@@ -306,6 +378,57 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
             </option>
           ))}
         </select>
+      )}
+
+      {field.type === 'multi-select' && (
+        <div className="space-y-2">
+          <div className="flex flex-wrap gap-1.5">
+            {(Array.isArray(localProps[key]) ? (localProps[key] as string[]) : []).map((val) => (
+              <span key={val} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary/10 text-primary border border-primary/20">
+                {val}
+                <button
+                  onClick={() => update(key, (localProps[key] as string[]).filter((v) => v !== val))}
+                  className="hover:text-error transition-colors leading-none"
+                >×</button>
+              </span>
+            ))}
+          </div>
+          {field.options && field.options.length > 0 ? (
+            <select
+              value=""
+              onChange={(e) => {
+                if (!e.target.value) return
+                const current = Array.isArray(localProps[key]) ? (localProps[key] as string[]) : []
+                if (!current.includes(e.target.value)) update(key, [...current, e.target.value])
+                e.target.value = ''
+              }}
+              className={inputCls}
+            >
+              <option value="">Add option…</option>
+              {field.options.map((opt) => {
+                const v = optVal(opt)
+                const l = optLabel(opt)
+                const current = Array.isArray(localProps[key]) ? (localProps[key] as string[]) : []
+                if (current.includes(v)) return null
+                return <option key={v} value={v}>{l}</option>
+              })}
+            </select>
+          ) : (
+            <input
+              type="text"
+              placeholder={field.placeholder || 'Type and press Enter…'}
+              className={inputCls}
+              onKeyDown={(e) => {
+                if (e.key !== 'Enter') return
+                const val = e.currentTarget.value.trim()
+                if (!val) return
+                const current = Array.isArray(localProps[key]) ? (localProps[key] as string[]) : []
+                if (!current.includes(val)) update(key, [...current, val])
+                e.currentTarget.value = ''
+              }}
+            />
+          )}
+        </div>
       )}
 
       {field.type === 'json' && (
@@ -391,7 +514,12 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
         {/* Grouped fields */}
         {Object.entries(groupMap).map(([groupName, entries]) => (
-          <details key={groupName} className="group/group border border-base-content/10 rounded-lg overflow-hidden" open>
+          <details
+            key={groupName}
+            className="group/group border border-base-content/10 rounded-lg overflow-hidden"
+            open={groupOpenRef.current[groupName] !== false}
+            onToggle={(e) => { groupOpenRef.current[groupName] = (e.currentTarget as HTMLDetailsElement).open }}
+          >
             <summary className="flex items-center justify-between px-3 py-2 bg-base-300/50 cursor-pointer list-none select-none">
               <span className="text-xs font-semibold uppercase tracking-widest text-base-content/50">{groupName}</span>
               <svg

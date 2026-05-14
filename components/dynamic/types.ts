@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 export type { BlockData } from '@/types/content/PageTypes'
 
-export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'json' | 'img' | 'repeater' | 'icon' | 'rich-text'
+export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'multi-select' | 'json' | 'img' | 'repeater' | 'icon' | 'rich-text'
 
 /** Select option — either a plain string (value === label) or an object with distinct label/value */
 export type FieldOption = string | { label: string; value: string }
@@ -24,8 +24,8 @@ export interface FieldSchema {
   max?: number
   /** Step for `type: 'number'` */
   step?: number
-  /** Only render this field when the given prop key/value pairs match the current block props */
-  showIf?: Record<string, unknown>
+  /** Only render this field when all conditions match. Values can be a single value or an array of allowed values. */
+  showIf?: Record<string, unknown | unknown[]>
   /** Groups related fields under a collapsible section header */
   group?: string
   /** Sub-field definitions for `type: 'repeater'` rows (supports one level of nesting) */
@@ -41,6 +41,8 @@ export interface BlockDefinition {
   icon?: string
   /** Keywords used for search matching in addition to label */
   tags?: string[]
+  /** Approximate rendered height in px — used for skeleton fallback in DynamicPageRenderer */
+  skeletonHeight?: number
   defaultProps: Record<string, unknown>
   schema: Record<string, FieldSchema>
   Component: ComponentType<Record<string, unknown>>

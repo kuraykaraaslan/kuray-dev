@@ -37,8 +37,8 @@ interface EditorStore {
   translationOpen: boolean
   isDirty: boolean
   previewMode: PreviewMode
-  undoStack: BlockData[][]
-  redoStack: BlockData[][]
+  undoStack: { sections: BlockData[]; selectedId: string | null }[]
+  redoStack: { sections: BlockData[]; selectedId: string | null }[]
 
   // Block definitions (loaded from DB)
   blockDefs: DynamicPageBlockRecord[]
@@ -70,7 +70,9 @@ interface EditorStore {
   duplicateBlock: (id: string) => void
   toggleBlockHidden: (id: string) => void
   updateBlockProps: (id: string, props: Record<string, unknown>) => void
+  updateBlockLabel: (id: string, label: string) => void
   moveBlock: (id: string, dir: -1 | 1) => void
+  reorderBlocks: (fromId: string, toId: string) => void
   copyBlock: (id: string) => void
   pasteBlock: (atIndex?: number) => void
   clipboard: BlockData | null
@@ -107,8 +109,8 @@ const initialState = {
   translationOpen: false,
   isDirty: false,
   previewMode: 'desktop' as PreviewMode,
-  undoStack: [] as BlockData[][],
-  redoStack: [] as BlockData[][],
+  undoStack: [] as { sections: BlockData[]; selectedId: string | null }[],
+  redoStack: [] as { sections: BlockData[]; selectedId: string | null }[],
   pageId: '',
   activeLang: 'en',
   enSections: [] as BlockData[],
@@ -152,7 +154,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       const oldIndex = state.sections.findIndex((b) => b.id === active.id)
       const newIndex = state.sections.findIndex((b) => b.id === over.id)
       return {
-        undoStack: [...state.undoStack.slice(-49), state.sections],
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
         redoStack: [],
         isDirty: true,
         sections: arrayMove(state.sections, oldIndex, newIndex).map((b, i) => ({
@@ -186,7 +188,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         newSections = [...state.sections, { ...newSection, order: state.sections.length }]
       }
       return {
-        undoStack: [...state.undoStack.slice(-49), state.sections],
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
         redoStack: [],
         isDirty: true,
         sections: newSections,
@@ -198,7 +200,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   deleteBlock: (id) => {
     if (get().activeLang !== 'en') return
     set((state) => ({
-      undoStack: [...state.undoStack.slice(-49), state.sections],
+      undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
       redoStack: [],
       isDirty: true,
       sections: state.sections
@@ -213,7 +215,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set((state) => {
       const original = state.sections.find((b) => b.id === id)
       if (!original) return {}
-      const copy: BlockData = { ...original, id: uuidv4() }
+      const copy: BlockData = { ...original, id: uuidv4(), props: structuredClone(original.props) }
       const insertIdx = state.sections.findIndex((b) => b.id === id) + 1
       const newSections = [
         ...state.sections.slice(0, insertIdx),
@@ -221,7 +223,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         ...state.sections.slice(insertIdx),
       ].map((b, i) => ({ ...b, order: i }))
       return {
-        undoStack: [...state.undoStack.slice(-49), state.sections],
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
         redoStack: [],
         isDirty: true,
         sections: newSections,
@@ -232,7 +234,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   toggleBlockHidden: (id) => {
     set((state) => ({
-      undoStack: [...state.undoStack.slice(-49), state.sections],
+      undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
       redoStack: [],
       isDirty: true,
       sections: state.sections.map((b) =>
@@ -249,10 +251,25 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       const newIdx = idx + dir
       if (newIdx < 0 || newIdx >= state.sections.length) return {}
       return {
-        undoStack: [...state.undoStack.slice(-49), state.sections],
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
         redoStack: [],
         isDirty: true,
         sections: arrayMove(state.sections, idx, newIdx).map((b, i) => ({ ...b, order: i })),
+      }
+    })
+  },
+
+  reorderBlocks: (fromId, toId) => {
+    if (get().activeLang !== 'en') return
+    set((state) => {
+      const oldIndex = state.sections.findIndex((b) => b.id === fromId)
+      const newIndex = state.sections.findIndex((b) => b.id === toId)
+      if (oldIndex < 0 || newIndex < 0 || oldIndex === newIndex) return {}
+      return {
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
+        redoStack: [],
+        isDirty: true,
+        sections: arrayMove(state.sections, oldIndex, newIndex).map((b, i) => ({ ...b, order: i })),
       }
     })
   },
@@ -281,7 +298,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         ...state.sections.slice(insertAt),
       ].map((b, i) => ({ ...b, order: i }))
       return {
-        undoStack: [...state.undoStack.slice(-49), state.sections],
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
         redoStack: [],
         isDirty: true,
         sections: newSections,
@@ -292,7 +309,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   snapshotForUndo: () => {
     set((state) => ({
-      undoStack: [...state.undoStack.slice(-49), state.sections],
+      undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
       redoStack: [],
     }))
   },
@@ -304,15 +321,22 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     }))
   },
 
+  updateBlockLabel: (id, label) => {
+    set((state) => ({
+      isDirty: true,
+      sections: state.sections.map((b) => b.id === id ? { ...b, label: label || undefined } : b),
+    }))
+  },
+
   undo: () => {
     set((state) => {
       if (state.undoStack.length === 0) return {}
       const prev = state.undoStack[state.undoStack.length - 1]
       return {
-        sections: prev,
+        sections: prev.sections,
+        selectedId: prev.selectedId,
         undoStack: state.undoStack.slice(0, -1),
-        redoStack: [...state.redoStack.slice(-49), state.sections],
-        selectedId: null,
+        redoStack: [...state.redoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
       }
     })
   },
@@ -322,10 +346,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       if (state.redoStack.length === 0) return {}
       const next = state.redoStack[state.redoStack.length - 1]
       return {
-        sections: next,
+        sections: next.sections,
+        selectedId: next.selectedId,
         redoStack: state.redoStack.slice(0, -1),
-        undoStack: [...state.undoStack.slice(-49), state.sections],
-        selectedId: null,
+        undoStack: [...state.undoStack.slice(-49), { sections: state.sections, selectedId: state.selectedId }],
       }
     })
   },

@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { prisma } from '@/libs/prisma'
 import type { DynamicPageBlockRecord, FieldSchema } from '@/components/dynamic/types'
 
@@ -25,10 +26,14 @@ function toRecord(raw: {
   }
 }
 
+const fetchAllBlocks = cache(async (): Promise<DynamicPageBlockRecord[]> => {
+  const rows = await prisma.dynamicPageBlock.findMany({ orderBy: [{ category: 'asc' }, { label: 'asc' }] })
+  return rows.map(toRecord)
+})
+
 export default class DynamicPageBlockService {
   static async getAll(): Promise<DynamicPageBlockRecord[]> {
-    const rows = await prisma.dynamicPageBlock.findMany({ orderBy: [{ category: 'asc' }, { label: 'asc' }] })
-    return rows.map(toRecord)
+    return fetchAllBlocks()
   }
 
   static async getByType(type: string): Promise<DynamicPageBlockRecord | null> {

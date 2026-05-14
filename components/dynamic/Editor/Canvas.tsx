@@ -1,36 +1,14 @@
 'use client'
 
-import React, { useState, Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDndContext, useDroppable } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { BlockData } from '../types'
-import { getCodeBlock } from '../BlockRegistry'
+import { getCodeBlock, getCodeBlocks } from '../BlockRegistry'
 import { useEditorStore } from './stores/editorStore'
 import TemplateBlockRenderer from '../TemplateBlockRenderer'
-
-// ── Error boundary ─────────────────────────────────────────────────────────────
-
-class BlockErrorBoundary extends Component<
-  { children: React.ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props)
-    this.state = { hasError: false }
-  }
-  static getDerivedStateFromError() { return { hasError: true } }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="flex items-center justify-center h-16 text-xs text-error/50 border border-error/20 rounded m-2">
-          Block render error
-        </div>
-      )
-    }
-    return this.props.children
-  }
-}
+import { BlockEditorErrorBoundary } from '../BlockErrorBoundary'
 
 // ── Resize handle ─────────────────────────────────────────────────────────────
 
@@ -92,24 +70,232 @@ function ResizeHandle({ blockId }: { blockId: string }) {
   )
 }
 
+// ── Quick Add Popover ─────────────────────────────────────────────────────────
+
+interface QuickAddPopoverProps {
+  index: number
+  x: number
+  y: number
+  onClose: () => void
+}
+
+function QuickAddPopover({ index, x, y, onClose }: QuickAddPopoverProps) {
+  const addBlock = useEditorStore((s) => s.addBlock)
+  const blockDefs = useEditorStore((s) => s.blockDefs)
+  const [search, setSearch] = useState('')
+  const ref = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Clamp position to viewport
+  const popoverW = 208
+  const popoverH = 280
+  const margin = 8
+  const left = Math.min(Math.max(x, margin), window.innerWidth - popoverW - margin)
+  const top = Math.min(Math.max(y, margin), window.innerHeight - popoverH - margin)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onClose()
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [onClose])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  const allDefs = [...getCodeBlocks(), ...blockDefs]
+  const filtered = search.trim()
+    ? allDefs.filter((d) => d.label.toLowerCase().includes(search.trim().toLowerCase()))
+    : allDefs
+
+  return (
+    <div
+      ref={ref}
+      className="fixed z-50 bg-base-100 border border-base-content/10 rounded-xl shadow-2xl p-2 w-52"
+      style={{ top, left }}
+    >
+      <input
+        ref={inputRef}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search blocks…"
+        className="text-xs bg-base-200 border border-base-content/10 rounded-lg px-2.5 py-1.5 mb-2 w-full outline-none focus:border-primary/40"
+      />
+      <div className="max-h-52 overflow-y-auto space-y-0.5">
+        {filtered.length === 0 ? (
+          <p className="text-xs text-center py-2 text-base-content/30">No blocks found</p>
+        ) : (
+          filtered.map((def) => (
+            <button
+              key={def.type}
+              className="w-full text-left px-2 py-1.5 rounded-lg text-xs hover:bg-base-200 transition-colors text-base-content flex items-center gap-1.5"
+              onClick={() => { addBlock(def.type, index); onClose() }}
+            >
+              {'icon' in def && def.icon ? <span>{def.icon as React.ReactNode}</span> : null}
+              {def.label}
+            </button>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Block Context Menu ────────────────────────────────────────────────────────
+
+interface BlockContextMenuProps {
+  blockId: string
+  x: number
+  y: number
+  onClose: () => void
+}
+
+function BlockContextMenu({ blockId, x, y, onClose }: BlockContextMenuProps) {
+  const deleteBlock = useEditorStore((s) => s.deleteBlock)
+  const duplicateBlock = useEditorStore((s) => s.duplicateBlock)
+  const copyBlock = useEditorStore((s) => s.copyBlock)
+  const moveBlock = useEditorStore((s) => s.moveBlock)
+  const toggleBlockHidden = useEditorStore((s) => s.toggleBlockHidden)
+  const sections = useEditorStore((s) => s.sections)
+  const block = sections.find((b) => b.id === blockId)
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  // Clamp position to viewport
+  const menuW = 176
+  const menuH = 200
+  const margin = 8
+  const left = Math.min(Math.max(x, margin), window.innerWidth - menuW - margin)
+  const top = Math.min(Math.max(y, margin), window.innerHeight - menuH - margin)
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onClose()
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [onClose])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  const rowCls = 'w-full flex items-center justify-between px-3 py-1.5 text-xs hover:bg-base-200 transition-colors text-base-content'
+  const hintCls = 'text-base-content/25 text-[10px] ml-auto'
+
+  return (
+    <div
+      ref={ref}
+      className="fixed z-50 bg-base-100 border border-base-content/10 rounded-xl shadow-2xl py-1 w-44"
+      style={{ top, left }}
+    >
+      <button
+        className={rowCls}
+        onClick={() => { duplicateBlock(blockId); onClose() }}
+      >
+        Duplicate
+        <span className={hintCls}>Ctrl+D</span>
+      </button>
+      <button
+        className={rowCls}
+        onClick={() => { copyBlock(blockId); onClose() }}
+      >
+        Copy
+        <span className={hintCls}>Ctrl+C</span>
+      </button>
+      <button
+        className={rowCls}
+        onClick={() => { toggleBlockHidden(blockId); onClose() }}
+      >
+        {block?.hidden ? 'Show' : 'Hide'}
+      </button>
+      <button
+        className={rowCls}
+        onClick={() => { moveBlock(blockId, -1); onClose() }}
+      >
+        Move Up
+      </button>
+      <button
+        className={rowCls}
+        onClick={() => { moveBlock(blockId, 1); onClose() }}
+      >
+        Move Down
+      </button>
+      <div className="my-1 border-t border-base-content/10" />
+      <button
+        className="w-full flex items-center justify-between px-3 py-1.5 text-xs hover:bg-base-200 transition-colors text-error"
+        onClick={() => { deleteBlock(blockId); onClose() }}
+      >
+        Delete
+        <span className={hintCls}>⌫</span>
+      </button>
+    </div>
+  )
+}
+
 // ── Insert gap (droppable zone between blocks) ────────────────────────────────
 
-function InsertGap({ index }: { index: number }) {
+interface InsertGapProps {
+  index: number
+  onQuickAdd: (index: number, x: number, y: number) => void
+}
+
+function InsertGap({ index, onQuickAdd }: InsertGapProps) {
   const { setNodeRef, isOver } = useDroppable({ id: `insert-gap-${index}` })
   const { active } = useDndContext()
   const isFromSidebar = active?.data.current?.fromSidebar ?? false
+  const [hovered, setHovered] = useState(false)
 
-  if (!isFromSidebar) return null
+  if (isFromSidebar) {
+    return (
+      <div
+        ref={setNodeRef}
+        className={`mx-3 rounded-lg border-2 border-dashed transition-all duration-150 ${
+          isOver
+            ? 'h-10 border-primary bg-primary/10'
+            : 'h-2 border-base-content/20'
+        }`}
+      />
+    )
+  }
 
   return (
     <div
       ref={setNodeRef}
-      className={`mx-3 rounded-lg border-2 border-dashed transition-all duration-150 ${
-        isOver
-          ? 'h-10 border-primary bg-primary/10'
-          : 'h-2 border-base-content/20'
-      }`}
-    />
+      className="relative h-5 flex items-center justify-center"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {hovered && (
+        <>
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-primary/20" />
+          <button
+            className="absolute z-20 flex items-center gap-0.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary text-primary-content shadow hover:scale-105 transition-transform select-none"
+            onClick={(e) => { e.stopPropagation(); onQuickAdd(index, e.clientX, e.clientY) }}
+          >
+            +
+          </button>
+        </>
+      )}
+    </div>
   )
 }
 
@@ -122,10 +308,11 @@ interface SortableBlockProps {
   onDelete: () => void
   onDuplicate: () => void
   onToggleHidden: () => void
+  onContextMenu: (e: React.MouseEvent, blockId: string) => void
   isTranslationMode?: boolean
 }
 
-function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onToggleHidden, isTranslationMode }: SortableBlockProps) {
+function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onToggleHidden, onContextMenu, isTranslationMode }: SortableBlockProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: block.id })
   const blockDefs = useEditorStore((s) => s.blockDefs)
 
@@ -141,8 +328,10 @@ function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onT
     <div
       ref={setNodeRef}
       style={style}
+      data-block-id={block.id}
       className={`relative group cursor-pointer ${block.hidden ? 'opacity-40' : ''}`}
       onClick={onSelect}
+      onContextMenu={(e) => { e.preventDefault(); onContextMenu(e, block.id) }}
     >
       {/* selection outline */}
       <div
@@ -162,7 +351,7 @@ function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onT
 
       {/* controls */}
       <div className={`absolute top-2 right-2 z-20 flex items-center gap-1.5 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-        <span className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70">{label}</span>
+        <span className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70">{block.label || label}</span>
 
         {!isTranslationMode && (
           <>
@@ -204,13 +393,13 @@ function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onT
       </div>
 
       {/* block content */}
-      <BlockErrorBoundary>
+      <BlockEditorErrorBoundary blockId={block.id} onDelete={onDelete}>
         {codeDef ? (
           <codeDef.Component {...block.props} />
         ) : (
           <TemplateBlockRenderer template={dbDef!.template} props={block.props} />
         )}
-      </BlockErrorBoundary>
+      </BlockEditorErrorBoundary>
 
       {/* resize handle */}
       {!isTranslationMode && <ResizeHandle blockId={block.id} />}
@@ -236,8 +425,41 @@ export default function Canvas() {
   const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
   const previewMode = useEditorStore((s) => s.previewMode)
 
+  const [quickAdd, setQuickAdd] = useState<{ index: number; x: number; y: number } | null>(null)
+  const [contextMenu, setContextMenu] = useState<{ blockId: string; x: number; y: number } | null>(null)
+
   const maxWidth = PREVIEW_WIDTHS[previewMode] ?? '100%'
   const sorted = [...sections].sort((a, b) => a.order - b.order)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!selectedId) return
+      const target = e.target as HTMLElement
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) || target.isContentEditable) return
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        const cur = useEditorStore.getState()
+        const sortedNow = [...cur.sections].sort((a, b) => a.order - b.order)
+        const idx = sortedNow.findIndex((b) => b.id === selectedId)
+        const nextIdx = e.key === 'ArrowDown' ? idx + 1 : idx - 1
+        if (nextIdx >= 0 && nextIdx < sortedNow.length) {
+          const nextId = sortedNow[nextIdx].id
+          setSelectedId(nextId)
+          requestAnimationFrame(() => {
+            document.querySelector(`[data-block-id="${nextId}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          })
+        }
+      } else if (e.key === 'Escape') {
+        setSelectedId(null)
+      } else if ((e.key === 'Delete' || e.key === 'Backspace') && !isTranslationMode) {
+        e.preventDefault()
+        deleteBlock(selectedId)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [selectedId, setSelectedId, deleteBlock, isTranslationMode])
 
   if (sections.length === 0) {
     return (
@@ -251,26 +473,46 @@ export default function Canvas() {
   }
 
   return (
-    <div
-      className="mx-auto transition-all duration-300"
-      style={{ maxWidth, width: '100%' }}
-    >
-      <InsertGap index={0} />
-      {sorted.map((block, i) => (
-        <React.Fragment key={block.id}>
-          <SortableBlock
-            block={block}
-            isSelected={selectedId === block.id}
-            onSelect={() => setSelectedId(block.id)}
-            onDelete={() => deleteBlock(block.id)}
-            onDuplicate={() => duplicateBlock(block.id)}
-            onToggleHidden={() => toggleBlockHidden(block.id)}
-            isTranslationMode={isTranslationMode}
-          />
-          <InsertGap index={i + 1} />
-        </React.Fragment>
-      ))}
-    </div>
+    <>
+      <div
+        className="mx-auto transition-all duration-300"
+        style={{ maxWidth, width: '100%' }}
+      >
+        <InsertGap index={0} onQuickAdd={(idx, x, y) => setQuickAdd({ index: idx, x, y })} />
+        {sorted.map((block, i) => (
+          <React.Fragment key={block.id}>
+            <SortableBlock
+              block={block}
+              isSelected={selectedId === block.id}
+              onSelect={() => setSelectedId(block.id)}
+              onDelete={() => deleteBlock(block.id)}
+              onDuplicate={() => duplicateBlock(block.id)}
+              onToggleHidden={() => toggleBlockHidden(block.id)}
+              onContextMenu={(e, id) => setContextMenu({ blockId: id, x: e.clientX, y: e.clientY })}
+              isTranslationMode={isTranslationMode}
+            />
+            <InsertGap index={i + 1} onQuickAdd={(idx, x, y) => setQuickAdd({ index: idx, x, y })} />
+          </React.Fragment>
+        ))}
+      </div>
+
+      {quickAdd && (
+        <QuickAddPopover
+          index={quickAdd.index}
+          x={quickAdd.x}
+          y={quickAdd.y}
+          onClose={() => setQuickAdd(null)}
+        />
+      )}
+      {contextMenu && (
+        <BlockContextMenu
+          blockId={contextMenu.blockId}
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
+    </>
   )
 }
 

@@ -3,25 +3,35 @@ import type { BlockData, DynamicPageBlockRecord } from './types'
 import { getCodeBlock } from './BlockRegistry'
 import DynamicPageBlockService from '@/services/DynamicPageBlockService'
 import TemplateBlockRenderer from './TemplateBlockRenderer'
+import { BlockRenderErrorBoundary } from './BlockErrorBoundary'
 
 interface Props {
   sections: BlockData[]
 }
 
+function BlockSkeleton({ type }: { type: string }) {
+  const codeDef = getCodeBlock(type)
+  const height = codeDef?.skeletonHeight ?? 300
+  return <div className="w-full animate-pulse bg-base-200" style={{ height }} />
+}
+
 function ServerBlock({ block, dbDefs }: { block: BlockData; dbDefs: DynamicPageBlockRecord[] }) {
-  try {
-    const codeDef = getCodeBlock(block.type)
-    if (codeDef) {
-      const { Component } = codeDef
-      return <Component {...block.props} />
-    }
-    const dbDef = dbDefs.find((d) => d.type === block.type)
-    if (!dbDef) return null
-    return <TemplateBlockRenderer template={dbDef.template} props={block.props} />
-  } catch (e) {
-    console.error(`[DynamicPageRenderer] Failed to render block type="${block.type}" id="${block.id}"`, e)
-    return null
+  const codeDef = getCodeBlock(block.type)
+  if (codeDef) {
+    const { Component } = codeDef
+    return (
+      <BlockRenderErrorBoundary blockType={block.type}>
+        <Component {...block.props} />
+      </BlockRenderErrorBoundary>
+    )
   }
+  const dbDef = dbDefs.find((d) => d.type === block.type)
+  if (!dbDef) return null
+  return (
+    <BlockRenderErrorBoundary blockType={block.type}>
+      <TemplateBlockRenderer template={dbDef.template} props={block.props} />
+    </BlockRenderErrorBoundary>
+  )
 }
 
 export default async function DynamicPageRenderer({ sections }: Props) {
@@ -33,7 +43,7 @@ export default async function DynamicPageRenderer({ sections }: Props) {
   return (
     <div className="bg-base-100">
       {sorted.map((block) => (
-        <Suspense key={block.id} fallback={null}>
+        <Suspense key={block.id} fallback={<BlockSkeleton type={block.type} />}>
           <ServerBlock block={block} dbDefs={dbDefs} />
         </Suspense>
       ))}
