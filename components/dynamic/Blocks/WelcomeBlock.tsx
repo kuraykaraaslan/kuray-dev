@@ -7,7 +7,8 @@ import { faArrowRight, faPlayCircle, faMagnifyingGlass } from '@fortawesome/free
 import dynamic from 'next/dynamic'
 import { HeadlessModal, useModal } from '@/components/common/Modal'
 import LoadingElement from '@/components/frontend/UI/Content/LoadingElement'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
+import { usePreviewMode } from '../partials/PreviewContext'
 import type { BlockDefinition } from '../types'
 
 const ReactPlayer = dynamic(() => import('react-player'), {
@@ -26,6 +27,7 @@ interface PhotoWidgetProps {
 }
 
 function PhotoWidget({ src, alt, action, actionUrl, mobileLayout }: PhotoWidgetProps) {
+  const previewMode = usePreviewMode()
   const [playing, setPlaying] = useState(false)
   const player = createRef<any>()
   const { open: videoOpen, openModal: openVideo, closeModal: closeVideo } = useModal()
@@ -57,7 +59,7 @@ function PhotoWidget({ src, alt, action, actionUrl, mobileLayout }: PhotoWidgetP
     <>
       <div className={`flex-none ${visibilityCls}`}>
         {/* Container fixes the photo size — overlay is placed inside so inset-0 aligns exactly */}
-        <div className="relative w-24 sm:w-48 md:w-64 group">
+        <div className={`relative ${previewMode === 'mobile' ? 'w-24' : 'w-24 sm:w-48 md:w-64'} group`}>
           <Image
             src={src}
             alt={alt}

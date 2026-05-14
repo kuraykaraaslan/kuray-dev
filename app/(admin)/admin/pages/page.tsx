@@ -10,7 +10,7 @@ import Table, {
   type ActionButton,
 } from '@/components/common/Forms/DynamicTable'
 import axiosInstance from '@/libs/axios'
-import AIModal from '@/components/dynamic/AIModal'
+import AIModal from '@/components/dynamic/partials/AIModal'
 
 interface DynamicPageRow extends Record<string, unknown> {
   dynamicPageId: string

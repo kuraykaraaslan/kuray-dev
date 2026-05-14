@@ -1,16 +1,16 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import {
   faXTwitter, faLinkedin, faTelegram, faFacebook, faInstagram, faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons'
 import { CircleFlag } from 'react-circle-flags'
 import Link from 'next/link'
-import axios from 'axios'
 import dynamic from 'next/dynamic'
 import ReCAPTCHA from 'react-google-recaptcha'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
+import { usePreviewMode } from '../partials/PreviewContext'
 import type { BlockDefinition } from '../types'
 
 const Form = dynamic(
@@ -20,120 +20,104 @@ const Form = dynamic(
 
 const recaptchaSiteKey = process.env.RECAPTCHA_CLIENT_KEY || ''
 
-interface Phone {
-  CountryCode: string
-  PhoneNumber: string
-  noSpacePhoneNumber: string
+interface PhoneEntry {
+  countryCode: string
+  phoneNumber: string
   hasTelegram: boolean
   hasWhatsapp: boolean
 }
 
-interface Mail {
+interface MailEntry {
   mail: string
 }
 
+const DEFAULT_PHONES: PhoneEntry[] = [
+  { countryCode: 'tr', phoneNumber: '+90 545 922 35 54', hasTelegram: true, hasWhatsapp: true },
+]
+
+const DEFAULT_MAILS: MailEntry[] = [
+  { mail: 'kuraykaraaslan@gmail.com' },
+]
+
+function parsePhones(raw: unknown): PhoneEntry[] {
+  if (Array.isArray(raw)) return raw as PhoneEntry[]
+  if (typeof raw === 'string') { try { return JSON.parse(raw) } catch {} }
+  return DEFAULT_PHONES
+}
+
+function parseMails(raw: unknown): MailEntry[] {
+  if (Array.isArray(raw)) return raw as MailEntry[]
+  if (typeof raw === 'string') { try { return JSON.parse(raw) } catch {} }
+  return DEFAULT_MAILS
+}
+
 function ContactBlock(rawProps: Record<string, unknown>) {
+  const previewMode = usePreviewMode()
+
   const title = (rawProps.title as string) || 'Get In Touch'
-  const description = (rawProps.description as string) || 'Have a project in mind? Let\'s talk.'
+  const description = (rawProps.description as string) || "Have a project in mind? Let's talk."
   const sendMessageTitle = (rawProps.sendMessageTitle as string) || 'Send a Message'
   const phoneAndMailLabel = (rawProps.phoneAndMailLabel as string) || 'Phone & Email'
   const socialMediaLabel = (rawProps.socialMediaLabel as string) || 'Social Media'
+  const captchaPrompt = (rawProps.captchaPrompt as string) || "Please verify you're human to send a message."
   const baseProps = parseBaseBlockProps(rawProps)
+
   const whatsappUrl = (rawProps.whatsappUrl as string) || 'https://wa.me/905459223554'
   const telegramUrl = (rawProps.telegramUrl as string) || 'https://t.me/kuraykaraaslan'
   const linkedinUrl = (rawProps.linkedinUrl as string) || 'https://www.linkedin.com/in/kuraykaraaslan'
   const twitterUrl = (rawProps.twitterUrl as string) || 'https://twitter.com/kuraykaraaslan'
   const facebookUrl = (rawProps.facebookUrl as string) || 'https://www.facebook.com/kuraykaraaslan'
   const instagramUrl = (rawProps.instagramUrl as string) || 'https://www.instagram.com/kuraykaraaslan'
-  const revealMailLabel = (rawProps.revealMailLabel as string) || 'Reveal Email'
-  const revealPhoneLabel = (rawProps.revealPhoneLabel as string) || 'Reveal Phone'
 
-  const [phoneNumbers, setPhoneNumbers] = useState<Phone[]>([])
-  const [mails, setMails] = useState<Mail[]>([])
-  const [token, setToken] = useState<string>('x')
+  const phones = parsePhones(rawProps.phones)
+  const mails = parseMails(rawProps.mails)
+
+  const [token, setToken] = useState<string>('')
   const recaptchaRef = useRef<ReCAPTCHA>(null)
 
-  useEffect(() => {
-    const val = recaptchaRef.current?.getValue()
-    setToken(val as string)
-  }, [])
-
-  useEffect(() => {
-    if (token === '') return
-    getMails()
-  }, [token])
-
-  const getMails = () => {
-    if (token === '') return
-    if (mails.length === 0) {
-      axios.get('/api/contact/info/mail').then((res) => setMails(res.data.mails))
-    }
-  }
-
-  const getPhoneNumbers = () => {
-    if (token === '') return
-    if (phoneNumbers.length === 0) {
-      axios.get('/api/contact/info/phone').then((res) => setPhoneNumbers(res.data.phones))
-    }
-  }
+  const handleCaptcha = (val: string | null) => setToken(val ?? '')
 
   return (
     <BaseBlock {...baseProps}>
       <div className="relative z-10 container mx-auto mt-0 md:rounded-box md:shadow-2xl md:border-2 md:border-black contactHero">
         <div className="mx-4 md:mx-8 pt-2 rounded-box md:mb-4">
-          <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x pt-12 pb-12 mb-2">
+          <div className={`grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 ${previewMode !== 'mobile' ? 'md:grid-cols-2 md:divide-x' : ''} pt-12 pb-12 mb-2`}>
+
+            {/* Left: contact info */}
             <div className="py-6 md:py-0 md:px-6">
               <h2 className="text-4xl font-bold">{title}</h2>
               <p className="pt-2 pb-4">{description}</p>
 
               <div className="space-y-4">
                 <h3 className="text-xl font-bold">{phoneAndMailLabel}</h3>
-                {token !== '' ? (
-                  <>
-                    {mails.length === 0 && (
-                      <button className="flex transform transition-transform hover:scale-105" onClick={getMails}>
-                        <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5 mr-2 sm:mr-6" />
-                        <span>{revealMailLabel}</span>
-                      </button>
-                    )}
-                    {mails.map((mail, i) => (
-                      <p key={i} className="flex">
-                        <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5 mr-2 sm:mr-6" />
-                        <Link href={`mailto:${mail.mail}`} target="_blank" rel="noopener noreferrer">
-                          {mail.mail}
+                {mails.map((m, i) => (
+                  <p key={i} className="flex items-center">
+                    <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5 mr-2 sm:mr-6 shrink-0" />
+                    <Link href={`mailto:${m.mail}`} target="_blank" rel="noopener noreferrer">
+                      {m.mail}
+                    </Link>
+                  </p>
+                ))}
+                {phones.map((p, i) => (
+                  <p key={i} className="flex items-center">
+                    <CircleFlag countryCode={p.countryCode} className="rounded-full w-5 h-5 mr-2 sm:mr-6 shrink-0" />
+                    <Link href={`tel:${p.phoneNumber.replace(/\s/g, '')}`} target="_blank" rel="noopener noreferrer">
+                      {p.phoneNumber}
+                    </Link>
+                    <span className="ms-2 flex items-center">
+                      {p.hasWhatsapp && (
+                        <Link href={`https://wa.me/${p.phoneNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                          <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5 me-2 sm:me-3" />
                         </Link>
-                      </p>
-                    ))}
-                    {phoneNumbers.length === 0 && (
-                      <button className="flex transform transition-transform hover:scale-105" onClick={getPhoneNumbers}>
-                        <FontAwesomeIcon icon={faPhone} className="w-5 h-5 mr-2 sm:mr-6" />
-                        <span>{revealPhoneLabel}</span>
-                      </button>
-                    )}
-                    {phoneNumbers.map((phone, i) => (
-                      <p key={i} className="flex">
-                        <CircleFlag countryCode={phone.CountryCode} className="rounded-full w-5 h-5 mr-2 sm:mr-6" />
-                        <Link href={`tel:${phone.noSpacePhoneNumber}`} target="_blank" rel="noopener noreferrer">
-                          {phone.PhoneNumber}
+                      )}
+                      {p.hasTelegram && (
+                        <Link href={`https://t.me/${p.phoneNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                          <FontAwesomeIcon icon={faTelegram} className="w-5 h-5 me-2 sm:me-3" />
                         </Link>
-                        <span className="ms-2">
-                          {phone.hasWhatsapp && (
-                            <Link href={`https://wa.me/${phone.noSpacePhoneNumber}`}>
-                              <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5 me-2 sm:me-3" />
-                            </Link>
-                          )}
-                          {phone.hasTelegram && (
-                            <Link href={`https://t.me/${phone.noSpacePhoneNumber}`}>
-                              <FontAwesomeIcon icon={faTelegram} className="w-5 h-5 me-2 sm:me-3" />
-                            </Link>
-                          )}
-                        </span>
-                      </p>
-                    ))}
-                  </>
-                ) : (
-                  <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={recaptchaSiteKey} />
-                )}
+                      )}
+                    </span>
+                  </p>
+                ))}
               </div>
 
               <div className="space-y-4 mt-4">
@@ -165,10 +149,19 @@ function ContactBlock(rawProps: Record<string, unknown>) {
               </div>
             </div>
 
+            {/* Right: form — gated behind captcha */}
             <div className="flex flex-col py-6 space-y-6 md:py-0 md:px-6">
               <h2 className="text-4xl font-bold">{sendMessageTitle}</h2>
-              <Form token={token} />
+              {token ? (
+                <Form token={token} />
+              ) : (
+                <div>
+                  <p className="text-sm text-base-content/60 mb-3">{captchaPrompt}</p>
+                  <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={recaptchaSiteKey} onChange={handleCaptcha} />
+                </div>
+              )}
             </div>
+
           </div>
         </div>
       </div>
@@ -179,7 +172,7 @@ function ContactBlock(rawProps: Record<string, unknown>) {
 export const ContactBlockDefinition: BlockDefinition = {
   type: 'ContactBlock',
   label: 'Contact',
-  description: 'Full contact section with phone/email reveal, social links, and contact form.',
+  description: 'Full contact section with phones, emails, social links, and a contact form.',
   category: 'Hero',
   defaultProps: {
     title: 'Get In Touch',
@@ -187,11 +180,12 @@ export const ContactBlockDefinition: BlockDefinition = {
     sendMessageTitle: 'Send a Message',
     phoneAndMailLabel: 'Phone & Email',
     socialMediaLabel: 'Social Media',
-    revealMailLabel: 'Reveal Email',
-    revealPhoneLabel: 'Reveal Phone',
+    captchaPrompt: "Please verify you're human to send a message.",
     blockClass: 'min-h-screen md:pt-24 bg-base-100',
     sectionId: 'contact',
     ...BASE_BLOCK_DEFAULT_PROPS,
+    phones: DEFAULT_PHONES,
+    mails: DEFAULT_MAILS,
     whatsappUrl: 'https://wa.me/905459223554',
     telegramUrl: 'https://t.me/kuraykaraaslan',
     linkedinUrl: 'https://www.linkedin.com/in/kuraykaraaslan',
@@ -205,8 +199,24 @@ export const ContactBlockDefinition: BlockDefinition = {
     sendMessageTitle: { label: 'Send Message Heading', type: 'text' },
     phoneAndMailLabel: { label: 'Phone & Mail Section Label', type: 'text' },
     socialMediaLabel: { label: 'Social Media Section Label', type: 'text' },
-    revealMailLabel: { label: 'Reveal Email Button Label', type: 'text' },
-    revealPhoneLabel: { label: 'Reveal Phone Button Label', type: 'text' },
+    captchaPrompt: { label: 'Captcha Prompt Text', type: 'text' },
+    mails: {
+      label: 'Email Addresses',
+      type: 'repeater',
+      fields: {
+        mail: { label: 'Email', type: 'text', value: '' },
+      },
+    },
+    phones: {
+      label: 'Phone Numbers',
+      type: 'repeater',
+      fields: {
+        countryCode: { label: 'Country Code (2-letter, e.g. tr)', type: 'text', value: 'tr' },
+        phoneNumber: { label: 'Phone Number', type: 'text', value: '' },
+        hasWhatsapp: { label: 'WhatsApp', type: 'boolean', value: false },
+        hasTelegram: { label: 'Telegram', type: 'boolean', value: false },
+      },
+    },
     ...BASE_BLOCK_SCHEMA_FIELDS,
     whatsappUrl: { label: 'WhatsApp URL', type: 'url' },
     telegramUrl: { label: 'Telegram URL', type: 'url' },

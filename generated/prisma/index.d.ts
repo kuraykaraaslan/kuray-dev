@@ -37381,8 +37381,18 @@ export namespace Prisma {
 
   export type AggregateDynamicPage = {
     _count: DynamicPageCountAggregateOutputType | null
+    _avg: DynamicPageAvgAggregateOutputType | null
+    _sum: DynamicPageSumAggregateOutputType | null
     _min: DynamicPageMinAggregateOutputType | null
     _max: DynamicPageMaxAggregateOutputType | null
+  }
+
+  export type DynamicPageAvgAggregateOutputType = {
+    schemaVersion: number | null
+  }
+
+  export type DynamicPageSumAggregateOutputType = {
+    schemaVersion: number | null
   }
 
   export type DynamicPageMinAggregateOutputType = {
@@ -37391,6 +37401,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     status: $Enums.DynamicPageStatus | null
+    schemaVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -37401,6 +37412,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     status: $Enums.DynamicPageStatus | null
+    schemaVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -37414,11 +37426,20 @@ export namespace Prisma {
     sections: number
     metadata: number
     status: number
+    schemaVersion: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type DynamicPageAvgAggregateInputType = {
+    schemaVersion?: true
+  }
+
+  export type DynamicPageSumAggregateInputType = {
+    schemaVersion?: true
+  }
 
   export type DynamicPageMinAggregateInputType = {
     dynamicPageId?: true
@@ -37426,6 +37447,7 @@ export namespace Prisma {
     title?: true
     description?: true
     status?: true
+    schemaVersion?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -37436,6 +37458,7 @@ export namespace Prisma {
     title?: true
     description?: true
     status?: true
+    schemaVersion?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -37449,6 +37472,7 @@ export namespace Prisma {
     sections?: true
     metadata?: true
     status?: true
+    schemaVersion?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -37492,6 +37516,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: DynamicPageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DynamicPageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: DynamicPageMinAggregateInputType
@@ -37522,6 +37558,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: DynamicPageCountAggregateInputType | true
+    _avg?: DynamicPageAvgAggregateInputType
+    _sum?: DynamicPageSumAggregateInputType
     _min?: DynamicPageMinAggregateInputType
     _max?: DynamicPageMaxAggregateInputType
   }
@@ -37535,9 +37573,12 @@ export namespace Prisma {
     sections: JsonValue
     metadata: JsonValue | null
     status: $Enums.DynamicPageStatus
+    schemaVersion: number
     createdAt: Date
     updatedAt: Date
     _count: DynamicPageCountAggregateOutputType | null
+    _avg: DynamicPageAvgAggregateOutputType | null
+    _sum: DynamicPageSumAggregateOutputType | null
     _min: DynamicPageMinAggregateOutputType | null
     _max: DynamicPageMaxAggregateOutputType | null
   }
@@ -37565,6 +37606,7 @@ export namespace Prisma {
     sections?: boolean
     metadata?: boolean
     status?: boolean
+    schemaVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     translations?: boolean | DynamicPage$translationsArgs<ExtArgs>
@@ -37580,6 +37622,7 @@ export namespace Prisma {
     sections?: boolean
     metadata?: boolean
     status?: boolean
+    schemaVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dynamicPage"]>
@@ -37593,6 +37636,7 @@ export namespace Prisma {
     sections?: boolean
     metadata?: boolean
     status?: boolean
+    schemaVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["dynamicPage"]>
@@ -37606,11 +37650,12 @@ export namespace Prisma {
     sections?: boolean
     metadata?: boolean
     status?: boolean
+    schemaVersion?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DynamicPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dynamicPageId" | "slug" | "title" | "description" | "keywords" | "sections" | "metadata" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPage"]>
+  export type DynamicPageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"dynamicPageId" | "slug" | "title" | "description" | "keywords" | "sections" | "metadata" | "status" | "schemaVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPage"]>
   export type DynamicPageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | DynamicPage$translationsArgs<ExtArgs>
     _count?: boolean | DynamicPageCountOutputTypeDefaultArgs<ExtArgs>
@@ -37632,6 +37677,7 @@ export namespace Prisma {
       sections: Prisma.JsonValue
       metadata: Prisma.JsonValue | null
       status: $Enums.DynamicPageStatus
+      schemaVersion: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dynamicPage"]>
@@ -38066,6 +38112,7 @@ export namespace Prisma {
     readonly sections: FieldRef<"DynamicPage", 'Json'>
     readonly metadata: FieldRef<"DynamicPage", 'Json'>
     readonly status: FieldRef<"DynamicPage", 'DynamicPageStatus'>
+    readonly schemaVersion: FieldRef<"DynamicPage", 'Int'>
     readonly createdAt: FieldRef<"DynamicPage", 'DateTime'>
     readonly updatedAt: FieldRef<"DynamicPage", 'DateTime'>
   }
@@ -40066,6 +40113,7 @@ export namespace Prisma {
     sections: 'sections',
     metadata: 'metadata',
     status: 'status',
+    schemaVersion: 'schemaVersion',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -42584,6 +42632,7 @@ export namespace Prisma {
     sections?: JsonFilter<"DynamicPage">
     metadata?: JsonNullableFilter<"DynamicPage">
     status?: EnumDynamicPageStatusFilter<"DynamicPage"> | $Enums.DynamicPageStatus
+    schemaVersion?: IntFilter<"DynamicPage"> | number
     createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
     translations?: DynamicPageTranslationListRelationFilter
@@ -42598,6 +42647,7 @@ export namespace Prisma {
     sections?: SortOrder
     metadata?: SortOrderInput | SortOrder
     status?: SortOrder
+    schemaVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     translations?: DynamicPageTranslationOrderByRelationAggregateInput
@@ -42615,6 +42665,7 @@ export namespace Prisma {
     sections?: JsonFilter<"DynamicPage">
     metadata?: JsonNullableFilter<"DynamicPage">
     status?: EnumDynamicPageStatusFilter<"DynamicPage"> | $Enums.DynamicPageStatus
+    schemaVersion?: IntFilter<"DynamicPage"> | number
     createdAt?: DateTimeFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPage"> | Date | string
     translations?: DynamicPageTranslationListRelationFilter
@@ -42629,11 +42680,14 @@ export namespace Prisma {
     sections?: SortOrder
     metadata?: SortOrderInput | SortOrder
     status?: SortOrder
+    schemaVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DynamicPageCountOrderByAggregateInput
+    _avg?: DynamicPageAvgOrderByAggregateInput
     _max?: DynamicPageMaxOrderByAggregateInput
     _min?: DynamicPageMinOrderByAggregateInput
+    _sum?: DynamicPageSumOrderByAggregateInput
   }
 
   export type DynamicPageScalarWhereWithAggregatesInput = {
@@ -42648,6 +42702,7 @@ export namespace Prisma {
     sections?: JsonWithAggregatesFilter<"DynamicPage">
     metadata?: JsonNullableWithAggregatesFilter<"DynamicPage">
     status?: EnumDynamicPageStatusWithAggregatesFilter<"DynamicPage"> | $Enums.DynamicPageStatus
+    schemaVersion?: IntWithAggregatesFilter<"DynamicPage"> | number
     createdAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DynamicPage"> | Date | string
   }
@@ -45244,6 +45299,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.DynamicPageStatus
+    schemaVersion?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     translations?: DynamicPageTranslationCreateNestedManyWithoutDynamicPageInput
@@ -45258,6 +45314,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.DynamicPageStatus
+    schemaVersion?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     translations?: DynamicPageTranslationUncheckedCreateNestedManyWithoutDynamicPageInput
@@ -45272,6 +45329,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    schemaVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     translations?: DynamicPageTranslationUpdateManyWithoutDynamicPageNestedInput
@@ -45286,6 +45344,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    schemaVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     translations?: DynamicPageTranslationUncheckedUpdateManyWithoutDynamicPageNestedInput
@@ -45300,6 +45359,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.DynamicPageStatus
+    schemaVersion?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -45313,6 +45373,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    schemaVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -45326,6 +45387,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    schemaVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -47187,8 +47249,13 @@ export namespace Prisma {
     sections?: SortOrder
     metadata?: SortOrder
     status?: SortOrder
+    schemaVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type DynamicPageAvgOrderByAggregateInput = {
+    schemaVersion?: SortOrder
   }
 
   export type DynamicPageMaxOrderByAggregateInput = {
@@ -47197,6 +47264,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    schemaVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -47207,8 +47275,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     status?: SortOrder
+    schemaVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type DynamicPageSumOrderByAggregateInput = {
+    schemaVersion?: SortOrder
   }
 
   export type EnumDynamicPageStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -51114,6 +51187,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.DynamicPageStatus
+    schemaVersion?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51127,6 +51201,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.DynamicPageStatus
+    schemaVersion?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51156,6 +51231,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    schemaVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51169,6 +51245,7 @@ export namespace Prisma {
     sections?: JsonNullValueInput | InputJsonValue
     metadata?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumDynamicPageStatusFieldUpdateOperationsInput | $Enums.DynamicPageStatus
+    schemaVersion?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

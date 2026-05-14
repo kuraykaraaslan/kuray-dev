@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import type { BlockData, DynamicPageBlockRecord } from './types'
-import { getCodeBlock } from './BlockRegistry'
+import { getCodeBlock } from './utils/BlockRegistry'
 import DynamicPageBlockService from '@/services/DynamicPageBlockService'
-import TemplateBlockRenderer from './TemplateBlockRenderer'
-import { BlockRenderErrorBoundary } from './BlockErrorBoundary'
+import TemplateBlockRenderer from './partials/TemplateBlockRenderer'
+import { BlockRenderErrorBoundary } from './partials/BlockErrorBoundary'
 
 interface Props {
   sections: BlockData[]

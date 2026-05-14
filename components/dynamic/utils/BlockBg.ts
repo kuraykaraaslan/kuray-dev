@@ -1,4 +1,4 @@
-import type { FieldSchema } from './types'
+import type { FieldSchema } from '../types'
 
 export type BgType = 'none' | 'svg' | 'image' | 'video' | 'color'
 

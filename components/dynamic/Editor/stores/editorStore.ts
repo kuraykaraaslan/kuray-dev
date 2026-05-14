@@ -4,12 +4,13 @@ import { arrayMove } from '@dnd-kit/sortable'
 import type { DragEndEvent } from '@dnd-kit/core'
 import axiosInstance from '@/libs/axios'
 import { toast } from 'react-toastify'
-import { getCodeBlock } from '../../BlockRegistry'
+import { getCodeBlock } from '../../utils/BlockRegistry'
 import type { BlockData, DynamicPageStatus, PageMetadata } from '@/types/content/PageTypes'
+import { DefaultPageMetadata, CURRENT_SCHEMA_VERSION } from '@/types/content/PageTypes'
+import { migrateSections, needsMigration } from '../../migrations'
 import type { DynamicPageBlockRecord } from '../../types'
 
 export type { DynamicPageBlockRecord }
-import { DefaultPageMetadata } from '@/types/content/PageTypes'
 
 type Router = { push: (href: string) => void; replace: (href: string) => void }
 
@@ -44,6 +45,8 @@ interface EditorStore {
   pendingDraft: { savedAt: number; title: string; pageId: string } | null
   // Tracks which translation langs were modified this session
   dirtyLangs: string[]
+  // Schema version of the loaded page (for migration tracking)
+  pageSchemaVersion: number
 
   // Block definitions (loaded from DB)
   blockDefs: DynamicPageBlockRecord[]
@@ -127,6 +130,7 @@ const initialState = {
   showShortcuts: false,
   pendingDraft: null as { savedAt: number; title: string; pageId: string } | null,
   dirtyLangs: [] as string[],
+  pageSchemaVersion: 2,
 }
 
 // Auto-save draft helpers
@@ -413,9 +417,18 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       ])
 
       const raw = pageRes.data.page
-      const enSections: BlockData[] = Array.isArray(raw.sections)
+      const rawVersion: number = raw.schemaVersion ?? 1
+      const sortedRaw: BlockData[] = Array.isArray(raw.sections)
         ? (raw.sections as BlockData[]).sort((a, b) => a.order - b.order)
         : []
+
+      // Run pending schema migrations client-side (server may have already done this,
+      // but we guard here too so the editor always works with up-to-date data)
+      const wasMigrated = needsMigration(rawVersion)
+      const { sections: migratedSections } = wasMigrated
+        ? migrateSections(sortedRaw, rawVersion)
+        : { sections: sortedRaw }
+      const enSections: BlockData[] = migratedSections
 
       const translationList: Array<{
         lang: string
@@ -451,11 +464,16 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         translationCache: cache,
         savedLangs,
         activeLang: 'en',
-        isDirty: false,
+        isDirty: wasMigrated,
         dirtyLangs: [],
+        pageSchemaVersion: wasMigrated ? CURRENT_SCHEMA_VERSION : rawVersion,
         undoStack: [],
         redoStack: [],
       })
+
+      if (wasMigrated) {
+        toast.info(`Page schema upgraded v${rawVersion} → v${CURRENT_SCHEMA_VERSION}. Save to apply.`)
+      }
 
       // Check for a locally saved draft and offer recovery
       try {

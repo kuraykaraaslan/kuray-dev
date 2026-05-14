@@ -1,8 +1,10 @@
 'use client'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
+import { usePreviewMode } from '../partials/PreviewContext'
 import type { BlockDefinition } from '../types'
 
 function ProseBlock(rawProps: Record<string, unknown>) {
+  const previewMode = usePreviewMode()
   const title    = (rawProps.title    as string) || ''
   const subtitle = (rawProps.subtitle as string) || ''
   const content  = (rawProps.content  as string) || ''
@@ -10,7 +12,7 @@ function ProseBlock(rawProps: Record<string, unknown>) {
 
   return (
     <BaseBlock {...baseProps}>
-      <div className="relative z-10 container mx-auto px-4 lg:px-8 mb-16 max-w-3xl">
+      <div className={`relative z-10 container mx-auto px-4 ${previewMode !== 'mobile' ? 'lg:px-8' : ''} mb-16 max-w-3xl`}>
         {title && (
           <h1 className="text-3xl font-bold text-center mb-4">{title}</h1>
         )}

@@ -1,5 +1,5 @@
 'use client'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import { useState, useEffect, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAnglesDown, faAnglesUp } from '@fortawesome/free-solid-svg-icons'
@@ -7,7 +7,7 @@ import axiosInstance from '@/libs/axios'
 import SingleProject from '@/components/frontend/Features/Hero/Projects/Partials/SingleProject'
 import type { Project } from '@/types/content/ProjectTypes'
 import type { BlockDefinition } from '../types'
-import { usePreviewMode } from '../PreviewContext'
+import { usePreviewMode } from '../partials/PreviewContext'
 
 interface FilterItem {
   label: string

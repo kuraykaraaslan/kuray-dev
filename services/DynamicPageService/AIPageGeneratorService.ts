@@ -3,6 +3,7 @@ import path from 'path'
 import openai from '@/libs/openai'
 import type { BlockData } from '@/dtos/DynamicPageDTO'
 import type { DynamicPage } from '@/types/content/PageTypes'
+import { CURRENT_SCHEMA_VERSION } from '@/types/content/PageTypes'
 
 
 interface BlockPropHint {
@@ -304,6 +305,7 @@ export default class AIPageGeneratorService {
       sections,
       metadata: selection.metadata ?? {},
       status: 'DRAFT',
+      schemaVersion: CURRENT_SCHEMA_VERSION,
     }
   }
 }

@@ -2,6 +2,8 @@ import { prisma } from '@/libs/prisma'
 import redisInstance from '@/libs/redis'
 import type { BlockData, DynamicPageParams } from '@/dtos/DynamicPageDTO'
 import type { DynamicPageStatus } from '@/types/content/PageTypes'
+import { CURRENT_SCHEMA_VERSION } from '@/types/content/PageTypes'
+import { migrateSections, needsMigration } from '@/components/dynamic/migrations'
 import type { Prisma } from '@/generated/prisma'
 
 type DynamicPageWithTranslations = Prisma.DynamicPageGetPayload<{
@@ -34,10 +36,12 @@ export default class DynamicPageService {
   }
 
   static async getById(dynamicPageId: string) {
-    return prisma.dynamicPage.findUnique({
+    const page = await prisma.dynamicPage.findUnique({
       where: { dynamicPageId },
       include: { translations: true },
     })
+    if (!page) return null
+    return DynamicPageService.applySchemaVersion(page)
   }
 
   static async getBySlug(slug: string): Promise<DynamicPageWithTranslations | null> {
@@ -63,10 +67,12 @@ export default class DynamicPageService {
     })
 
     if (page) {
-      await redisInstance.set(cacheKey, JSON.stringify(page), 'EX', 60 * 60)
+      const migrated = DynamicPageService.applySchemaVersion(page)
+      await redisInstance.set(cacheKey, JSON.stringify(migrated), 'EX', 60 * 60)
+      return migrated
     }
 
-    return page
+    return null
   }
 
   static applyTranslation(page: DynamicPageWithTranslations, lang: string): DynamicPageWithTranslations {
@@ -99,6 +105,7 @@ export default class DynamicPageService {
         sections: (data.sections ?? []) as object[],
         metadata: data.metadata as object | undefined,
         status: data.status ?? 'DRAFT',
+        schemaVersion: CURRENT_SCHEMA_VERSION,
       },
     })
     await redisInstance.del('sitemap:pages')
@@ -132,6 +139,7 @@ export default class DynamicPageService {
         ...(data.sections !== undefined && { sections: data.sections as object[] }),
         ...(data.metadata !== undefined && { metadata: data.metadata as object }),
         ...(data.status !== undefined && { status: data.status }),
+        schemaVersion: CURRENT_SCHEMA_VERSION,
       },
     })
 
@@ -196,6 +204,17 @@ export default class DynamicPageService {
     })
     await DynamicPageService.invalidateByPageId(dynamicPageId)
     return result
+  }
+
+  /**
+   * Runs pending schema migrations on a page returned from the DB.
+   * Mutates sections in-memory only; the caller must save to persist.
+   */
+  private static applySchemaVersion<T extends { sections: unknown; schemaVersion: number }>(page: T): T {
+    const version = page.schemaVersion ?? 1
+    if (!needsMigration(version)) return page
+    const { sections } = migrateSections(page.sections as BlockData[], version)
+    return { ...page, sections, schemaVersion: CURRENT_SCHEMA_VERSION }
   }
 
   private static async invalidateByPageId(dynamicPageId: string) {

@@ -1,5 +1,9 @@
 import { z } from 'zod'
 
+/** The current block/page data schema version. Increment when BlockDataSchema or DynamicPageSchema changes in a breaking or additive way. */
+export const CURRENT_SCHEMA_VERSION = 2 as const
+export type SchemaVersion = number
+
 export const DynamicPageStatusEnum = z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED'])
 
 export const BlockDataSchema = z.object({
@@ -43,6 +47,7 @@ export const DynamicPageSchema = z.object({
     sections: z.array(BlockDataSchema),
     metadata: PageMetadataSchema,
     status: DynamicPageStatusEnum,
+    schemaVersion: z.number().int().min(1).default(CURRENT_SCHEMA_VERSION),
     createdAt: z.preprocess((arg) => {
       if (typeof arg === 'string' || arg instanceof Date) {
         return new Date(arg)

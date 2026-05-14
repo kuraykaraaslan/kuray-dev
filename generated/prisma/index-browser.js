@@ -481,6 +481,7 @@ exports.Prisma.DynamicPageScalarFieldEnum = {
   sections: 'sections',
   metadata: 'metadata',
   status: 'status',
+  schemaVersion: 'schemaVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

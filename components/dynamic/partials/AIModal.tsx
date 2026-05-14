@@ -1,5 +1,5 @@
 import axiosInstance from "@/libs/axios";
-import HeadlessModal from "../common/Modal";
+import HeadlessModal from "../../common/Modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

@@ -146,6 +146,48 @@ Arkaplan tipleri: `none` | `color` | `gradient` | `image` | `video` | `svg`
 
 ---
 
+## Editör: Responsive Preview (PreviewContext)
+
+CSS `@media` sorguları (Tailwind'deki `md:`, `lg:`, `xl:` prefix'leri) viewport genişliğine göre çalışır, container genişliğine göre değil. Editörde 375px genişliğinde bir canvas kolonu olsa bile gerçek viewport ~1400px olduğundan `md:grid-cols-2` gibi sınıflar tetiklenir ve blok desktop düzeninde görünür.
+
+**Çözüm:** `PreviewContext`, editörün hangi cihaz modunda olduğunu (mobile / tablet / desktop) bloklara iletir. Bloklar CSS yerine bu değeri kontrol ederek responsive sınıfları override eder.
+
+### Kullanım
+
+```tsx
+import { usePreviewMode } from '../PreviewContext'
+
+function MyBlock(rawProps: Record<string, unknown>) {
+  const previewMode = usePreviewMode()
+  // ...
+
+  return (
+    <BaseBlock {...baseProps}>
+      {/* Layout değiştiren responsive sınıfları conditional yap */}
+      <div className={`grid gap-6 grid-cols-1 ${previewMode !== 'mobile' ? 'md:grid-cols-2' : ''}`}>
+        {/* içerik */}
+      </div>
+    </BaseBlock>
+  )
+}
+```
+
+### Kurallar
+
+- **Varsayılan değer `'desktop'`'tur** — editör dışında (public site) context sağlanmaz, hook her zaman `'desktop'` döndürür. Blokların public site davranışı değişmez.
+- **Her zaman `previewMode !== 'mobile'`** kalıbını kullan — `'tablet'` modunda `md:` ve `lg:` sınıfları çoğunlukla uygun kalır.
+- **Layout'u bozan sınıfları** conditional yap: `md:grid-cols-2`, `xl:grid-cols-5`, `lg:grid-cols-3`, `md:divide-x` gibi.
+- **Sadece padding/boşluk** değiştiren sınıflar (`md:px-8`, `lg:gap-12`) genellikle conditional yapmaya değmez.
+
+### Ne zaman uygulanmalı
+
+Blokta şunlardan biri varsa PreviewContext gerekir:
+- Grid sütun sayısını artıran: `md:grid-cols-*`, `lg:grid-cols-*`, `xl:grid-cols-*`
+- Yatay düzene geçiren: `md:flex-row`, `sm:flex-row-reverse`
+- Bölücü çizen: `md:divide-x`
+
+---
+
 ## Editör: Resize Handle
 
 `Canvas.tsx`'teki `ResizeHandle` bileşeni, her bloğun altında görünür bir sürükleme tutacağı ekler. Blok sürüklenince `blockHeight` prop'u güncellenir. Kod blok tarafında hiçbir şey gerektirmez — `BaseBlock` yüksekliği otomatik uygular.

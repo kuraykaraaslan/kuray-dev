@@ -1,6 +1,7 @@
 'use client'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import { useState, useEffect } from 'react'
+import { usePreviewMode } from '../partials/PreviewContext'
 import Image from 'next/image'
 import axiosInstance from '@/libs/axios'
 import type { BlockDefinition } from '../types'
@@ -42,6 +43,7 @@ function TestimonialCard({ name, title, review, image }: TestimonialItem) {
 }
 
 function TestimonialsBlock(rawProps: Record<string, unknown>) {
+  const previewMode = usePreviewMode()
   const baseProps = parseBaseBlockProps(rawProps)
   const title = (rawProps.title as string) || 'What People Say'
   const description = (rawProps.description as string) || 'Feedback from clients and collaborators.'
@@ -82,7 +84,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
   return (
     <BaseBlock {...baseProps}>
       <div className="relative z-10 container px-6 py-4 mx-auto pb-0 md:pb-20">
-        <div className="grid items-center gap-4 xl:grid-cols-5">
+        <div className={`grid items-center gap-4 ${previewMode !== 'mobile' ? 'xl:grid-cols-5' : ''}`}>
           <div className="max-w-2xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
             <h2 className="text-4xl font-bold">{title}</h2>
             <p>{description}</p>
@@ -97,7 +99,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
                 {dataSource === 'api' ? 'No published testimonials found in the database.' : 'No testimonials added yet.'}
               </p>
             ) : (
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className={`grid gap-4 ${previewMode !== 'mobile' ? 'md:grid-cols-2' : ''}`}>
                 <div className="grid content-center gap-4">
                   {leftColumn.map((t, i) => <TestimonialCard key={i} {...t} />)}
                 </div>

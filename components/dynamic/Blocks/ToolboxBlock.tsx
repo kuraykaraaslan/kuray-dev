@@ -1,10 +1,10 @@
 'use client'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ICON_MAP } from '../icons'
 import type { BlockDefinition } from '../types'
-import { usePreviewMode } from '../PreviewContext'
+import { usePreviewMode } from '../partials/PreviewContext'
 
 interface ToolItem {
   icon: string

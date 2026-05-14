@@ -588,12 +588,14 @@ model DynamicPage {
   sections       Json             @default("[]")
   metadata       Json? // { ogTitle, ogDescription, ogImage, twitterTitle, twitterDescription, twitterCard }
   status         DynamicPageStatus @default(DRAFT)
+  schemaVersion  Int              @default(2)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 
   translations   DynamicPageTranslation[]
 
   @@index([slug])
+  @@index([schemaVersion])
 }
 
 model DynamicPageTranslation {

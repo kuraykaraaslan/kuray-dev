@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server'
 import DynamicPageBlockService from '@/services/DynamicPageBlockService'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
-import { CODE_BLOCK_META } from '@/components/dynamic/CodeBlocksMeta'
+import { CODE_BLOCK_META } from '@/components/dynamic/utils/CodeBlocksMeta'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = request.nextUrl
+    const page = parseInt(searchParams.get('page') || '0', 10)
+    const pageSize = parseInt(searchParams.get('pageSize') || '10', 10)
+    const search = (searchParams.get('search') || '').toLowerCase()
+
     const dbBlocks = await DynamicPageBlockService.getAll()
 
     const codeBlocks = CODE_BLOCK_META.map((meta) => ({
@@ -20,12 +25,25 @@ export async function GET() {
       source: 'code' as const,
     }))
 
-    const blocks = [
+    let blocks = [
       ...codeBlocks,
       ...dbBlocks.map((b) => ({ ...b, source: 'db' as const })),
     ]
 
-    return NextResponse.json({ blocks })
+    if (search) {
+      blocks = blocks.filter(
+        (b) =>
+          b.label?.toLowerCase().includes(search) ||
+          b.type?.toLowerCase().includes(search) ||
+          b.category?.toLowerCase().includes(search) ||
+          b.description?.toLowerCase().includes(search)
+      )
+    }
+
+    const total = blocks.length
+    const paginated = blocks.slice(page * pageSize, (page + 1) * pageSize)
+
+    return NextResponse.json({ blocks: paginated, total, page, pageSize })
   } catch {
     return NextResponse.json({ message: 'Failed to fetch block definitions' }, { status: 500 })
   }

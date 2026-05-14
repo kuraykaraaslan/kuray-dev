@@ -1,9 +1,9 @@
 'use client'
-import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import SingleService from '@/components/frontend/Features/Hero/Services/Partials/SingleService'
 import type { Service } from '@/types/content/ProjectTypes'
 import type { BlockDefinition } from '../types'
-import { usePreviewMode } from '../PreviewContext'
+import { usePreviewMode } from '../partials/PreviewContext'
 
 // Literal maps — Tailwind JIT needs to see the full class strings in source
 const MOBILE_COLS: Record<number, string> = {

@@ -1,9 +1,9 @@
 'use client'
 import type React from 'react'
 import BlockBackground from './BlockBackground'
-import { parseBgProps, BG_DEFAULT_PROPS, BG_SCHEMA_FIELDS } from './blockBg'
-import type { BgProps } from './blockBg'
-import type { FieldSchema } from './types'
+import { parseBgProps, BG_DEFAULT_PROPS, BG_SCHEMA_FIELDS } from '../utils/BlockBg'
+import type { BgProps } from '../utils/BlockBg'
+import type { FieldSchema } from '../types'
 
 export interface BaseBlockConfig {
   bgProps: BgProps
