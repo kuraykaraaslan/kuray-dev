@@ -17,6 +17,8 @@ export const PageMetadataSchema = z.object({
   twitterTitle: z.string().optional(),
   twitterDescription: z.string().optional(),
   twitterCard: z.string().optional(),
+  canonical: z.string().optional(),
+  robots: z.string().optional(),
 }).optional()
 
 export const DefaultPageMetadata: z.infer<typeof PageMetadataSchema> = {
@@ -26,6 +28,8 @@ export const DefaultPageMetadata: z.infer<typeof PageMetadataSchema> = {
   twitterTitle: '',
   twitterDescription: '',
   twitterCard: '',
+  canonical: '',
+  robots: '',
 }
 
 export const DynamicPageSchema = z.object({

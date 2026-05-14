@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { getCodeBlocks } from '../BlockRegistry'
+import { getCodeBlocks, getCodeBlock } from '../BlockRegistry'
 import type { BlockDefinition, DynamicPageBlockRecord } from '../types'
 import { useEditorStore } from './stores/editorStore'
 import TemplateBlockRenderer from '../TemplateBlockRenderer'
@@ -10,20 +10,22 @@ import TemplateBlockRenderer from '../TemplateBlockRenderer'
 type AnyBlockDef = BlockDefinition | DynamicPageBlockRecord
 
 const CATEGORY_ORDER = ['Custom', 'General', 'Hero', 'Content', 'CTA']
+const RECENTLY_USED_KEY = 'dynamic_editor_recently_used'
+const MAX_RECENT = 5
 
 const PREVIEW_WIDTH = 320
 const INNER_WIDTH = 1280
 const SCALE = PREVIEW_WIDTH / INNER_WIDTH
 const PREVIEW_HEIGHT = 220
 
+// ── Block hover preview ───────────────────────────────────────────────────────
+
 function BlockPreview({ def, anchorY, sidebarRight }: { def: AnyBlockDef; anchorY: number; sidebarRight: number }) {
   const maxTop = window.innerHeight - PREVIEW_HEIGHT - 8
   const top = Math.min(Math.max(anchorY, 8), maxTop)
-
   const inner = 'Component' in def
     ? <def.Component {...def.defaultProps} />
     : <TemplateBlockRenderer template={def.template} props={def.defaultProps} />
-
   return (
     <div
       className="pointer-events-none bg-base-100/90 backdrop-blur-sm border-base-content/20"
@@ -39,6 +41,8 @@ function BlockPreview({ def, anchorY, sidebarRight }: { def: AnyBlockDef; anchor
   )
 }
 
+// ── Chevron ───────────────────────────────────────────────────────────────────
+
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: open ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 150ms ease', flexShrink: 0 }}>
@@ -46,6 +50,8 @@ function Chevron({ open }: { open: boolean }) {
     </svg>
   )
 }
+
+// ── Draggable block button ────────────────────────────────────────────────────
 
 function DraggableBlockButton({ def, onAdd, onMouseEnter, onMouseLeave, isHovered }: {
   def: AnyBlockDef
@@ -59,6 +65,7 @@ function DraggableBlockButton({ def, onAdd, onMouseEnter, onMouseLeave, isHovere
     data: { fromSidebar: true, blockType: def.type, blockLabel: def.label },
   })
   const isCustom = def.category === 'Custom'
+  const icon = 'icon' in def ? def.icon : undefined
 
   return (
     <button
@@ -73,20 +80,116 @@ function DraggableBlockButton({ def, onAdd, onMouseEnter, onMouseLeave, isHovere
         isCustom ? 'bg-primary/5 border-primary/20' : 'bg-base-300 border-base-content/10'
       } ${isHovered ? 'border-primary/50' : ''}`}
     >
-      <div className={`text-sm font-medium mb-0.5 ${isCustom ? 'text-primary' : 'text-base-content'}`}>{def.label}</div>
+      <div className={`flex items-center gap-1.5 text-sm font-medium mb-0.5 ${isCustom ? 'text-primary' : 'text-base-content'}`}>
+        {icon && <span className="text-base leading-none">{icon}</span>}
+        {def.label}
+      </div>
       <div className="text-xs leading-snug text-base-content/40">{'description' in def ? def.description : ''}</div>
     </button>
   )
 }
 
+// ── Layers panel ──────────────────────────────────────────────────────────────
+
+function LayersPanel() {
+  const sections = useEditorStore((s) => s.sections)
+  const selectedId = useEditorStore((s) => s.selectedId)
+  const setSelectedId = useEditorStore((s) => s.setSelectedId)
+  const toggleBlockHidden = useEditorStore((s) => s.toggleBlockHidden)
+  const moveBlock = useEditorStore((s) => s.moveBlock)
+  const blockDefs = useEditorStore((s) => s.blockDefs)
+  const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
+
+  const sorted = [...sections].sort((a, b) => a.order - b.order)
+
+  if (sorted.length === 0) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-4">
+        <p className="text-xs text-base-content/30 text-center leading-relaxed">No blocks yet.<br />Add blocks from the Blocks tab.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="py-2 px-2 space-y-0.5">
+      {sorted.map((block, i) => {
+        const codeDef = getCodeBlock(block.type)
+        const dbDef = blockDefs.find((d) => d.type === block.type)
+        const label = codeDef?.label ?? dbDef?.label ?? block.type
+        const isSelected = selectedId === block.id
+
+        return (
+          <div
+            key={block.id}
+            onClick={() => setSelectedId(block.id)}
+            className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md cursor-pointer transition-colors select-none group ${
+              isSelected ? 'bg-primary/10 text-primary' : 'text-base-content/60 hover:bg-base-300 hover:text-base-content'
+            } ${block.hidden ? 'opacity-40' : ''}`}
+          >
+            <span className="text-[10px] text-base-content/30 w-4 text-right flex-shrink-0 tabular-nums">{i + 1}</span>
+            <span className="flex-1 text-xs font-medium truncate">{label}</span>
+
+            {!isTranslationMode && (
+              <div
+                className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => moveBlock(block.id, -1)}
+                  disabled={i === 0}
+                  className="w-5 h-5 flex items-center justify-center text-[11px] rounded hover:bg-base-content/10 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  title="Move up"
+                >↑</button>
+                <button
+                  onClick={() => moveBlock(block.id, 1)}
+                  disabled={i === sorted.length - 1}
+                  className="w-5 h-5 flex items-center justify-center text-[11px] rounded hover:bg-base-content/10 disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                  title="Move down"
+                >↓</button>
+                <button
+                  onClick={() => toggleBlockHidden(block.id)}
+                  className="w-5 h-5 flex items-center justify-center text-[11px] rounded hover:bg-base-content/10 transition-colors"
+                  title={block.hidden ? 'Show block' : 'Hide block'}
+                >
+                  {block.hidden ? '👁' : '🙈'}
+                </button>
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Main sidebar ──────────────────────────────────────────────────────────────
+
 export default function LeftSidebar() {
-  const addBlock = useEditorStore((s) => s.addBlock)
+  const rawAddBlock = useEditorStore((s) => s.addBlock)
   const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
   const blockDefs = useEditorStore((s) => s.blockDefs)
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState<{ def: AnyBlockDef; y: number } | null>(null)
   const [collapsed, setCollapsed] = useState(false)
   const [search, setSearch] = useState('')
+  const [activeTab, setActiveTab] = useState<'blocks' | 'layers'>('blocks')
+  const [recentlyUsed, setRecentlyUsed] = useState<string[]>([])
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(RECENTLY_USED_KEY)
+      if (raw) setRecentlyUsed(JSON.parse(raw))
+    } catch { /* ignore */ }
+  }, [])
+
+  const addBlock = useCallback((type: string) => {
+    rawAddBlock(type)
+    setRecentlyUsed((prev) => {
+      const next = [type, ...prev.filter((t) => t !== type)].slice(0, MAX_RECENT)
+      try { localStorage.setItem(RECENTLY_USED_KEY, JSON.stringify(next)) } catch { /* ignore */ }
+      return next
+    })
+  }, [rawAddBlock])
 
   const allDefs: AnyBlockDef[] = [...getCodeBlocks(), ...blockDefs]
 
@@ -115,8 +218,17 @@ export default function LeftSidebar() {
   const searchTrimmed = search.trim()
   const isSearchActive = searchTrimmed.length > 0
   const filteredDefs = isSearchActive
-    ? allDefs.filter((def) => def.label.toLowerCase().includes(searchTrimmed.toLowerCase()))
+    ? allDefs.filter((def) => {
+        const q = searchTrimmed.toLowerCase()
+        if (def.label.toLowerCase().includes(q)) return true
+        const tags = 'tags' in def ? (def.tags ?? []) : []
+        return tags.some((t: string) => t.toLowerCase().includes(q))
+      })
     : []
+
+  const recentDefs = recentlyUsed
+    .map((type) => allDefs.find((d) => d.type === type))
+    .filter(Boolean) as AnyBlockDef[]
 
   if (collapsed) {
     return (
@@ -142,14 +254,8 @@ export default function LeftSidebar() {
       <div className="w-60 flex-shrink-0 flex flex-col border-r border-base-content/10 bg-base-200">
         <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
           <p className="text-xs font-semibold tracking-widest text-base-content/40">BLOCKS</p>
-          <button
-            onClick={() => setCollapsed(true)}
-            title="Collapse blocks panel"
-            className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors"
-          >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <button onClick={() => setCollapsed(true)} title="Collapse" className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
         </div>
         <div className="flex-1 flex items-center justify-center p-4">
@@ -163,74 +269,61 @@ export default function LeftSidebar() {
 
   return (
     <div ref={sidebarRef} className="w-60 flex-shrink-0 flex flex-col border-r border-base-content/10 overflow-y-auto bg-base-200">
-      <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
-        <p className="text-xs font-semibold tracking-widest text-base-content/40">BLOCKS</p>
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center gap-1 bg-base-300 rounded-md p-0.5">
+          <button
+            onClick={() => setActiveTab('blocks')}
+            className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${activeTab === 'blocks' ? 'bg-base-100 text-base-content shadow-sm' : 'text-base-content/40 hover:text-base-content/70'}`}
+          >
+            Blocks
+          </button>
+          <button
+            onClick={() => setActiveTab('layers')}
+            className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${activeTab === 'layers' ? 'bg-base-100 text-base-content shadow-sm' : 'text-base-content/40 hover:text-base-content/70'}`}
+          >
+            Layers
+          </button>
+        </div>
         <button
           onClick={() => setCollapsed(true)}
-          title="Collapse blocks panel"
+          title="Collapse panel"
           className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors"
         >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </button>
       </div>
 
-      <div className="px-3 pt-2 pb-1">
-        <div className="relative flex items-center">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search blocks…"
-            className="w-full text-xs bg-base-300 border border-base-content/10 rounded-md px-2.5 py-1.5 pr-6 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary/40 transition-colors"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch('')}
-              className="absolute right-1.5 text-base-content/40 hover:text-base-content transition-colors leading-none"
-              title="Clear search"
-            >
-              ×
-            </button>
-          )}
-        </div>
-      </div>
+      {/* Layers tab */}
+      {activeTab === 'layers' && <LayersPanel />}
 
-      <div className="py-2">
-        {isSearchActive ? (
-          filteredDefs.length === 0 ? (
-            <div className="px-4 py-6 text-center">
-              <p className="text-xs text-base-content/30">No blocks found</p>
+      {/* Blocks tab */}
+      {activeTab === 'blocks' && (
+        <>
+          <div className="px-3 pt-2 pb-1 flex-shrink-0">
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search blocks…"
+                className="w-full text-xs bg-base-300 border border-base-content/10 rounded-md px-2.5 py-1.5 pr-6 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary/40 transition-colors"
+              />
+              {search && (
+                <button onClick={() => setSearch('')} className="absolute right-1.5 text-base-content/40 hover:text-base-content transition-colors leading-none" title="Clear">×</button>
+              )}
             </div>
-          ) : (
-            <div className="px-3 pb-2 space-y-1.5">
-              {filteredDefs.map((def) => (
-                <DraggableBlockButton
-                  key={def.type}
-                  def={def}
-                  onAdd={() => addBlock(def.type)}
-                  onMouseEnter={(e) => handleMouseEnter(def, e)}
-                  onMouseLeave={() => setHovered(null)}
-                  isHovered={hovered?.def.type === def.type}
-                />
-              ))}
-            </div>
-          )
-        ) : (
-          orderedCategories.map((cat) => (
-            <div key={cat}>
-              <button
-                onClick={() => setOpen((prev) => ({ ...prev, [cat]: !prev[cat] }))}
-                className="w-full flex items-center justify-between px-4 py-2 transition-colors text-base-content/50"
-              >
-                <span className="text-xs font-semibold uppercase tracking-widest">{cat}</span>
-                <Chevron open={open[cat] ?? true} />
-              </button>
+          </div>
 
-              {(open[cat] ?? true) && (
+          <div className="py-2 flex-1">
+            {isSearchActive ? (
+              filteredDefs.length === 0 ? (
+                <div className="px-4 py-6 text-center">
+                  <p className="text-xs text-base-content/30">No blocks found</p>
+                </div>
+              ) : (
                 <div className="px-3 pb-2 space-y-1.5">
-                  {grouped[cat].map((def) => (
+                  {filteredDefs.map((def) => (
                     <DraggableBlockButton
                       key={def.type}
                       def={def}
@@ -241,13 +334,64 @@ export default function LeftSidebar() {
                     />
                   ))}
                 </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+              )
+            ) : (
+              <>
+                {/* Recently used */}
+                {recentDefs.length > 0 && (
+                  <div className="mb-1">
+                    <p className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-base-content/30">Recently Used</p>
+                    <div className="px-3 pb-2 space-y-1.5">
+                      {recentDefs.map((def) => (
+                        <DraggableBlockButton
+                          key={`recent-${def.type}`}
+                          def={def}
+                          onAdd={() => addBlock(def.type)}
+                          onMouseEnter={(e) => handleMouseEnter(def, e)}
+                          onMouseLeave={() => setHovered(null)}
+                          isHovered={hovered?.def.type === def.type}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-      {hovered && <BlockPreview def={hovered.def} anchorY={hovered.y} sidebarRight={sidebarRight} />}
+                {/* Categorised blocks */}
+                {orderedCategories.map((cat) => (
+                  <div key={cat}>
+                    <button
+                      onClick={() => setOpen((prev) => ({ ...prev, [cat]: !prev[cat] }))}
+                      className="w-full flex items-center justify-between px-4 py-2 transition-colors text-base-content/50"
+                    >
+                      <span className="text-xs font-semibold uppercase tracking-widest">{cat}</span>
+                      <Chevron open={open[cat] ?? true} />
+                    </button>
+
+                    {(open[cat] ?? true) && (
+                      <div className="px-3 pb-2 space-y-1.5">
+                        {grouped[cat].map((def) => (
+                          <DraggableBlockButton
+                            key={def.type}
+                            def={def}
+                            onAdd={() => addBlock(def.type)}
+                            onMouseEnter={(e) => handleMouseEnter(def, e)}
+                            onMouseLeave={() => setHovered(null)}
+                            isHovered={hovered?.def.type === def.type}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </>
+      )}
+
+      {hovered && activeTab === 'blocks' && (
+        <BlockPreview def={hovered.def} anchorY={hovered.y} sidebarRight={sidebarRight} />
+      )}
     </div>
   )
 }

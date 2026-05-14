@@ -2,8 +2,11 @@
 
 import { useState } from 'react'
 import axiosInstance from '@/libs/axios'
-import type { FieldSchema } from '../types'
+import type { FieldSchema, FieldOption } from '../types'
 import IconPicker from './IconPicker'
+
+const optVal = (o: FieldOption): string => (typeof o === 'string' ? o : o.value)
+const optLabel = (o: FieldOption): string => (typeof o === 'string' ? o : o.label)
 
 interface RepeaterFieldProps {
   propKey: string
@@ -171,7 +174,7 @@ export default function RepeaterField({
                   >
                     <option value="">— select —</option>
                     {subField.options?.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
+                      <option key={optVal(opt)} value={optVal(opt)}>{optLabel(opt)}</option>
                     ))}
                   </select>
                 )}

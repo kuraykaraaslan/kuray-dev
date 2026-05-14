@@ -30,8 +30,15 @@ export default function DynamicPageEditor() {
 
   const loading = useEditorStore((s) => s.loading)
   const sections = useEditorStore((s) => s.sections)
+  const selectedId = useEditorStore((s) => s.selectedId)
   const storeHandleDragEnd = useEditorStore((s) => s.handleDragEnd)
   const addBlock = useEditorStore((s) => s.addBlock)
+  const deleteBlock = useEditorStore((s) => s.deleteBlock)
+  const duplicateBlock = useEditorStore((s) => s.duplicateBlock)
+  const moveBlock = useEditorStore((s) => s.moveBlock)
+  const copyBlock = useEditorStore((s) => s.copyBlock)
+  const pasteBlock = useEditorStore((s) => s.pasteBlock)
+  const setSelectedId = useEditorStore((s) => s.setSelectedId)
   const loadPage = useEditorStore((s) => s.loadPage)
   const loadBlockDefs = useEditorStore((s) => s.loadBlockDefs)
   const handleSave = useEditorStore((s) => s.handleSave)
@@ -57,13 +64,53 @@ export default function DynamicPageEditor() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const ctrl = e.ctrlKey || e.metaKey
-      if (!ctrl) return
-      if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo() }
-      else if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); redo() }
+      const alt = e.altKey
+      const tag = (e.target as HTMLElement).tagName
+
+      // Don't intercept shortcuts when typing inside an input/textarea
+      const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(tag) || (e.target as HTMLElement).isContentEditable
+
+      if (ctrl) {
+        if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); return }
+        if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); redo(); return }
+        if (!isEditing) {
+          if (e.key === 's') { e.preventDefault(); handleSave(mode, pageId, router); return }
+          if (e.key === 'd') {
+            const id = useEditorStore.getState().selectedId
+            if (id) { e.preventDefault(); duplicateBlock(id) }
+            return
+          }
+          if (e.key === 'c') {
+            const id = useEditorStore.getState().selectedId
+            if (id) { e.preventDefault(); copyBlock(id) }
+            return
+          }
+          if (e.key === 'v') { e.preventDefault(); pasteBlock(); return }
+        }
+      }
+
+      if (!isEditing) {
+        if (e.key === 'Escape') { setSelectedId(null); return }
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+          const id = useEditorStore.getState().selectedId
+          if (id) { e.preventDefault(); deleteBlock(id) }
+          return
+        }
+        if (alt && e.key === 'ArrowUp') {
+          const id = useEditorStore.getState().selectedId
+          if (id) { e.preventDefault(); moveBlock(id, -1) }
+          return
+        }
+        if (alt && e.key === 'ArrowDown') {
+          const id = useEditorStore.getState().selectedId
+          if (id) { e.preventDefault(); moveBlock(id, 1) }
+          return
+        }
+      }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [undo, redo])
+  }, [undo, redo, deleteBlock, duplicateBlock, copyBlock, pasteBlock, moveBlock, setSelectedId, handleSave, mode, pageId, router])
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {

@@ -62,12 +62,18 @@ interface EditorStore {
   setSeoOpen: (v: boolean) => void
   setTranslationOpen: (v: boolean) => void
   setPreviewMode: (v: PreviewMode) => void
+  showShortcuts: boolean
+  setShowShortcuts: (v: boolean) => void
   handleDragEnd: (event: DragEndEvent) => void
   addBlock: (type: string, atIndex?: number) => void
   deleteBlock: (id: string) => void
   duplicateBlock: (id: string) => void
   toggleBlockHidden: (id: string) => void
   updateBlockProps: (id: string, props: Record<string, unknown>) => void
+  moveBlock: (id: string, dir: -1 | 1) => void
+  copyBlock: (id: string) => void
+  pasteBlock: (atIndex?: number) => void
+  clipboard: BlockData | null
   undo: () => void
   redo: () => void
   loadPage: (pageId: string) => Promise<void>
@@ -88,6 +94,7 @@ const initialState = {
   saving: false,
   sections: [] as BlockData[],
   selectedId: null as string | null,
+  clipboard: null as BlockData | null,
   title: '',
   slug: '',
   status: 'DRAFT' as DynamicPageStatus,
@@ -107,6 +114,7 @@ const initialState = {
   translationCache: {} as Record<string, TranslationEntry>,
   savedLangs: [] as string[],
   blockDefs: [] as DynamicPageBlockRecord[],
+  showShortcuts: false,
 }
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
@@ -123,6 +131,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   setSeoOpen: (v) => set({ seoOpen: v }),
   setTranslationOpen: (v) => set({ translationOpen: v }),
   setPreviewMode: (v) => set({ previewMode: v }),
+  setShowShortcuts: (v) => set({ showShortcuts: v }),
 
   loadBlockDefs: async () => {
     try {
@@ -229,6 +238,55 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         b.id === id ? { ...b, hidden: !b.hidden } : b
       ),
     }))
+  },
+
+  moveBlock: (id, dir) => {
+    if (get().activeLang !== 'en') return
+    set((state) => {
+      const idx = state.sections.findIndex((b) => b.id === id)
+      if (idx < 0) return {}
+      const newIdx = idx + dir
+      if (newIdx < 0 || newIdx >= state.sections.length) return {}
+      return {
+        undoStack: [...state.undoStack.slice(-49), state.sections],
+        redoStack: [],
+        isDirty: true,
+        sections: arrayMove(state.sections, idx, newIdx).map((b, i) => ({ ...b, order: i })),
+      }
+    })
+  },
+
+  copyBlock: (id) => {
+    const block = get().sections.find((b) => b.id === id)
+    if (!block) return
+    set({ clipboard: { ...block } })
+    toast.success('Block copied')
+  },
+
+  pasteBlock: (atIndex) => {
+    if (get().activeLang !== 'en') return
+    const { clipboard } = get()
+    if (!clipboard) return
+    const newBlock: BlockData = { ...clipboard, id: uuidv4() }
+    set((state) => {
+      const insertAt = atIndex ?? (
+        state.selectedId
+          ? (state.sections.findIndex((b) => b.id === state.selectedId) + 1)
+          : state.sections.length
+      )
+      const newSections = [
+        ...state.sections.slice(0, insertAt),
+        { ...newBlock, order: insertAt },
+        ...state.sections.slice(insertAt),
+      ].map((b, i) => ({ ...b, order: i }))
+      return {
+        undoStack: [...state.undoStack.slice(-49), state.sections],
+        redoStack: [],
+        isDirty: true,
+        sections: newSections,
+        selectedId: newBlock.id,
+      }
+    })
   },
 
   updateBlockProps: (id, props) => {

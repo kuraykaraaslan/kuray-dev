@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { BlockData, DynamicPageBlockRecord } from './types'
 import { getCodeBlock } from './BlockRegistry'
 import DynamicPageBlockService from '@/services/DynamicPageBlockService'
@@ -17,7 +18,8 @@ function ServerBlock({ block, dbDefs }: { block: BlockData; dbDefs: DynamicPageB
     const dbDef = dbDefs.find((d) => d.type === block.type)
     if (!dbDef) return null
     return <TemplateBlockRenderer template={dbDef.template} props={block.props} />
-  } catch {
+  } catch (e) {
+    console.error(`[DynamicPageRenderer] Failed to render block type="${block.type}" id="${block.id}"`, e)
     return null
   }
 }
@@ -31,7 +33,9 @@ export default async function DynamicPageRenderer({ sections }: Props) {
   return (
     <div className="bg-base-100">
       {sorted.map((block) => (
-        <ServerBlock key={block.id} block={block} dbDefs={dbDefs} />
+        <Suspense key={block.id} fallback={null}>
+          <ServerBlock block={block} dbDefs={dbDefs} />
+        </Suspense>
       ))}
     </div>
   )
