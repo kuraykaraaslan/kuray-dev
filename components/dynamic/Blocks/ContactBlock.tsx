@@ -78,7 +78,7 @@ function ContactBlock(rawProps: Record<string, unknown>) {
   }
 
   return (
-    <BaseBlock {...baseProps} className="min-h-screen md:pt-24 bg-base-100">
+    <BaseBlock {...baseProps}>
       <div className="relative z-10 container mx-auto mt-0 md:rounded-box md:shadow-2xl md:border-2 md:border-black contactHero">
         <div className="mx-4 md:mx-8 pt-2 rounded-box md:mb-4">
           <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x pt-12 pb-12 mb-2">
@@ -189,6 +189,7 @@ export const ContactBlockDefinition: BlockDefinition = {
     socialMediaLabel: 'Social Media',
     revealMailLabel: 'Reveal Email',
     revealPhoneLabel: 'Reveal Phone',
+    blockClass: 'min-h-screen md:pt-24 bg-base-100',
     sectionId: 'contact',
     ...BASE_BLOCK_DEFAULT_PROPS,
     whatsappUrl: 'https://wa.me/905459223554',

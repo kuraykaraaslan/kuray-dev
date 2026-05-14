@@ -132,7 +132,7 @@ function WelcomeBlock(rawProps: Record<string, unknown>) {
   const baseProps = parseBaseBlockProps(rawProps)
 
   return (
-    <BaseBlock as="div" {...baseProps} className="bg-base-200" style={{ height: '100dvh' }}>
+    <BaseBlock as="div" {...baseProps} style={{ height: '100dvh' }}>
       <div className="hero min-h-screen select-none" style={{ zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <div
           className={[
@@ -184,6 +184,7 @@ export const WelcomeBlockDefinition: BlockDefinition = {
     mobilePhoto: 'hidden',
     headingSize: 'text-5xl',
     descSize: 'text-lg',
+    blockClass: 'bg-base-200',
     sectionId: 'home',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },

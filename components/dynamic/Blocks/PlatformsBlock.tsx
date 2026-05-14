@@ -61,7 +61,7 @@ function PlatformsBlock(rawProps: Record<string, unknown>) {
   const gridCls = `grid gap-6 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
 
   return (
-    <BaseBlock {...baseProps} className="py-12 bg-base-200">
+    <BaseBlock {...baseProps}>
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <span className="font-medium mb-4 block">{subtitle}</span>
@@ -106,6 +106,7 @@ export const PlatformsBlockDefinition: BlockDefinition = {
     mobileColumns: 2,
     desktopColumns: 6,
     platforms: DEFAULT_PLATFORMS,
+    blockClass: 'py-12 bg-base-200',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {

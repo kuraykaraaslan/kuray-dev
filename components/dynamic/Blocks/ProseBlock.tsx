@@ -9,7 +9,7 @@ function ProseBlock(rawProps: Record<string, unknown>) {
   const baseProps = parseBaseBlockProps(rawProps)
 
   return (
-    <BaseBlock {...baseProps} className="min-h-screen bg-base-100 pt-32">
+    <BaseBlock {...baseProps}>
       <div className="relative z-10 container mx-auto px-4 lg:px-8 mb-16 max-w-3xl">
         {title && (
           <h1 className="text-3xl font-bold text-center mb-4">{title}</h1>
@@ -37,6 +37,7 @@ export const ProseBlockDefinition: BlockDefinition = {
     title: 'Document Title',
     subtitle: 'Last Updated: January 1, 2025',
     content: '<h2>Section</h2><p>Start writing your content here...</p>',
+    blockClass: 'min-h-screen bg-base-100 pt-32',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {

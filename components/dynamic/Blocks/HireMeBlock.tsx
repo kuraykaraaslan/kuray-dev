@@ -13,7 +13,7 @@ function HireMeBlock(rawProps: Record<string, unknown>) {
   const baseProps = parseBaseBlockProps(rawProps)
 
   return (
-    <BaseBlock as="div" {...baseProps} className="bg-base-200 min-h-screen">
+    <BaseBlock as="div" {...baseProps}>
       <div
         className="hero min-h-screen select-none"
         style={{ zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
@@ -43,6 +43,7 @@ export const HireMeBlockDefinition: BlockDefinition = {
     description: 'I am available for freelance projects worldwide.',
     ctaLabel: 'View My Services',
     ctaHref: '#services',
+    blockClass: 'bg-base-200 min-h-screen',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {

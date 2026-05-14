@@ -59,7 +59,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
   const [hoveredRow, setHoveredRow] = useState<number | null>(null)
 
   return (
-    <BaseBlock {...baseProps} className="hero bg-base-300 py-8 px-4 md:px-20 items-center justify-center min-h-screen">
+    <BaseBlock {...baseProps}>
       <div className="relative z-10 w-full max-w-5xl">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
           <div className="col-span-2 md:col-span-1 md:col-start-3 overflow-hidden">
@@ -118,6 +118,7 @@ export const ToolboxBlockDefinition: BlockDefinition = {
   category: 'Hero',
   defaultProps: {
     title: 'Toolbox',
+    blockClass: 'hero bg-base-300 py-8 px-4 md:px-20 items-center justify-center min-h-screen',
     description: 'Technologies and skills I use every day.',
     ...BASE_BLOCK_DEFAULT_PROPS,
     rows: [

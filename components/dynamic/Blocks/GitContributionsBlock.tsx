@@ -19,7 +19,7 @@ function GitContributionsBlock(rawProps: Record<string, unknown>) {
   const baseProps = parseBaseBlockProps(rawProps)
 
   return (
-    <BaseBlock as="div" {...baseProps} className="hero min-h-screen bg-base-100 hidden lg:flex items-center justify-center">
+    <BaseBlock as="div" {...baseProps}>
       <div className="relative z-10 hero-content text-center">
         <div>
           <h2 className="text-5xl font-bold">{title}</h2>
@@ -52,6 +52,7 @@ export const GitContributionsBlockDefinition: BlockDefinition = {
     description: 'My open source activity on GitHub.',
     githubUrl: 'https://github.com/kuraykaraaslan',
     buttonLabel: 'View on GitHub',
+    blockClass: 'hero min-h-screen bg-base-100 hidden lg:flex items-center justify-center',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {

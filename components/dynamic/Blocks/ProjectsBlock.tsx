@@ -123,7 +123,7 @@ function ProjectsBlock(rawProps: Record<string, unknown>) {
   const filtered = allProjects.filter((p) => !filter || p.platforms.includes(filter))
 
   return (
-    <BaseBlock {...baseProps} className="bg-base-200 pt-16">
+    <BaseBlock {...baseProps}>
       <div
         className="relative z-10 px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6 duration-1000"
         style={{ height: '560px', overflow: 'clip' }}
@@ -198,6 +198,7 @@ export const ProjectsBlockDefinition: BlockDefinition = {
     dataSource: 'api',
     filters: DEFAULT_FILTERS,
     projects: DEFAULT_STATIC_PROJECTS,
+    blockClass: 'bg-base-200 pt-16',
     sectionId: 'portfolio',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },

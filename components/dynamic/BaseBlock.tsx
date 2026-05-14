@@ -9,23 +9,26 @@ export interface BaseBlockConfig {
   bgProps: BgProps
   sectionId: string
   blockHeight: number
+  blockClass: string
 }
 
 interface BaseBlockProps extends BaseBlockConfig {
-  className?: string
   style?: React.CSSProperties
   as?: 'section' | 'div'
   children: React.ReactNode
 }
 
 export const BASE_BLOCK_DEFAULT_PROPS: Record<string, unknown> = {
+  blockClass:  '',
   blockHeight: 0,
+  sectionId:   '',
   ...BG_DEFAULT_PROPS,
 }
 
 export const BASE_BLOCK_SCHEMA_FIELDS: Record<string, FieldSchema> = {
-  sectionId:   { label: 'Section ID (anchor)', type: 'text',   placeholder: 'e.g. contact' },
-  blockHeight: { label: 'Min Height (px)',      type: 'number', value: 0 },
+  blockClass:  { label: 'Section Classes (Tailwind)', type: 'text',   placeholder: 'bg-base-100 pt-16' },
+  sectionId:   { label: 'Section ID (anchor)',         type: 'text',   placeholder: 'e.g. contact' },
+  blockHeight: { label: 'Min Height (px)',              type: 'number', value: 0 },
   ...BG_SCHEMA_FIELDS,
 }
 
@@ -34,6 +37,7 @@ export function parseBaseBlockProps(raw: Record<string, unknown>): BaseBlockConf
     bgProps:     parseBgProps(raw),
     sectionId:   (raw.sectionId   as string) || '',
     blockHeight: Number(raw.blockHeight)     || 0,
+    blockClass:  (raw.blockClass  as string) || '',
   }
 }
 
@@ -41,18 +45,27 @@ export default function BaseBlock({
   bgProps,
   sectionId,
   blockHeight,
-  className = '',
+  blockClass,
   style,
   as: Tag = 'section',
   children,
 }: BaseBlockProps) {
-  const heightStyle: React.CSSProperties = blockHeight > 0 ? { minHeight: blockHeight } : {}
+  const heightStyle: React.CSSProperties = blockHeight > 0
+    ? {
+        height: blockHeight,
+        minHeight: 200,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }
+    : {}
 
   return (
     <Tag
-      className={`relative ${className}`.trim()}
+      className={`relative ${blockClass}`.trim()}
       id={sectionId || undefined}
-      style={{ ...heightStyle, ...style }}
+      style={{ ...style, ...heightStyle }}
     >
       <BlockBackground {...bgProps} />
       {children}

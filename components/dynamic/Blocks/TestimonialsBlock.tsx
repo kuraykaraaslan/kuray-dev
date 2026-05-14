@@ -80,7 +80,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
   const rightColumn = testimonials.slice(half)
 
   return (
-    <BaseBlock {...baseProps} className="bg-base-300 md:px-24">
+    <BaseBlock {...baseProps}>
       <div className="relative z-10 container px-6 py-4 mx-auto pb-0 md:pb-20">
         <div className="grid items-center gap-4 xl:grid-cols-5">
           <div className="max-w-2xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
@@ -121,6 +121,7 @@ export const TestimonialsBlockDefinition: BlockDefinition = {
   defaultProps: {
     title: 'What People Say',
     description: 'Feedback from clients and collaborators.',
+    blockClass: 'bg-base-300 md:px-24',
     dataSource: 'manual',
     ...BASE_BLOCK_DEFAULT_PROPS,
     testimonials: [

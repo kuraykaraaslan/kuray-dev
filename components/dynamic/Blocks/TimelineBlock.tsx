@@ -56,7 +56,7 @@ function TimelineBlock(rawProps: Record<string, unknown>) {
   }
 
   return (
-    <BaseBlock {...baseProps} className="bg-base-100 pt-16">
+    <BaseBlock {...baseProps}>
       <div
         className="px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6 duration-1000"
         style={{ height: '560px', overflow: 'clip' }}
@@ -145,6 +145,7 @@ export const TimelineBlockDefinition: BlockDefinition = {
     showMoreLabel: 'Show More',
     showLessLabel: 'Show Less',
     items: DEFAULT_ITEMS,
+    blockClass: 'bg-base-100 pt-16',
     sectionId: 'timeline',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },

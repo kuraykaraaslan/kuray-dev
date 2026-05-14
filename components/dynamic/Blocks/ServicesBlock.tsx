@@ -71,7 +71,7 @@ function ServicesBlock(rawProps: Record<string, unknown>) {
   const gridCls = `grid gap-8 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
 
   return (
-    <BaseBlock {...baseProps} className="bg-base-100 pt-16">
+    <BaseBlock {...baseProps}>
       <div className="relative z-10 px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
           <h2 className="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold">{sectionTitle}</h2>
@@ -98,6 +98,7 @@ export const ServicesBlockDefinition: BlockDefinition = {
     mobileColumns: 1,
     desktopColumns: 2,
     services: DEFAULT_SERVICES,
+    blockClass: 'bg-base-100 pt-16',
     sectionId: 'services',
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
