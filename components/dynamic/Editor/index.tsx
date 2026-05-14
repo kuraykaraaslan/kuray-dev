@@ -1,15 +1,17 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   DndContext,
+  DragOverlay,
   closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
+import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import Canvas from './Canvas'
 import LeftSidebar from './LeftSidebar'
@@ -28,14 +30,20 @@ export default function DynamicPageEditor() {
 
   const loading = useEditorStore((s) => s.loading)
   const sections = useEditorStore((s) => s.sections)
-  const handleDragEnd = useEditorStore((s) => s.handleDragEnd)
+  const storeHandleDragEnd = useEditorStore((s) => s.handleDragEnd)
+  const addBlock = useEditorStore((s) => s.addBlock)
   const loadPage = useEditorStore((s) => s.loadPage)
   const loadBlockDefs = useEditorStore((s) => s.loadBlockDefs)
   const handleSave = useEditorStore((s) => s.handleSave)
   const reset = useEditorStore((s) => s.reset)
+  const undo = useEditorStore((s) => s.undo)
+  const redo = useEditorStore((s) => s.redo)
+  const isDirty = useEditorStore((s) => s.isDirty)
+
+  const [sidebarDrag, setSidebarDrag] = useState<{ type: string; label: string } | null>(null)
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
@@ -45,6 +53,54 @@ export default function DynamicPageEditor() {
     return () => reset()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const ctrl = e.ctrlKey || e.metaKey
+      if (!ctrl) return
+      if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo() }
+      else if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); redo() }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [undo, redo])
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) e.preventDefault()
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
+
+  const onDragStart = useCallback((event: DragStartEvent) => {
+    const data = event.active.data.current
+    if (data?.fromSidebar) {
+      setSidebarDrag({ type: data.blockType, label: data.blockLabel ?? data.blockType })
+    }
+  }, [])
+
+  const onDragEnd = useCallback((event: DragEndEvent) => {
+    setSidebarDrag(null)
+    const { active, over } = event
+
+    if (active.data.current?.fromSidebar) {
+      if (!over) return
+      const overId = String(over.id)
+      const blockType = active.data.current.blockType
+
+      if (overId.startsWith('insert-gap-')) {
+        const index = parseInt(overId.replace('insert-gap-', ''), 10)
+        addBlock(blockType, index)
+      } else {
+        const blockIndex = sections.findIndex((b) => b.id === overId)
+        addBlock(blockType, blockIndex >= 0 ? blockIndex + 1 : undefined)
+      }
+      return
+    }
+
+    storeHandleDragEnd(event)
+  }, [sections, addBlock, storeHandleDragEnd])
 
   if (loading) {
     return (
@@ -61,26 +117,35 @@ export default function DynamicPageEditor() {
         onCancel={() => router.push('/admin/pages')}
       />
 
-      <div className="flex flex-1 min-h-0">
-        <LeftSidebar />
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
+        <div className="flex flex-1 min-h-0">
+          <LeftSidebar />
 
-        <div className="flex-1 overflow-y-auto">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
+          <div className="flex-1 overflow-y-auto">
             <SortableContext
               items={sections.map((b) => b.id)}
               strategy={verticalListSortingStrategy}
             >
               <Canvas />
             </SortableContext>
-          </DndContext>
+          </div>
+
+          <RightSidebar />
         </div>
 
-        <RightSidebar />
-      </div>
+        <DragOverlay dropAnimation={null}>
+          {sidebarDrag ? (
+            <div className="bg-base-100 rounded-lg shadow-2xl px-4 py-2.5 text-sm font-semibold border border-primary/50 text-primary opacity-90 pointer-events-none select-none">
+              + {sidebarDrag.label}
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
     </div>
   )
 }

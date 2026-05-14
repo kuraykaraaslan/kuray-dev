@@ -43,6 +43,7 @@ function TimelineBlock(rawProps: Record<string, unknown>) {
   const atLabel       = (rawProps.atLabel as string)       || 'at'
   const showMoreLabel = (rawProps.showMoreLabel as string) || 'Show More'
   const showLessLabel = (rawProps.showLessLabel as string) || 'Show Less'
+  const lineColor     = (rawProps.lineColor as string)     || ''
 
   const [expanded, setExpanded] = useState(false)
   const container = useRef<HTMLDivElement>(null)
@@ -75,9 +76,12 @@ function TimelineBlock(rawProps: Record<string, unknown>) {
 
             return (
               <li key={index}>
-                {index > 0 && <hr />}
+                {index > 0 && <hr className="bg-primary" style={lineColor ? { backgroundColor: lineColor } : undefined} />}
 
-                <div className="timeline-middle bg-base-300 p-2 rounded-full">
+                <div
+                  className="timeline-middle bg-base-300 p-2 rounded-full border-2 border-primary"
+                  style={lineColor ? { borderColor: lineColor } : undefined}
+                >
                   <FontAwesomeIcon icon={icon} className="h-5 w-5" />
                 </div>
 
@@ -106,7 +110,7 @@ function TimelineBlock(rawProps: Record<string, unknown>) {
                   )}
                 </div>
 
-                {!isLast && <hr />}
+                {!isLast && <hr className="bg-primary" style={lineColor ? { backgroundColor: lineColor } : undefined} />}
               </li>
             )
           })}
@@ -155,6 +159,7 @@ export const TimelineBlockDefinition: BlockDefinition = {
     atLabel:       { label: '"at" Label',          type: 'text', placeholder: 'at' },
     showMoreLabel: { label: '"Show More" Label',   type: 'text' },
     showLessLabel: { label: '"Show Less" Label',   type: 'text' },
+    lineColor:     { label: 'Line Color',          type: 'color', placeholder: '#6b7280' },
     items: {
       label: 'Timeline Items',
       type: 'repeater',

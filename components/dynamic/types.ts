@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 export type { BlockData } from '@/types/content/PageTypes'
 
-export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'json' | 'img' | 'repeater' | 'icon'
+export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'json' | 'img' | 'repeater' | 'icon' | 'rich-text'
 
 export interface FieldSchema {
   label: string

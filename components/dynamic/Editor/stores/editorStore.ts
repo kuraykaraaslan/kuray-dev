@@ -19,6 +19,8 @@ type TranslationEntry = {
   sections: BlockData[]
 }
 
+export type PreviewMode = 'mobile' | 'tablet' | 'desktop'
+
 interface EditorStore {
   loading: boolean
   saving: boolean
@@ -33,6 +35,10 @@ interface EditorStore {
   backupOpen: boolean
   seoOpen: boolean
   translationOpen: boolean
+  isDirty: boolean
+  previewMode: PreviewMode
+  undoStack: BlockData[][]
+  redoStack: BlockData[][]
 
   // Block definitions (loaded from DB)
   blockDefs: DynamicPageBlockRecord[]
@@ -55,10 +61,15 @@ interface EditorStore {
   setBackupOpen: (v: boolean) => void
   setSeoOpen: (v: boolean) => void
   setTranslationOpen: (v: boolean) => void
+  setPreviewMode: (v: PreviewMode) => void
   handleDragEnd: (event: DragEndEvent) => void
-  addBlock: (type: string) => void
+  addBlock: (type: string, atIndex?: number) => void
   deleteBlock: (id: string) => void
+  duplicateBlock: (id: string) => void
+  toggleBlockHidden: (id: string) => void
   updateBlockProps: (id: string, props: Record<string, unknown>) => void
+  undo: () => void
+  redo: () => void
   loadPage: (pageId: string) => Promise<void>
   handleSave: (mode: 'create' | 'edit', pageId: string, router: Router) => Promise<void>
   reset: () => void
@@ -86,6 +97,10 @@ const initialState = {
   backupOpen: false,
   seoOpen: false,
   translationOpen: false,
+  isDirty: false,
+  previewMode: 'desktop' as PreviewMode,
+  undoStack: [] as BlockData[][],
+  redoStack: [] as BlockData[][],
   pageId: '',
   activeLang: 'en',
   enSections: [] as BlockData[],
@@ -98,15 +113,16 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   ...initialState,
 
   setSelectedId: (id) => set({ selectedId: id }),
-  setTitle: (v) => set({ title: v }),
-  setSlug: (v) => set({ slug: v }),
-  setStatus: (v) => set({ status: v }),
-  setDescription: (v) => set({ description: v }),
-  setKeywords: (v) => set({ keywords: v }),
-  setMetadata: (v) => set({ metadata: v }),
+  setTitle: (v) => set({ title: v, isDirty: true }),
+  setSlug: (v) => set({ slug: v, isDirty: true }),
+  setStatus: (v) => set({ status: v, isDirty: true }),
+  setDescription: (v) => set({ description: v, isDirty: true }),
+  setKeywords: (v) => set({ keywords: v, isDirty: true }),
+  setMetadata: (v) => set({ metadata: v, isDirty: true }),
   setBackupOpen: (v) => set({ backupOpen: v }),
   setSeoOpen: (v) => set({ seoOpen: v }),
   setTranslationOpen: (v) => set({ translationOpen: v }),
+  setPreviewMode: (v) => set({ previewMode: v }),
 
   loadBlockDefs: async () => {
     try {
@@ -126,6 +142,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       const oldIndex = state.sections.findIndex((b) => b.id === active.id)
       const newIndex = state.sections.findIndex((b) => b.id === over.id)
       return {
+        undoStack: [...state.undoStack.slice(-49), state.sections],
+        redoStack: [],
+        isDirty: true,
         sections: arrayMove(state.sections, oldIndex, newIndex).map((b, i) => ({
           ...b,
           order: i,
@@ -134,7 +153,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     })
   },
 
-  addBlock: (type) => {
+  addBlock: (type, atIndex) => {
     if (get().activeLang !== 'en') return
     const codeBlock = getCodeBlock(type)
     const dbBlock = get().blockDefs.find((d) => d.type === type)
@@ -142,18 +161,36 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const newSection: BlockData = {
       id: uuidv4(),
       type,
-      order: get().sections.length,
+      order: 0,
       props: { ...defaultProps },
     }
-    set((state) => ({
-      sections: [...state.sections, newSection],
-      selectedId: newSection.id,
-    }))
+    set((state) => {
+      let newSections: BlockData[]
+      if (atIndex !== undefined) {
+        newSections = [
+          ...state.sections.slice(0, atIndex),
+          newSection,
+          ...state.sections.slice(atIndex),
+        ].map((b, i) => ({ ...b, order: i }))
+      } else {
+        newSections = [...state.sections, { ...newSection, order: state.sections.length }]
+      }
+      return {
+        undoStack: [...state.undoStack.slice(-49), state.sections],
+        redoStack: [],
+        isDirty: true,
+        sections: newSections,
+        selectedId: newSection.id,
+      }
+    })
   },
 
   deleteBlock: (id) => {
     if (get().activeLang !== 'en') return
     set((state) => ({
+      undoStack: [...state.undoStack.slice(-49), state.sections],
+      redoStack: [],
+      isDirty: true,
       sections: state.sections
         .filter((b) => b.id !== id)
         .map((b, i) => ({ ...b, order: i })),
@@ -161,15 +198,75 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     }))
   },
 
+  duplicateBlock: (id) => {
+    if (get().activeLang !== 'en') return
+    set((state) => {
+      const original = state.sections.find((b) => b.id === id)
+      if (!original) return {}
+      const copy: BlockData = { ...original, id: uuidv4() }
+      const insertIdx = state.sections.findIndex((b) => b.id === id) + 1
+      const newSections = [
+        ...state.sections.slice(0, insertIdx),
+        copy,
+        ...state.sections.slice(insertIdx),
+      ].map((b, i) => ({ ...b, order: i }))
+      return {
+        undoStack: [...state.undoStack.slice(-49), state.sections],
+        redoStack: [],
+        isDirty: true,
+        sections: newSections,
+        selectedId: copy.id,
+      }
+    })
+  },
+
+  toggleBlockHidden: (id) => {
+    set((state) => ({
+      undoStack: [...state.undoStack.slice(-49), state.sections],
+      redoStack: [],
+      isDirty: true,
+      sections: state.sections.map((b) =>
+        b.id === id ? { ...b, hidden: !b.hidden } : b
+      ),
+    }))
+  },
+
   updateBlockProps: (id, props) => {
     set((state) => ({
+      isDirty: true,
       sections: state.sections.map((b) => (b.id === id ? { ...b, props } : b)),
     }))
   },
 
+  undo: () => {
+    set((state) => {
+      if (state.undoStack.length === 0) return {}
+      const prev = state.undoStack[state.undoStack.length - 1]
+      return {
+        sections: prev,
+        undoStack: state.undoStack.slice(0, -1),
+        redoStack: [...state.redoStack.slice(-49), state.sections],
+        selectedId: null,
+      }
+    })
+  },
+
+  redo: () => {
+    set((state) => {
+      if (state.redoStack.length === 0) return {}
+      const next = state.redoStack[state.redoStack.length - 1]
+      return {
+        sections: next,
+        redoStack: state.redoStack.slice(0, -1),
+        undoStack: [...state.undoStack.slice(-49), state.sections],
+        selectedId: null,
+      }
+    })
+  },
+
   loadPage: async (pageId) => {
     if (pageId === 'create') {
-      set({ loading: false, pageId: '' })
+      set({ loading: false, pageId: '', isDirty: false })
       return
     }
     set({ loading: true, pageId })
@@ -218,6 +315,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         translationCache: cache,
         savedLangs,
         activeLang: 'en',
+        isDirty: false,
+        undoStack: [],
+        redoStack: [],
       })
     } catch {
       toast.error('Failed to load page')
@@ -230,7 +330,6 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const { title, slug, status, description, keywords, metadata, sections, enSections, activeLang, translationCache } = get()
     if (!title.trim()) { toast.error('Title is required'); return }
 
-    // EN modundayken sections, çeviri modundayken enSections kullan
     const enSectionsToSave = activeLang === 'en' ? sections : enSections
 
     const body = {
@@ -248,17 +347,16 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       if (mode === 'create') {
         const res = await axiosInstance.post('/api/dynamic-pages', body)
         toast.success('Page created')
+        set({ isDirty: false })
         router.replace(`/admin/pages/${res.data.page.dynamicPageId}`)
         return
       }
 
-      // Aktif translation sections'ı da cache'e yaz (henüz yazılmadıysa)
       const latestCache = { ...translationCache }
       if (activeLang !== 'en' && latestCache[activeLang]) {
         latestCache[activeLang] = { ...latestCache[activeLang], sections: sections.map((s, i) => ({ ...s, order: i })) }
       }
 
-      // EN sayfası + tüm çevirileri paralel kaydet
       const translationEntries = Object.entries(latestCache).filter(([lang]) => lang !== 'en')
 
       await Promise.all([
@@ -276,7 +374,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       ])
 
       const savedTranslationLangs = translationEntries.map(([lang]) => lang)
-      set({ savedLangs: [...new Set([...get().savedLangs, ...savedTranslationLangs])] })
+      set({
+        savedLangs: [...new Set([...get().savedLangs, ...savedTranslationLangs])],
+        isDirty: false,
+      })
       toast.success('Page and translations saved')
     } catch (error: unknown) {
       const msg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message
@@ -293,7 +394,6 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
     const currentEnSections = activeLang === 'en' ? sections : enSections
 
-    // Dil değişmeden önce mevcut sections'ı cache'e kaydet
     if (activeLang !== 'en') {
       const entry = translationCache[activeLang]
       if (entry) {
@@ -336,14 +436,14 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const { translationCache } = get()
     const entry = translationCache[lang]
     if (!entry) return
-    set({ translationCache: { ...translationCache, [lang]: { ...entry, title: v } } })
+    set({ translationCache: { ...translationCache, [lang]: { ...entry, title: v } }, isDirty: true })
   },
 
   setTranslationDescription: (lang, v) => {
     const { translationCache } = get()
     const entry = translationCache[lang]
     if (!entry) return
-    set({ translationCache: { ...translationCache, [lang]: { ...entry, description: v } } })
+    set({ translationCache: { ...translationCache, [lang]: { ...entry, description: v } }, isDirty: true })
   },
 
   addTranslation: (lang, data) => {
@@ -372,6 +472,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       })
       set((state) => ({
         savedLangs: [...new Set([...state.savedLangs, activeLang])],
+        isDirty: false,
         translationCache: {
           ...state.translationCache,
           [activeLang]: { ...entry, sections: sections.map((s, i) => ({ ...s, order: i })) },

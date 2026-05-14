@@ -7,6 +7,7 @@ export const BlockDataSchema = z.object({
   type: z.string(),
   order: z.number(),
   props: z.record(z.unknown()),
+  hidden: z.boolean().optional(),
 })
 
 export const PageMetadataSchema = z.object({

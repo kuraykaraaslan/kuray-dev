@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+import { useDraggable } from '@dnd-kit/core'
 import { getCodeBlocks } from '../BlockRegistry'
 import type { BlockDefinition, DynamicPageBlockRecord } from '../types'
 import { useEditorStore } from './stores/editorStore'
@@ -46,6 +47,38 @@ function Chevron({ open }: { open: boolean }) {
   )
 }
 
+function DraggableBlockButton({ def, onAdd, onMouseEnter, onMouseLeave, isHovered }: {
+  def: AnyBlockDef
+  onAdd: () => void
+  onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onMouseLeave: () => void
+  isHovered: boolean
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `sidebar-${def.type}`,
+    data: { fromSidebar: true, blockType: def.type, blockLabel: def.label },
+  })
+  const isCustom = def.category === 'Custom'
+
+  return (
+    <button
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      onClick={onAdd}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={{ opacity: isDragging ? 0.4 : 1, touchAction: 'none' }}
+      className={`w-full text-left p-2.5 rounded-lg transition-all hover:scale-[1.02] border cursor-grab active:cursor-grabbing select-none ${
+        isCustom ? 'bg-primary/5 border-primary/20' : 'bg-base-300 border-base-content/10'
+      } ${isHovered ? 'border-primary/50' : ''}`}
+    >
+      <div className={`text-sm font-medium mb-0.5 ${isCustom ? 'text-primary' : 'text-base-content'}`}>{def.label}</div>
+      <div className="text-xs leading-snug text-base-content/40">{'description' in def ? def.description : ''}</div>
+    </button>
+  )
+}
+
 export default function LeftSidebar() {
   const addBlock = useEditorStore((s) => s.addBlock)
   const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
@@ -53,6 +86,7 @@ export default function LeftSidebar() {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState<{ def: AnyBlockDef; y: number } | null>(null)
   const [collapsed, setCollapsed] = useState(false)
+  const [search, setSearch] = useState('')
 
   const allDefs: AnyBlockDef[] = [...getCodeBlocks(), ...blockDefs]
 
@@ -77,6 +111,12 @@ export default function LeftSidebar() {
   }, [])
 
   const sidebarRight = sidebarRef.current?.getBoundingClientRect().right ?? 240
+
+  const searchTrimmed = search.trim()
+  const isSearchActive = searchTrimmed.length > 0
+  const filteredDefs = isSearchActive
+    ? allDefs.filter((def) => def.label.toLowerCase().includes(searchTrimmed.toLowerCase()))
+    : []
 
   if (collapsed) {
     return (
@@ -136,39 +176,75 @@ export default function LeftSidebar() {
         </button>
       </div>
 
-      <div className="py-2">
-        {orderedCategories.map((cat) => (
-          <div key={cat}>
+      <div className="px-3 pt-2 pb-1">
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search blocks…"
+            className="w-full text-xs bg-base-300 border border-base-content/10 rounded-md px-2.5 py-1.5 pr-6 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary/40 transition-colors"
+          />
+          {search && (
             <button
-              onClick={() => setOpen((prev) => ({ ...prev, [cat]: !prev[cat] }))}
-              className="w-full flex items-center justify-between px-4 py-2 transition-colors text-base-content/50"
+              onClick={() => setSearch('')}
+              className="absolute right-1.5 text-base-content/40 hover:text-base-content transition-colors leading-none"
+              title="Clear search"
             >
-              <span className="text-xs font-semibold uppercase tracking-widest">{cat}</span>
-              <Chevron open={open[cat] ?? true} />
+              ×
             </button>
+          )}
+        </div>
+      </div>
 
-            {(open[cat] ?? true) && (
-              <div className="px-3 pb-2 space-y-1.5">
-                {grouped[cat].map((def) => {
-                  const isCustom = cat === 'Custom'
-                  const type = def.type
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => addBlock(type)}
+      <div className="py-2">
+        {isSearchActive ? (
+          filteredDefs.length === 0 ? (
+            <div className="px-4 py-6 text-center">
+              <p className="text-xs text-base-content/30">No blocks found</p>
+            </div>
+          ) : (
+            <div className="px-3 pb-2 space-y-1.5">
+              {filteredDefs.map((def) => (
+                <DraggableBlockButton
+                  key={def.type}
+                  def={def}
+                  onAdd={() => addBlock(def.type)}
+                  onMouseEnter={(e) => handleMouseEnter(def, e)}
+                  onMouseLeave={() => setHovered(null)}
+                  isHovered={hovered?.def.type === def.type}
+                />
+              ))}
+            </div>
+          )
+        ) : (
+          orderedCategories.map((cat) => (
+            <div key={cat}>
+              <button
+                onClick={() => setOpen((prev) => ({ ...prev, [cat]: !prev[cat] }))}
+                className="w-full flex items-center justify-between px-4 py-2 transition-colors text-base-content/50"
+              >
+                <span className="text-xs font-semibold uppercase tracking-widest">{cat}</span>
+                <Chevron open={open[cat] ?? true} />
+              </button>
+
+              {(open[cat] ?? true) && (
+                <div className="px-3 pb-2 space-y-1.5">
+                  {grouped[cat].map((def) => (
+                    <DraggableBlockButton
+                      key={def.type}
+                      def={def}
+                      onAdd={() => addBlock(def.type)}
                       onMouseEnter={(e) => handleMouseEnter(def, e)}
                       onMouseLeave={() => setHovered(null)}
-                      className={`w-full text-left p-2.5 rounded-lg transition-all hover:scale-[1.02] border ${isCustom ? 'bg-primary/5 border-primary/20' : 'bg-base-300 border-base-content/10'} ${hovered?.def.type === type ? 'border-primary/50' : ''}`}
-                    >
-                      <div className={`text-sm font-medium mb-0.5 ${isCustom ? 'text-primary' : 'text-base-content'}`}>{def.label}</div>
-                      <div className="text-xs leading-snug text-base-content/40">{'description' in def ? def.description : ''}</div>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        ))}
+                      isHovered={hovered?.def.type === def.type}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
       {hovered && <BlockPreview def={hovered.def} anchorY={hovered.y} sidebarRight={sidebarRight} />}

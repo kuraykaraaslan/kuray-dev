@@ -7,6 +7,13 @@ import SeoModal from './SeoModal'
 import BackupModal from './BackupModal'
 import TranslationModal from './TranslationModal'
 import { useEditorStore } from './stores/editorStore'
+import type { PreviewMode } from './stores/editorStore'
+
+const PREVIEW_MODES: { mode: PreviewMode; label: string; icon: string }[] = [
+  { mode: 'mobile', label: 'Mobile', icon: '📱' },
+  { mode: 'tablet', label: 'Tablet', icon: '📟' },
+  { mode: 'desktop', label: 'Desktop', icon: '🖥' },
+]
 
 interface Props {
   onSave: () => void
@@ -25,6 +32,10 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
     setTranslationTitle,
     setTranslationDescription,
     saveTranslation,
+    previewMode, setPreviewMode,
+    isDirty,
+    undo, redo,
+    undoStack, redoStack,
   } = useEditorStore()
 
   const isTranslationMode = activeLang !== 'en'
@@ -33,8 +44,8 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-between px-6 py-3 border-b bg-base-200">
-        <div className="flex items-center space-x-1">
+      <div className="flex items-center justify-between px-4 py-3 border-b bg-base-200 gap-3">
+        <div className="flex items-center gap-1 flex-1 min-w-0">
           {isTranslationMode ? (
             <>
               <DynamicText
@@ -48,7 +59,7 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
                 setValue={(v) => setTranslationDescription(activeLang, v)}
                 placeholder={`${activeLangLabel} Description`}
               />
-              <span className="px-2 py-1 text-xs rounded bg-secondary/15 text-secondary border border-secondary/30 font-mono">
+              <span className="px-2 py-1 text-xs rounded bg-secondary/15 text-secondary border border-secondary/30 font-mono flex-shrink-0">
                 {activeLangLabel} Translation
               </span>
             </>
@@ -90,7 +101,6 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
             </>
           )}
 
-          {/* Always visible — shows active lang badge when in translation mode */}
           <button
             onClick={() => setTranslationOpen(true)}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0 h-10 flex items-center gap-1.5 ${
@@ -106,7 +116,48 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
           </button>
         </div>
 
-        <div className="flex items-center space-x-3">
+        {/* Preview mode toggle */}
+        <div className="flex items-center gap-0.5 bg-base-300 rounded-lg p-0.5 flex-shrink-0">
+          {PREVIEW_MODES.map(({ mode, label, icon }) => (
+            <button
+              key={mode}
+              onClick={() => setPreviewMode(mode)}
+              title={label}
+              className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition-all ${
+                previewMode === mode
+                  ? 'bg-base-100 text-base-content shadow-sm'
+                  : 'text-base-content/40 hover:text-base-content/70'
+              }`}
+            >
+              {icon}
+            </button>
+          ))}
+        </div>
+
+        {/* Undo / Redo */}
+        <div className="flex items-center gap-0.5 flex-shrink-0">
+          <button
+            onClick={undo}
+            disabled={undoStack.length === 0}
+            title="Undo (Ctrl+Z)"
+            className="w-8 h-8 flex items-center justify-center rounded-md text-xs text-base-content/50 hover:text-base-content hover:bg-base-300 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
+          >
+            ↩
+          </button>
+          <button
+            onClick={redo}
+            disabled={redoStack.length === 0}
+            title="Redo (Ctrl+Y)"
+            className="w-8 h-8 flex items-center justify-center rounded-md text-xs text-base-content/50 hover:text-base-content hover:bg-base-300 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
+          >
+            ↪
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {isDirty && (
+            <span className="text-[10px] text-warning/70 font-medium">Unsaved</span>
+          )}
           <button
             onClick={onCancel}
             className="px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0 bg-base-content/10 text-base-content/70 h-10"

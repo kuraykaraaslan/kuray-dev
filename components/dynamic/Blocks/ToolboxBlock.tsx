@@ -60,7 +60,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
 
   return (
     <BaseBlock {...baseProps}>
-      <div className="relative z-10 w-full max-w-5xl">
+      <div className="relative z-10 w-full">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
           <div className="col-span-2 md:col-span-1 md:col-start-3 overflow-hidden">
             <h2 className="text-4xl lg:text-3xl font-bold mt-6 text-center md:text-end">{title}</h2>

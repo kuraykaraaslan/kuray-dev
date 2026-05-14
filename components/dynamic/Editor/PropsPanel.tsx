@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import axiosInstance from '@/libs/axios'
 import type { BlockData, FieldSchema } from '../types'
 import { getCodeBlock } from '../BlockRegistry'
@@ -18,6 +18,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   const [localProps, setLocalProps] = useState<Record<string, unknown>>({})
   const [uploadingKey, setUploadingKey] = useState<string | null>(null)
   const blockDefs = useEditorStore((s) => s.blockDefs)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (!block) return
@@ -36,6 +37,13 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
     setLocalProps(nextProps)
   }, [block?.id, block?.type, blockDefs])
+
+  const update = useCallback((key: string, value: unknown) => {
+    const next = { ...localProps, [key]: value }
+    setLocalProps(next)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => onChange(next), 200)
+  }, [localProps, onChange])
 
   if (!block) {
     return (
@@ -60,12 +68,6 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
 
   const schema = (codeDef?.schema ?? dbDef?.schema ?? {}) as Record<string, FieldSchema>
 
-  const update = (key: string, value: unknown) => {
-    const next = { ...localProps, [key]: value }
-    setLocalProps(next)
-    onChange(next)
-  }
-
   const uploadImage = async (key: string, file: File, uploadFolder = 'content') => {
     const formData = new FormData()
     formData.append('file', file)
@@ -76,7 +78,6 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
       const response = await axiosInstance.post('/api/media', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-
       update(key, response.data.url)
     } finally {
       setUploadingKey(null)
@@ -124,7 +125,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
               />
             )}
 
-            {(field.type === 'img') && (
+            {field.type === 'img' && (
               <div className="space-y-3">
                 {typeof localProps[key] === 'string' && (localProps[key] as string) ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -173,6 +174,25 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
                 onChange={(e) => update(key, e.target.value)}
                 className={`${inputCls} resize-none`}
               />
+            )}
+
+            {field.type === 'rich-text' && (
+              <div className="space-y-2">
+                <textarea
+                  value={(localProps[key] as string) ?? (field.value as string) ?? ''}
+                  placeholder={field.placeholder || '<p>Enter HTML content…</p>'}
+                  rows={6}
+                  onChange={(e) => update(key, e.target.value)}
+                  className={`${inputCls} resize-none font-mono text-xs`}
+                />
+                {(localProps[key] as string) && (
+                  <div
+                    className="p-2.5 rounded-md text-xs border border-base-content/10 bg-base-300/50 prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: localProps[key] as string }}
+                  />
+                )}
+                <p className="text-[10px] text-base-content/30">HTML supported · live preview above</p>
+              </div>
             )}
 
             {field.type === 'color' && (
@@ -251,7 +271,6 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
                   try {
                     update(key, JSON.parse(e.target.value))
                   } catch {
-                    // Keep raw string while typing invalid JSON
                     const next = { ...localProps, [key]: e.target.value }
                     setLocalProps(next)
                   }
