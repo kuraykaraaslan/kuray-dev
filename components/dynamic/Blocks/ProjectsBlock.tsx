@@ -1,4 +1,5 @@
 'use client'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import { useState, useEffect, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAnglesDown, faAnglesUp } from '@fortawesome/free-solid-svg-icons'
@@ -84,6 +85,7 @@ function ProjectsBlock(rawProps: Record<string, unknown>) {
   const showLessLabel = (rawProps.showLessLabel as string) || 'Show Less'
   const allLabel      = (rawProps.allLabel as string)      || 'All'
   const dataSource    = (rawProps.dataSource as string)    || 'api'
+  const baseProps = parseBaseBlockProps(rawProps)
 
   const filters     = parseFilters(rawProps.filters)
   const staticItems = parseStaticProjects(rawProps.projects)
@@ -121,9 +123,9 @@ function ProjectsBlock(rawProps: Record<string, unknown>) {
   const filtered = allProjects.filter((p) => !filter || p.platforms.includes(filter))
 
   return (
-    <section className="bg-base-200 pt-16" id="portfolio">
+    <BaseBlock {...baseProps} className="bg-base-200 pt-16">
       <div
-        className="px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6 duration-1000"
+        className="relative z-10 px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6 duration-1000"
         style={{ height: '560px', overflow: 'clip' }}
         ref={container}
       >
@@ -178,7 +180,7 @@ function ProjectsBlock(rawProps: Record<string, unknown>) {
           </button>
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -196,6 +198,8 @@ export const ProjectsBlockDefinition: BlockDefinition = {
     dataSource: 'api',
     filters: DEFAULT_FILTERS,
     projects: DEFAULT_STATIC_PROJECTS,
+    sectionId: 'portfolio',
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
     title:         { label: 'Section Title',       type: 'text' },
@@ -231,6 +235,7 @@ export const ProjectsBlockDefinition: BlockDefinition = {
         platforms:    { label: 'Platforms (comma-separated, for filters)', type: 'text',     placeholder: 'web, mobile', value: '' },
       },
     },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: ProjectsBlock as unknown as BlockDefinition['Component'],
 }

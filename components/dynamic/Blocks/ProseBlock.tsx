@@ -1,15 +1,16 @@
+'use client'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
 
-interface Props {
-  title?: string
-  subtitle?: string
-  content?: string
-}
+function ProseBlock(rawProps: Record<string, unknown>) {
+  const title    = (rawProps.title    as string) || ''
+  const subtitle = (rawProps.subtitle as string) || ''
+  const content  = (rawProps.content  as string) || ''
+  const baseProps = parseBaseBlockProps(rawProps)
 
-function ProseBlock({ title, subtitle, content }: Props) {
   return (
-    <section className="min-h-screen bg-base-100 pt-32">
-      <div className="container mx-auto px-4 lg:px-8 mb-16 max-w-3xl">
+    <BaseBlock {...baseProps} className="min-h-screen bg-base-100 pt-32">
+      <div className="relative z-10 container mx-auto px-4 lg:px-8 mb-16 max-w-3xl">
         {title && (
           <h1 className="text-3xl font-bold text-center mb-4">{title}</h1>
         )}
@@ -23,7 +24,7 @@ function ProseBlock({ title, subtitle, content }: Props) {
           />
         )}
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -36,11 +37,13 @@ export const ProseBlockDefinition: BlockDefinition = {
     title: 'Document Title',
     subtitle: 'Last Updated: January 1, 2025',
     content: '<h2>Section</h2><p>Start writing your content here...</p>',
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
-    title: { label: 'Title', type: 'text', placeholder: 'Privacy Policy' },
-    subtitle: { label: 'Subtitle / Last Updated', type: 'text', placeholder: 'Last Updated: January 1, 2025' },
-    content: { label: 'Content (HTML)', type: 'textarea', placeholder: '<h2>Heading</h2><p>Paragraph...</p>' },
+    title:    { label: 'Title',                   type: 'text',     placeholder: 'Privacy Policy' },
+    subtitle: { label: 'Subtitle / Last Updated', type: 'text',     placeholder: 'Last Updated: January 1, 2025' },
+    content:  { label: 'Content (HTML)',           type: 'textarea', placeholder: '<h2>Heading</h2><p>Paragraph...</p>' },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: ProseBlock as unknown as BlockDefinition['Component'],
 }

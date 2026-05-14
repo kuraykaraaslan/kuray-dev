@@ -1,4 +1,5 @@
 'use client'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import SingleService from '@/components/frontend/Features/Hero/Services/Partials/SingleService'
 import type { Service } from '@/types/content/ProjectTypes'
 import type { BlockDefinition } from '../types'
@@ -47,6 +48,7 @@ function parseServices(raw: unknown): ServiceItem[] {
 }
 
 function ServicesBlock(rawProps: Record<string, unknown>) {
+  const baseProps = parseBaseBlockProps(rawProps)
   const sectionTitle       = (rawProps.sectionTitle as string)       || 'What I Do'
   const sectionDescription = (rawProps.sectionDescription as string) || 'A range of services I offer.'
   const mobileColumns      = clamp(Number(rawProps.mobileColumns)  || 1, 1, 4)
@@ -69,8 +71,8 @@ function ServicesBlock(rawProps: Record<string, unknown>) {
   const gridCls = `grid gap-8 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
 
   return (
-    <section className="bg-base-100 pt-16" id="services">
-      <div className="px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6">
+    <BaseBlock {...baseProps} className="bg-base-100 pt-16">
+      <div className="relative z-10 px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
           <h2 className="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold">{sectionTitle}</h2>
           <p className="font-light sm:text-xl">{sectionDescription}</p>
@@ -81,7 +83,7 @@ function ServicesBlock(rawProps: Record<string, unknown>) {
           ))}
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -96,6 +98,8 @@ export const ServicesBlockDefinition: BlockDefinition = {
     mobileColumns: 1,
     desktopColumns: 2,
     services: DEFAULT_SERVICES,
+    sectionId: 'services',
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
     sectionTitle:       { label: 'Section Title',       type: 'text' },
@@ -115,6 +119,7 @@ export const ServicesBlockDefinition: BlockDefinition = {
         textColor:   { label: 'Text Class',       type: 'text', placeholder: 'text-base-900' },
       },
     },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: ServicesBlock as unknown as BlockDefinition['Component'],
 }

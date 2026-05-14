@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import dynamic from 'next/dynamic'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
 
 const HeatMap = dynamic(
@@ -15,10 +16,11 @@ function GitContributionsBlock(rawProps: Record<string, unknown>) {
   const description = (rawProps.description as string) || 'My open source activity on GitHub.'
   const githubUrl = (rawProps.githubUrl as string) || 'https://github.com/kuraykaraaslan'
   const buttonLabel = (rawProps.buttonLabel as string) || 'View on GitHub'
+  const baseProps = parseBaseBlockProps(rawProps)
 
   return (
-    <div className="hero min-h-screen bg-base-100 hidden lg:flex items-center justify-center">
-      <div className="hero-content text-center">
+    <BaseBlock as="div" {...baseProps} className="hero min-h-screen bg-base-100 hidden lg:flex items-center justify-center">
+      <div className="relative z-10 hero-content text-center">
         <div>
           <h2 className="text-5xl font-bold">{title}</h2>
           <p className="py-6">{description}</p>
@@ -36,7 +38,7 @@ function GitContributionsBlock(rawProps: Record<string, unknown>) {
           </div>
         </div>
       </div>
-    </div>
+    </BaseBlock>
   )
 }
 
@@ -50,12 +52,14 @@ export const GitContributionsBlockDefinition: BlockDefinition = {
     description: 'My open source activity on GitHub.',
     githubUrl: 'https://github.com/kuraykaraaslan',
     buttonLabel: 'View on GitHub',
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
     title: { label: 'Title', type: 'text' },
     description: { label: 'Description', type: 'textarea' },
     githubUrl: { label: 'GitHub Profile URL', type: 'url' },
     buttonLabel: { label: 'Button Label', type: 'text' },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: GitContributionsBlock as unknown as BlockDefinition['Component'],
 }

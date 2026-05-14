@@ -1,4 +1,5 @@
 'use client'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import axiosInstance from '@/libs/axios'
@@ -41,6 +42,7 @@ function TestimonialCard({ name, title, review, image }: TestimonialItem) {
 }
 
 function TestimonialsBlock(rawProps: Record<string, unknown>) {
+  const baseProps = parseBaseBlockProps(rawProps)
   const title = (rawProps.title as string) || 'What People Say'
   const description = (rawProps.description as string) || 'Feedback from clients and collaborators.'
   const dataSource = (rawProps.dataSource as string) || 'manual'
@@ -78,8 +80,8 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
   const rightColumn = testimonials.slice(half)
 
   return (
-    <section className="bg-base-300 md:px-24">
-      <div className="container px-6 py-4 mx-auto pb-0 md:pb-20">
+    <BaseBlock {...baseProps} className="bg-base-300 md:px-24">
+      <div className="relative z-10 container px-6 py-4 mx-auto pb-0 md:pb-20">
         <div className="grid items-center gap-4 xl:grid-cols-5">
           <div className="max-w-2xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
             <h2 className="text-4xl font-bold">{title}</h2>
@@ -107,7 +109,7 @@ function TestimonialsBlock(rawProps: Record<string, unknown>) {
           </div>
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -120,6 +122,7 @@ export const TestimonialsBlockDefinition: BlockDefinition = {
     title: 'What People Say',
     description: 'Feedback from clients and collaborators.',
     dataSource: 'manual',
+    ...BASE_BLOCK_DEFAULT_PROPS,
     testimonials: [
       {
         name: 'Jane Doe',
@@ -149,6 +152,7 @@ export const TestimonialsBlockDefinition: BlockDefinition = {
         image: { label: 'Avatar', type: 'img', uploadFolder: 'testimonials', value: '' },
       },
     },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: TestimonialsBlock as unknown as BlockDefinition['Component'],
 }

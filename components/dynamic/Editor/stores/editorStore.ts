@@ -73,7 +73,7 @@ interface EditorStore {
 }
 
 const initialState = {
-  loading: true,
+  loading: false,
   saving: false,
   sections: [] as BlockData[],
   selectedId: null as string | null,

@@ -1,5 +1,7 @@
+'use client'
 import Image from 'next/image'
 import Link from 'next/link'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
 
 interface Platform {
@@ -47,6 +49,7 @@ function parsePlatforms(raw: unknown): Platform[] {
 }
 
 function PlatformsBlock(rawProps: Record<string, unknown>) {
+  const baseProps = parseBaseBlockProps(rawProps)
   const title    = (rawProps.title    as string) || 'Find Me On'
   const subtitle = (rawProps.subtitle as string) || 'Freelance Platforms'
   const mobileColumns  = clamp(Number(rawProps.mobileColumns)  || 2, 1, 6)
@@ -58,8 +61,8 @@ function PlatformsBlock(rawProps: Record<string, unknown>) {
   const gridCls = `grid gap-6 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
 
   return (
-    <section className="py-12 bg-base-200">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <BaseBlock {...baseProps} className="py-12 bg-base-200">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <span className="font-medium mb-4 block">{subtitle}</span>
           <h2 className="text-4xl font-bold">{title}</h2>
@@ -88,7 +91,7 @@ function PlatformsBlock(rawProps: Record<string, unknown>) {
           ))}
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -103,6 +106,7 @@ export const PlatformsBlockDefinition: BlockDefinition = {
     mobileColumns: 2,
     desktopColumns: 6,
     platforms: DEFAULT_PLATFORMS,
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
     title:          { label: 'Section Title',    type: 'text' },
@@ -119,6 +123,7 @@ export const PlatformsBlockDefinition: BlockDefinition = {
         bgColor: { label: 'Background Class', type: 'text', placeholder: 'bg-white', value: 'bg-white' },
       },
     },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: PlatformsBlock as unknown as BlockDefinition['Component'],
 }

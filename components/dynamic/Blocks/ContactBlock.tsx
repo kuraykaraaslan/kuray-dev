@@ -10,6 +10,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import ReCAPTCHA from 'react-google-recaptcha'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
 
 const Form = dynamic(
@@ -37,7 +38,7 @@ function ContactBlock(rawProps: Record<string, unknown>) {
   const sendMessageTitle = (rawProps.sendMessageTitle as string) || 'Send a Message'
   const phoneAndMailLabel = (rawProps.phoneAndMailLabel as string) || 'Phone & Email'
   const socialMediaLabel = (rawProps.socialMediaLabel as string) || 'Social Media'
-  const backgroundColor = (rawProps.backgroundColor as string) || 'bg-base-100'
+  const baseProps = parseBaseBlockProps(rawProps)
   const whatsappUrl = (rawProps.whatsappUrl as string) || 'https://wa.me/905459223554'
   const telegramUrl = (rawProps.telegramUrl as string) || 'https://t.me/kuraykaraaslan'
   const linkedinUrl = (rawProps.linkedinUrl as string) || 'https://www.linkedin.com/in/kuraykaraaslan'
@@ -77,8 +78,8 @@ function ContactBlock(rawProps: Record<string, unknown>) {
   }
 
   return (
-    <section className={`min-h-screen md:pt-24 ${backgroundColor}`} id="contact">
-      <div className="container mx-auto mt-0 md:rounded-box md:shadow-2xl md:border-2 md:border-black contactHero">
+    <BaseBlock {...baseProps} className="min-h-screen md:pt-24 bg-base-100">
+      <div className="relative z-10 container mx-auto mt-0 md:rounded-box md:shadow-2xl md:border-2 md:border-black contactHero">
         <div className="mx-4 md:mx-8 pt-2 rounded-box md:mb-4">
           <div className="grid max-w-6xl grid-cols-1 px-6 mx-auto lg:px-8 md:grid-cols-2 md:divide-x pt-12 pb-12 mb-2">
             <div className="py-6 md:py-0 md:px-6">
@@ -171,7 +172,7 @@ function ContactBlock(rawProps: Record<string, unknown>) {
           </div>
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -188,7 +189,8 @@ export const ContactBlockDefinition: BlockDefinition = {
     socialMediaLabel: 'Social Media',
     revealMailLabel: 'Reveal Email',
     revealPhoneLabel: 'Reveal Phone',
-    backgroundColor: 'bg-base-100',
+    sectionId: 'contact',
+    ...BASE_BLOCK_DEFAULT_PROPS,
     whatsappUrl: 'https://wa.me/905459223554',
     telegramUrl: 'https://t.me/kuraykaraaslan',
     linkedinUrl: 'https://www.linkedin.com/in/kuraykaraaslan',
@@ -204,7 +206,7 @@ export const ContactBlockDefinition: BlockDefinition = {
     socialMediaLabel: { label: 'Social Media Section Label', type: 'text' },
     revealMailLabel: { label: 'Reveal Email Button Label', type: 'text' },
     revealPhoneLabel: { label: 'Reveal Phone Button Label', type: 'text' },
-    backgroundColor: { label: 'Background Color Class', type: 'text', placeholder: 'bg-base-100' },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
     whatsappUrl: { label: 'WhatsApp URL', type: 'url' },
     telegramUrl: { label: 'Telegram URL', type: 'url' },
     linkedinUrl: { label: 'LinkedIn URL', type: 'url' },

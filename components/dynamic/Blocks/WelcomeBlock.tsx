@@ -7,14 +7,13 @@ import { faArrowRight, faPlayCircle, faMagnifyingGlass } from '@fortawesome/free
 import dynamic from 'next/dynamic'
 import { HeadlessModal, useModal } from '@/components/common/Modal'
 import LoadingElement from '@/components/frontend/UI/Content/LoadingElement'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
 
 const ReactPlayer = dynamic(() => import('react-player'), {
   ssr: false,
   loading: () => <LoadingElement title="Video Player" />,
 })
-
-const BG_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.39'%3E%3Cpolygon fill='%23222222' points='800 100 0 200 0 800 1600 800 1600 200'/%3E%3Cpolygon fill='%23444444' points='800 200 0 400 0 800 1600 800 1600 400'/%3E%3Cpolygon fill='%23666666' points='800 300 0 600 0 800 1600 800 1600 600'/%3E%3Cpolygon fill='%23888888' points='1600 800 800 400 0 800'/%3E%3Cpolygon fill='%23aaaaaa' points='1280 800 800 500 320 800'/%3E%3Cpolygon fill='%23cccccc' points='533.3 800 1066.7 800 800 600'/%3E%3Cpolygon fill='%23EEE' points='684.1 800 914.3 800 800 700'/%3E%3C/g%3E%3C/svg%3E")`
 
 // ── Photo Widget ──────────────────────────────────────────────────────────────
 
@@ -130,36 +129,11 @@ function WelcomeBlock(rawProps: Record<string, unknown>) {
   const photoActionUrl = (rawProps.photoActionUrl as string) || 'https://www.youtube.com/watch?v=oJN50oOlW-c'
   const mobilePhoto = ((rawProps.mobilePhoto as string) || 'hidden') as PhotoWidgetProps['mobileLayout']
 
-  const backgroundType = (rawProps.backgroundType as string) || 'svg'
-  const backgroundImage = (rawProps.backgroundImage as string) || ''
-
-  const bgStyle: React.CSSProperties = {
-    zIndex: 2,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  }
-
-  if (backgroundType === 'svg') {
-    bgStyle.backgroundImage = BG_SVG
-    bgStyle.backgroundAttachment = 'fixed'
-    bgStyle.backgroundSize = 'cover'
-  }
+  const baseProps = parseBaseBlockProps(rawProps)
 
   return (
-    <div className="relative bg-base-200" style={{ height: '100dvh' }} id="home">
-      {backgroundType === 'image' && backgroundImage && (
-        <Image
-          src={backgroundImage}
-          alt="Hero background"
-          fill
-          className="object-cover opacity-30 z-0"
-          priority
-          unoptimized={backgroundImage.startsWith('http')}
-        />
-      )}
-      <div className="hero min-h-screen select-none" style={bgStyle}>
+    <BaseBlock as="div" {...baseProps} className="bg-base-200" style={{ height: '100dvh' }}>
+      <div className="hero min-h-screen select-none" style={{ zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <div
           className={[
             'hero-content relative z-10',
@@ -189,7 +163,7 @@ function WelcomeBlock(rawProps: Record<string, unknown>) {
           )}
         </div>
       </div>
-    </div>
+    </BaseBlock>
   )
 }
 
@@ -208,10 +182,10 @@ export const WelcomeBlockDefinition: BlockDefinition = {
     photoAction: 'modal-video',
     photoActionUrl: 'https://www.youtube.com/watch?v=oJN50oOlW-c',
     mobilePhoto: 'hidden',
-    backgroundType: 'svg',
-    backgroundImage: '',
     headingSize: 'text-5xl',
     descSize: 'text-lg',
+    sectionId: 'home',
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
     heading: { label: 'Heading', type: 'text', placeholder: 'Hello, I am ...' },
@@ -247,17 +221,7 @@ export const WelcomeBlockDefinition: BlockDefinition = {
       type: 'select',
       options: ['hidden', 'top', 'bottom'],
     },
-    backgroundType: {
-      label: 'Background Type',
-      type: 'select',
-      options: ['svg', 'image', 'none'],
-    },
-    backgroundImage: {
-      label: 'Background Image (if type = image)',
-      type: 'img',
-      uploadFolder: 'backgrounds',
-      accept: 'image/*',
-    },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: WelcomeBlock as unknown as BlockDefinition['Component'],
 }

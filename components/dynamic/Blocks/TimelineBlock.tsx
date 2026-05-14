@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAnglesDown, faAnglesUp, faBriefcase } from '@fortawesome/free-solid-svg-icons'
 import { ICON_MAP } from '../icons'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
 
 interface TimelineItem {
@@ -36,6 +37,7 @@ function resolveSide(item: TimelineItem, index: number): 'start' | 'end' {
 }
 
 function TimelineBlock(rawProps: Record<string, unknown>) {
+  const baseProps = parseBaseBlockProps(rawProps)
   const title         = (rawProps.title as string)         || 'My Journey'
   const description   = (rawProps.description as string)   || 'A timeline of my professional experience.'
   const atLabel       = (rawProps.atLabel as string)       || 'at'
@@ -54,7 +56,7 @@ function TimelineBlock(rawProps: Record<string, unknown>) {
   }
 
   return (
-    <section className="relative bg-base-100 pt-16" id="timeline">
+    <BaseBlock {...baseProps} className="bg-base-100 pt-16">
       <div
         className="px-4 mx-auto max-w-screen-xl lg:pb-16 lg:px-6 duration-1000"
         style={{ height: '560px', overflow: 'clip' }}
@@ -127,7 +129,7 @@ function TimelineBlock(rawProps: Record<string, unknown>) {
           </button>
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -143,6 +145,8 @@ export const TimelineBlockDefinition: BlockDefinition = {
     showMoreLabel: 'Show More',
     showLessLabel: 'Show Less',
     items: DEFAULT_ITEMS,
+    sectionId: 'timeline',
+    ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
     title:         { label: 'Section Title',       type: 'text' },
@@ -162,6 +166,7 @@ export const TimelineBlockDefinition: BlockDefinition = {
         side:        { label: 'Side',                         type: 'select', options: ['auto', 'start', 'end'], value: 'auto' },
       },
     },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: TimelineBlock as unknown as BlockDefinition['Component'],
 }

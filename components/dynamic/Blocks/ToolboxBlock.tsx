@@ -1,4 +1,5 @@
 'use client'
+import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ICON_MAP } from '../icons'
@@ -51,14 +52,15 @@ function SmallTool({ icon, text, flipped }: ToolItem & { flipped: boolean }) {
 }
 
 function ToolboxBlock(rawProps: Record<string, unknown>) {
+  const baseProps = parseBaseBlockProps(rawProps)
   const title = (rawProps.title as string) || 'Toolbox'
   const description = (rawProps.description as string) || 'Technologies and skills I use every day.'
   const rows = (rawProps.rows as RowItem[]) || []
   const [hoveredRow, setHoveredRow] = useState<number | null>(null)
 
   return (
-    <section className="hero bg-base-300 py-8 px-4 md:px-20 items-center justify-center min-h-screen">
-      <div className="w-full max-w-5xl">
+    <BaseBlock {...baseProps} className="hero bg-base-300 py-8 px-4 md:px-20 items-center justify-center min-h-screen">
+      <div className="relative z-10 w-full max-w-5xl">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
           <div className="col-span-2 md:col-span-1 md:col-start-3 overflow-hidden">
             <h2 className="text-4xl lg:text-3xl font-bold mt-6 text-center md:text-end">{title}</h2>
@@ -105,7 +107,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
           )}
         </div>
       </div>
-    </section>
+    </BaseBlock>
   )
 }
 
@@ -117,6 +119,7 @@ export const ToolboxBlockDefinition: BlockDefinition = {
   defaultProps: {
     title: 'Toolbox',
     description: 'Technologies and skills I use every day.',
+    ...BASE_BLOCK_DEFAULT_PROPS,
     rows: [
       {
         type: 'big',
@@ -175,6 +178,7 @@ export const ToolboxBlockDefinition: BlockDefinition = {
         },
       },
     },
+    ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: ToolboxBlock as unknown as BlockDefinition['Component'],
 }
