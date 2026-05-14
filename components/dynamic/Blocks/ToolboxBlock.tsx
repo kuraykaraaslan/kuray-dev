@@ -80,7 +80,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
             ) : null
             const toolsEl = (
               <div
-                className="flex flex-wrap gap-4 justify-center md:justify-start"
+                className="flex flex-wrap gap-4 justify-center"
                 onMouseEnter={() => setHoveredRow(rowIdx)}
                 onMouseLeave={() => setHoveredRow(null)}
               >
@@ -95,7 +95,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
               </div>
             )
             return (
-              <div key={rowIdx} className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+              <div key={rowIdx} className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
                 {isRight ? <>{toolsEl}{labelEl}</> : <>{labelEl}{toolsEl}</>}
               </div>
             )
