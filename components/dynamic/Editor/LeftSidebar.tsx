@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { createPortal } from 'react-dom'
 import { getCodeBlocks } from '../BlockRegistry'
 import type { BlockDefinition, DynamicPageBlockRecord } from '../types'
 import { useEditorStore } from './stores/editorStore'
@@ -24,10 +23,10 @@ function BlockPreview({ def, anchorY, sidebarRight }: { def: AnyBlockDef; anchor
     ? <def.Component {...def.defaultProps} />
     : <TemplateBlockRenderer template={def.template} props={def.defaultProps} />
 
-  return createPortal(
+  return (
     <div
-      className="pointer-events-none"
-      style={{ position: 'fixed', top, left: sidebarRight + 8, width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT, zIndex: 9999, borderRadius: 8, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.7)', border: '1px solid oklch(var(--p) / 0.3)' }}
+      className="pointer-events-none bg-base-100/90 backdrop-blur-sm border-base-content/20"
+      style={{ position: 'fixed', top, left: sidebarRight + 8, width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT, zIndex: 50, borderRadius: 8, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.7)', border: '1px solid oklch(var(--p) / 0.3)' }}
     >
       <div style={{ width: INNER_WIDTH, transformOrigin: 'top left', transform: `scale(${SCALE})`, pointerEvents: 'none', userSelect: 'none' }}>
         {inner}
@@ -35,8 +34,7 @@ function BlockPreview({ def, anchorY, sidebarRight }: { def: AnyBlockDef; anchor
       <div className="text-primary" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 10px 7px', background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%)', fontSize: 11, fontWeight: 600, letterSpacing: '0.06em' }}>
         {def.label}
       </div>
-    </div>,
-    document.body
+    </div>
   )
 }
 
