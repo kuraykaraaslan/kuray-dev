@@ -43,9 +43,11 @@ export default async function DynamicPageRenderer({ sections }: Props) {
   return (
     <div className="bg-base-100">
       {sorted.map((block) => (
-        <Suspense key={block.id} fallback={<BlockSkeleton type={block.type} />}>
-          <ServerBlock block={block} dbDefs={dbDefs} />
-        </Suspense>
+        <div key={block.id} className={block.className} data-block-type={block.type}>
+          <Suspense fallback={<BlockSkeleton type={block.type} />}>
+            <ServerBlock block={block} dbDefs={dbDefs} />
+          </Suspense>
+        </div>
       ))}
     </div>
   )

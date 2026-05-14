@@ -9,6 +9,9 @@ import { getCodeBlock } from '../BlockRegistry'
 import { useEditorStore } from './stores/editorStore'
 import RepeaterField from './RepeaterField'
 import IconPicker from './IconPicker'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRotateLeft, faXmark, faTrash, faCopy } from '@fortawesome/free-solid-svg-icons'
+import { toast } from 'react-toastify'
 
 const NEXT_PUBLIC_TINYMCE_API_KEY = process.env.NEXT_PUBLIC_TINYMCE_API_KEY
 
@@ -41,6 +44,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   const localPropsRef = useRef<Record<string, unknown>>({})
   const blockDefs = useEditorStore((s) => s.blockDefs)
   const snapshotForUndo = useEditorStore((s) => s.snapshotForUndo)
+  const updateBlockLabel = useEditorStore((s) => s.updateBlockLabel)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hasSnapshotted = useRef(false)
   const { theme } = useThemeStore()
@@ -161,7 +165,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
             title="Reset to default"
             className="text-[10px] text-base-content/25 hover:text-base-content/60 transition-colors px-1 rounded"
           >
-            ↺
+            <FontAwesomeIcon icon={faArrowRotateLeft} className="w-3 h-3" />
           </button>
         )}
       </div>
@@ -218,7 +222,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
                   onClick={() => update(key, '')}
                   className="absolute top-1.5 right-1.5 w-6 h-6 flex items-center justify-center rounded-full bg-black/60 text-white/80 hover:bg-error/80 hover:text-white transition-colors text-xs"
                   title="Remove image"
-                >✕</button>
+                ><FontAwesomeIcon icon={faTrash} className="w-3 h-3" /></button>
               </div>
             ) : (
               <div className={`w-full h-32 rounded-md border-2 border-dashed flex flex-col items-center justify-center gap-1 transition-colors ${dragOverKey === key ? 'border-primary bg-primary/5' : 'border-base-content/10'}`}>
@@ -311,7 +315,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
               className="text-xs px-2 py-1 rounded text-base-content/40 hover:text-error transition-colors"
               title="Clear color"
             >
-              ✕
+              <FontAwesomeIcon icon={faXmark} className="w-3 h-3" />
             </button>
           )}
         </div>
@@ -349,6 +353,12 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
                 max={field.max}
                 step={field.step}
                 onChange={(e) => update(key, Number(e.target.value))}
+                onBlur={(e) => {
+                  let v = Number(e.target.value)
+                  if (field.min !== undefined) v = Math.max(v, field.min)
+                  if (field.max !== undefined) v = Math.min(v, field.max)
+                  update(key, v)
+                }}
                 className="w-16 px-2 py-1.5 rounded-md text-xs text-center bg-base-300 border border-base-content/10 text-base-content outline-none"
               />
             </div>
@@ -361,6 +371,12 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
             max={field.max}
             step={field.step}
             onChange={(e) => update(key, Number(e.target.value))}
+            onBlur={(e) => {
+              let v = Number(e.target.value)
+              if (field.min !== undefined) v = Math.max(v, field.min)
+              if (field.max !== undefined) v = Math.min(v, field.max)
+              update(key, v)
+            }}
             className={inputCls}
           />
         )
@@ -389,7 +405,7 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
                 <button
                   onClick={() => update(key, (localProps[key] as string[]).filter((v) => v !== val))}
                   className="hover:text-error transition-colors leading-none"
-                >×</button>
+                ><FontAwesomeIcon icon={faXmark} className="w-2.5 h-2.5" /></button>
               </span>
             ))}
           </div>
@@ -489,9 +505,28 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
   return (
     <div className="w-72 flex-shrink-0 flex flex-col border-l border-base-content/10 overflow-y-auto bg-base-200">
       <div className="px-4 py-4 border-b border-base-content/10 flex items-start justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-base-content">{def.label}</p>
-          <p className="text-xs mt-0.5 text-base-content/40">{def.description}</p>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <p className="text-sm font-semibold text-base-content truncate">{def.label}</p>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(JSON.stringify(localProps, null, 2))
+                toast.success('Props copied as JSON')
+              }}
+              title="Copy props as JSON"
+              className="flex-shrink-0 text-base-content/25 hover:text-base-content/60 transition-colors p-0.5 rounded"
+            >
+              <FontAwesomeIcon icon={faCopy} className="w-3 h-3" />
+            </button>
+          </div>
+          <input
+            type="text"
+            value={block.label ?? ''}
+            onChange={(e) => updateBlockLabel(block.id, e.target.value)}
+            placeholder="Custom label…"
+            className="mt-1 w-full text-xs bg-transparent border-b border-base-content/10 focus:border-primary/40 outline-none pb-0.5 text-base-content/60 placeholder:text-base-content/20 transition-colors"
+          />
+          <p className="text-xs mt-1.5 text-base-content/40 leading-snug">{def.description}</p>
         </div>
         {collapseButton}
       </div>

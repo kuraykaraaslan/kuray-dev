@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, memo } from 'react'
 import { useDndContext, useDroppable } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -9,6 +9,9 @@ import { getCodeBlock, getCodeBlocks } from '../BlockRegistry'
 import { useEditorStore } from './stores/editorStore'
 import TemplateBlockRenderer from '../TemplateBlockRenderer'
 import { BlockEditorErrorBoundary } from '../BlockErrorBoundary'
+import { PreviewContext } from '../PreviewContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUpDown, faEye, faEyeSlash, faClone, faGripVertical, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 // ── Resize handle ─────────────────────────────────────────────────────────────
 
@@ -55,7 +58,6 @@ function ResizeHandle({ blockId }: { blockId: string }) {
       onClick={(e) => e.stopPropagation()}
       className="absolute bottom-0 left-0 right-0 z-30 h-5 flex items-end justify-center pb-0.5 cursor-ns-resize select-none opacity-0 group-hover:opacity-100 transition-opacity"
     >
-      {/* visible border line between blocks while dragging */}
       {dragging && (
         <div className="absolute inset-x-0 bottom-2.5 h-0.5 bg-primary/60" />
       )}
@@ -63,7 +65,7 @@ function ResizeHandle({ blockId }: { blockId: string }) {
         'relative flex items-center gap-1 px-2 py-0.5 rounded-t text-[10px] font-medium',
         dragging ? 'bg-primary text-primary-content' : 'bg-black/60 text-white/70',
       ].join(' ')}>
-        <span>↕</span>
+        <FontAwesomeIcon icon={faUpDown} className="w-2.5 h-2.5" />
         {dragging ? `${Math.round(liveH)}px` : 'Resize'}
       </div>
     </div>
@@ -86,7 +88,6 @@ function QuickAddPopover({ index, x, y, onClose }: QuickAddPopoverProps) {
   const ref = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Clamp position to viewport
   const popoverW = 208
   const popoverH = 280
   const margin = 8
@@ -99,25 +100,26 @@ function QuickAddPopover({ index, x, y, onClose }: QuickAddPopoverProps) {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        onClose()
-      }
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [onClose])
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
   }, [onClose])
 
   const allDefs = [...getCodeBlocks(), ...blockDefs]
-  const filtered = search.trim()
-    ? allDefs.filter((d) => d.label.toLowerCase().includes(search.trim().toLowerCase()))
+  const q = search.trim().toLowerCase()
+  const filtered = q
+    ? allDefs.filter((d) => {
+        if (d.label.toLowerCase().includes(q)) return true
+        const tags = 'tags' in d ? (d.tags ?? []) : []
+        return tags.some((t: string) => t.toLowerCase().includes(q))
+      })
     : allDefs
 
   return (
@@ -173,7 +175,6 @@ function BlockContextMenu({ blockId, x, y, onClose }: BlockContextMenuProps) {
 
   const ref = useRef<HTMLDivElement>(null)
 
-  // Clamp position to viewport
   const menuW = 176
   const menuH = 200
   const margin = 8
@@ -182,18 +183,14 @@ function BlockContextMenu({ blockId, x, y, onClose }: BlockContextMenuProps) {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        onClose()
-      }
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [onClose])
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
   }, [onClose])
@@ -207,45 +204,23 @@ function BlockContextMenu({ blockId, x, y, onClose }: BlockContextMenuProps) {
       className="fixed z-50 bg-base-100 border border-base-content/10 rounded-xl shadow-2xl py-1 w-44"
       style={{ top, left }}
     >
-      <button
-        className={rowCls}
-        onClick={() => { duplicateBlock(blockId); onClose() }}
-      >
-        Duplicate
-        <span className={hintCls}>Ctrl+D</span>
+      <button className={rowCls} onClick={() => { duplicateBlock(blockId); onClose() }}>
+        Duplicate <span className={hintCls}>Ctrl+D</span>
       </button>
-      <button
-        className={rowCls}
-        onClick={() => { copyBlock(blockId); onClose() }}
-      >
-        Copy
-        <span className={hintCls}>Ctrl+C</span>
+      <button className={rowCls} onClick={() => { copyBlock(blockId); onClose() }}>
+        Copy <span className={hintCls}>Ctrl+C</span>
       </button>
-      <button
-        className={rowCls}
-        onClick={() => { toggleBlockHidden(blockId); onClose() }}
-      >
+      <button className={rowCls} onClick={() => { toggleBlockHidden(blockId); onClose() }}>
         {block?.hidden ? 'Show' : 'Hide'}
       </button>
-      <button
-        className={rowCls}
-        onClick={() => { moveBlock(blockId, -1); onClose() }}
-      >
-        Move Up
-      </button>
-      <button
-        className={rowCls}
-        onClick={() => { moveBlock(blockId, 1); onClose() }}
-      >
-        Move Down
-      </button>
+      <button className={rowCls} onClick={() => { moveBlock(blockId, -1); onClose() }}>Move Up</button>
+      <button className={rowCls} onClick={() => { moveBlock(blockId, 1); onClose() }}>Move Down</button>
       <div className="my-1 border-t border-base-content/10" />
       <button
         className="w-full flex items-center justify-between px-3 py-1.5 text-xs hover:bg-base-200 transition-colors text-error"
         onClick={() => { deleteBlock(blockId); onClose() }}
       >
-        Delete
-        <span className={hintCls}>⌫</span>
+        Delete <span className={hintCls}>⌫</span>
       </button>
     </div>
   )
@@ -269,9 +244,7 @@ function InsertGap({ index, onQuickAdd }: InsertGapProps) {
       <div
         ref={setNodeRef}
         className={`mx-3 rounded-lg border-2 border-dashed transition-all duration-150 ${
-          isOver
-            ? 'h-10 border-primary bg-primary/10'
-            : 'h-2 border-base-content/20'
+          isOver ? 'h-10 border-primary bg-primary/10' : 'h-2 border-base-content/20'
         }`}
       />
     )
@@ -312,100 +285,106 @@ interface SortableBlockProps {
   isTranslationMode?: boolean
 }
 
-function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onToggleHidden, onContextMenu, isTranslationMode }: SortableBlockProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: block.id })
-  const blockDefs = useEditorStore((s) => s.blockDefs)
+const SortableBlock = memo(
+  function SortableBlock({ block, isSelected, onSelect, onDelete, onDuplicate, onToggleHidden, onContextMenu, isTranslationMode }: SortableBlockProps) {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: block.id })
+    const blockDefs = useEditorStore((s) => s.blockDefs)
 
-  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }
+    const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }
 
-  const codeDef = getCodeBlock(block.type)
-  const dbDef = blockDefs.find((d) => d.type === block.type)
-  const label = codeDef?.label ?? dbDef?.label ?? block.type
+    const codeDef = getCodeBlock(block.type)
+    const dbDef = blockDefs.find((d) => d.type === block.type)
+    const label = codeDef?.label ?? dbDef?.label ?? block.type
 
-  if (!codeDef && !dbDef) return null
+    if (!codeDef && !dbDef) return null
 
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      data-block-id={block.id}
-      className={`relative group cursor-pointer ${block.hidden ? 'opacity-40' : ''}`}
-      onClick={onSelect}
-      onContextMenu={(e) => { e.preventDefault(); onContextMenu(e, block.id) }}
-    >
-      {/* selection outline */}
+    return (
       <div
-        className="absolute inset-0 z-10 pointer-events-none transition-all"
-        style={{
-          outline: isSelected ? '2px solid oklch(var(--p))' : '2px solid transparent',
-          outlineOffset: '-2px',
-        }}
-      />
+        ref={setNodeRef}
+        style={style}
+        data-block-id={block.id}
+        className={`relative group cursor-pointer ${block.hidden ? 'opacity-40' : ''}`}
+        onClick={onSelect}
+        onContextMenu={(e) => { e.preventDefault(); onContextMenu(e, block.id) }}
+      >
+        {/* selection outline */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none transition-all"
+          style={{
+            outline: isSelected ? '2px solid oklch(var(--p))' : '2px solid transparent',
+            outlineOffset: '-2px',
+          }}
+        />
 
-      {/* hidden overlay */}
-      {block.hidden && (
-        <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-          <span className="bg-black/60 text-white/70 text-[10px] font-semibold px-2 py-0.5 rounded">HIDDEN</span>
+        {/* hidden overlay */}
+        {block.hidden && (
+          <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
+            <span className="bg-black/60 text-white/70 text-[10px] font-semibold px-2 py-0.5 rounded">HIDDEN</span>
+          </div>
+        )}
+
+        {/* controls */}
+        <div className={`absolute top-2 right-2 z-20 flex items-center gap-1.5 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+          <span className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70">{block.label || label}</span>
+
+          {!isTranslationMode && (
+            <>
+              <button
+                className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70 hover:text-white transition-colors"
+                onClick={(e) => { e.stopPropagation(); onToggleHidden() }}
+                title={block.hidden ? 'Show block' : 'Hide block'}
+              >
+                <FontAwesomeIcon icon={block.hidden ? faEye : faEyeSlash} className="w-3 h-3" />
+              </button>
+
+              <button
+                className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70 hover:text-white transition-colors"
+                onClick={(e) => { e.stopPropagation(); onDuplicate() }}
+                title="Duplicate block"
+              >
+                <FontAwesomeIcon icon={faClone} className="w-3 h-3" />
+              </button>
+
+              <div
+                {...attributes}
+                {...listeners}
+                className="px-2 py-1 rounded text-xs font-medium cursor-grab active:cursor-grabbing bg-black/75 text-white/70"
+                onClick={(e) => e.stopPropagation()}
+                title="Drag to reorder"
+              >
+                <FontAwesomeIcon icon={faGripVertical} className="w-3 h-3" />
+              </div>
+
+              <button
+                className="px-2 py-1 rounded text-xs font-medium bg-error/85 text-error-content"
+                onClick={(e) => { e.stopPropagation(); onDelete() }}
+                title="Delete block"
+              >
+                <FontAwesomeIcon icon={faTrash} className="w-3 h-3" />
+              </button>
+            </>
+          )}
         </div>
-      )}
 
-      {/* controls */}
-      <div className={`absolute top-2 right-2 z-20 flex items-center gap-1.5 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-        <span className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70">{block.label || label}</span>
+        {/* block content */}
+        <BlockEditorErrorBoundary blockId={block.id} onDelete={onDelete}>
+          {codeDef ? (
+            <codeDef.Component {...block.props} />
+          ) : (
+            <TemplateBlockRenderer template={dbDef!.template} props={block.props} />
+          )}
+        </BlockEditorErrorBoundary>
 
-        {!isTranslationMode && (
-          <>
-            <button
-              className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70 hover:text-white transition-colors"
-              onClick={(e) => { e.stopPropagation(); onToggleHidden() }}
-              title={block.hidden ? 'Show block' : 'Hide block'}
-            >
-              {block.hidden ? '👁' : '🙈'}
-            </button>
-
-            <button
-              className="px-2 py-1 rounded text-xs font-medium bg-black/75 text-white/70 hover:text-white transition-colors"
-              onClick={(e) => { e.stopPropagation(); onDuplicate() }}
-              title="Duplicate block"
-            >
-              ⧉
-            </button>
-
-            <div
-              {...attributes}
-              {...listeners}
-              className="px-2 py-1 rounded text-xs font-medium cursor-grab active:cursor-grabbing bg-black/75 text-white/70"
-              onClick={(e) => e.stopPropagation()}
-              title="Drag to reorder"
-            >
-              ⠿
-            </div>
-
-            <button
-              className="px-2 py-1 rounded text-xs font-medium bg-error/85 text-error-content"
-              onClick={(e) => { e.stopPropagation(); onDelete() }}
-              title="Delete block"
-            >
-              ✕
-            </button>
-          </>
-        )}
+        {/* resize handle */}
+        {!isTranslationMode && <ResizeHandle blockId={block.id} />}
       </div>
-
-      {/* block content */}
-      <BlockEditorErrorBoundary blockId={block.id} onDelete={onDelete}>
-        {codeDef ? (
-          <codeDef.Component {...block.props} />
-        ) : (
-          <TemplateBlockRenderer template={dbDef!.template} props={block.props} />
-        )}
-      </BlockEditorErrorBoundary>
-
-      {/* resize handle */}
-      {!isTranslationMode && <ResizeHandle blockId={block.id} />}
-    </div>
-  )
-}
+    )
+  },
+  (prev, next) =>
+    prev.block === next.block &&
+    prev.isSelected === next.isSelected &&
+    prev.isTranslationMode === next.isTranslationMode
+)
 
 // ── Canvas ────────────────────────────────────────────────────────────────────
 
@@ -424,6 +403,9 @@ export default function Canvas() {
   const toggleBlockHidden = useEditorStore((s) => s.toggleBlockHidden)
   const isTranslationMode = useEditorStore((s) => s.activeLang !== 'en')
   const previewMode = useEditorStore((s) => s.previewMode)
+  const pendingDraft = useEditorStore((s) => s.pendingDraft)
+  const restoreDraft = useEditorStore((s) => s.restoreDraft)
+  const dismissDraft = useEditorStore((s) => s.dismissDraft)
 
   const [quickAdd, setQuickAdd] = useState<{ index: number; x: number; y: number } | null>(null)
   const [contextMenu, setContextMenu] = useState<{ blockId: string; x: number; y: number } | null>(null)
@@ -461,40 +443,68 @@ export default function Canvas() {
     return () => document.removeEventListener('keydown', onKey)
   }, [selectedId, setSelectedId, deleteBlock, isTranslationMode])
 
+  const draftBanner = pendingDraft ? (
+    <div className="sticky top-0 z-40 flex items-center justify-between gap-4 bg-warning/90 px-4 py-2 text-xs text-warning-content backdrop-blur-sm">
+      <span>
+        Unsaved draft from{' '}
+        <span className="font-semibold">{new Date(pendingDraft.savedAt).toLocaleTimeString()}</span>
+        {pendingDraft.title ? ` — "${pendingDraft.title}"` : ''}
+      </span>
+      <div className="flex items-center gap-3 flex-shrink-0">
+        <button onClick={restoreDraft} className="font-semibold underline underline-offset-2">
+          Restore
+        </button>
+        <button onClick={dismissDraft} className="opacity-70 hover:opacity-100 transition-opacity">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  ) : null
+
   if (sections.length === 0) {
     return (
-      <SidebarDropTarget>
-        <div className="flex flex-col items-center justify-center py-40 gap-3">
-          <div className="text-4xl opacity-20">+</div>
-          <p className="text-sm text-base-content/30">Add blocks from the left panel to build your page.</p>
-        </div>
-      </SidebarDropTarget>
+      <>
+        {draftBanner}
+        <SidebarDropTarget>
+          <div className="flex flex-col items-center justify-center py-40 gap-3">
+            <div className="text-4xl opacity-20">+</div>
+            <p className="text-sm text-base-content/30">Add blocks from the left panel to build your page.</p>
+          </div>
+        </SidebarDropTarget>
+      </>
     )
   }
 
+  const isConstrained = previewMode !== 'desktop'
+
   return (
     <>
-      <div
-        className="mx-auto transition-all duration-300"
-        style={{ maxWidth, width: '100%' }}
-      >
-        <InsertGap index={0} onQuickAdd={(idx, x, y) => setQuickAdd({ index: idx, x, y })} />
-        {sorted.map((block, i) => (
-          <React.Fragment key={block.id}>
-            <SortableBlock
-              block={block}
-              isSelected={selectedId === block.id}
-              onSelect={() => setSelectedId(block.id)}
-              onDelete={() => deleteBlock(block.id)}
-              onDuplicate={() => duplicateBlock(block.id)}
-              onToggleHidden={() => toggleBlockHidden(block.id)}
-              onContextMenu={(e, id) => setContextMenu({ blockId: id, x: e.clientX, y: e.clientY })}
-              isTranslationMode={isTranslationMode}
-            />
-            <InsertGap index={i + 1} onQuickAdd={(idx, x, y) => setQuickAdd({ index: idx, x, y })} />
-          </React.Fragment>
-        ))}
-      </div>
+      {draftBanner}
+      <PreviewContext.Provider value={previewMode}>
+        <div className={`transition-colors duration-300 ${isConstrained ? 'min-h-full bg-base-300/70 py-6' : ''}`}>
+          <div
+            className={`transition-all duration-300 ${isConstrained ? 'mx-auto shadow-2xl ring-1 ring-base-content/10 bg-base-100' : ''}`}
+            style={{ maxWidth, width: '100%' }}
+          >
+            <InsertGap index={0} onQuickAdd={(idx, x, y) => setQuickAdd({ index: idx, x, y })} />
+            {sorted.map((block, i) => (
+              <React.Fragment key={block.id}>
+                <SortableBlock
+                  block={block}
+                  isSelected={selectedId === block.id}
+                  onSelect={() => setSelectedId(block.id)}
+                  onDelete={() => deleteBlock(block.id)}
+                  onDuplicate={() => duplicateBlock(block.id)}
+                  onToggleHidden={() => toggleBlockHidden(block.id)}
+                  onContextMenu={(e, id) => setContextMenu({ blockId: id, x: e.clientX, y: e.clientY })}
+                  isTranslationMode={isTranslationMode}
+                />
+                <InsertGap index={i + 1} onQuickAdd={(idx, x, y) => setQuickAdd({ index: idx, x, y })} />
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </PreviewContext.Provider>
 
       {quickAdd && (
         <QuickAddPopover

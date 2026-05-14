@@ -7,6 +7,7 @@ import axiosInstance from '@/libs/axios'
 import SingleProject from '@/components/frontend/Features/Hero/Projects/Partials/SingleProject'
 import type { Project } from '@/types/content/ProjectTypes'
 import type { BlockDefinition } from '../types'
+import { usePreviewMode } from '../PreviewContext'
 
 interface FilterItem {
   label: string
@@ -85,6 +86,7 @@ function ProjectsBlock(rawProps: Record<string, unknown>) {
   const showLessLabel = (rawProps.showLessLabel as string) || 'Show Less'
   const allLabel      = (rawProps.allLabel as string)      || 'All'
   const dataSource    = (rawProps.dataSource as string)    || 'api'
+  const previewMode = usePreviewMode()
   const baseProps = parseBaseBlockProps(rawProps)
 
   const filters     = parseFilters(rawProps.filters)
@@ -157,7 +159,7 @@ function ProjectsBlock(rawProps: Record<string, unknown>) {
             <span className="loading loading-spinner loading-md text-base-content/40" />
           </div>
         ) : (
-          <div className="grid gap-8 lg:grid-cols-3 mt-8">
+          <div className={`grid gap-8 mt-8 ${previewMode === 'mobile' ? '' : 'lg:grid-cols-3'}`}>
             {filtered.map((project, i) => (
               <SingleProject key={i} project={project} />
             ))}

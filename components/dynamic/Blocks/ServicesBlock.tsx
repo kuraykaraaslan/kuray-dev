@@ -3,6 +3,7 @@ import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBas
 import SingleService from '@/components/frontend/Features/Hero/Services/Partials/SingleService'
 import type { Service } from '@/types/content/ProjectTypes'
 import type { BlockDefinition } from '../types'
+import { usePreviewMode } from '../PreviewContext'
 
 // Literal maps — Tailwind JIT needs to see the full class strings in source
 const MOBILE_COLS: Record<number, string> = {
@@ -54,6 +55,7 @@ function ServicesBlock(rawProps: Record<string, unknown>) {
   const mobileColumns      = clamp(Number(rawProps.mobileColumns)  || 1, 1, 4)
   const desktopColumns     = clamp(Number(rawProps.desktopColumns) || 2, 1, 4)
 
+  const previewMode = usePreviewMode()
   const items = parseServices(rawProps.services)
 
   const services: Service[] = items.map((item, i) => ({
@@ -68,7 +70,9 @@ function ServicesBlock(rawProps: Record<string, unknown>) {
     textColor:   item.textColor,
   }))
 
-  const gridCls = `grid gap-8 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
+  const gridCls = previewMode === 'mobile'
+    ? `grid gap-8 ${MOBILE_COLS[mobileColumns]}`
+    : `grid gap-8 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
 
   return (
     <BaseBlock {...baseProps}>

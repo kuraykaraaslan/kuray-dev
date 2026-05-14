@@ -9,6 +9,7 @@ export const BlockDataSchema = z.object({
   props: z.record(z.unknown()),
   hidden: z.boolean().optional(),
   label: z.string().optional(),
+  className: z.string().optional(),
 })
 
 export const PageMetadataSchema = z.object({

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import { useDraggable, DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -8,6 +8,8 @@ import { getCodeBlocks, getCodeBlock } from '../BlockRegistry'
 import type { BlockDefinition, DynamicPageBlockRecord } from '../types'
 import { useEditorStore } from './stores/editorStore'
 import TemplateBlockRenderer from '../TemplateBlockRenderer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronRight, faChevronLeft, faGripVertical, faEye, faEyeSlash, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 type AnyBlockDef = BlockDefinition | DynamicPageBlockRecord
 
@@ -47,9 +49,7 @@ function BlockPreview({ def, anchorY, sidebarRight }: { def: AnyBlockDef; anchor
 
 function Chevron({ open }: { open: boolean }) {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: open ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 150ms ease', flexShrink: 0 }}>
-      <path d="M4 2.5L7.5 6L4 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <FontAwesomeIcon icon={faChevronRight} className="w-2.5 h-2.5 text-base-content/30 transition-transform" style={{ transform: open ? 'rotate(90deg)' : 'rotate(0deg)' }} />
   )
 }
 
@@ -141,11 +141,7 @@ function SortableLayerItem({ block, index, isTranslationMode, editingId, editVal
           onClick={(e) => e.stopPropagation()}
           title="Drag to reorder"
         >
-          <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor">
-            <circle cx="2" cy="1.5" r="1" /><circle cx="6" cy="1.5" r="1" />
-            <circle cx="2" cy="5" r="1" /><circle cx="6" cy="5" r="1" />
-            <circle cx="2" cy="8.5" r="1" /><circle cx="6" cy="8.5" r="1" />
-          </svg>
+          <FontAwesomeIcon icon={faGripVertical} className="w-2.5 h-2.5" />
         </div>
       )}
       <span className="text-[10px] text-base-content/30 w-4 text-right flex-shrink-0 tabular-nums">{index + 1}</span>
@@ -181,14 +177,14 @@ function SortableLayerItem({ block, index, isTranslationMode, editingId, editVal
             className="w-5 h-5 flex items-center justify-center text-[11px] rounded hover:bg-base-content/10 transition-colors"
             title={block.hidden ? 'Show block' : 'Hide block'}
           >
-            {block.hidden ? '👁' : '🙈'}
+            <FontAwesomeIcon icon={block.hidden ? faEye : faEyeSlash} className="w-3 h-3" />
           </button>
           <button
             onClick={() => deleteBlock(block.id)}
             className="w-5 h-5 flex items-center justify-center text-[11px] rounded text-error/50 hover:text-error hover:bg-error/10 transition-colors"
             title="Delete block"
           >
-            ✕
+            <FontAwesomeIcon icon={faTrash} className="w-3 h-3" />
           </button>
         </div>
       )}
@@ -282,7 +278,10 @@ export default function LeftSidebar() {
     })
   }, [rawAddBlock])
 
-  const allDefs: AnyBlockDef[] = [...getCodeBlocks(), ...blockDefs]
+  const allDefs: AnyBlockDef[] = useMemo(
+    () => [...getCodeBlocks(), ...blockDefs],
+    [blockDefs]
+  )
 
   const grouped = allDefs.reduce<Record<string, AnyBlockDef[]>>((acc, def) => {
     const cat = def.category ?? 'Other'
@@ -336,9 +335,7 @@ export default function LeftSidebar() {
           title="Expand blocks panel"
           className="w-7 h-7 flex items-center justify-center rounded-md text-base-content/40 hover:text-base-content hover:bg-base-300 transition-colors"
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <FontAwesomeIcon icon={faChevronRight} className="w-3.5 h-3.5" />
         </button>
         <div className="flex-1 flex items-center">
           <span className="text-[9px] font-semibold tracking-widest text-base-content/25 uppercase" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>Blocks</span>
@@ -353,7 +350,7 @@ export default function LeftSidebar() {
         <div className="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
           <p className="text-xs font-semibold tracking-widest text-base-content/40">BLOCKS</p>
           <button onClick={() => setCollapsed(true)} title="Collapse" className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <FontAwesomeIcon icon={faChevronLeft} className="w-3 h-3" />
           </button>
         </div>
         <div className="flex-1 flex items-center justify-center p-4">
@@ -393,7 +390,7 @@ export default function LeftSidebar() {
           title="Collapse panel"
           className="w-6 h-6 flex items-center justify-center rounded text-base-content/30 hover:text-base-content hover:bg-base-300 transition-colors"
         >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2.5L4.5 6L8 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <FontAwesomeIcon icon={faChevronLeft} className="w-3 h-3" />
         </button>
       </div>
 

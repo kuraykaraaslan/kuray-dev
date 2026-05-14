@@ -4,6 +4,8 @@ import { useState } from 'react'
 import axiosInstance from '@/libs/axios'
 import type { FieldSchema, FieldOption } from '../types'
 import IconPicker from './IconPicker'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUp, faArrowDown, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const optVal = (o: FieldOption): string => (typeof o === 'string' ? o : o.value)
 const optLabel = (o: FieldOption): string => (typeof o === 'string' ? o : o.label)
@@ -100,20 +102,20 @@ export default function RepeaterField({
                 onClick={(e) => { e.preventDefault(); moveItem(index, -1) }}
                 disabled={index === 0}
                 title="Move up"
-              >↑</button>
+              ><FontAwesomeIcon icon={faArrowUp} className="w-3 h-3" /></button>
               <button
                 type="button"
                 className={btnCls}
                 onClick={(e) => { e.preventDefault(); moveItem(index, 1) }}
                 disabled={index === items.length - 1}
                 title="Move down"
-              >↓</button>
+              ><FontAwesomeIcon icon={faArrowDown} className="w-3 h-3" /></button>
               <button
                 type="button"
                 className={`${btnCls} hover:!text-error`}
                 onClick={(e) => { e.preventDefault(); removeItem(index) }}
                 title="Remove"
-              >✕</button>
+              ><FontAwesomeIcon icon={faTrash} className="w-3 h-3" /></button>
             </div>
           </summary>
 
@@ -258,7 +260,7 @@ export default function RepeaterField({
         onClick={addItem}
         className="w-full py-2 text-xs rounded-md border border-dashed border-primary/40 text-primary/60 hover:border-primary hover:text-primary transition-colors"
       >
-        + Add Item
+        <FontAwesomeIcon icon={faPlus} className="w-3 h-3 mr-1.5" />Add Item
       </button>
     </div>
   )

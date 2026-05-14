@@ -1,6 +1,8 @@
 'use client'
 
 import { useEditorStore } from './stores/editorStore'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 const SHORTCUTS: { keys: string; description: string }[] = [
   { keys: 'Ctrl + S', description: 'Save page' },
@@ -37,7 +39,7 @@ export default function ShortcutsModal() {
             onClick={() => setShowShortcuts(false)}
             className="w-6 h-6 flex items-center justify-center rounded text-base-content/40 hover:text-base-content hover:bg-base-300 transition-colors text-xs"
           >
-            ✕
+            <FontAwesomeIcon icon={faXmark} className="w-3.5 h-3.5" />
           </button>
         </div>
 

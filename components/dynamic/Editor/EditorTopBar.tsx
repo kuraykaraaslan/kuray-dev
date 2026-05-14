@@ -9,11 +9,14 @@ import TranslationModal from './TranslationModal'
 import ShortcutsModal from './ShortcutsModal'
 import { useEditorStore } from './stores/editorStore'
 import type { PreviewMode } from './stores/editorStore'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMobileScreen, faTabletScreenButton, faDesktop, faRotateLeft, faRotateRight, faArrowUpRightFromSquare, faKeyboard } from '@fortawesome/free-solid-svg-icons'
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
-const PREVIEW_MODES: { mode: PreviewMode; label: string; icon: string }[] = [
-  { mode: 'mobile', label: 'Mobile', icon: '📱' },
-  { mode: 'tablet', label: 'Tablet', icon: '📟' },
-  { mode: 'desktop', label: 'Desktop', icon: '🖥' },
+const PREVIEW_MODES: { mode: PreviewMode; label: string; icon: IconDefinition }[] = [
+  { mode: 'mobile', label: 'Mobile', icon: faMobileScreen },
+  { mode: 'tablet', label: 'Tablet', icon: faTabletScreenButton },
+  { mode: 'desktop', label: 'Desktop', icon: faDesktop },
 ]
 
 interface Props {
@@ -131,7 +134,7 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
                   : 'text-base-content/40 hover:text-base-content/70'
               }`}
             >
-              {icon}
+              <FontAwesomeIcon icon={icon} className="w-4 h-4" />
             </button>
           ))}
         </div>
@@ -144,7 +147,7 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
             title="Undo (Ctrl+Z)"
             className="w-8 h-8 flex items-center justify-center rounded-md text-xs text-base-content/50 hover:text-base-content hover:bg-base-300 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
           >
-            ↩
+            <FontAwesomeIcon icon={faRotateLeft} className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={redo}
@@ -152,7 +155,7 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
             title="Redo (Ctrl+Y)"
             className="w-8 h-8 flex items-center justify-center rounded-md text-xs text-base-content/50 hover:text-base-content hover:bg-base-300 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
           >
-            ↪
+            <FontAwesomeIcon icon={faRotateRight} className="w-3.5 h-3.5" />
           </button>
         </div>
 
@@ -165,14 +168,14 @@ export default function EditorTopBar({ onSave, onCancel }: Props) {
             title="Preview page in new tab"
             className="px-3 py-1.5 rounded-md text-xs font-medium transition-all flex-shrink-0 bg-base-content/10 text-base-content/70 h-10"
           >
-            ↗ Preview
+            <><FontAwesomeIcon icon={faArrowUpRightFromSquare} className="w-3 h-3 mr-1.5" />Preview</>
           </button>
           <button
             onClick={() => setShowShortcuts(true)}
             title="Keyboard shortcuts (Ctrl+/)"
             className="w-10 h-10 flex items-center justify-center rounded-md text-sm font-medium bg-base-content/10 text-base-content/70 hover:text-base-content transition-colors flex-shrink-0"
           >
-            ?
+            <FontAwesomeIcon icon={faKeyboard} className="w-4 h-4" />
           </button>
           <button
             onClick={onCancel}

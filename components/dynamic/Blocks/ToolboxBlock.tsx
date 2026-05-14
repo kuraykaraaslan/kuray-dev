@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ICON_MAP } from '../icons'
 import type { BlockDefinition } from '../types'
+import { usePreviewMode } from '../PreviewContext'
 
 interface ToolItem {
   icon: string
@@ -56,12 +57,13 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
   const title = (rawProps.title as string) || 'Toolbox'
   const description = (rawProps.description as string) || 'Technologies and skills I use every day.'
   const rows = (rawProps.rows as RowItem[]) || []
+  const previewMode = usePreviewMode()
   const [hoveredRow, setHoveredRow] = useState<number | null>(null)
 
   return (
     <BaseBlock {...baseProps}>
       <div className="relative z-10 w-full">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+        <div className={`grid gap-4 mb-8 ${previewMode === 'mobile' ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-6'}`}>
           <div className="col-span-2 md:col-span-1 md:col-start-3 overflow-hidden">
             <h2 className="text-4xl lg:text-3xl font-bold mt-6 text-center md:text-end">{title}</h2>
           </div>
@@ -76,7 +78,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
             const isRight = row.labelSide === 'right'
             const flipped = hoveredRow === rowIdx
             const labelEl = row.label ? (
-              <div className="md:w-28 flex-shrink-0 text-center md:text-right">
+              <div className={`flex-shrink-0 text-center ${previewMode !== 'mobile' ? 'md:w-28 md:text-right' : ''}`}>
                 <span className="text-xl font-bold">{row.label}</span>
               </div>
             ) : null
@@ -97,7 +99,7 @@ function ToolboxBlock(rawProps: Record<string, unknown>) {
               </div>
             )
             return (
-              <div key={rowIdx} className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+              <div key={rowIdx} className={`flex items-center justify-center ${previewMode === 'mobile' ? 'flex-col gap-4' : 'flex-col md:flex-row gap-4 md:gap-8'}`}>
                 {isRight ? <>{toolsEl}{labelEl}</> : <>{labelEl}{toolsEl}</>}
               </div>
             )

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../BaseBlock'
 import type { BlockDefinition } from '../types'
+import { usePreviewMode } from '../PreviewContext'
 
 interface Platform {
   name: string
@@ -55,10 +56,13 @@ function PlatformsBlock(rawProps: Record<string, unknown>) {
   const mobileColumns  = clamp(Number(rawProps.mobileColumns)  || 2, 1, 6)
   const desktopColumns = clamp(Number(rawProps.desktopColumns) || 6, 1, 6)
   const platforms = parsePlatforms(rawProps.platforms)
+  const previewMode = usePreviewMode()
 
   if (!platforms.length) return null
 
-  const gridCls = `grid gap-6 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
+  const gridCls = previewMode === 'mobile'
+    ? `grid gap-6 ${MOBILE_COLS[mobileColumns]}`
+    : `grid gap-6 ${MOBILE_COLS[mobileColumns]} ${DESKTOP_COLS[desktopColumns]}`
 
   return (
     <BaseBlock {...baseProps}>

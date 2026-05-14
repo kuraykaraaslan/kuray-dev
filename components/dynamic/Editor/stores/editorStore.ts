@@ -40,6 +40,11 @@ interface EditorStore {
   undoStack: { sections: BlockData[]; selectedId: string | null }[]
   redoStack: { sections: BlockData[]; selectedId: string | null }[]
 
+  // Draft recovery
+  pendingDraft: { savedAt: number; title: string; pageId: string } | null
+  // Tracks which translation langs were modified this session
+  dirtyLangs: string[]
+
   // Block definitions (loaded from DB)
   blockDefs: DynamicPageBlockRecord[]
   loadBlockDefs: () => Promise<void>
@@ -64,6 +69,8 @@ interface EditorStore {
   setPreviewMode: (v: PreviewMode) => void
   showShortcuts: boolean
   setShowShortcuts: (v: boolean) => void
+  restoreDraft: () => void
+  dismissDraft: () => void
   handleDragEnd: (event: DragEndEvent) => void
   addBlock: (type: string, atIndex?: number) => void
   deleteBlock: (id: string) => void
@@ -118,7 +125,13 @@ const initialState = {
   savedLangs: [] as string[],
   blockDefs: [] as DynamicPageBlockRecord[],
   showShortcuts: false,
+  pendingDraft: null as { savedAt: number; title: string; pageId: string } | null,
+  dirtyLangs: [] as string[],
 }
+
+// Auto-save draft helpers
+let _draftTimer: ReturnType<typeof setTimeout> | null = null
+const draftKey = (id: string) => `dynamic_editor_draft_${id || 'new'}`
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
   ...initialState,
@@ -135,6 +148,36 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   setTranslationOpen: (v) => set({ translationOpen: v }),
   setPreviewMode: (v) => set({ previewMode: v }),
   setShowShortcuts: (v) => set({ showShortcuts: v }),
+
+  restoreDraft: () => {
+    const { pageId } = get()
+    const raw = typeof window !== 'undefined' ? localStorage.getItem(draftKey(pageId)) : null
+    if (!raw) { set({ pendingDraft: null }); return }
+    try {
+      const draft = JSON.parse(raw)
+      set({
+        title: draft.title ?? '',
+        slug: draft.slug ?? '',
+        description: draft.description ?? '',
+        keywords: Array.isArray(draft.keywords) ? draft.keywords : [],
+        metadata: draft.metadata ?? DefaultPageMetadata,
+        sections: Array.isArray(draft.sections) ? draft.sections : [],
+        enSections: Array.isArray(draft.sections) ? draft.sections : [],
+        isDirty: true,
+        pendingDraft: null,
+        undoStack: [],
+        redoStack: [],
+      })
+    } catch {
+      set({ pendingDraft: null })
+    }
+  },
+
+  dismissDraft: () => {
+    const { pageId } = get()
+    try { if (typeof window !== 'undefined') localStorage.removeItem(draftKey(pageId)) } catch {}
+    set({ pendingDraft: null })
+  },
 
   loadBlockDefs: async () => {
     try {
@@ -318,6 +361,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set((state) => ({
       isDirty: true,
       sections: state.sections.map((b) => (b.id === id ? { ...b, props } : b)),
+      dirtyLangs: state.activeLang !== 'en'
+        ? [...new Set([...state.dirtyLangs, state.activeLang])]
+        : state.dirtyLangs,
     }))
   },
 
@@ -406,9 +452,21 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         savedLangs,
         activeLang: 'en',
         isDirty: false,
+        dirtyLangs: [],
         undoStack: [],
         redoStack: [],
       })
+
+      // Check for a locally saved draft and offer recovery
+      try {
+        const raw2 = typeof window !== 'undefined' ? localStorage.getItem(draftKey(pageId)) : null
+        if (raw2) {
+          const draft = JSON.parse(raw2)
+          if (draft.savedAt) {
+            set({ pendingDraft: { savedAt: draft.savedAt, title: draft.title ?? '', pageId } })
+          }
+        }
+      } catch {}
     } catch {
       toast.error('Failed to load page')
     } finally {
@@ -417,7 +475,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   },
 
   handleSave: async (mode, pageId, router) => {
-    const { title, slug, status, description, keywords, metadata, sections, enSections, activeLang, translationCache } = get()
+    const { title, slug, status, description, keywords, metadata, sections, enSections, activeLang, translationCache, dirtyLangs, savedLangs } = get()
     if (!title.trim()) { toast.error('Title is required'); return }
 
     const enSectionsToSave = activeLang === 'en' ? sections : enSections
@@ -437,7 +495,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       if (mode === 'create') {
         const res = await axiosInstance.post('/api/dynamic-pages', body)
         toast.success('Page created')
-        set({ isDirty: false })
+        set({ isDirty: false, dirtyLangs: [] })
+        try { if (typeof window !== 'undefined') localStorage.removeItem(draftKey('')) } catch {}
         router.replace(`/admin/pages/${res.data.page.dynamicPageId}`)
         return
       }
@@ -447,7 +506,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         latestCache[activeLang] = { ...latestCache[activeLang], sections: sections.map((s, i) => ({ ...s, order: i })) }
       }
 
-      const translationEntries = Object.entries(latestCache).filter(([lang]) => lang !== 'en')
+      // Only save translations that were modified this session or are new (not yet persisted)
+      const translationEntries = Object.entries(latestCache)
+        .filter(([lang]) => lang !== 'en')
+        .filter(([lang]) => dirtyLangs.includes(lang) || !savedLangs.includes(lang))
 
       await Promise.all([
         axiosInstance.patch(`/api/dynamic-pages/${pageId}`, body),
@@ -464,9 +526,12 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       ])
 
       const savedTranslationLangs = translationEntries.map(([lang]) => lang)
+      try { if (typeof window !== 'undefined') localStorage.removeItem(draftKey(pageId)) } catch {}
       set({
         savedLangs: [...new Set([...get().savedLangs, ...savedTranslationLangs])],
         isDirty: false,
+        dirtyLangs: [],
+        pendingDraft: null,
       })
       toast.success('Page and translations saved')
     } catch (error: unknown) {
@@ -523,25 +588,35 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   },
 
   setTranslationTitle: (lang, v) => {
-    const { translationCache } = get()
-    const entry = translationCache[lang]
-    if (!entry) return
-    set({ translationCache: { ...translationCache, [lang]: { ...entry, title: v } }, isDirty: true })
+    set((state) => {
+      const entry = state.translationCache[lang]
+      if (!entry) return {}
+      return {
+        translationCache: { ...state.translationCache, [lang]: { ...entry, title: v } },
+        isDirty: true,
+        dirtyLangs: [...new Set([...state.dirtyLangs, lang])],
+      }
+    })
   },
 
   setTranslationDescription: (lang, v) => {
-    const { translationCache } = get()
-    const entry = translationCache[lang]
-    if (!entry) return
-    set({ translationCache: { ...translationCache, [lang]: { ...entry, description: v } }, isDirty: true })
+    set((state) => {
+      const entry = state.translationCache[lang]
+      if (!entry) return {}
+      return {
+        translationCache: { ...state.translationCache, [lang]: { ...entry, description: v } },
+        isDirty: true,
+        dirtyLangs: [...new Set([...state.dirtyLangs, lang])],
+      }
+    })
   },
 
   addTranslation: (lang, data) => {
-    const { translationCache, savedLangs } = get()
-    set({
-      translationCache: { ...translationCache, [lang]: data },
-      savedLangs: [...new Set([...savedLangs, lang])],
-    })
+    set((state) => ({
+      translationCache: { ...state.translationCache, [lang]: data },
+      savedLangs: [...new Set([...state.savedLangs, lang])],
+      dirtyLangs: [...new Set([...state.dirtyLangs, lang])],
+    }))
   },
 
   saveTranslation: async () => {
@@ -563,6 +638,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       set((state) => ({
         savedLangs: [...new Set([...state.savedLangs, activeLang])],
         isDirty: false,
+        dirtyLangs: state.dirtyLangs.filter((l) => l !== activeLang),
         translationCache: {
           ...state.translationCache,
           [activeLang]: { ...entry, sections: sections.map((s, i) => ({ ...s, order: i })) },
@@ -584,7 +660,11 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       await axiosInstance.delete(`/api/dynamic-pages/${pageId}/translations/${lang}`)
       const newCache = { ...translationCache }
       delete newCache[lang]
-      set({ translationCache: newCache, savedLangs: savedLangs.filter((l) => l !== lang) })
+      set({
+        translationCache: newCache,
+        savedLangs: savedLangs.filter((l) => l !== lang),
+        dirtyLangs: get().dirtyLangs.filter((l) => l !== lang),
+      })
       if (activeLang === lang) {
         set({ activeLang: 'en', sections: enSections, selectedId: null })
       }
@@ -595,6 +675,29 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     }
   },
 }))
+
+// Auto-save draft to localStorage 3 seconds after any dirty mutation
+useEditorStore.subscribe((state) => {
+  if (!state.isDirty) return
+  if (_draftTimer) clearTimeout(_draftTimer)
+  _draftTimer = setTimeout(() => {
+    const s = useEditorStore.getState()
+    if (!s.isDirty) return
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(draftKey(s.pageId), JSON.stringify({
+          title: s.title,
+          slug: s.slug,
+          description: s.description,
+          keywords: s.keywords,
+          metadata: s.metadata,
+          sections: s.sections,
+          savedAt: Date.now(),
+        }))
+      }
+    } catch {}
+  }, 3000)
+})
 
 export const selectSelectedBlock = (state: EditorStore) =>
   state.sections.find((b) => b.id === state.selectedId) ?? null
