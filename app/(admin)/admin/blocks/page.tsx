@@ -48,9 +48,15 @@ const BlocksPage = () => {
 
   const actions: ActionButton<BlockRow>[] = [
     {
+      label: 'Preview',
+      href: (b) => `/admin/blocks/${b.blockId}`,
+      className: 'btn-ghost btn-sm',
+      hidden: (b) => b.source === 'db',
+    },
+    {
       label: 'Edit',
-      href: (b) => (b.source === 'db' ? `/admin/blocks/${b.blockId}` : ''),
-      className: 'btn-primary',
+      href: (b) => `/admin/blocks/${b.blockId}`,
+      className: 'btn-primary btn-sm',
       hidden: (b) => b.source === 'code',
     },
     {
@@ -59,7 +65,7 @@ const BlocksPage = () => {
         if (!confirm(`Delete block "${b.label}"?`)) return
         await axiosInstance.delete(`/api/dynamic-pages/block-definitions/${b.blockId}`)
       },
-      className: 'text-danger',
+      className: 'text-danger btn-sm',
       hideOnMobile: true,
       hidden: (b) => b.source === 'code',
     },

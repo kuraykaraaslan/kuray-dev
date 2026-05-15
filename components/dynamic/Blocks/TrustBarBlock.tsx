@@ -12,7 +12,8 @@ function TrustBarBlock(rawProps: Record<string, unknown>) {
   let items: string[] = []
   try {
     const raw = rawProps.items
-    items = typeof raw === 'string' ? JSON.parse(raw) : (raw as string[]) ?? []
+    const arr: unknown[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as unknown[]) ?? []
+    items = arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
   } catch {
     items = []
   }
@@ -58,7 +59,7 @@ export const TrustBarBlockDefinition: BlockDefinition = {
   description: 'Horizontal pipe-separated list of audience types or trust signals',
   defaultProps: {
     label: 'Built for Complex AECO Environments',
-    items: JSON.stringify(defaultItems),
+    items: defaultItems.map(text => ({ text })),
     blockClass: 'py-8 px-6 md:px-12 lg:px-20 bg-base-300',
     sectionId: 'trust-bar',
     ...BASE_BLOCK_DEFAULT_PROPS,
@@ -71,10 +72,9 @@ export const TrustBarBlockDefinition: BlockDefinition = {
       placeholder: 'Built for...',
     },
     items: {
-      label: 'Items (JSON string array)',
-      type: 'json',
-      value: JSON.stringify(defaultItems),
-      placeholder: '["Item 1","Item 2","Item 3"]',
+      label: 'Items',
+      type: 'repeater',
+      fields: { text: { label: 'Item', type: 'text', value: '' } },
     },
     ...BASE_BLOCK_SCHEMA_FIELDS,
   },

@@ -29,7 +29,8 @@ function WhyUsBlock(rawProps: Record<string, unknown>) {
   let items: string[] = []
   try {
     const raw = rawProps.items
-    items = typeof raw === 'string' ? JSON.parse(raw) : (raw as string[]) ?? []
+    const arr: unknown[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as unknown[]) ?? []
+    items = arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
   } catch {
     items = []
   }
@@ -147,7 +148,7 @@ export const WhyUsBlockDefinition: BlockDefinition = {
       'We are technology-agnostic, not tool-dependent — combining expertise and human insight into one execution mindset.',
     sectionTitle: 'Built for Complex',
     sectionTitleAccent: 'Environments',
-    items: JSON.stringify(defaultItems),
+    items: defaultItems.map(text => ({ text })),
     description:
       "We work with global decision-makers in complex environments. If your projects involve multiple teams, massive data flows, tight timelines, and zero margin for error — we're built for you.",
     ctaLabel: 'Talk to an Expert',
@@ -165,7 +166,11 @@ export const WhyUsBlockDefinition: BlockDefinition = {
     subtitle: { label: 'Top Subtitle', type: 'textarea' },
     sectionTitle: { label: 'Section Title', type: 'text' },
     sectionTitleAccent: { label: 'Section Title Accent', type: 'text' },
-    items: { label: 'Audience Items (JSON string array)', type: 'json' },
+    items: {
+      label: 'Audience Items',
+      type: 'repeater',
+      fields: { text: { label: 'Item', type: 'text', value: '' } },
+    },
     description: { label: 'Description paragraph', type: 'textarea' },
     ctaLabel: { label: 'Button Label', type: 'text' },
     ctaHref: { label: 'Button URL', type: 'url' },

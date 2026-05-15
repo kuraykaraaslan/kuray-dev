@@ -17,11 +17,14 @@ const DEFAULT_ITEMS = [
 ]
 
 function parseItems(raw: unknown): string[] {
-  if (Array.isArray(raw)) return raw as string[]
-  if (typeof raw === 'string') {
-    try { return JSON.parse(raw) } catch {}
+  let arr: unknown[] = []
+  if (Array.isArray(raw)) arr = raw
+  else if (typeof raw === 'string') {
+    try { arr = JSON.parse(raw) } catch { return DEFAULT_ITEMS }
+  } else {
+    return DEFAULT_ITEMS
   }
-  return DEFAULT_ITEMS
+  return arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
 }
 
 function TagCloudBlock(rawProps: Record<string, unknown>) {
@@ -79,7 +82,7 @@ export const TagCloudBlockDefinition: BlockDefinition = {
     heading: 'Capabilities',
     subtitle: '',
     variant: 'pills',
-    items: DEFAULT_ITEMS,
+    items: DEFAULT_ITEMS.map(text => ({ text })),
     blockClass: 'bg-base-200 py-4',
     sectionId: 'tag-cloud',
     ...BASE_BLOCK_DEFAULT_PROPS,
@@ -88,7 +91,11 @@ export const TagCloudBlockDefinition: BlockDefinition = {
     heading:  { label: 'Heading',  type: 'text' },
     subtitle: { label: 'Subtitle', type: 'text' },
     variant:  { label: 'Style',    type: 'select', options: ['pills', 'cards'], value: 'pills' },
-    items:    { label: 'Items (JSON string array)', type: 'json' },
+    items: {
+      label: 'Items',
+      type: 'repeater',
+      fields: { text: { label: 'Item', type: 'text', value: '' } },
+    },
     ...BASE_BLOCK_SCHEMA_FIELDS,
   },
   Component: TagCloudBlock as unknown as BlockDefinition['Component'],

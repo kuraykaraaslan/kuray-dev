@@ -17,7 +17,8 @@ function HomeHeroBlock(rawProps: Record<string, unknown>) {
   let titleLines: string[] = []
   try {
     const raw = rawProps.titleLines
-    titleLines = typeof raw === 'string' ? JSON.parse(raw) : (raw as string[]) ?? []
+    const arr: unknown[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as unknown[]) ?? []
+    titleLines = arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
   } catch {
     titleLines = []
   }
@@ -25,7 +26,8 @@ function HomeHeroBlock(rawProps: Record<string, unknown>) {
   let bodyLines: string[] = []
   try {
     const raw = rawProps.bodyLines
-    bodyLines = typeof raw === 'string' ? JSON.parse(raw) : (raw as string[]) ?? []
+    const arr: unknown[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as unknown[]) ?? []
+    bodyLines = arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
   } catch {
     bodyLines = []
   }
@@ -105,16 +107,16 @@ export const HomeHeroBlockDefinition: BlockDefinition = {
   category: 'Hero',
   description: 'Full-screen split hero: stacked multi-line title (last line accented), body text, dual CTAs, image with glow',
   defaultProps: {
-    titleLines: JSON.stringify([
-      'AI-Driven Transformation',
-      'for complex',
-      'AECO',
-      'Organizations',
-    ]),
-    bodyLines: JSON.stringify([
-      'Your Partner in Smarter, Faster, and More Efficient AECO Projects',
-      'We help enterprise architecture, engineering, infrastructure, and development teams simplify complexity, eliminate delivery risk, and execute large-scale projects with confidence.',
-    ]),
+    titleLines: [
+      { text: 'AI-Driven Transformation' },
+      { text: 'for complex' },
+      { text: 'AECO' },
+      { text: 'Organizations' },
+    ],
+    bodyLines: [
+      { text: 'Your Partner in Smarter, Faster, and More Efficient AECO Projects' },
+      { text: 'We help enterprise architecture, engineering, infrastructure, and development teams simplify complexity, eliminate delivery risk, and execute large-scale projects with confidence.' },
+    ],
     primaryCtaLabel: 'Talk to an Expert',
     primaryCtaHref: '/contact',
     secondaryCtaLabel: 'Explore Solutions',
@@ -127,8 +129,16 @@ export const HomeHeroBlockDefinition: BlockDefinition = {
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
-    titleLines: { label: 'Title Lines (JSON array — last line gets accent color)', type: 'json' },
-    bodyLines: { label: 'Body Lines (JSON array of paragraphs)', type: 'json' },
+    titleLines: {
+      label: 'Title Lines (last line gets accent color)',
+      type: 'repeater',
+      fields: { text: { label: 'Line', type: 'text', value: '' } },
+    },
+    bodyLines: {
+      label: 'Body Lines',
+      type: 'repeater',
+      fields: { text: { label: 'Paragraph', type: 'textarea', value: '' } },
+    },
     primaryCtaLabel: { label: 'Primary Button Label', type: 'text' },
     primaryCtaHref: { label: 'Primary Button URL', type: 'url' },
     secondaryCtaLabel: { label: 'Secondary Button Label', type: 'text' },

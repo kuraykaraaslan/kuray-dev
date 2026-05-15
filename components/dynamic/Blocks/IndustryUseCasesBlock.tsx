@@ -3,10 +3,27 @@
 import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import type { BlockDefinition } from '../types'
 
+interface RawUseCase {
+  industry: string
+  icon?: string
+  useCases?: string | string[]
+}
+
 interface UseCase {
   industry: string
   icon?: string
   useCases: string[]
+}
+
+function parseUseCases(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw as string[]
+  if (typeof raw === 'string') {
+    if (raw.trimStart().startsWith('[')) {
+      try { return JSON.parse(raw) } catch {}
+    }
+    return raw.split('\n').filter(Boolean)
+  }
+  return []
 }
 
 function IndustryUseCasesBlock(rawProps: Record<string, unknown>) {
@@ -17,7 +34,8 @@ function IndustryUseCasesBlock(rawProps: Record<string, unknown>) {
   let industries: UseCase[] = []
   try {
     const raw = rawProps.industries
-    industries = typeof raw === 'string' ? JSON.parse(raw) : (raw as UseCase[]) ?? []
+    const arr: RawUseCase[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as RawUseCase[]) ?? []
+    industries = arr.map(item => ({ ...item, useCases: parseUseCases(item.useCases) }))
   } catch {
     industries = []
   }
@@ -73,32 +91,28 @@ export const IndustryUseCasesBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Industry Solutions',
     subtitle: 'Tailored for your business',
-    industries: JSON.stringify([
+    industries: [
       {
         industry: 'Healthcare',
         icon: '🏥',
-        useCases: [
-          'Patient record management',
-          'Appointment scheduling',
-          'Telemedicine integration',
-        ],
+        useCases: 'Patient record management\nAppointment scheduling\nTelemedicine integration',
       },
       {
         industry: 'Finance',
         icon: '💰',
-        useCases: ['Risk analysis', 'Portfolio management', 'Compliance reporting'],
+        useCases: 'Risk analysis\nPortfolio management\nCompliance reporting',
       },
       {
         industry: 'Retail',
         icon: '🛍️',
-        useCases: ['Inventory tracking', 'POS systems', 'Customer analytics'],
+        useCases: 'Inventory tracking\nPOS systems\nCustomer analytics',
       },
       {
         industry: 'Technology',
         icon: '💻',
-        useCases: ['DevOps automation', 'Code deployment', 'Performance monitoring'],
+        useCases: 'DevOps automation\nCode deployment\nPerformance monitoring',
       },
-    ]),
+    ],
     blockClass: 'bg-base-100 pt-16',
     sectionId: '',
     ...BASE_BLOCK_DEFAULT_PROPS,
@@ -112,7 +126,7 @@ export const IndustryUseCasesBlockDefinition: BlockDefinition = {
       fields: {
         industry: { label: 'Industry Name', type: 'text', value: '' },
         icon: { label: 'Icon (emoji)', type: 'text', value: '' },
-        useCases: { label: 'Use Cases (JSON array of strings)', type: 'json', value: [] },
+        useCases: { label: 'Use Cases (one per line)', type: 'textarea', value: '' },
       },
     },
     ...BASE_BLOCK_SCHEMA_FIELDS,

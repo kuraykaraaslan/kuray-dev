@@ -1,12 +1,22 @@
 import { NextResponse } from 'next/server'
 import DynamicPageBlockService from '@/services/DynamicPageBlockService'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
+import { CODE_BLOCK_META } from '@/components/dynamic/utils/CodeBlocksMeta'
 
 type Params = { params: Promise<{ blockId: string }> }
 
 export async function GET(_req: NextRequest, { params }: Params) {
   const { blockId } = await params
   try {
+    if (blockId.startsWith('code:')) {
+      const type = blockId.slice(5)
+      const meta = CODE_BLOCK_META.find((m) => m.type === type)
+      if (!meta) return NextResponse.json({ message: 'Not found' }, { status: 404 })
+      return NextResponse.json({
+        block: { blockId, ...meta, template: '', isSystem: true, source: 'code' },
+      })
+    }
+
     const blocks = await DynamicPageBlockService.getAll()
     const block = blocks.find((b) => b.blockId === blockId)
     if (!block) return NextResponse.json({ message: 'Not found' }, { status: 404 })

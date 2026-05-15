@@ -26,11 +26,14 @@ const DEFAULT_STATS: StatItem[] = [
 ]
 
 function parseParagraphs(raw: unknown): string[] {
-  if (Array.isArray(raw)) return raw as string[]
-  if (typeof raw === 'string') {
-    try { return JSON.parse(raw) } catch {}
+  let arr: unknown[] = []
+  if (Array.isArray(raw)) arr = raw
+  else if (typeof raw === 'string') {
+    try { arr = JSON.parse(raw) } catch { return DEFAULT_PARAGRAPHS }
+  } else {
+    return DEFAULT_PARAGRAPHS
   }
-  return DEFAULT_PARAGRAPHS
+  return arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
 }
 
 function parseStats(raw: unknown): StatItem[] {
@@ -85,7 +88,7 @@ export const TextStatsBlockDefinition: BlockDefinition = {
   defaultProps: {
     heading: 'Global Expertise,',
     accentHeading: 'Local Presence',
-    paragraphs: DEFAULT_PARAGRAPHS,
+    paragraphs: DEFAULT_PARAGRAPHS.map(text => ({ text })),
     stats: DEFAULT_STATS,
     blockClass: 'bg-base-200 py-4',
     sectionId: 'text-stats',
@@ -94,7 +97,11 @@ export const TextStatsBlockDefinition: BlockDefinition = {
   schema: {
     heading: { label: 'Heading (first line)', type: 'text' },
     accentHeading: { label: 'Heading (accented second line)', type: 'text' },
-    paragraphs: { label: 'Paragraphs (JSON array)', type: 'json' },
+    paragraphs: {
+      label: 'Paragraphs',
+      type: 'repeater',
+      fields: { text: { label: 'Paragraph', type: 'textarea', value: '' } },
+    },
     stats: {
       label: 'Stats',
       type: 'repeater',

@@ -34,7 +34,8 @@ function AboutHeroBlock(rawProps: Record<string, unknown>) {
   let headlineLines: string[] = []
   try {
     const raw = rawProps.headlineLines
-    headlineLines = typeof raw === 'string' ? JSON.parse(raw) : (raw as string[]) ?? []
+    const arr: unknown[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as unknown[]) ?? []
+    headlineLines = arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
   } catch {
     headlineLines = []
   }
@@ -42,7 +43,8 @@ function AboutHeroBlock(rawProps: Record<string, unknown>) {
   let paragraphList: string[] = []
   try {
     const raw = rawProps.paragraphs
-    paragraphList = typeof raw === 'string' ? JSON.parse(raw) : (raw as string[]) ?? []
+    const arr: unknown[] = typeof raw === 'string' ? JSON.parse(raw) : (raw as unknown[]) ?? []
+    paragraphList = arr.map(i => typeof i === 'string' ? i : (i as { text: string }).text ?? '').filter(Boolean)
   } catch {
     paragraphList = []
   }
@@ -105,13 +107,17 @@ export const AboutHeroBlockDefinition: BlockDefinition = {
   category: 'Hero',
   description: 'Multi-line headline hero for the About page: last line accented, paragraphs array, split image with accent border.',
   defaultProps: {
-    headlineLines: JSON.stringify(['Expert-Led.', 'Outcome-Driven.', 'Human-Centric.']),
-    paragraphs: JSON.stringify([
-      "We don't just create. We inspire.",
-      "We don't just finish projects. We create remarkable experiences.",
-      "We don't just construct. We elevate.",
-      "Founded in 2019, we exist to help professionals do more with less stress. By blending advanced technologies with expert consulting, we empower teams to overcome inefficiencies, optimize collaboration, and deliver exceptional results.",
-    ]),
+    headlineLines: [
+      { text: 'Expert-Led.' },
+      { text: 'Outcome-Driven.' },
+      { text: 'Human-Centric.' },
+    ],
+    paragraphs: [
+      { text: "We don't just create. We inspire." },
+      { text: "We don't just finish projects. We create remarkable experiences." },
+      { text: "We don't just construct. We elevate." },
+      { text: "Founded in 2019, we exist to help professionals do more with less stress. By blending advanced technologies with expert consulting, we empower teams to overcome inefficiencies, optimize collaboration, and deliver exceptional results." },
+    ],
     ctaLabel: '',
     ctaHref: '/contact',
     imageUrl:
@@ -122,8 +128,16 @@ export const AboutHeroBlockDefinition: BlockDefinition = {
     ...BASE_BLOCK_DEFAULT_PROPS,
   },
   schema: {
-    headlineLines: { label: 'Headline Lines (JSON array)', type: 'json' },
-    paragraphs: { label: 'Paragraphs (JSON array)', type: 'json' },
+    headlineLines: {
+      label: 'Headline Lines',
+      type: 'repeater',
+      fields: { text: { label: 'Line', type: 'text', value: '' } },
+    },
+    paragraphs: {
+      label: 'Paragraphs',
+      type: 'repeater',
+      fields: { text: { label: 'Paragraph', type: 'textarea', value: '' } },
+    },
     ctaLabel: { label: 'CTA Button Label', type: 'text', placeholder: 'Learn More' },
     ctaHref: { label: 'CTA Button URL', type: 'url', placeholder: '/contact' },
     imageUrl: {
