@@ -240,6 +240,18 @@ export default async function BlogPost({ params }: Props) {
           comments: commentsForSchema,
           rating: likeCount > 0 ? { likeCount } : undefined,
           isNewsArticle,
+          blogPosting: {
+            title: post.title,
+            description: post.description || post.content.substring(0, 150),
+            url,
+            image,
+            datePublished: post.createdAt?.toISOString() || new Date().toISOString(),
+            dateModified: post.updatedAt?.toISOString() || post.createdAt?.toISOString(),
+            authorName: 'Kuray Karaaslan',
+            wordCount: articleData.wordCount,
+            keywords: articleData.keywords,
+            articleSection: post.category.title,
+          },
         })}
         <section className="min-h-screen bg-base-100 pt-32" id="blog">
           <div className="container mx-auto px-4 lg:px-8 mb-8 flex-grow flex-col max-w-7xl">

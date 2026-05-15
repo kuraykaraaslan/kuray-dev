@@ -1,0 +1,32 @@
+# Kuray Karaaslan — kuray.dev
+
+> Personal portfolio and engineering blog by Kuray Karaaslan, a Full-Stack Developer (React, Next.js, Node.js, Java Spring Boot) based in Turkey. Focus areas: multi-tenant SaaS, IoT platforms, BIM tooling, and developer experience.
+
+## About
+
+- Role: Full-Stack Developer
+- Stack: React, Next.js, React Native, Node.js, TypeScript, Java Spring Boot, PostgreSQL, Redis
+- Location: Turkey (remote-friendly)
+- Languages: English, Turkish
+- Available for freelance and consulting work
+
+## Key URLs
+
+- [Homepage](https://kuray.dev/)
+- [About](https://kuray.dev/about)
+- [Projects](https://kuray.dev/projects) — portfolio with case studies
+- [Blog](https://kuray.dev/blog) — technical articles and tutorials
+- [Contact](https://kuray.dev/contact)
+- [RSS Feed](https://kuray.dev/feed.xml)
+- [Sitemap](https://kuray.dev/sitemap.xml)
+- [Detailed content (llms-full.txt)](https://kuray.dev/llms-full.txt)
+
+## Social
+
+- GitHub: https://github.com/kuraykaraaslan
+- LinkedIn: https://www.linkedin.com/in/kuraykaraaslan/
+- X (Twitter): https://twitter.com/kuraykaraaslan
+
+## License
+
+Code samples published on the blog are released under MIT unless otherwise noted. Original written content is © Kuray Karaaslan; quote with attribution.

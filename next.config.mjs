@@ -17,6 +17,32 @@ const nextConfig = {
 
   reactStrictMode: true,
 
+  // Tree-shake heavy icon libraries — each `import { faGithub } from '@fortawesome/free-brands-svg-icons'`
+  // resolves to the single-icon file instead of pulling in the entire icon pack.
+  modularizeImports: {
+    '@fortawesome/free-brands-svg-icons': {
+      transform: '@fortawesome/free-brands-svg-icons/{{member}}',
+      skipDefaultConversion: true,
+    },
+    '@fortawesome/free-solid-svg-icons': {
+      transform: '@fortawesome/free-solid-svg-icons/{{member}}',
+      skipDefaultConversion: true,
+    },
+    '@fortawesome/free-regular-svg-icons': {
+      transform: '@fortawesome/free-regular-svg-icons/{{member}}',
+      skipDefaultConversion: true,
+    },
+  },
+
+  experimental: {
+    optimizePackageImports: [
+      '@fortawesome/free-brands-svg-icons',
+      '@fortawesome/free-solid-svg-icons',
+      '@fortawesome/free-regular-svg-icons',
+      'lucide-react',
+    ],
+  },
+
   env: {
     NEXT_PUBLIC_APPLICATION_HOST: env.NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000',
     SSO_ALLOWED_PROVIDERS: env.SSO_ALLOWED_PROVIDERS || 'google,apple'

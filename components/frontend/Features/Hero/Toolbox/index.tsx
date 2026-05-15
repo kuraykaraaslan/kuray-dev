@@ -216,9 +216,9 @@ const Toolbox = () => {
           <div className="grid grid-row-auto justify-items-center grid-row-1 md:grid-row-2 md:space-y-8 py-8 md:py-16">
             <div className="flex flex-col lg:flex-row-reverse md:mx-12 mx-auto">
               <div className="flex-1 ps-4 select-none hidden lg:block">
-                <h2 className="text-3xl font-bold  relative overflow-hidden animate-shake pb-4">
+                <h3 className="text-3xl font-bold  relative overflow-hidden animate-shake pb-4">
                   {t('pages.toolbox.frontend')}
-                </h2>
+                </h3>
               </div>
               <div className="group flex-none grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
                 {frontendTools.map((tool, index) => (
@@ -228,9 +228,9 @@ const Toolbox = () => {
             </div>
             <div className="group flex flex-col lg:flex-row md:mx-12 mx-auto pt-4">
               <div className="flex-0 lg:ps-0 select-none hidden lg:block pe-4">
-                <h2 className="text-3xl font-bold  relative overflow-hidden animate-shake pb-4">
+                <h3 className="text-3xl font-bold  relative overflow-hidden animate-shake pb-4">
                   {t('pages.toolbox.backend')}
-                </h2>
+                </h3>
               </div>
               <div className="flex-none grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
                 {backendTools.map((tool, index) => (

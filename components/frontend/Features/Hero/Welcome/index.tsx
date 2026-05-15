@@ -38,20 +38,21 @@ const Welcome = () => {
       >
         <div className="hero-content">
           <div className="flex-1 max-w-2xl md:me-4">
-            <h1 className="font-bold relative overflow-hidden animate-shake text-5xl leading-normal h-32 md:h-16">
-              <TypingEffect />
+            <h1 className="sr-only">
+              Kuray Karaaslan — Full-Stack Developer Building SaaS, IoT & BIM Platforms
             </h1>
-            <h2 className="py-3 pb-6 leading-7 text-lg">
-              <p>
-                <Trans
-                  i18nKey="pages.hero.description"
-                  lang={i18n.language}
-                  components={{
-                    bold: <span className="font-bold" />,
-                  }}
-                />
-              </p>
-            </h2>
+            <p className="hero-tagline font-bold relative overflow-hidden animate-shake text-5xl leading-normal h-32 md:h-16">
+              <TypingEffect />
+            </p>
+            <p className="py-3 pb-6 leading-7 text-lg">
+              <Trans
+                i18nKey="pages.hero.description"
+                lang={i18n.language}
+                components={{
+                  bold: <span className="font-bold" />,
+                }}
+              />
+            </p>
 
             <Link href="#contact" className="btn btn-primary hidden lg:inline-flex">
               <FontAwesomeIcon icon={faArrowRight} className="mt-1" style={{ width: '1rem' }} />
@@ -61,6 +62,7 @@ const Welcome = () => {
             <Link
               href="https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link"
               target="_blank"
+              rel="noopener noreferrer"
             >
               <p className="btn btn-ghost ms-2 lowercase hidden">
                 <FontAwesomeIcon icon={faLink} className="mt-1" style={{ width: '1rem' }} />

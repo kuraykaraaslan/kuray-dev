@@ -16,7 +16,8 @@ const MyImage = () => {
             width="1000"
             height="1000"
             src="/assets/img/kuraykaraaslan.jpg"
-            alt="kuray karaaslan"
+            alt="Kuray Karaaslan profil fotoğrafı"
+            priority
             className="transition duration-500 transform max-w-24 sm:max-w-48 md:max-w-64 transition duration-500 transform bg-primary"
           />
         </div>

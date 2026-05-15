@@ -12,7 +12,7 @@ const SingleSkill = ({ title, icon, bgColor, textColor }: Partial<Skill>) => {
         className={`relative card rounded-none w-28 h-24 from-base-100 to-base-300 bg-gradient-to-b shadow-lg relative select-none transition duration-500 transform group-hover:rotate-y-180 shadow-lg`}
       >
         <div className="flex flex-row items-center justify-center group-hover:rotate-y-180 h-full relative fixed w-28 h-24 top-0 left-0 absolute">
-          <figure className={`w-20 h-20 group-hover:hidden`}>
+          <figure className={`w-20 h-20 group-hover:hidden`} aria-hidden="true">
             <FontAwesomeIcon icon={icon} className="text-2xl flex group-hover:hidden" />
           </figure>
           <div
@@ -23,9 +23,9 @@ const SingleSkill = ({ title, icon, bgColor, textColor }: Partial<Skill>) => {
             <div
               className={'card-body items-center text-center duration-1000 ease-in-out transform '}
             >
-              <h2 className={'card-title ' + textSize}>
+              <h3 className={'card-title ' + textSize}>
                 {title ? title : ''}
-              </h2>
+              </h3>
             </div>
           </div>
         </div>

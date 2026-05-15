@@ -1,6 +1,7 @@
 import { DEFAULT_LANGUAGE, getOgLocale } from '@/types/common/I18nTypes'
+import { SITE_URL } from '@/lib/seo/siteUrl'
 
-const HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000'
+const HOST = SITE_URL
 
 export { getOgLocale }
 
@@ -12,6 +13,8 @@ export function buildLangUrl(lang: string, path: string): string {
 
 /**
  * Builds canonical + hreflang alternates for Next.js Metadata.
+ * Pass only the languages this specific URL is actually available in
+ * (e.g. for blog posts, only the langs the post has been translated to).
  * @param lang - current page language
  * @param path - path WITHOUT lang prefix (e.g. /blog/category/post)
  * @param availableLangs - language codes that have this content (must include 'en')
@@ -26,7 +29,7 @@ export function buildAlternates(
   for (const l of availableLangs) {
     languages[l] = buildLangUrl(l, path)
   }
-  // x-default points to the default (English) version
+  // x-default always points to the default (English) version
   languages['x-default'] = buildLangUrl(DEFAULT_LANGUAGE, path)
   return { canonical, languages }
 }

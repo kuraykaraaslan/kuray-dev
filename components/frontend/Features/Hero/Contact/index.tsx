@@ -23,7 +23,7 @@ import axios from 'axios'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { useTranslation } from 'react-i18next'
 
-const recaptchaSiteKey = process.env.RECAPTCHA_CLIENT_KEY || ''
+const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY || ''
 
 const Form = dynamic(() => import('./Partials/Form'), { ssr: false })
 

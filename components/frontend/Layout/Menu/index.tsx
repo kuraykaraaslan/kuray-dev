@@ -75,6 +75,11 @@ const Menu = ({
       {menuItems?.map((item) => {
         const label = t(`navigation.${item.name}`)
         const active = isActive(item)
+        const isExternal = item.external
+        let href = item.page
+        if (!isExternal && item.id && !item.page.includes('#')) {
+          href = item.page.endsWith('/') ? `${item.page}#${item.id}` : `${item.page}/#${item.id}`
+        }
 
         return (
           <li
@@ -91,10 +96,14 @@ const Menu = ({
               ' rounded-md'
             }
           >
-            <button
-              type="button"
-              onClick={() => {
-                scrollOrRedirect(item)
+            <a
+              href={href}
+              {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              onClick={(e) => {
+                if (!isExternal && item.id) {
+                  e.preventDefault()
+                  scrollOrRedirect(item)
+                }
                 onItemClick?.()
               }}
               aria-current={active ? 'page' : undefined}
@@ -105,11 +114,10 @@ const Menu = ({
                 <FontAwesomeIcon icon={item.icon as IconDefinition} className="w-6 h-6" aria-hidden="true" />
               )}
 
-              {/* Görünür text kalsın; SR zaten buton label'ı olarak bunu da okuyabilir */}
               <span className={item.hideTextOnDesktop && !isSidebar ? 'hidden' : 'block'} suppressHydrationWarning>
                 {label}
               </span>
-            </button>
+            </a>
           </li>
         )
       })}

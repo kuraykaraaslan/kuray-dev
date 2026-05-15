@@ -18,7 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { title, description, keywords } = await getPageMetadata(lang, 'projects')
 
   return {
-    title,
+    // dictionary titles already include "| Kuray Karaaslan"
+    title: { absolute: title },
     description,
     keywords,
     robots: { index: true, follow: true },

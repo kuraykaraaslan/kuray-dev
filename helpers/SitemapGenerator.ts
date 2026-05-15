@@ -1,15 +1,10 @@
 // helpers/SitemapGenerator.ts
 import type { SitemapUrl } from '@/types/common/SitemapTypes'
-
-
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000'
+import { SITE_URL } from '@/lib/seo/siteUrl'
 
 export type ChangeFreq = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 
-export const getBaseUrl = () => {
-  const raw = NEXT_PUBLIC_APPLICATION_HOST.endsWith('/') ? NEXT_PUBLIC_APPLICATION_HOST : `${NEXT_PUBLIC_APPLICATION_HOST}/`
-  return raw.replace(/\/+$/, '')
-}
+export const getBaseUrl = () => SITE_URL
 
 const escapeXml = (s: string) =>
   s

@@ -11,7 +11,7 @@ const SingleProject = ({ project }: { project: Project }) => {
     <article
       className={`rounded-lg border from-base-100 to-base-300 bg-gradient-to-b shadow-lg border-base-200 text-base-900`}
     >
-      <Link className="shadow-md rounded-t-lg" href={url} target="_blank">
+      <Link className="shadow-md rounded-t-lg" href={url} target="_blank" rel="noopener noreferrer">
         <Image
           width="1000"
           height="1000"
@@ -26,11 +26,11 @@ const SingleProject = ({ project }: { project: Project }) => {
           <SingleTag technology={tag} key={index} />
         ))}
       </div>
-      <h2 className="px-6 mb-2 text-2xl font-bold tracking-tight">
-        <Link href={url} target="_blank">
+      <h3 className="px-6 mb-2 text-2xl font-bold tracking-tight">
+        <Link href={url} target="_blank" rel="noopener noreferrer">
           {project.title}
         </Link>
-      </h2>
+      </h3>
       <p className="px-6 mb-5 font-light">{project?.description!.substring(0, 250)}...</p>
       <div className="px-6 pb-6 flex justify-between items-center">
         <div className="flex items-center space-x-4">

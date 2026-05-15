@@ -24,9 +24,10 @@ const PAGE_SIZE = 6
 
 export default function Feed(props: FeedProps) {
   const { category, author } = props
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const currentPage = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
+  const lang = i18n.language
 
   const [feeds, setFeeds] = useState<FeedCardProps[]>([])
   const [total, setTotal] = useState(0)
@@ -38,6 +39,7 @@ export default function Feed(props: FeedProps) {
       .get(
         '/api/posts' +
           `?page=${currentPage - 1}&pageSize=${PAGE_SIZE}&sortDir=desc` +
+          (lang ? `&lang=${encodeURIComponent(lang)}` : '') +
           (category ? `&categoryId=${category.categoryId}` : '') +
           (author ? `&authorId=${author.userId}` : '')
       )
@@ -55,7 +57,7 @@ export default function Feed(props: FeedProps) {
       .catch((error) => {
         console.error('Error fetching posts:', error)
       })
-  }, [currentPage])
+  }, [currentPage, lang, category, author])
 
   return (
     <section className="min-h-screen bg-base-100 pt-32" id="blog">

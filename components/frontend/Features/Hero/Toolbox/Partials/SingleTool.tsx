@@ -12,7 +12,7 @@ const SingleTool = ({ icon, title, description, hoverBgColor, hoverTextColor }: 
         }
       >
         <div className="flex flex-col items-center justify-center group-hover:hidden">
-          <figure className="px-10 pt-5 -mb-3">
+          <figure className="px-10 pt-5 -mb-3" aria-hidden="true">
             <FontAwesomeIcon icon={icon} className="text-8xl" />
           </figure>
         </div>
@@ -21,14 +21,14 @@ const SingleTool = ({ icon, title, description, hoverBgColor, hoverTextColor }: 
             'flex flex-col items-center justify-center hidden group-hover:flex rotate-y-180 w-40 h-40 top-0 left-0 absolute group-hover:bg-primary group-hover:text-primary-content rounded-none '
           }
         >
-          <figure className="px-10 pt-5 -mb-4">
+          <figure className="px-10 pt-5 -mb-4" aria-hidden="true">
             <FontAwesomeIcon
               icon={icon}
               className="text-4xl transition duration-500 hover:animate-spin"
             />
           </figure>
           <div className={'card-body items-center text-center duration-1000 ease-in-out '}>
-            <h2 className="card-title">{title}</h2>
+            <h3 className="card-title">{title}</h3>
             <span className="text-xs">{description}</span>
           </div>
         </div>

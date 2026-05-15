@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/siteUrl'
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
+const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 
 export default class MetadataHelper {
   // Generate JSON-LD for WebSite with SearchAction (enables sitelinks search box in Google)
@@ -59,10 +60,24 @@ export default class MetadataHelper {
         name: 'Kuray Karaaslan',
         alternateName: 'kuraykaraaslan',
         description:
-          'Software developer, tech blogger, and open-source enthusiast. Skilled in React, Next.js, Node.js, Java, and React Native.',
+          'Full-Stack Developer specialized in React, Next.js, Node.js, Java Spring Boot, and multi-tenant SaaS architectures.',
         url: NEXT_PUBLIC_APPLICATION_HOST,
         image: `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`,
-        jobTitle: 'Software Developer',
+        jobTitle: 'Full-Stack Developer',
+        email: 'mailto:kuraykaraaslan@gmail.com',
+        address: {
+          '@type': 'PostalAddress',
+          addressCountry: 'TR',
+        },
+        nationality: {
+          '@type': 'Country',
+          name: 'Turkey',
+        },
+        knowsLanguage: ['en', 'tr'],
+        alumniOf: {
+          '@type': 'CollegeOrUniversity',
+          name: 'Istanbul University',
+        },
         worksFor: {
           '@type': 'Organization',
           name: 'Freelance',
@@ -73,7 +88,11 @@ export default class MetadataHelper {
           'Node.js',
           'TypeScript',
           'Java',
+          'Spring Boot',
           'React Native',
+          'SaaS Architecture',
+          'IoT',
+          'BIM',
           'Web Development',
           'Mobile Development',
         ],
@@ -81,8 +100,98 @@ export default class MetadataHelper {
           'https://github.com/kuraykaraaslan',
           'https://twitter.com/kuraykaraaslan',
           'https://www.linkedin.com/in/kuraykaraaslan/',
+          'https://www.instagram.com/kuraykaraaslan/',
+          'https://www.facebook.com/kuraykaraaslan',
+          'https://wa.me/905459223554',
+          'https://t.me/kuraykaraaslan',
+          'https://www.youtube.com/@kuraykaraaslan',
         ],
       },
+    }
+  }
+
+  // ItemList schema for the homepage portfolio section (Google project carousel)
+  public static getPortfolioItemListJsonLd(items: { name: string; url: string; image?: string }[]) {
+    if (!items?.length) return null
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Featured Projects',
+      itemListElement: items.map((it, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: it.url,
+        name: it.name,
+        ...(it.image ? { image: it.image } : {}),
+      })),
+    }
+  }
+
+  // SoftwareSourceCode schema for code-repo project pages (use alongside SoftwareApplication)
+  public static getSoftwareSourceCodeJsonLd(options: {
+    name: string
+    description: string
+    url: string
+    codeRepository?: string
+    programmingLanguage?: string[]
+    license?: string
+    image?: string
+  }) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareSourceCode',
+      name: options.name,
+      description: options.description,
+      url: options.url,
+      author: { '@type': 'Person', name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST },
+      ...(options.codeRepository ? { codeRepository: options.codeRepository } : {}),
+      ...(options.programmingLanguage?.length
+        ? { programmingLanguage: options.programmingLanguage }
+        : {}),
+      ...(options.license ? { license: options.license } : {}),
+      ...(options.image ? { image: options.image } : {}),
+    }
+  }
+
+  // BlogPosting schema (richer than generic Article — required fields for rich snippets)
+  public static getBlogPostingJsonLd(options: {
+    title: string
+    description: string
+    url: string
+    image: string
+    datePublished: string
+    dateModified?: string
+    authorName?: string
+    wordCount?: number
+    keywords?: string[]
+    articleSection?: string
+  }) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: options.title,
+      description: options.description,
+      image: options.image,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': options.url },
+      url: options.url,
+      datePublished: options.datePublished,
+      dateModified: options.dateModified ?? options.datePublished,
+      author: {
+        '@type': 'Person',
+        name: options.authorName ?? 'Kuray Karaaslan',
+        url: NEXT_PUBLIC_APPLICATION_HOST,
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Kuray Karaaslan',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`,
+        },
+      },
+      ...(options.wordCount ? { wordCount: options.wordCount } : {}),
+      ...(options.keywords?.length ? { keywords: options.keywords.join(', ') } : {}),
+      ...(options.articleSection ? { articleSection: options.articleSection } : {}),
     }
   }
 
@@ -399,6 +508,28 @@ export default class MetadataHelper {
         platforms?: string[]
         applicationBody?: string
       }
+      softwareSourceCode?: {
+        name: string
+        description: string
+        url: string
+        codeRepository?: string
+        programmingLanguage?: string[]
+        license?: string
+        image?: string
+      }
+      portfolioItems?: { name: string; url: string; image?: string }[]
+      blogPosting?: {
+        title: string
+        description: string
+        url: string
+        image: string
+        datePublished: string
+        dateModified?: string
+        authorName?: string
+        wordCount?: number
+        keywords?: string[]
+        articleSection?: string
+      }
     }
   ) {
     const webSiteJsonLd = MetadataHelper.getWebSiteJsonLd()
@@ -429,6 +560,15 @@ export default class MetadataHelper {
     const softwareAppJsonLd = options?.softwareApp
       ? MetadataHelper.getSoftwareApplicationJsonLd(options.softwareApp)
       : null
+    const softwareSourceCodeJsonLd = options?.softwareSourceCode
+      ? MetadataHelper.getSoftwareSourceCodeJsonLd(options.softwareSourceCode)
+      : null
+    const portfolioItemListJsonLd = options?.portfolioItems
+      ? MetadataHelper.getPortfolioItemListJsonLd(options.portfolioItems)
+      : null
+    const blogPostingJsonLd = options?.blogPosting
+      ? MetadataHelper.getBlogPostingJsonLd(options.blogPosting)
+      : null
 
     return (
       <>
@@ -450,6 +590,24 @@ export default class MetadataHelper {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppJsonLd) }}
+          />
+        )}
+        {softwareSourceCodeJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSourceCodeJsonLd) }}
+          />
+        )}
+        {portfolioItemListJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(portfolioItemListJsonLd) }}
+          />
+        )}
+        {blogPostingJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
           />
         )}
         {articleJsonLd && (

@@ -86,14 +86,14 @@ export default function LanguageButton() {
           portal
           renderOption={(opt) => (
             <span className="flex items-center gap-2.5">
-              <img src={getLangFlagUrl(opt.value as AppLanguage)} alt="" className="w-5 h-5 rounded-full shrink-0 select-none" />
+              <img src={getLangFlagUrl(opt.value as AppLanguage)} alt="" aria-hidden="true" className="w-5 h-5 rounded-full shrink-0 select-none" />
               <span className="flex-1 font-medium">{opt.label}</span>
               <span className="text-xs font-mono text-base-content/40">{opt.value.toUpperCase()}</span>
             </span>
           )}
           renderSelected={(opt) => (
             <span className="flex items-center gap-2">
-              <img src={getLangFlagUrl(opt.value as AppLanguage)} alt="" className="w-5 h-5 rounded-full shrink-0 select-none" />
+              <img src={getLangFlagUrl(opt.value as AppLanguage)} alt="" aria-hidden="true" className="w-5 h-5 rounded-full shrink-0 select-none" />
               <span className="font-medium">{opt.label}</span>
             </span>
           )}

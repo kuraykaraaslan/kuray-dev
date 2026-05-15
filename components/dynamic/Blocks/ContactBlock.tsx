@@ -1,5 +1,4 @@
 'use client'
-import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -8,7 +7,6 @@ import {
 import { CircleFlag } from 'react-circle-flags'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import ReCAPTCHA from 'react-google-recaptcha'
 import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import { usePreviewMode } from '../partials/PreviewContext'
 import type { BlockDefinition } from '../types'
@@ -17,8 +15,6 @@ const Form = dynamic(
   () => import('@/components/frontend/Features/Hero/Contact/Partials/Form'),
   { ssr: false }
 )
-
-const recaptchaSiteKey = process.env.RECAPTCHA_CLIENT_KEY || ''
 
 interface PhoneEntry {
   countryCode: string
@@ -59,7 +55,6 @@ function ContactBlock(rawProps: Record<string, unknown>) {
   const sendMessageTitle = (rawProps.sendMessageTitle as string) || 'Send a Message'
   const phoneAndMailLabel = (rawProps.phoneAndMailLabel as string) || 'Phone & Email'
   const socialMediaLabel = (rawProps.socialMediaLabel as string) || 'Social Media'
-  const captchaPrompt = (rawProps.captchaPrompt as string) || "Please verify you're human to send a message."
   const baseProps = parseBaseBlockProps(rawProps)
 
   const whatsappUrl = (rawProps.whatsappUrl as string) || 'https://wa.me/905459223554'
@@ -71,11 +66,6 @@ function ContactBlock(rawProps: Record<string, unknown>) {
 
   const phones = parsePhones(rawProps.phones)
   const mails = parseMails(rawProps.mails)
-
-  const [token, setToken] = useState<string>('')
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
-
-  const handleCaptcha = (val: string | null) => setToken(val ?? '')
 
   return (
     <BaseBlock {...baseProps}>
@@ -149,17 +139,10 @@ function ContactBlock(rawProps: Record<string, unknown>) {
               </div>
             </div>
 
-            {/* Right: form — gated behind captcha */}
+            {/* Right: form */}
             <div className="flex flex-col py-6 space-y-6 md:py-0 md:px-6">
               <h2 className="text-4xl font-bold">{sendMessageTitle}</h2>
-              {token ? (
-                <Form token={token} />
-              ) : (
-                <div>
-                  <p className="text-sm text-base-content/60 mb-3">{captchaPrompt}</p>
-                  <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={recaptchaSiteKey} onChange={handleCaptcha} />
-                </div>
-              )}
+              <Form token="" />
             </div>
 
           </div>
@@ -180,7 +163,6 @@ export const ContactBlockDefinition: BlockDefinition = {
     sendMessageTitle: 'Send a Message',
     phoneAndMailLabel: 'Phone & Email',
     socialMediaLabel: 'Social Media',
-    captchaPrompt: "Please verify you're human to send a message.",
     blockClass: 'min-h-screen md:pt-24 bg-base-100',
     sectionId: 'contact',
     ...BASE_BLOCK_DEFAULT_PROPS,
@@ -199,7 +181,6 @@ export const ContactBlockDefinition: BlockDefinition = {
     sendMessageTitle: { label: 'Send Message Heading', type: 'text' },
     phoneAndMailLabel: { label: 'Phone & Mail Section Label', type: 'text' },
     socialMediaLabel: { label: 'Social Media Section Label', type: 'text' },
-    captchaPrompt: { label: 'Captcha Prompt Text', type: 'text' },
     mails: {
       label: 'Email Addresses',
       type: 'repeater',

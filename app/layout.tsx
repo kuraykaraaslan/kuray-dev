@@ -7,19 +7,61 @@ import ThemeSyncScript from '@/components/common/UI/ThemeSyncScript'
 import type { Metadata, Viewport } from 'next'
 import { cookies } from 'next/headers'
 import type { AppTheme } from '@/types/ui/UITypes'
+import { SITE_URL } from '@/lib/seo/siteUrl'
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG
-const APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST || 'https://kuray.dev'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(APPLICATION_HOST),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Kuray Karaaslan',
-    // No template — all pages already include "| Kuray Karaaslan" in their title strings
-    template: '%s',
+    default: 'Kuray Karaaslan | Full-Stack Developer (React, Next.js, Java)',
+    template: '%s | Kuray Karaaslan',
   },
   description:
-    'Software developer, tech blogger, and open-source enthusiast sharing coding tutorials and insights.',
+    'Product-focused Full-Stack Developer with 3+ years of experience. Specialized in React, Next.js, Node.js, Java Spring Boot, and multi-tenant SaaS architectures. Available for freelance.',
+  keywords: [
+    'full-stack developer',
+    'react developer',
+    'next.js',
+    'node.js',
+    'java spring boot',
+    'react native',
+    'typescript',
+    'saas developer',
+    'freelance developer',
+    'kuray karaaslan',
+  ],
+  authors: [{ name: 'Kuray Karaaslan', url: SITE_URL }],
+  creator: 'Kuray Karaaslan',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: SITE_URL,
+    siteName: 'Kuray Karaaslan',
+    title: 'Kuray Karaaslan | Full-Stack Developer',
+    description:
+      'Full-Stack Developer building scalable SaaS, IoT, and BIM platforms with React, Next.js, and Java Spring Boot.',
+    images: [
+      {
+        url: '/assets/img/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Kuray Karaaslan - Full-Stack Developer',
+        type: 'image/png',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@kuraykaraaslan',
+    creator: '@kuraykaraaslan',
+    title: 'Kuray Karaaslan | Full-Stack Developer',
+    description: 'Full-Stack Developer (React, Next.js, Java). Available for freelance.',
+    images: ['/assets/img/og.png'],
+  },
   robots: {
     index: true,
     follow: true,
@@ -31,9 +73,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  authors: [{ name: 'Kuray Karaaslan', url: APPLICATION_HOST }],
   other: {
     publisher: 'Kuray Karaaslan',
+    'apple-mobile-web-app-title': 'Kuray Karaaslan',
   },
   icons: {
     icon: '/favicon.ico',
@@ -57,14 +99,27 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Kuray Karaaslan Blog"
+          href="/feed.xml"
+        />
+        <meta name="apple-mobile-web-app-title" content="Kuray Karaaslan" />
         {/* Preconnect hints for faster resource loading */}
         <link rel="preconnect" href="https://kuray-dev.s3.amazonaws.com" />
         <link rel="preconnect" href="https://www.gravatar.com" />
         <link rel="preconnect" href="https://avatars.githubusercontent.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://kuray-dev.s3.amazonaws.com" />
         <link rel="dns-prefetch" href="https://www.gravatar.com" />
         <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body className="min-h-screen">
         <a

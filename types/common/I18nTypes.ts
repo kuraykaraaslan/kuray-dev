@@ -127,7 +127,9 @@ export function getOgLocale(lang: string): string {
   return l === 'en' ? 'en_US' : `${l}_${cc}`
 }
 
-/** Returns the square-flags CDN URL for a language code */
+/** Returns a same-origin URL for a country flag SVG, served from the
+ *  `country-flag-icons` package via /flags/[cc] (see app/flags route).
+ *  First-party hosting avoids the kapowaz/flagcdn external dependency. */
 export function getLangFlagUrl(lang: AppLanguage): string {
-  return `https://kapowaz.github.io/square-flags/flags/${resolveCountryCode(lang).toLowerCase()}.svg`
+  return `/flags/${resolveCountryCode(lang).toUpperCase()}`
 }

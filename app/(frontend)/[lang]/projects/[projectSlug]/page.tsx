@@ -136,6 +136,17 @@ export default async function ProjectPage({ params }: Props) {
             platforms: project.platforms,
             applicationBody,
           },
+          softwareSourceCode: {
+            name: project.title,
+            description,
+            url,
+            codeRepository:
+              project.projectLinks?.find((l: string) => /github\.com|gitlab\.com|bitbucket/.test(l)) ||
+              undefined,
+            programmingLanguage: project.technologies,
+            license: 'MIT',
+            image: project.image || undefined,
+          },
           breadcrumbs,
         })}
         <section className="min-h-screen bg-base-100 pt-32" id="blog">

@@ -231,6 +231,13 @@ export default class PostService {
           equals: status === 'ALL' ? undefined : null,
         },
         slug: slug ? slug : undefined,
+        // For non-English listings, only include posts translated to that lang.
+        // English is the source — always visible. Admin views (status='ALL')
+        // bypass this filter so editors see every post regardless of language.
+        translations:
+          lang && lang !== 'en' && status !== 'ALL'
+            ? { some: { lang } }
+            : undefined,
       },
     }
 
