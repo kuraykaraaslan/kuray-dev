@@ -1,6 +1,7 @@
 import './globals.css'
-import Script from 'next/script'
 import { ReactNode } from 'react'
+import { Inter } from 'next/font/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import WebVitals from '@/components/frontend/WebVitals'
 import ServiceWorkerRegistrar from '@/components/common/PWA/ServiceWorkerRegistrar'
 import ThemeSyncScript from '@/components/common/UI/ThemeSyncScript'
@@ -8,6 +9,12 @@ import type { Metadata, Viewport } from 'next'
 import { cookies } from 'next/headers'
 import type { AppTheme } from '@/types/ui/UITypes'
 import { SITE_URL } from '@/lib/seo/siteUrl'
+
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  variable: '--font-sans',
+})
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG
 
@@ -73,6 +80,24 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  referrer: 'strict-origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'Kuray Karaaslan',
+    statusBarStyle: 'black-translucent',
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.YANDEX_VERIFICATION,
+    other: {
+      'msvalidate.01': process.env.BING_SITE_VERIFICATION || '',
+    },
+  },
   other: {
     publisher: 'Kuray Karaaslan',
     'apple-mobile-web-app-title': 'Kuray Karaaslan',
@@ -86,7 +111,11 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#1d2a35',
+  colorScheme: 'dark light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1d2a35' },
+  ],
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -95,7 +124,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const theme: AppTheme = themeCookie === 'light' ? 'light' : 'dark'
 
   return (
-    <html lang="en" data-theme={theme} className="antialiased scroll-smooth focus:scroll-auto">
+    <html lang="en" data-theme={theme} className={`${inter.variable} antialiased scroll-smooth focus:scroll-auto`}>
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
@@ -106,19 +135,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           title="Kuray Karaaslan Blog"
           href="/feed.xml"
         />
-        <meta name="apple-mobile-web-app-title" content="Kuray Karaaslan" />
-        {/* Preconnect hints for faster resource loading */}
         <link rel="preconnect" href="https://kuray-dev.s3.amazonaws.com" />
         <link rel="preconnect" href="https://www.gravatar.com" />
         <link rel="preconnect" href="https://avatars.githubusercontent.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://kuray-dev.s3.amazonaws.com" />
         <link rel="dns-prefetch" href="https://www.gravatar.com" />
         <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body className="min-h-screen">
@@ -133,28 +157,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <WebVitals />
         <main id="main-content">{children}</main>
 
-        {/* Google Analytics 4 */}
-        {GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              id="ga4-script"
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            />
-            <Script
-              id="ga4-init"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });
-                `,
-              }}
-            />
-          </>
-        )}
+        {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   )

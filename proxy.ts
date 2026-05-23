@@ -22,6 +22,11 @@ const STATIC_FILES = new Set([
   '/sitemap.xml',
   '/opensearch.xml',
   '/site.webmanifest',
+  // LLM / AI crawler indexes — must not be redirected through i18n
+  // (llms.txt is a static file in /public/, llms-full.txt is a top-level
+  // route handler at app/llms-full.txt/route.ts)
+  '/llms.txt',
+  '/llms-full.txt',
 ])
 
 const SKIP_PREFIXES = [
@@ -31,7 +36,7 @@ const SKIP_PREFIXES = [
   '/auth',
   '/admin',
   '/api',
-  '/s/',  // short links
+  '/s/',        // short links
 ]
 
 function shouldSkipI18n(pathname: string): boolean {

@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const meta = (page.metadata as Record<string, unknown> | null) || {}
 
     return {
-        title: `${page.title} | Kuray Karaaslan`,
+        // bare title — layout template "%s | Kuray Karaaslan" adds the suffix
+        title: page.title,
         description: page.description,
         keywords: page.keywords,
         alternates: { canonical: `${host}/${page.slug}` },
@@ -51,7 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             title: (meta.twitterTitle as string) || page.title,
             description: (meta.twitterDescription as string) || page.description || '',
             images: [(meta.ogImage as string) || '/assets/img/og.png'],
-            site: '@avantleap',
+            site: '@kuraykaraaslan',
+            creator: '@kuraykaraaslan',
         },
     }
 }

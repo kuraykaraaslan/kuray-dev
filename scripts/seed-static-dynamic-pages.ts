@@ -25,7 +25,7 @@ type PageSeed = {
 const PAGES: PageSeed[] = [
   {
     slug: 'about',
-    title: 'About | Kuray Karaaslan',
+    title: 'About',
     description:
       'Kuray Karaaslan — Full-Stack Developer specialized in React, Next.js, Node.js, and Java Spring Boot. Background, experience, and tech stack.',
     keywords: [
@@ -81,7 +81,7 @@ const PAGES: PageSeed[] = [
   },
   {
     slug: 'contact',
-    title: 'Contact | Kuray Karaaslan',
+    title: 'Contact',
     description:
       'Get in touch with Kuray Karaaslan for freelance work, collaboration, or technical consulting. Email, LinkedIn, and contact form.',
     keywords: ['contact', 'kuray karaaslan', 'freelance', 'hire developer', 'get in touch'],
@@ -102,7 +102,7 @@ const PAGES: PageSeed[] = [
   },
   {
     slug: 'terms',
-    title: 'Terms of Use | Kuray Karaaslan',
+    title: 'Terms of Use',
     description:
       'Terms of use for kuray.dev. By using this site, you agree to the following conditions on content, intellectual property, and disclaimers.',
     keywords: ['terms', 'terms of use', 'legal', 'kuray karaaslan'],

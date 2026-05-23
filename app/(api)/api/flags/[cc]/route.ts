@@ -1,6 +1,6 @@
 /**
  * Serves country flag SVGs from the `country-flag-icons` npm package.
- * Path: /flags/{ISO-3166-2}  → returns the SVG (3x2 aspect).
+ * Path: /api/flags/{ISO-3166-2}  → returns the SVG (3x2 aspect).
  *
  * Replaces external dependencies on kapowaz.github.io / flagcdn.com so flags
  * are first-party, cacheable, and survive third-party CDN outages.

@@ -85,6 +85,9 @@ function HomeHeroBlock(rawProps: Record<string, unknown>) {
                   src={imageUrl}
                   alt={imageAlt}
                   fill
+                  priority
+                  fetchPriority="high"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-base-100 to-transparent" />

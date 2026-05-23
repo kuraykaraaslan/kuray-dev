@@ -131,5 +131,5 @@ export function getOgLocale(lang: string): string {
  *  `country-flag-icons` package via /flags/[cc] (see app/flags route).
  *  First-party hosting avoids the kapowaz/flagcdn external dependency. */
 export function getLangFlagUrl(lang: AppLanguage): string {
-  return `/flags/${resolveCountryCode(lang).toUpperCase()}`
+  return `/api/flags/${resolveCountryCode(lang).toUpperCase()}`
 }

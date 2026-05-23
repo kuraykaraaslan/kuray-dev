@@ -4,6 +4,10 @@
  * pulled from PostService / ProjectService so AI assistants can fetch a single
  * markdown file summarizing the entire site.
  *
+ * Lives at top-level `app/` (NOT under (frontend)) so it sits outside the
+ * locale-prefixed route group. `/llms-full.txt` is also added to proxy.ts
+ * STATIC_FILES so the i18n middleware doesn't redirect the path.
+ *
  * Spec: https://llmstxt.org/
  */
 import { NextResponse } from 'next/server'

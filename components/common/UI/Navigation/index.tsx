@@ -3,7 +3,6 @@
 import Link from '@/libs/i18n/Link'
 import { useUserStore } from '@/libs/zustand'
 import Image from 'next/image'
-import { createHash } from 'crypto'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react'
@@ -15,8 +14,8 @@ const NavbarAuthButton = () => {
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const hash = createHash('sha256').digest('hex')
-  const gravatarUrl = `https://www.gravatar.com/avatar/${hash}?d=identicon`
+  const gravatarUrl =
+    'https://www.gravatar.com/avatar/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855?d=identicon'
 
   // -------------------------
   // Close dropdown on click outside

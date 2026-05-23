@@ -10,22 +10,55 @@ type DynamicPageWithTranslations = Prisma.DynamicPageGetPayload<{
   include: { translations: true }
 }>
 
+const ALLOWED_SORT_KEYS = new Set(['title', 'slug', 'status', 'createdAt', 'updatedAt'])
+
 export default class DynamicPageService {
-  static async getAll() {
-    return prisma.dynamicPage.findMany({
-      orderBy: { updatedAt: 'desc' },
-      select: {
-        dynamicPageId: true,
-        slug: true,
-        title: true,
-        description: true,
-        keywords: true,
-        metadata: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    })
+  static async getAll(opts: {
+    page?: number
+    pageSize?: number
+    search?: string
+    sortKey?: string
+    sortDir?: 'asc' | 'desc'
+    status?: string
+  } = {}) {
+    const page = Math.max(0, opts.page ?? 0)
+    const pageSize = Math.max(1, Math.min(opts.pageSize ?? 10, 100))
+    const sortKey = ALLOWED_SORT_KEYS.has(opts.sortKey ?? '') ? (opts.sortKey as string) : 'updatedAt'
+    const sortDir: 'asc' | 'desc' = opts.sortDir === 'asc' ? 'asc' : 'desc'
+
+    const where: Prisma.DynamicPageWhereInput = {}
+    if (opts.search) {
+      where.OR = [
+        { title: { contains: opts.search, mode: 'insensitive' } },
+        { slug: { contains: opts.search, mode: 'insensitive' } },
+      ]
+    }
+    if (opts.status) {
+      where.status = opts.status as DynamicPageStatus
+    }
+
+    const [pages, total] = await Promise.all([
+      prisma.dynamicPage.findMany({
+        where,
+        orderBy: { [sortKey]: sortDir },
+        skip: page * pageSize,
+        take: pageSize,
+        select: {
+          dynamicPageId: true,
+          slug: true,
+          title: true,
+          description: true,
+          keywords: true,
+          metadata: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+      prisma.dynamicPage.count({ where }),
+    ])
+
+    return { pages, total }
   }
 
   static async mergeParams(params: DynamicPageParams): Promise<string> {

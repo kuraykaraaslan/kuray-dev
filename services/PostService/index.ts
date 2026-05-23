@@ -2,6 +2,8 @@ import { Post, PostSchema, PostWithData } from '@/types/content/BlogTypes'
 import { prisma } from '@/libs/prisma'
 import { MetadataRoute } from 'next'
 import redisInstance from '@/libs/redis'
+import IndexNowService from '@/services/IndexNowService'
+import { SITE_URL } from '@/lib/seo/siteUrl'
 
 export default class PostService {
   private static CACHE_KEY = 'sitemap:blog'
@@ -155,7 +157,17 @@ export default class PostService {
 
     await redisInstance.del(this.CACHE_KEY)
 
-    const createdPost = await prisma.post.create({ data })
+    const createdPost = await prisma.post.create({
+      data,
+      include: { category: { select: { slug: true } } },
+    })
+
+    if (createdPost.status === 'PUBLISHED') {
+      void IndexNowService.ping(
+        `${SITE_URL}/blog/${(createdPost as any).category?.slug}/${createdPost.slug}`
+      )
+    }
+
     return PostSchema.parse(createdPost)
   }
 
@@ -322,9 +334,16 @@ export default class PostService {
     const post = await prisma.post.update({
       where: { postId },
       data: updateData,
+      include: { category: { select: { slug: true } } },
     })
 
     await redisInstance.del(this.CACHE_KEY)
+
+    if (post.status === 'PUBLISHED') {
+      void IndexNowService.ping(
+        `${SITE_URL}/blog/${(post as any).category?.slug}/${post.slug}`
+      )
+    }
 
     return PostSchema.parse(post)
   }

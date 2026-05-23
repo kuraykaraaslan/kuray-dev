@@ -75,7 +75,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { canonical, languages } = buildAlternates(lang, path, availableLangs)
 
   return {
-    title: `${post.title} | Kuray Karaaslan`,
+    // bare title — layout's "%s | Kuray Karaaslan" template adds the suffix
+    title: post.title,
     description,
     keywords: post.keywords?.length ? post.keywords : [post.category.title],
     robots: {
