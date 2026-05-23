@@ -1451,7 +1451,6 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       "sendMessageTitle": "Send a Message",
       "phoneAndMailLabel": "Phone & Email",
       "socialMediaLabel": "Social Media",
-      "captchaPrompt": "Please verify you're human to send a message.",
       "blockClass": "",
       "sectionId": "",
       "blockHeight": 0,
@@ -1499,10 +1498,6 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       },
       "socialMediaLabel": {
         "label": "Social Media Section Label",
-        "type": "text"
-      },
-      "captchaPrompt": {
-        "label": "Captcha Prompt Text",
         "type": "text"
       },
       "mails": {
@@ -1852,8 +1847,31 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     category: "Hero",
     description: "Multi-line headline hero for the About page: last line accented, paragraphs array, split image with accent border.",
     defaultProps: {
-      "headlineLines": "[\"Expert-Led.\",\"Outcome-Driven.\",\"Human-Centric.\"]",
-      "paragraphs": "[\"We don't just create. We inspire.\",\"We don't just finish projects. We create remarkable experiences.\",\"We don't just construct. We elevate.\",\"Founded in 2019, we exist to help professionals do more with less stress. By blending advanced technologies with expert consulting, we empower teams to overcome inefficiencies, optimize collaboration, and deliver exceptional results.\"]",
+      "headlineLines": [
+        {
+          "text": "Expert-Led."
+        },
+        {
+          "text": "Outcome-Driven."
+        },
+        {
+          "text": "Human-Centric."
+        }
+      ],
+      "paragraphs": [
+        {
+          "text": "We don't just create. We inspire."
+        },
+        {
+          "text": "We don't just finish projects. We create remarkable experiences."
+        },
+        {
+          "text": "We don't just construct. We elevate."
+        },
+        {
+          "text": "Founded in 2019, we exist to help professionals do more with less stress. By blending advanced technologies with expert consulting, we empower teams to overcome inefficiencies, optimize collaboration, and deliver exceptional results."
+        }
+      ],
       "ctaLabel": "",
       "ctaHref": "/contact",
       "imageUrl": "https://images.unsplash.com/photo-1762341120156-4a8303067873?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBvZmZpY2UlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc2OTEyNzg3NXww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -1869,12 +1887,26 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     },
     schema: {
       "headlineLines": {
-        "label": "Headline Lines (JSON array)",
-        "type": "json"
+        "label": "Headline Lines",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Line",
+            "type": "text",
+            "value": ""
+          }
+        }
       },
       "paragraphs": {
-        "label": "Paragraphs (JSON array)",
-        "type": "json"
+        "label": "Paragraphs",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Paragraph",
+            "type": "textarea",
+            "value": ""
+          }
+        }
       },
       "ctaLabel": {
         "label": "CTA Button Label",
@@ -2525,7 +2557,7 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       "showCategory": true,
       "showViews": true,
       "showReadTime": true,
-      "createdAt": "2026-05-14T13:37:48.228Z",
+      "createdAt": "2026-05-23T15:53:47.976Z",
       "views": 0,
       "blockClass": "",
       "sectionId": "",
@@ -3374,11 +3406,10 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     type: "ContactFormBlock",
     label: "Contact Form",
     category: "Forms",
-    description: "Standalone contact form with reCAPTCHA gate — posts to /api/contact/form.",
+    description: "Standalone contact form — posts to /api/contact/form.",
     defaultProps: {
       "heading": "Send Us a Message",
       "subtitle": "Fill in the form below and we'll get back to you shortly.",
-      "captchaPrompt": "Please verify you're human to send a message.",
       "blockClass": "",
       "sectionId": "",
       "blockHeight": 0,
@@ -3395,10 +3426,6 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       },
       "subtitle": {
         "label": "Subtitle",
-        "type": "text"
-      },
-      "captchaPrompt": {
-        "label": "reCAPTCHA Prompt Text",
         "type": "text"
       },
       "blockClass": {
@@ -4561,8 +4588,28 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     category: "Hero",
     description: "Full-screen split hero: stacked multi-line title (last line accented), body text, dual CTAs, image with glow",
     defaultProps: {
-      "titleLines": "[\"AI-Driven Transformation\",\"for complex\",\"AECO\",\"Organizations\"]",
-      "bodyLines": "[\"Your Partner in Smarter, Faster, and More Efficient AECO Projects\",\"We help enterprise architecture, engineering, infrastructure, and development teams simplify complexity, eliminate delivery risk, and execute large-scale projects with confidence.\"]",
+      "titleLines": [
+        {
+          "text": "AI-Driven Transformation"
+        },
+        {
+          "text": "for complex"
+        },
+        {
+          "text": "AECO"
+        },
+        {
+          "text": "Organizations"
+        }
+      ],
+      "bodyLines": [
+        {
+          "text": "Your Partner in Smarter, Faster, and More Efficient AECO Projects"
+        },
+        {
+          "text": "We help enterprise architecture, engineering, infrastructure, and development teams simplify complexity, eliminate delivery risk, and execute large-scale projects with confidence."
+        }
+      ],
       "primaryCtaLabel": "Talk to an Expert",
       "primaryCtaHref": "/contact",
       "secondaryCtaLabel": "Explore Solutions",
@@ -4580,12 +4627,26 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     },
     schema: {
       "titleLines": {
-        "label": "Title Lines (JSON array — last line gets accent color)",
-        "type": "json"
+        "label": "Title Lines (last line gets accent color)",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Line",
+            "type": "text",
+            "value": ""
+          }
+        }
       },
       "bodyLines": {
-        "label": "Body Lines (JSON array of paragraphs)",
-        "type": "json"
+        "label": "Body Lines",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Paragraph",
+            "type": "textarea",
+            "value": ""
+          }
+        }
       },
       "primaryCtaLabel": {
         "label": "Primary Button Label",
@@ -4765,7 +4826,28 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     defaultProps: {
       "heading": "Industry Solutions",
       "subtitle": "Tailored for your business",
-      "industries": "[{\"industry\":\"Healthcare\",\"icon\":\"🏥\",\"useCases\":[\"Patient record management\",\"Appointment scheduling\",\"Telemedicine integration\"]},{\"industry\":\"Finance\",\"icon\":\"💰\",\"useCases\":[\"Risk analysis\",\"Portfolio management\",\"Compliance reporting\"]},{\"industry\":\"Retail\",\"icon\":\"🛍️\",\"useCases\":[\"Inventory tracking\",\"POS systems\",\"Customer analytics\"]},{\"industry\":\"Technology\",\"icon\":\"💻\",\"useCases\":[\"DevOps automation\",\"Code deployment\",\"Performance monitoring\"]}]",
+      "industries": [
+        {
+          "industry": "Healthcare",
+          "icon": "🏥",
+          "useCases": "Patient record management\nAppointment scheduling\nTelemedicine integration"
+        },
+        {
+          "industry": "Finance",
+          "icon": "💰",
+          "useCases": "Risk analysis\nPortfolio management\nCompliance reporting"
+        },
+        {
+          "industry": "Retail",
+          "icon": "🛍️",
+          "useCases": "Inventory tracking\nPOS systems\nCustomer analytics"
+        },
+        {
+          "industry": "Technology",
+          "icon": "💻",
+          "useCases": "DevOps automation\nCode deployment\nPerformance monitoring"
+        }
+      ],
       "blockClass": "",
       "sectionId": "",
       "blockHeight": 0,
@@ -4799,9 +4881,9 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
             "value": ""
           },
           "useCases": {
-            "label": "Use Cases (JSON array of strings)",
-            "type": "json",
-            "value": []
+            "label": "Use Cases (one per line)",
+            "type": "textarea",
+            "value": ""
           }
         }
       },
@@ -7190,7 +7272,26 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
     description: "Horizontal pipe-separated list of audience types or trust signals",
     defaultProps: {
       "label": "Built for Complex AECO Environments",
-      "items": "[\"Large A&E Firms\",\"Asset Owners\",\"Infrastructure Projects\",\"Global Mega-Projects\",\"Developers\",\"Government Entities\"]",
+      "items": [
+        {
+          "text": "Large A&E Firms"
+        },
+        {
+          "text": "Asset Owners"
+        },
+        {
+          "text": "Infrastructure Projects"
+        },
+        {
+          "text": "Global Mega-Projects"
+        },
+        {
+          "text": "Developers"
+        },
+        {
+          "text": "Government Entities"
+        }
+      ],
       "blockClass": "",
       "sectionId": "",
       "blockHeight": 0,
@@ -7208,10 +7309,15 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
         "placeholder": "Built for..."
       },
       "items": {
-        "label": "Items (JSON string array)",
-        "type": "json",
-        "value": "[\"Large A&E Firms\",\"Asset Owners\",\"Infrastructure Projects\",\"Global Mega-Projects\",\"Developers\",\"Government Entities\"]",
-        "placeholder": "[\"Item 1\",\"Item 2\",\"Item 3\"]"
+        "label": "Items",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Item",
+            "type": "text",
+            "value": ""
+          }
+        }
       },
       "blockClass": {
         "label": "Section Classes (Tailwind)",
@@ -7369,7 +7475,26 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       "subtitle": "We are technology-agnostic, not tool-dependent — combining expertise and human insight into one execution mindset.",
       "sectionTitle": "Built for Complex",
       "sectionTitleAccent": "Environments",
-      "items": "[\"Enterprises\",\"Startups\",\"Tech Teams\",\"Global Projects\",\"Developers\",\"Organizations\"]",
+      "items": [
+        {
+          "text": "Enterprises"
+        },
+        {
+          "text": "Startups"
+        },
+        {
+          "text": "Tech Teams"
+        },
+        {
+          "text": "Global Projects"
+        },
+        {
+          "text": "Developers"
+        },
+        {
+          "text": "Organizations"
+        }
+      ],
       "description": "We work with global decision-makers in complex environments. If your projects involve multiple teams, massive data flows, tight timelines, and zero margin for error — we're built for you.",
       "ctaLabel": "Talk to an Expert",
       "ctaHref": "/contact",
@@ -7406,8 +7531,15 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
         "type": "text"
       },
       "items": {
-        "label": "Audience Items (JSON string array)",
-        "type": "json"
+        "label": "Audience Items",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Item",
+            "type": "text",
+            "value": ""
+          }
+        }
       },
       "description": {
         "label": "Description paragraph",
@@ -7861,12 +7993,24 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       "subtitle": "",
       "variant": "pills",
       "items": [
-        "Multi-Discipline Clash Detection",
-        "Linked Model Analysis",
-        "JSON Database Management",
-        "Model Version Comparison",
-        "Coordination View Production",
-        "Redline Change Reports"
+        {
+          "text": "Multi-Discipline Clash Detection"
+        },
+        {
+          "text": "Linked Model Analysis"
+        },
+        {
+          "text": "JSON Database Management"
+        },
+        {
+          "text": "Model Version Comparison"
+        },
+        {
+          "text": "Coordination View Production"
+        },
+        {
+          "text": "Redline Change Reports"
+        }
       ],
       "blockClass": "",
       "sectionId": "",
@@ -7896,8 +8040,15 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
         "value": "pills"
       },
       "items": {
-        "label": "Items (JSON string array)",
-        "type": "json"
+        "label": "Items",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Item",
+            "type": "text",
+            "value": ""
+          }
+        }
       },
       "blockClass": {
         "label": "Section Classes (Tailwind)",
@@ -8092,9 +8243,15 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
       "heading": "Global Expertise,",
       "accentHeading": "Local Presence",
       "paragraphs": [
-        "We don't operate as outsiders. We operate as partners who understand local context, regulatory environments, and delivery realities.",
-        "No experiments. No abstractions. Only execution.",
-        "Our values drive everything we do. We believe in delivering solutions that don't just solve problems — they transform how you work."
+        {
+          "text": "We don't operate as outsiders. We operate as partners who understand local context, regulatory environments, and delivery realities."
+        },
+        {
+          "text": "No experiments. No abstractions. Only execution."
+        },
+        {
+          "text": "Our values drive everything we do. We believe in delivering solutions that don't just solve problems — they transform how you work."
+        }
       ],
       "stats": [
         {
@@ -8133,8 +8290,15 @@ export const CODE_BLOCK_META: CodeBlockMeta[] = [
         "type": "text"
       },
       "paragraphs": {
-        "label": "Paragraphs (JSON array)",
-        "type": "json"
+        "label": "Paragraphs",
+        "type": "repeater",
+        "fields": {
+          "text": {
+            "label": "Paragraph",
+            "type": "textarea",
+            "value": ""
+          }
+        }
       },
       "stats": {
         "label": "Stats",

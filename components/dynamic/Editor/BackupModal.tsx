@@ -1,11 +1,12 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import axiosInstance from '@/libs/axios'
 import { HeadlessModal } from '@/components/common/Modal'
 import { useEditorStore } from './stores/editorStore'
-import { BlockDataSchema, CURRENT_SCHEMA_VERSION } from '@/types/content/PageTypes'
-import { migrateSections, needsMigration } from '@/components/dynamic/migrations'
+import { CURRENT_SCHEMA_VERSION } from '@/types/content/PageTypes'
 import type { BlockData, DynamicPageStatus, PageMetadata } from '@/types/content/PageTypes'
 
 interface TranslationEntry {
@@ -26,43 +27,35 @@ interface PageBackup {
   translations?: Record<string, TranslationEntry>
 }
 
-function validateSections(sections: unknown[]): { valid: BlockData[]; hasInvalid: boolean } {
-  let hasInvalid = false
-  const valid = sections.map((s, i) => {
-    const result = BlockDataSchema.safeParse(s)
-    if (result.success) return result.data
-    hasInvalid = true
-    // Return a best-effort block so the list is preserved
-    const b = s as Record<string, unknown>
-    return {
-      id: String(b.id ?? `imported-${i}`),
-      type: String(b.type ?? b.blockType ?? b.component ?? 'UnknownBlock'),
-      order: typeof b.order === 'number' ? b.order : i,
-      props: (b.props && typeof b.props === 'object' ? b.props : b) as Record<string, unknown>,
-      hidden: typeof b.hidden === 'boolean' ? b.hidden : undefined,
-      label: typeof b.label === 'string' ? b.label : undefined,
-      className: typeof b.className === 'string' ? b.className : undefined,
-    } as BlockData
-  })
-  return { valid, hasInvalid }
+type ImportResultRow = {
+  status: 'created' | 'updated' | 'failed'
+  slug: string
+  title: string
+  dynamicPageId?: string
+  sectionsCount?: number
+  repeaterConversions?: number
+  translationsUpserted?: number
+  aiApplied?: boolean
+  error?: string
+}
+
+type ImportResponse = {
+  summary: { total: number; created: number; updated: number; failed: number }
+  results: ImportResultRow[]
 }
 
 export default function BackupModal() {
+  const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [importError, setImportError] = useState<string | null>(null)
-  const [pendingImport, setPendingImport] = useState<{
-    backup: PageBackup
-    sections: BlockData[]
-    schemaWarning?: string
-    validationWarning?: boolean
-  } | null>(null)
-  const [migrating, setMigrating] = useState(false)
+  const [importing, setImporting] = useState(false)
+  const [useAi, setUseAi] = useState(false)
+  const [lastResult, setLastResult] = useState<ImportResultRow | null>(null)
 
   const {
-    backupOpen, setBackupOpen,
+    backupOpen, setBackupOpen, pageId,
     title, slug, status, description, keywords, metadata, sections,
-    translationCache,
-    setTitle, setSlug, setStatus, setDescription, setKeywords, setMetadata,
+    translationCache, loadPage,
   } = useEditorStore()
 
   const getBackupData = (): PageBackup => ({
@@ -84,110 +77,58 @@ export default function BackupModal() {
     toast.success('Backup downloaded')
   }
 
-  const applyImport = (backup: PageBackup, resolvedSections: BlockData[]) => {
-    setTitle(backup.title)
-    setSlug(backup.slug)
-    if (backup.status) setStatus(backup.status)
-    if (backup.description !== undefined) setDescription(backup.description)
-    if (Array.isArray(backup.keywords)) setKeywords(backup.keywords)
-    if (backup.metadata) setMetadata(backup.metadata)
-
-    const restoredTranslations = backup.translations ?? {}
-    const savedLangs = Object.keys(restoredTranslations)
-
-    useEditorStore.setState({
-      sections: resolvedSections.map((s, i) => ({ ...s, order: i })),
-      enSections: resolvedSections.map((s, i) => ({ ...s, order: i })),
-      translationCache: restoredTranslations,
-      savedLangs,
-      activeLang: 'en',
-      selectedId: null,
-      isDirty: true,
-    })
-
-    toast.success('Backup imported successfully')
-    setPendingImport(null)
-    setBackupOpen(false)
-  }
-
-  const handleAiMigrate = async () => {
-    if (!pendingImport) return
-    setMigrating(true)
-    try {
-      const res = await fetch('/api/dynamic-pages/ai-migrate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sections: pendingImport.sections }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? 'AI migration failed')
-      applyImport(pendingImport.backup, data.sections as BlockData[])
-      toast.success('AI migration complete')
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'AI migration failed'
-      toast.error(msg)
-    } finally {
-      setMigrating(false)
-    }
-  }
-
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setImportError(null)
-    setPendingImport(null)
+    setLastResult(null)
     const file = e.target.files?.[0]
     if (!file) return
 
-    const reader = new FileReader()
-    reader.onload = (ev) => {
-      try {
-        const parsed = JSON.parse(ev.target?.result as string) as Partial<PageBackup>
-
-        if (!parsed.title || !parsed.slug || !Array.isArray(parsed.sections)) {
-          throw new Error('Invalid backup format: missing required fields')
-        }
-
-        const importedVersion = parsed.schemaVersion ?? 1
-        let rawSections = parsed.sections as BlockData[]
-        let schemaWarning: string | undefined
-
-        // Run known schema migrations first
-        if (needsMigration(importedVersion)) {
-          const migrated = migrateSections(rawSections, importedVersion)
-          rawSections = migrated.sections
-          schemaWarning = `Schema upgraded v${importedVersion} → v${CURRENT_SCHEMA_VERSION}`
-        }
-
-        // Validate individual blocks
-        const { valid, hasInvalid } = validateSections(rawSections)
-
-        const backup: PageBackup = {
-          title: parsed.title,
-          slug: parsed.slug,
-          status: parsed.status ?? 'DRAFT',
-          description: parsed.description ?? '',
-          keywords: parsed.keywords ?? [],
-          metadata: parsed.metadata,
-          sections: valid,
-          translations: parsed.translations,
-        }
-
-        if (hasInvalid) {
-          // Show warning panel — let user choose to fix with AI or import as-is
-          setPendingImport({ backup, sections: rawSections, schemaWarning, validationWarning: true })
-        } else if (schemaWarning) {
-          setPendingImport({ backup, sections: valid, schemaWarning })
-        } else {
-          // All good — apply immediately
-          applyImport(backup, valid)
-        }
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Failed to parse backup file'
-        setImportError(msg)
-      } finally {
-        if (fileInputRef.current) fileInputRef.current.value = ''
-      }
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(await file.text())
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : 'Failed to parse backup file')
+      if (fileInputRef.current) fileInputRef.current.value = ''
+      return
     }
-    reader.readAsText(file)
+
+    try {
+      setImporting(true)
+      const res = await axiosInstance.post<ImportResponse>('/api/dynamic-pages/import', {
+        data: parsed,
+        useAi,
+      })
+      const row = res.data.results[0]
+      setLastResult(row)
+
+      if (!row || row.status === 'failed') {
+        setImportError(row?.error ?? 'Import failed')
+        return
+      }
+
+      const verb = row.status === 'updated' ? 'updated' : 'created'
+      toast.success(
+        `Backup ${verb}: /${row.slug}` +
+          (row.translationsUpserted ? ` · ${row.translationsUpserted} translation(s)` : ''),
+      )
+
+      // Navigate or reload depending on whether this is the currently-open page
+      if (row.dynamicPageId && row.dynamicPageId !== pageId) {
+        setBackupOpen(false)
+        router.push(`/admin/pages/${row.dynamicPageId}`)
+      } else if (row.dynamicPageId) {
+        await loadPage(row.dynamicPageId)
+        setBackupOpen(false)
+      }
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        (err instanceof Error ? err.message : 'Import failed')
+      setImportError(msg)
+    } finally {
+      setImporting(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
   }
 
   return (
@@ -217,55 +158,45 @@ export default function BackupModal() {
         <section className="space-y-2">
           <h3 className="text-sm font-semibold text-base-content/60 uppercase tracking-wide">Import</h3>
           <p className="text-xs text-base-content/50">
-            Select a previously exported JSON backup file. This will replace the current page content.
+            Select a previously exported JSON backup file. The file is sent through{' '}
+            <code>/api/dynamic-pages/import</code>: the page is created if its slug is new, or
+            updated in place if it already exists. Schema migrations and repeater normalization
+            run automatically.
           </p>
           <input
             ref={fileInputRef}
             type="file"
             accept=".json,application/json"
             onChange={handleImport}
+            disabled={importing}
             className="file-input file-input-bordered file-input-sm w-full"
           />
+          <label className="flex items-center gap-2 text-xs cursor-pointer text-base-content/70">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-xs"
+              checked={useAi}
+              onChange={(e) => setUseAi(e.target.checked)}
+              disabled={importing}
+            />
+            AI safety pass after deterministic migration (slower)
+          </label>
+          {importing && (
+            <p className="text-xs text-base-content/50 flex items-center gap-1">
+              <span className="loading loading-spinner loading-xs" />
+              Importing…
+            </p>
+          )}
           {importError && (
             <p className="text-xs text-error">{importError}</p>
           )}
-
-          {pendingImport && (
-            <div className="rounded-lg border border-warning/40 bg-warning/10 p-4 space-y-3">
-              {pendingImport.schemaWarning && (
-                <p className="text-xs text-warning font-medium">
-                  Schema version mismatch detected: {pendingImport.schemaWarning}
-                </p>
-              )}
-              {pendingImport.validationWarning && (
-                <p className="text-xs text-warning">
-                  Some blocks don&apos;t match the current schema. You can import as-is or let AI fix the structure.
-                </p>
-              )}
-              <div className="flex gap-2 flex-wrap">
-                <button
-                  onClick={handleAiMigrate}
-                  disabled={migrating}
-                  className="px-3 py-1.5 rounded-md text-xs font-semibold bg-primary text-primary-content disabled:opacity-50"
-                >
-                  {migrating ? 'Migrating…' : 'Fix with AI'}
-                </button>
-                <button
-                  onClick={() => applyImport(pendingImport.backup, pendingImport.sections)}
-                  disabled={migrating}
-                  className="px-3 py-1.5 rounded-md text-xs font-medium bg-base-content/10 text-base-content/70 disabled:opacity-50"
-                >
-                  Import as-is
-                </button>
-                <button
-                  onClick={() => setPendingImport(null)}
-                  disabled={migrating}
-                  className="px-3 py-1.5 rounded-md text-xs font-medium text-base-content/50 disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+          {lastResult && lastResult.status !== 'failed' && (
+            <p className="text-xs text-success">
+              {lastResult.status === 'created' ? '+ created' : '↻ updated'} {lastResult.title} ·{' '}
+              <code>/{lastResult.slug}</code> · {lastResult.sectionsCount} blocks
+              {lastResult.translationsUpserted ? ` · ${lastResult.translationsUpserted} translation(s)` : ''}
+              {lastResult.repeaterConversions ? ` · ${lastResult.repeaterConversions} repeater conv.` : ''}
+            </p>
           )}
         </section>
 

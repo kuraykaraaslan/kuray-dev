@@ -11,6 +11,7 @@ import Table, {
 } from '@/components/common/Forms/DynamicTable'
 import axiosInstance from '@/libs/axios'
 import AIModal from '@/components/dynamic/partials/AIModal'
+import ImportJsonModal from '@/components/dynamic/partials/ImportJsonModal'
 
 interface DynamicPageRow extends Record<string, unknown> {
   dynamicPageId: string
@@ -22,6 +23,7 @@ interface DynamicPageRow extends Record<string, unknown> {
 
 const PagesPage = () => {
   const [aiModalOpen, setAiModalOpen] = useState(false)
+  const [importModalOpen, setImportModalOpen] = useState(false)
 
   const columns: ColumnDef<DynamicPageRow>[] = [
     { key: 'title', header: 'Title', accessor: (p) => p.title },
@@ -96,6 +98,11 @@ const PagesPage = () => {
                   onClick: () => setAiModalOpen(true),
                   className: 'btn-ghost',
                 },
+                {
+                  label: 'Import from JSON',
+                  onClick: () => setImportModalOpen(true),
+                  className: 'btn-ghost',
+                },
               ]
             }
           />
@@ -105,6 +112,7 @@ const PagesPage = () => {
       </TableProvider>
 
       <AIModal open={aiModalOpen} onClose={() => setAiModalOpen(false)} />
+      <ImportJsonModal open={importModalOpen} onClose={() => setImportModalOpen(false)} />
 
     </>
   )
