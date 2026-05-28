@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const authorId = searchParams.get('authorId') || undefined
     const status = searchParams.get('status') || 'PUBLISHED'
     const categoryId = searchParams.get('categoryId') || undefined
+    const projectId = searchParams.get('projectId') || undefined
     const search = searchParams.get('search') || undefined
     const sortKey = searchParams.get('sortKey') || undefined
     const sortDir = (searchParams.get('sortDir') || 'desc') as 'asc' | 'desc'
@@ -26,6 +27,7 @@ export async function GET(request: NextRequest) {
       pageSize,
       status,
       categoryId,
+      projectId,
       search,
       postId,
       authorId,

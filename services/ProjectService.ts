@@ -1,7 +1,9 @@
 import { prisma } from '@/libs/prisma'
 import redisInstance from '@/libs/redis'
 import { Project, ProjectWithTranslations } from '@/types/content/ProjectTypes'
+import { PostWithData } from '@/types/content/BlogTypes'
 import { MetadataRoute } from 'next'
+import PostService from '@/services/PostService'
 
 export default class ProjectService {
   private static CACHE_KEY = 'sitemap:project'
@@ -214,6 +216,21 @@ export default class ProjectService {
         changeFrequency: 'daily',
         priority: 0.7,
       }
+    })
+  }
+
+  static async getProjectPosts(
+    projectId: string,
+    page = 0,
+    pageSize = 10
+  ): Promise<{ posts: PostWithData[]; total: number }> {
+    return PostService.getAllPosts({
+      page,
+      pageSize,
+      projectId,
+      status: 'PUBLISHED',
+      sortKey: 'publishedAt',
+      sortDir: 'desc',
     })
   }
 

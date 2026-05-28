@@ -24,6 +24,14 @@ const PostHeader = (post: PostWithData & { children?: ReactNode }) => {
         <Link href={'/blog/' + post.category.slug} className="text-primary">
           {post.category.title}
         </Link>
+        {post.project && (
+          <>
+            <span className="text-primary">•</span>
+            <Link href={'/projects/' + post.project.slug} className="text-secondary">
+              {post.project.title}
+            </Link>
+          </>
+        )}
         <span className="text-primary hidden md:inline">•</span>
         <span className="hidden md:inline">
           {t('frontend.post.views_count', { count: post.views })}

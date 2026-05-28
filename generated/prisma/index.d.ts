@@ -4030,10 +4030,12 @@ export namespace Prisma {
    */
 
   export type ProjectCountOutputType = {
+    posts: number
     translations: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posts?: boolean | ProjectCountOutputTypeCountPostsArgs
     translations?: boolean | ProjectCountOutputTypeCountTranslationsArgs
   }
 
@@ -4046,6 +4048,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the ProjectCountOutputType
      */
     select?: ProjectCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
   }
 
   /**
@@ -8795,6 +8804,7 @@ export namespace Prisma {
     slug: string | null
     createdAt: Date | null
     categoryId: string | null
+    projectId: string | null
     image: string | null
     status: string | null
     views: number | null
@@ -8812,6 +8822,7 @@ export namespace Prisma {
     slug: string | null
     createdAt: Date | null
     categoryId: string | null
+    projectId: string | null
     image: string | null
     status: string | null
     views: number | null
@@ -8830,6 +8841,7 @@ export namespace Prisma {
     keywords: number
     createdAt: number
     categoryId: number
+    projectId: number
     image: number
     status: number
     views: number
@@ -8857,6 +8869,7 @@ export namespace Prisma {
     slug?: true
     createdAt?: true
     categoryId?: true
+    projectId?: true
     image?: true
     status?: true
     views?: true
@@ -8874,6 +8887,7 @@ export namespace Prisma {
     slug?: true
     createdAt?: true
     categoryId?: true
+    projectId?: true
     image?: true
     status?: true
     views?: true
@@ -8892,6 +8906,7 @@ export namespace Prisma {
     keywords?: true
     createdAt?: true
     categoryId?: true
+    projectId?: true
     image?: true
     status?: true
     views?: true
@@ -8997,6 +9012,7 @@ export namespace Prisma {
     keywords: string[]
     createdAt: Date
     categoryId: string
+    projectId: string | null
     image: string | null
     status: string
     views: number
@@ -9034,6 +9050,7 @@ export namespace Prisma {
     keywords?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    projectId?: boolean
     image?: boolean
     status?: boolean
     views?: boolean
@@ -9043,6 +9060,7 @@ export namespace Prisma {
     comment?: boolean | Post$commentArgs<ExtArgs>
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    project?: boolean | Post$projectArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     translations?: boolean | Post$translationsArgs<ExtArgs>
     seriesEntry?: boolean | Post$seriesEntryArgs<ExtArgs>
@@ -9059,6 +9077,7 @@ export namespace Prisma {
     keywords?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    projectId?: boolean
     image?: boolean
     status?: boolean
     views?: boolean
@@ -9067,6 +9086,7 @@ export namespace Prisma {
     deletedAt?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    project?: boolean | Post$projectArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
   export type PostSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9079,6 +9099,7 @@ export namespace Prisma {
     keywords?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    projectId?: boolean
     image?: boolean
     status?: boolean
     views?: boolean
@@ -9087,6 +9108,7 @@ export namespace Prisma {
     deletedAt?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    project?: boolean | Post$projectArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
   export type PostSelectScalar = {
@@ -9099,6 +9121,7 @@ export namespace Prisma {
     keywords?: boolean
     createdAt?: boolean
     categoryId?: boolean
+    projectId?: boolean
     image?: boolean
     status?: boolean
     views?: boolean
@@ -9107,11 +9130,12 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"postId" | "title" | "content" | "authorId" | "description" | "slug" | "keywords" | "createdAt" | "categoryId" | "image" | "status" | "views" | "publishedAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"postId" | "title" | "content" | "authorId" | "description" | "slug" | "keywords" | "createdAt" | "categoryId" | "projectId" | "image" | "status" | "views" | "publishedAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     comment?: boolean | Post$commentArgs<ExtArgs>
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    project?: boolean | Post$projectArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     translations?: boolean | Post$translationsArgs<ExtArgs>
     seriesEntry?: boolean | Post$seriesEntryArgs<ExtArgs>
@@ -9120,10 +9144,12 @@ export namespace Prisma {
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    project?: boolean | Post$projectArgs<ExtArgs>
   }
   export type PostIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    project?: boolean | Post$projectArgs<ExtArgs>
   }
 
   export type $PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9132,6 +9158,7 @@ export namespace Prisma {
       comment: Prisma.$CommentPayload<ExtArgs>[]
       author: Prisma.$UserPayload<ExtArgs>
       category: Prisma.$CategoryPayload<ExtArgs>
+      project: Prisma.$ProjectPayload<ExtArgs> | null
       likes: Prisma.$LikePayload<ExtArgs>[]
       translations: Prisma.$PostTranslationPayload<ExtArgs>[]
       seriesEntry: Prisma.$PostSeriesEntryPayload<ExtArgs> | null
@@ -9146,6 +9173,7 @@ export namespace Prisma {
       keywords: string[]
       createdAt: Date
       categoryId: string
+      projectId: string | null
       image: string | null
       status: string
       views: number
@@ -9549,6 +9577,7 @@ export namespace Prisma {
     comment<T extends Post$commentArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    project<T extends Post$projectArgs<ExtArgs> = {}>(args?: Subset<T, Post$projectArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     translations<T extends Post$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Post$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     seriesEntry<T extends Post$seriesEntryArgs<ExtArgs> = {}>(args?: Subset<T, Post$seriesEntryArgs<ExtArgs>>): Prisma__PostSeriesEntryClient<$Result.GetResult<Prisma.$PostSeriesEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -9590,6 +9619,7 @@ export namespace Prisma {
     readonly keywords: FieldRef<"Post", 'String[]'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
     readonly categoryId: FieldRef<"Post", 'String'>
+    readonly projectId: FieldRef<"Post", 'String'>
     readonly image: FieldRef<"Post", 'String'>
     readonly status: FieldRef<"Post", 'String'>
     readonly views: FieldRef<"Post", 'Int'>
@@ -10018,6 +10048,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommentScalarFieldEnum | CommentScalarFieldEnum[]
+  }
+
+  /**
+   * Post.project
+   */
+  export type Post$projectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: ProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: ProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectInclude<ExtArgs> | null
+    where?: ProjectWhereInput
   }
 
   /**
@@ -21158,6 +21207,7 @@ export namespace Prisma {
     updatedAt?: boolean
     projectLinks?: boolean
     deletedAt?: boolean
+    posts?: boolean | Project$postsArgs<ExtArgs>
     translations?: boolean | Project$translationsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
@@ -21215,6 +21265,7 @@ export namespace Prisma {
 
   export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"projectId" | "title" | "description" | "slug" | "image" | "status" | "platforms" | "technologies" | "keywords" | "content" | "createdAt" | "updatedAt" | "projectLinks" | "deletedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posts?: boolean | Project$postsArgs<ExtArgs>
     translations?: boolean | Project$translationsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -21224,6 +21275,7 @@ export namespace Prisma {
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
+      posts: Prisma.$PostPayload<ExtArgs>[]
       translations: Prisma.$ProjectTranslationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -21635,6 +21687,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    posts<T extends Project$postsArgs<ExtArgs> = {}>(args?: Subset<T, Project$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     translations<T extends Project$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -22069,6 +22122,30 @@ export namespace Prisma {
      * Limit how many Projects to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Project.posts
+   */
+  export type Project$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
@@ -39753,6 +39830,7 @@ export namespace Prisma {
     keywords: 'keywords',
     createdAt: 'createdAt',
     categoryId: 'categoryId',
+    projectId: 'projectId',
     image: 'image',
     status: 'status',
     views: 'views',
@@ -40757,6 +40835,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Post">
     createdAt?: DateTimeFilter<"Post"> | Date | string
     categoryId?: StringFilter<"Post"> | string
+    projectId?: StringNullableFilter<"Post"> | string | null
     image?: StringNullableFilter<"Post"> | string | null
     status?: StringFilter<"Post"> | string
     views?: IntFilter<"Post"> | number
@@ -40766,6 +40845,7 @@ export namespace Prisma {
     comment?: CommentListRelationFilter
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    project?: XOR<ProjectNullableScalarRelationFilter, ProjectWhereInput> | null
     likes?: LikeListRelationFilter
     translations?: PostTranslationListRelationFilter
     seriesEntry?: XOR<PostSeriesEntryNullableScalarRelationFilter, PostSeriesEntryWhereInput> | null
@@ -40781,6 +40861,7 @@ export namespace Prisma {
     keywords?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    projectId?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     status?: SortOrder
     views?: SortOrder
@@ -40790,6 +40871,7 @@ export namespace Prisma {
     comment?: CommentOrderByRelationAggregateInput
     author?: UserOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
+    project?: ProjectOrderByWithRelationInput
     likes?: LikeOrderByRelationAggregateInput
     translations?: PostTranslationOrderByRelationAggregateInput
     seriesEntry?: PostSeriesEntryOrderByWithRelationInput
@@ -40808,6 +40890,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Post">
     createdAt?: DateTimeFilter<"Post"> | Date | string
     categoryId?: StringFilter<"Post"> | string
+    projectId?: StringNullableFilter<"Post"> | string | null
     image?: StringNullableFilter<"Post"> | string | null
     status?: StringFilter<"Post"> | string
     views?: IntFilter<"Post"> | number
@@ -40817,6 +40900,7 @@ export namespace Prisma {
     comment?: CommentListRelationFilter
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    project?: XOR<ProjectNullableScalarRelationFilter, ProjectWhereInput> | null
     likes?: LikeListRelationFilter
     translations?: PostTranslationListRelationFilter
     seriesEntry?: XOR<PostSeriesEntryNullableScalarRelationFilter, PostSeriesEntryWhereInput> | null
@@ -40832,6 +40916,7 @@ export namespace Prisma {
     keywords?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    projectId?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     status?: SortOrder
     views?: SortOrder
@@ -40858,6 +40943,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Post">
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     categoryId?: StringWithAggregatesFilter<"Post"> | string
+    projectId?: StringNullableWithAggregatesFilter<"Post"> | string | null
     image?: StringNullableWithAggregatesFilter<"Post"> | string | null
     status?: StringWithAggregatesFilter<"Post"> | string
     views?: IntWithAggregatesFilter<"Post"> | number
@@ -41547,6 +41633,7 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
     projectLinks?: StringNullableListFilter<"Project">
     deletedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
+    posts?: PostListRelationFilter
     translations?: ProjectTranslationListRelationFilter
   }
 
@@ -41565,6 +41652,7 @@ export namespace Prisma {
     updatedAt?: SortOrderInput | SortOrder
     projectLinks?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    posts?: PostOrderByRelationAggregateInput
     translations?: ProjectTranslationOrderByRelationAggregateInput
   }
 
@@ -41586,6 +41674,7 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
     projectLinks?: StringNullableListFilter<"Project">
     deletedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
+    posts?: PostListRelationFilter
     translations?: ProjectTranslationListRelationFilter
   }, "projectId" | "slug">
 
@@ -43224,6 +43313,7 @@ export namespace Prisma {
     comment?: CommentCreateNestedManyWithoutPostInput
     author: UserCreateNestedOneWithoutPostsInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     translations?: PostTranslationCreateNestedManyWithoutPostInput
     seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
@@ -43239,6 +43329,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -43268,6 +43359,7 @@ export namespace Prisma {
     comment?: CommentUpdateManyWithoutPostNestedInput
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     translations?: PostTranslationUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
@@ -43283,6 +43375,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -43305,6 +43398,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -43339,6 +43433,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -44079,6 +44174,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     projectLinks?: ProjectCreateprojectLinksInput | string[]
     deletedAt?: Date | string | null
+    posts?: PostCreateNestedManyWithoutProjectInput
     translations?: ProjectTranslationCreateNestedManyWithoutProjectInput
   }
 
@@ -44097,6 +44193,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     projectLinks?: ProjectCreateprojectLinksInput | string[]
     deletedAt?: Date | string | null
+    posts?: PostUncheckedCreateNestedManyWithoutProjectInput
     translations?: ProjectTranslationUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -44115,6 +44212,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectLinks?: ProjectUpdateprojectLinksInput | string[]
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUpdateManyWithoutProjectNestedInput
     translations?: ProjectTranslationUpdateManyWithoutProjectNestedInput
   }
 
@@ -44133,6 +44231,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectLinks?: ProjectUpdateprojectLinksInput | string[]
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUncheckedUpdateManyWithoutProjectNestedInput
     translations?: ProjectTranslationUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -45963,6 +46062,11 @@ export namespace Prisma {
     isNot?: CategoryWhereInput
   }
 
+  export type ProjectNullableScalarRelationFilter = {
+    is?: ProjectWhereInput | null
+    isNot?: ProjectWhereInput | null
+  }
+
   export type PostTranslationListRelationFilter = {
     every?: PostTranslationWhereInput
     some?: PostTranslationWhereInput
@@ -45992,6 +46096,7 @@ export namespace Prisma {
     keywords?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    projectId?: SortOrder
     image?: SortOrder
     status?: SortOrder
     views?: SortOrder
@@ -46013,6 +46118,7 @@ export namespace Prisma {
     slug?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    projectId?: SortOrder
     image?: SortOrder
     status?: SortOrder
     views?: SortOrder
@@ -46030,6 +46136,7 @@ export namespace Prisma {
     slug?: SortOrder
     createdAt?: SortOrder
     categoryId?: SortOrder
+    projectId?: SortOrder
     image?: SortOrder
     status?: SortOrder
     views?: SortOrder
@@ -47653,6 +47760,12 @@ export namespace Prisma {
     connect?: CategoryWhereUniqueInput
   }
 
+  export type ProjectCreateNestedOneWithoutPostsInput = {
+    create?: XOR<ProjectCreateWithoutPostsInput, ProjectUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutPostsInput
+    connect?: ProjectWhereUniqueInput
+  }
+
   export type LikeCreateNestedManyWithoutPostInput = {
     create?: XOR<LikeCreateWithoutPostInput, LikeUncheckedCreateWithoutPostInput> | LikeCreateWithoutPostInput[] | LikeUncheckedCreateWithoutPostInput[]
     connectOrCreate?: LikeCreateOrConnectWithoutPostInput | LikeCreateOrConnectWithoutPostInput[]
@@ -47741,6 +47854,16 @@ export namespace Prisma {
     upsert?: CategoryUpsertWithoutPostsInput
     connect?: CategoryWhereUniqueInput
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutPostsInput, CategoryUpdateWithoutPostsInput>, CategoryUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type ProjectUpdateOneWithoutPostsNestedInput = {
+    create?: XOR<ProjectCreateWithoutPostsInput, ProjectUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutPostsInput
+    upsert?: ProjectUpsertWithoutPostsInput
+    disconnect?: ProjectWhereInput | boolean
+    delete?: ProjectWhereInput | boolean
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutPostsInput, ProjectUpdateWithoutPostsInput>, ProjectUncheckedUpdateWithoutPostsInput>
   }
 
   export type LikeUpdateManyWithoutPostNestedInput = {
@@ -48124,11 +48247,25 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type PostCreateNestedManyWithoutProjectInput = {
+    create?: XOR<PostCreateWithoutProjectInput, PostUncheckedCreateWithoutProjectInput> | PostCreateWithoutProjectInput[] | PostUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutProjectInput | PostCreateOrConnectWithoutProjectInput[]
+    createMany?: PostCreateManyProjectInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
   export type ProjectTranslationCreateNestedManyWithoutProjectInput = {
     create?: XOR<ProjectTranslationCreateWithoutProjectInput, ProjectTranslationUncheckedCreateWithoutProjectInput> | ProjectTranslationCreateWithoutProjectInput[] | ProjectTranslationUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectTranslationCreateOrConnectWithoutProjectInput | ProjectTranslationCreateOrConnectWithoutProjectInput[]
     createMany?: ProjectTranslationCreateManyProjectInputEnvelope
     connect?: ProjectTranslationWhereUniqueInput | ProjectTranslationWhereUniqueInput[]
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<PostCreateWithoutProjectInput, PostUncheckedCreateWithoutProjectInput> | PostCreateWithoutProjectInput[] | PostUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutProjectInput | PostCreateOrConnectWithoutProjectInput[]
+    createMany?: PostCreateManyProjectInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
   export type ProjectTranslationUncheckedCreateNestedManyWithoutProjectInput = {
@@ -48158,6 +48295,20 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type PostUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<PostCreateWithoutProjectInput, PostUncheckedCreateWithoutProjectInput> | PostCreateWithoutProjectInput[] | PostUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutProjectInput | PostCreateOrConnectWithoutProjectInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutProjectInput | PostUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: PostCreateManyProjectInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutProjectInput | PostUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutProjectInput | PostUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
   export type ProjectTranslationUpdateManyWithoutProjectNestedInput = {
     create?: XOR<ProjectTranslationCreateWithoutProjectInput, ProjectTranslationUncheckedCreateWithoutProjectInput> | ProjectTranslationCreateWithoutProjectInput[] | ProjectTranslationUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectTranslationCreateOrConnectWithoutProjectInput | ProjectTranslationCreateOrConnectWithoutProjectInput[]
@@ -48170,6 +48321,20 @@ export namespace Prisma {
     update?: ProjectTranslationUpdateWithWhereUniqueWithoutProjectInput | ProjectTranslationUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: ProjectTranslationUpdateManyWithWhereWithoutProjectInput | ProjectTranslationUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: ProjectTranslationScalarWhereInput | ProjectTranslationScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<PostCreateWithoutProjectInput, PostUncheckedCreateWithoutProjectInput> | PostCreateWithoutProjectInput[] | PostUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutProjectInput | PostCreateOrConnectWithoutProjectInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutProjectInput | PostUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: PostCreateManyProjectInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutProjectInput | PostUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutProjectInput | PostUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type ProjectTranslationUncheckedUpdateManyWithoutProjectNestedInput = {
@@ -48986,6 +49151,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     comment?: CommentCreateNestedManyWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     translations?: PostTranslationCreateNestedManyWithoutPostInput
     seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
@@ -49000,6 +49166,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -49183,6 +49350,7 @@ export namespace Prisma {
     keywords?: StringNullableListFilter<"Post">
     createdAt?: DateTimeFilter<"Post"> | Date | string
     categoryId?: StringFilter<"Post"> | string
+    projectId?: StringNullableFilter<"Post"> | string | null
     image?: StringNullableFilter<"Post"> | string | null
     status?: StringFilter<"Post"> | string
     views?: IntFilter<"Post"> | number
@@ -49511,6 +49679,47 @@ export namespace Prisma {
     create: XOR<CategoryCreateWithoutPostsInput, CategoryUncheckedCreateWithoutPostsInput>
   }
 
+  export type ProjectCreateWithoutPostsInput = {
+    projectId?: string
+    title: string
+    description?: string | null
+    slug: string
+    image?: string | null
+    status?: string
+    platforms?: ProjectCreateplatformsInput | string[]
+    technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    projectLinks?: ProjectCreateprojectLinksInput | string[]
+    deletedAt?: Date | string | null
+    translations?: ProjectTranslationCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutPostsInput = {
+    projectId?: string
+    title: string
+    description?: string | null
+    slug: string
+    image?: string | null
+    status?: string
+    platforms?: ProjectCreateplatformsInput | string[]
+    technologies?: ProjectCreatetechnologiesInput | string[]
+    keywords?: ProjectCreatekeywordsInput | string[]
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    projectLinks?: ProjectCreateprojectLinksInput | string[]
+    deletedAt?: Date | string | null
+    translations?: ProjectTranslationUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutPostsInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutPostsInput, ProjectUncheckedCreateWithoutPostsInput>
+  }
+
   export type LikeCreateWithoutPostInput = {
     likeId?: string
     ipAddress?: string | null
@@ -49699,6 +49908,53 @@ export namespace Prisma {
     translations?: CategoryTranslationUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
+  export type ProjectUpsertWithoutPostsInput = {
+    update: XOR<ProjectUpdateWithoutPostsInput, ProjectUncheckedUpdateWithoutPostsInput>
+    create: XOR<ProjectCreateWithoutPostsInput, ProjectUncheckedCreateWithoutPostsInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutPostsInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutPostsInput, ProjectUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type ProjectUpdateWithoutPostsInput = {
+    projectId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    platforms?: ProjectUpdateplatformsInput | string[]
+    technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLinks?: ProjectUpdateprojectLinksInput | string[]
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    translations?: ProjectTranslationUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutPostsInput = {
+    projectId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    platforms?: ProjectUpdateplatformsInput | string[]
+    technologies?: ProjectUpdatetechnologiesInput | string[]
+    keywords?: ProjectUpdatekeywordsInput | string[]
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    projectLinks?: ProjectUpdateprojectLinksInput | string[]
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    translations?: ProjectTranslationUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
   export type LikeUpsertWithWhereUniqueWithoutPostInput = {
     where: LikeWhereUniqueInput
     update: XOR<LikeUpdateWithoutPostInput, LikeUncheckedUpdateWithoutPostInput>
@@ -49859,6 +50115,7 @@ export namespace Prisma {
     comment?: CommentCreateNestedManyWithoutPostInput
     author: UserCreateNestedOneWithoutPostsInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     translations?: PostTranslationCreateNestedManyWithoutPostInput
   }
@@ -49873,6 +50130,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -49950,6 +50208,7 @@ export namespace Prisma {
     comment?: CommentUpdateManyWithoutPostNestedInput
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     translations?: PostTranslationUpdateManyWithoutPostNestedInput
   }
@@ -49964,6 +50223,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -49992,6 +50252,7 @@ export namespace Prisma {
     comment?: CommentCreateNestedManyWithoutPostInput
     author: UserCreateNestedOneWithoutPostsInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
   }
@@ -50006,6 +50267,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -50050,6 +50312,7 @@ export namespace Prisma {
     comment?: CommentUpdateManyWithoutPostNestedInput
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
   }
@@ -50064,6 +50327,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -50091,6 +50355,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     comment?: CommentCreateNestedManyWithoutPostInput
     author: UserCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     translations?: PostTranslationCreateNestedManyWithoutPostInput
     seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
@@ -50105,6 +50370,7 @@ export namespace Prisma {
     slug: string
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -50344,6 +50610,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPostsInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     translations?: PostTranslationCreateNestedManyWithoutPostInput
     seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
@@ -50359,6 +50626,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -50453,6 +50721,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     translations?: PostTranslationUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
@@ -50468,6 +50737,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -50477,6 +50747,60 @@ export namespace Prisma {
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     translations?: PostTranslationUncheckedUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUncheckedUpdateOneWithoutPostNestedInput
+  }
+
+  export type PostCreateWithoutProjectInput = {
+    postId?: string
+    title: string
+    content: string
+    description?: string | null
+    slug: string
+    keywords?: PostCreatekeywordsInput | string[]
+    createdAt?: Date | string
+    image?: string | null
+    status?: string
+    views?: number
+    publishedAt?: Date | string | null
+    updatedAt?: Date | string | null
+    deletedAt?: Date | string | null
+    comment?: CommentCreateNestedManyWithoutPostInput
+    author: UserCreateNestedOneWithoutPostsInput
+    category: CategoryCreateNestedOneWithoutPostsInput
+    likes?: LikeCreateNestedManyWithoutPostInput
+    translations?: PostTranslationCreateNestedManyWithoutPostInput
+    seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutProjectInput = {
+    postId?: string
+    title: string
+    content: string
+    authorId: string
+    description?: string | null
+    slug: string
+    keywords?: PostCreatekeywordsInput | string[]
+    createdAt?: Date | string
+    categoryId: string
+    image?: string | null
+    status?: string
+    views?: number
+    publishedAt?: Date | string | null
+    updatedAt?: Date | string | null
+    deletedAt?: Date | string | null
+    comment?: CommentUncheckedCreateNestedManyWithoutPostInput
+    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    translations?: PostTranslationUncheckedCreateNestedManyWithoutPostInput
+    seriesEntry?: PostSeriesEntryUncheckedCreateNestedOneWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutProjectInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutProjectInput, PostUncheckedCreateWithoutProjectInput>
+  }
+
+  export type PostCreateManyProjectInputEnvelope = {
+    data: PostCreateManyProjectInput | PostCreateManyProjectInput[]
+    skipDuplicates?: boolean
   }
 
   export type ProjectTranslationCreateWithoutProjectInput = {
@@ -50505,6 +50829,22 @@ export namespace Prisma {
   export type ProjectTranslationCreateManyProjectInputEnvelope = {
     data: ProjectTranslationCreateManyProjectInput | ProjectTranslationCreateManyProjectInput[]
     skipDuplicates?: boolean
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutProjectInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutProjectInput, PostUncheckedUpdateWithoutProjectInput>
+    create: XOR<PostCreateWithoutProjectInput, PostUncheckedCreateWithoutProjectInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutProjectInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutProjectInput, PostUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutProjectInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutProjectInput>
   }
 
   export type ProjectTranslationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -50551,6 +50891,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     projectLinks?: ProjectCreateprojectLinksInput | string[]
     deletedAt?: Date | string | null
+    posts?: PostCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutTranslationsInput = {
@@ -50568,6 +50909,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     projectLinks?: ProjectCreateprojectLinksInput | string[]
     deletedAt?: Date | string | null
+    posts?: PostUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutTranslationsInput = {
@@ -50601,6 +50943,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectLinks?: ProjectUpdateprojectLinksInput | string[]
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutTranslationsInput = {
@@ -50618,6 +50961,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     projectLinks?: ProjectUpdateprojectLinksInput | string[]
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type PostCreateWithoutLikesInput = {
@@ -50637,6 +50981,7 @@ export namespace Prisma {
     comment?: CommentCreateNestedManyWithoutPostInput
     author: UserCreateNestedOneWithoutPostsInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    project?: ProjectCreateNestedOneWithoutPostsInput
     translations?: PostTranslationCreateNestedManyWithoutPostInput
     seriesEntry?: PostSeriesEntryCreateNestedOneWithoutPostInput
   }
@@ -50651,6 +50996,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -50738,6 +51084,7 @@ export namespace Prisma {
     comment?: CommentUpdateManyWithoutPostNestedInput
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     translations?: PostTranslationUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
   }
@@ -50752,6 +51099,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -51334,6 +51682,7 @@ export namespace Prisma {
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
     categoryId: string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -51504,6 +51853,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     comment?: CommentUpdateManyWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     translations?: PostTranslationUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
@@ -51518,6 +51868,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -51539,6 +51890,7 @@ export namespace Prisma {
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -51718,6 +52070,7 @@ export namespace Prisma {
     slug: string
     keywords?: PostCreatekeywordsInput | string[]
     createdAt?: Date | string
+    projectId?: string | null
     image?: string | null
     status?: string
     views?: number
@@ -51750,6 +52103,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     comment?: CommentUpdateManyWithoutPostNestedInput
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    project?: ProjectUpdateOneWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     translations?: PostTranslationUpdateManyWithoutPostNestedInput
     seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
@@ -51764,6 +52118,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -51785,6 +52140,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     keywords?: PostUpdatekeywordsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectId?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     views?: IntFieldUpdateOperationsInput | number
@@ -51863,6 +52219,24 @@ export namespace Prisma {
     status?: EnumCommentStatusFieldUpdateOperationsInput | $Enums.CommentStatus
   }
 
+  export type PostCreateManyProjectInput = {
+    postId?: string
+    title: string
+    content: string
+    authorId: string
+    description?: string | null
+    slug: string
+    keywords?: PostCreatekeywordsInput | string[]
+    createdAt?: Date | string
+    categoryId: string
+    image?: string | null
+    status?: string
+    views?: number
+    publishedAt?: Date | string | null
+    updatedAt?: Date | string | null
+    deletedAt?: Date | string | null
+  }
+
   export type ProjectTranslationCreateManyProjectInput = {
     id?: string
     lang: string
@@ -51870,6 +52244,68 @@ export namespace Prisma {
     description?: string | null
     slug: string
     content?: string | null
+  }
+
+  export type PostUpdateWithoutProjectInput = {
+    postId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    keywords?: PostUpdatekeywordsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    comment?: CommentUpdateManyWithoutPostNestedInput
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    translations?: PostTranslationUpdateManyWithoutPostNestedInput
+    seriesEntry?: PostSeriesEntryUpdateOneWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutProjectInput = {
+    postId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    keywords?: PostUpdatekeywordsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    comment?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    translations?: PostTranslationUncheckedUpdateManyWithoutPostNestedInput
+    seriesEntry?: PostSeriesEntryUncheckedUpdateOneWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutProjectInput = {
+    postId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    keywords?: PostUpdatekeywordsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    views?: IntFieldUpdateOperationsInput | number
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProjectTranslationUpdateWithoutProjectInput = {

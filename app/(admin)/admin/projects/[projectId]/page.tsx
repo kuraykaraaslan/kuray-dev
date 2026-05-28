@@ -5,7 +5,10 @@ import axiosInstance from '@/libs/axios'
 import { toast } from 'react-toastify'
 import ImageLoad from '@/components/common/UI/Images/ImageLoad'
 import Editor from '@/components/common/Forms/Editor'
-import { TableBody, TableHeader, TableProvider } from '@/components/common/Forms/DynamicTable'
+import { TableBody, TableHeader, TableProvider, ColumnDef } from '@/components/common/Forms/DynamicTable'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { HeadlessModal } from '@/components/common/Modal'
 import DynamicText from '@/components/common/Forms/DynamicText'
 import DynamicSelect from '@/components/common/Forms/DynamicSelect'
 import GenericElement from '@/components/common/Forms/GenericElement'
@@ -26,6 +29,7 @@ import {
   KEYWORDS_SCORE_RULES,
 } from '@/components/common/Forms/ContentScoreBar/rules'
 import DynamicDate from '@/components/common/Forms/DynamicDate'
+import { PostWithData } from '@/types/content/BlogTypes'
 
 const PROJECT_TRANSLATION_FIELDS: TranslationFieldDef[] = [
   { key: 'title', label: 'Title' },
@@ -58,8 +62,30 @@ const SingleProject = () => {
   const [projectLinks, setProjectLinks] = useState<string[]>([])
   const [createdAt, setCreatedAt] = useState<Date>(new Date())
   const [updatedAt, setUpdatedAt] = useState<Date>(new Date())
+  const [relatedTableKey, setRelatedTableKey] = useState(0)
+  const [postPickerKey, setPostPickerKey] = useState(0)
+  const [attachModalOpen, setAttachModalOpen] = useState(false)
 
   const tr = useTranslationState({ translationApiBase: `/api/projects/${routeProjectId}/translations` })
+
+  const handleAttachPost = async (postId: string) => {
+    if (!postId || !routeProjectId || routeProjectId === 'create') return
+    try {
+      await axiosInstance.put(`/api/posts/${postId}/project`, { projectId: routeProjectId })
+      toast.success('Post attached')
+      setPostPickerKey((k) => k + 1)
+      setRelatedTableKey((k) => k + 1)
+      setAttachModalOpen(false)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message ?? 'Attach failed')
+    }
+  }
+
+  const relatedPostColumns: ColumnDef<PostWithData>[] = [
+    { key: 'title', header: 'Title', accessor: (p) => p.title },
+    { key: 'slug', header: 'Slug', accessor: (p) => p.slug, hideOnMobile: true },
+    { key: 'status', header: 'Status', accessor: (p) => p.status, hideOnMobile: true },
+  ]
 
   const { clearAutoSave } = useDraftAutoSave({
     storageKey: 'projectCaches',
@@ -266,46 +292,51 @@ const SingleProject = () => {
             <ContentScoreBar value={keywords.join(',')} rules={KEYWORDS_SCORE_RULES} label="Anahtar Kelimeler" />
           </div>
 
-          <TableProvider<{ id: number; link: string }>
-            localData={projectLinks.map((link, i) => ({ id: i, link }))}
-            idKey="id"
-            columns={[{
-              key: 'link',
-              header: 'Link',
-              accessor: (item) => (
-                <input
-                  type="text"
-                  placeholder="Project Link"
-                  className="input input-bordered w-full"
-                  value={item.link}
-                  onChange={(e) => {
-                    const newLinks = [...projectLinks]
-                    newLinks[item.id] = e.target.value
-                    setProjectLinks(newLinks)
-                  }}
-                />
-              ),
-            }]}
-            actions={[{
-              label: 'Delete',
-              onClick: (item) => setProjectLinks(projectLinks.filter((_, i) => i !== item.id)),
-              className: 'btn-error',
-              hideOnMobile: true,
-            }]}
-          >
-            <TableHeader
-              className="p-2 -mb-8 rounded-t-lg"
-              title="Project Links"
-              buttons={[{ label: 'Add Link', onClick: () => setProjectLinks([...projectLinks, '']), className: 'btn-secondary btn-sm' }]}
-              titleTextClassName="text-sm font-normal"
-              searchClassName="hidden"
-              showExport
-            />
-            <TableBody emptyText="No links added yet." />
-          </TableProvider>
+          <GenericElement label="Project Links">
+            <TableProvider<{ id: number; link: string }>
+              localData={projectLinks.map((link, i) => ({ id: i, link }))}
+              idKey="id"
+              columns={[{
+                key: 'link',
+                header: 'Link',
+                accessor: (item) => (
+                  <input
+                    type="text"
+                    placeholder="Project Link"
+                    className="input input-bordered w-full"
+                    value={item.link}
+                    onChange={(e) => {
+                      const newLinks = [...projectLinks]
+                      newLinks[item.id] = e.target.value
+                      setProjectLinks(newLinks)
+                    }}
+                  />
+                ),
+              }]}
+              actions={[{
+                label: <FontAwesomeIcon icon={faTrash} size="sm" />,
+                onClick: (item) => setProjectLinks(projectLinks.filter((_, i) => i !== item.id)),
+                className: 'btn-error',
+                tooltip: 'Delete',
+              }]}
+            >
+              <TableHeader
+                className="p-2 -mb-8 rounded-t-lg"
+                title=""
+                titleTextClassName="hidden"
+                searchClassName="hidden"
+                buttons={[{
+                  label: <FontAwesomeIcon icon={faPlus} />,
+                  onClick: () => setProjectLinks([...projectLinks, '']),
+                  className: 'btn-ghost btn-sm',
+                }]}
+              />
+              <TableBody emptyText="No links added yet." />
+            </TableProvider>
+          </GenericElement>
 
           <GenericElement label="Image">
-            <ImageLoad image={image} setImage={setImage} uploadFolder="projects" toast={toast} />
+            <ImageLoad image={image} setImage={setImage} uploadFolder="projects" toast={toast} width={1200} height={627} />
           </GenericElement>
 
           <GenericElement label="Created At">
@@ -314,6 +345,50 @@ const SingleProject = () => {
           <GenericElement label="Updated At">
             <DynamicDate value={updatedAt} onChange={setUpdatedAt} />
           </GenericElement>
+
+          {mode === 'edit' && (
+            <GenericElement label="Related Posts"
+            >
+              <TableProvider<PostWithData>
+                key={`related-posts-${relatedTableKey}`}
+                apiEndpoint={`/api/projects/${routeProjectId}/posts`}
+                dataKey="posts"
+                idKey="postId"
+                columns={relatedPostColumns}
+                ignoreSearchParams
+              >
+                <TableHeader
+                  className="p-2 -mb-8 rounded-t-lg"
+                  title=""
+                  titleTextClassName="hidden"
+                  searchClassName="hidden"
+                  showRefresh
+                  buttons={[{
+                    label: <FontAwesomeIcon icon={faPlus} />,
+                    onClick: () => setAttachModalOpen(true),
+                    className: 'btn-ghost btn-sm',
+                  }]}
+                />
+                <TableBody emptyText="No posts linked to this project yet." />
+              </TableProvider>
+              <HeadlessModal
+                open={attachModalOpen}
+                onClose={() => setAttachModalOpen(false)}
+                title="Attach Post"
+                size="md"
+              >
+                <DynamicSelect
+                  key={`post-picker-${postPickerKey}`}
+                  label="Post"
+                  endpoint="/api/posts" dataKey="posts" valueKey="postId" labelKey="title"
+                  searchKey="search" selectedValue=""
+                  onValueChange={(v) => v && handleAttachPost(v)}
+                  placeholder="Bağlanacak postu seç..." searchPlaceholder="Post ara..." debounceMs={400}
+                  portal
+                />
+              </HeadlessModal>
+            </GenericElement>
+          )}
 
         </>
       )}

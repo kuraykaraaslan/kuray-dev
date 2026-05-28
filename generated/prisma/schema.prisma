@@ -130,6 +130,7 @@ model Post {
   keywords    String[]
   createdAt   DateTime  @default(now())
   categoryId  String
+  projectId   String?
   image       String?
   status      String    @default("PUBLISHED")
   views       Int       @default(0)
@@ -141,9 +142,12 @@ model Post {
   comment      Comment[]
   author       User              @relation(fields: [authorId], references: [userId])
   category     Category          @relation(fields: [categoryId], references: [categoryId])
+  project      Project?          @relation(fields: [projectId], references: [projectId])
   likes        Like[]
   translations PostTranslation[]
   seriesEntry  PostSeriesEntry?
+
+  @@index([projectId])
 }
 
 model PostSeries {
@@ -312,6 +316,7 @@ model Project {
   projectLinks String[]
   deletedAt    DateTime?
 
+  posts        Post[]
   translations ProjectTranslation[]
 }
 

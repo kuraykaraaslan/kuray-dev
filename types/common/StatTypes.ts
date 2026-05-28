@@ -15,6 +15,7 @@ export type StatFrequency = z.infer<typeof StatFrequencySchema>
 
 export const StatSchema = z.object({
   totalPosts: z.number().int().nonnegative(),
+  totalProjects: z.number().int().nonnegative(),
   totalCategories: z.number().int().nonnegative(),
   totalUsers: z.number().int().nonnegative(),
   totalViews: z.number().int().nonnegative(),

@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo, ReactNode } from 'react'
 import axiosInstance from '@/libs/axios'
 import { useTranslation } from 'react-i18next'
 import { PostWithData, CommentWithData } from '@/types/content/BlogTypes'
+import { Project } from '@/types/content/ProjectTypes'
 import { Stat } from '@/types/common/StatTypes'
 import { Subscription } from '@/types/common/SubscriptionTypes'
 import { Appointment } from '@/types/features/CalendarTypes'
@@ -11,6 +12,7 @@ import DashboardWidget, { StatsGrid } from '@/components/admin/Features/Dashboar
 import StatCardItem from '@/components/admin/Features/Dashboard/StatCardItem'
 import { STAT_CARDS, TrafficDataPoint, aggregateGeoByCountry, generateTrafficData } from '@/types/common/DashboardTypes'
 import RecentPostItem from '@/components/admin/Features/Dashboard/RecentPostItem'
+import RecentProjectItem from '@/components/admin/Features/Dashboard/RecentProjectItem'
 import PendingCommentItem from '@/components/admin/Features/Dashboard/PendingCommentItem'
 import PopularPostItem from '@/components/admin/Features/Dashboard/PopularPostItem'
 import SubscriptionItem from '@/components/admin/Features/Dashboard/SubscriptionItem'
@@ -31,6 +33,7 @@ export default function DashboardPage() {
   const { t } = useTranslation()
   const [stats, setStats] = useState<Stat | null>(null)
   const [recentPosts, setRecentPosts] = useState<PostWithData[]>([])
+  const [recentProjects, setRecentProjects] = useState<Project[]>([])
   const [popularPosts, setPopularPosts] = useState<PostWithData[]>([])
   const [pendingComments, setPendingComments] = useState<CommentWithData[]>([])
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -46,6 +49,7 @@ export default function DashboardPage() {
         const [
           statsRes,
           postsRes,
+          projectsRes,
           popularRes,
           commentsRes,
           subscriptionsRes,
@@ -55,6 +59,7 @@ export default function DashboardPage() {
         ] = await Promise.allSettled([
           axiosInstance.post('/api/stats', { frequency: 'all-time' }),
           axiosInstance.get('/api/posts?page=0&pageSize=5&status=ALL&sort=desc'),
+          axiosInstance.get('/api/projects?page=0&pageSize=5&sortKey=createdAt&sortDir=desc'),
           axiosInstance.get('/api/posts?page=0&pageSize=5&status=PUBLISHED&sortBy=views'),
           axiosInstance.get('/api/comments?page=0&pageSize=5&pending=true'),
           axiosInstance.get('/api/contact/subscription?page=0&pageSize=5'),
@@ -65,6 +70,7 @@ export default function DashboardPage() {
 
         if (statsRes.status === 'fulfilled') setStats(statsRes.value.data.values)
         if (postsRes.status === 'fulfilled') setRecentPosts(postsRes.value.data.posts ?? [])
+        if (projectsRes.status === 'fulfilled') setRecentProjects(projectsRes.value.data.projects ?? [])
         if (popularRes.status === 'fulfilled') {
           const posts = popularRes.value.data.posts ?? []
           setPopularPosts([...posts].sort((a: PostWithData, b: PostWithData) => (b.views ?? 0) - (a.views ?? 0)))
@@ -105,6 +111,22 @@ export default function DashboardPage() {
           >
             {recentPosts.map((post) => (
               <RecentPostItem key={post.postId} post={post} />
+            ))}
+          </DashboardWidget>
+        ),
+      },
+      {
+        key: 'recent-projects',
+        component: (
+          <DashboardWidget
+            title={t('admin.dashboard.recent_projects')}
+            viewAllHref="/admin/projects"
+            loading={loading}
+            isEmpty={recentProjects.length === 0}
+            emptyMessage={t('admin.dashboard.no_projects')}
+          >
+            {recentProjects.map((project) => (
+              <RecentProjectItem key={project.projectId} project={project} />
             ))}
           </DashboardWidget>
         ),
@@ -220,7 +242,7 @@ export default function DashboardPage() {
         ),
       },
     ],
-    [recentPosts, pendingComments, popularPosts, subscriptions, appointments, contactForms, trafficData, geoData, loading]
+    [recentPosts, recentProjects, pendingComments, popularPosts, subscriptions, appointments, contactForms, trafficData, geoData, loading]
   )
 
   return (

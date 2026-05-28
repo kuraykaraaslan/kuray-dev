@@ -1095,6 +1095,8 @@
       "description": "Overview of your content and activity",
       "recent_posts": "Recent Posts",
       "no_posts": "No posts yet.",
+      "recent_projects": "Recent Projects",
+      "no_projects": "No projects yet.",
       "pending_comments": "Pending Comments",
       "no_comments": "No pending comments.",
       "popular_posts": "Popular Posts",

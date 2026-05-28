@@ -209,7 +209,7 @@ export default function SeoModal() {
             </div>
             <DynamicText value={meta?.ogDescription ?? ''} setValue={(v) => updateMeta('ogDescription', v)} isTextarea />
           </div>
-          <ImageLoad label="OG Image" image={meta?.ogImage ?? ''} setImage={(v) => updateMeta('ogImage', v)} uploadFolder="og" aspect={1200 / 630} />
+          <ImageLoad label="OG Image" image={meta?.ogImage ?? ''} setImage={(v) => updateMeta('ogImage', v)} uploadFolder="og" width={1200} height={627} />
         </section>
 
         <div className="divider my-0" />

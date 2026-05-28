@@ -10,6 +10,7 @@ export const GetPostsRequestSchema = z.object({
   authorId: z.string().optional(),
   status: PostStatusEnum.default('PUBLISHED'),
   categoryId: z.string().optional(),
+  projectId: z.string().optional(),
   search: z.string().optional(),
 })
 
@@ -22,6 +23,7 @@ export const CreatePostRequestSchema = z.object({
   keywords: z.array(z.string()).min(1, PostMessages.KEYWORDS_REQUIRED),
   createdAt: z.coerce.date(),
   categoryId: z.string(),
+  projectId: z.string().nullable().optional(),
   image: z.string().nullable(),
   status: PostStatusEnum.default('PUBLISHED'),
   views: z.number().default(0),
@@ -49,6 +51,7 @@ export const PostResponseSchema = z.object({
   keywords: z.array(z.string()),
   createdAt: z.date(),
   categoryId: z.string(),
+  projectId: z.string().nullable().optional(),
   image: z.string().nullable(),
   status: PostStatusEnum.default('PUBLISHED'),
   views: z.number().default(0),

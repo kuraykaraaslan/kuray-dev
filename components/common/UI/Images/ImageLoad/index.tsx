@@ -26,6 +26,7 @@ const ImageLoad = ({
   label,
   aspect = 3 / 2,
   outputQuality = 1,
+  // @ts-ignore-next-line
   width = 384,
   // @ts-ignore-next-line
   height = 256,
@@ -133,7 +134,7 @@ const ImageLoad = ({
       {/* ── PREVIEW ── */}
       <div
         className="relative group rounded-xl overflow-hidden border-2 border-dashed border-base-300 bg-base-200 transition-colors duration-200 hover:border-base-content/30"
-        style={{ width: '100%', maxWidth: width, aspectRatio: aspect }}
+        style={{ height: 320, width: 320 * aspect, maxWidth: '100%' }}
       >
         {image ? (
           <>

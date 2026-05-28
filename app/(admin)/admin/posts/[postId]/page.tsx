@@ -56,6 +56,7 @@ const SinglePost = () => {
   const [keywords, setKeywords] = useState<string[]>([])
   const [authorId, setAuthorId] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [projectId, setProjectId] = useState<string | null>(null)
   const [status, setStatus] = useState<PostStatus>('DRAFT')
   const [createdAt, setCreatedAt] = useState<Date>(new Date())
   const [publishedAt, setPublishedAt] = useState<Date | null>(null)
@@ -69,7 +70,7 @@ const SinglePost = () => {
   const { clearAutoSave } = useDraftAutoSave({
     storageKey: 'post_drafts',
     id: routePostId,
-    data: { title, content, description, slug, keywords, authorId, categoryId, status, image, publishedAt },
+    data: { title, content, description, slug, keywords, authorId, categoryId, projectId, status, image, publishedAt },
     loading,
     onLoad: (draft) => {
       setTitle(draft.title ?? '')
@@ -79,6 +80,7 @@ const SinglePost = () => {
       setKeywords(draft.keywords ?? [])
       setAuthorId(draft.authorId ?? '')
       setCategoryId(draft.categoryId ?? '')
+      setProjectId(draft.projectId ?? null)
       setStatus(draft.status ?? 'DRAFT')
       setImage(draft.image ?? '')
       setPublishedAt(draft.publishedAt ? new Date(draft.publishedAt) : null)
@@ -142,6 +144,7 @@ const SinglePost = () => {
         setKeywords(Array.isArray(post.keywords) ? post.keywords : [])
         setAuthorId(post.authorId ?? '')
         setCategoryId(post.categoryId ?? '')
+        setProjectId(post.projectId ?? null)
         setStatus((post.status as PostStatus) ?? 'DRAFT')
         setCreatedAt(post.createdAt ? new Date(post.createdAt) : new Date())
         setPublishedAt(post.publishedAt ? new Date(post.publishedAt) : null)
@@ -165,7 +168,7 @@ const SinglePost = () => {
   const handleClearDraft = () => {
     clearAutoSave()
     setTitle(''); setContent(''); setDescription(''); setSlug('')
-    setKeywords([]); setAuthorId(''); setCategoryId(''); setStatus('DRAFT'); setImage('')
+    setKeywords([]); setAuthorId(''); setCategoryId(''); setProjectId(null); setStatus('DRAFT'); setImage('')
     setCreatedAt(new Date()); setViews(0); setPublishedAt(null)
     toast.info('Draft cleared')
   }
@@ -214,7 +217,7 @@ const SinglePost = () => {
     try {
       const body = {
         postId: routePostId !== 'create' ? routePostId : undefined,
-        title, content, description, slug, keywords, authorId, categoryId, status, createdAt, views, image,
+        title, content, description, slug, keywords, authorId, categoryId, projectId, status, createdAt, views, image,
         publishedAt: publishedAt ?? undefined,
       }
       if (mode === 'create') {
@@ -309,6 +312,12 @@ const SinglePost = () => {
             searchKey="search" selectedValue={categoryId} onValueChange={setCategoryId}
             placeholder="Kategori Seçin" searchPlaceholder="Kategori ara..." debounceMs={400}
           />
+          <DynamicSelect
+            label="Related Project"
+            endpoint="/api/projects" dataKey="projects" valueKey="projectId" labelKey="title"
+            searchKey="search" selectedValue={projectId ?? ''} onValueChange={(v) => setProjectId(v || null)}
+            placeholder="İlgili proje (opsiyonel)" searchPlaceholder="Proje ara..." debounceMs={400}
+          />
           <DynamicDate label="Created At" value={createdAt} onChange={setCreatedAt} />
           <DynamicText label="Views" placeholder="Views" value={String(views)} setValue={(v) => setViews(Number(v))} size="md" />
         </>
@@ -351,7 +360,7 @@ const SinglePost = () => {
             disabled={user?.userRole !== 'ADMIN'} disabledError="You can only change if you are admin"
           />
           <GenericElement label="Image">
-            <ImageLoad image={image} setImage={setImage} uploadFolder="posts" toast={toast} />
+            <ImageLoad image={image} setImage={setImage} uploadFolder="posts" toast={toast} width={1200} height={627}/>
           </GenericElement>
         </>
       )}

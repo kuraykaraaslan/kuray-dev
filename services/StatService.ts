@@ -46,9 +46,10 @@ export default class StatService {
           }
         : {}
 
-    const [totalPosts, totalCategories, totalUsers, totalViewsAggregate, totalComments] =
+    const [totalPosts, totalProjects, totalCategories, totalUsers, totalViewsAggregate, totalComments] =
       await prisma.$transaction([
         prisma.post.count({ where: whereClause }),
+        prisma.project.count({ where: whereClause }),
         prisma.category.count({ where: whereClause }),
         prisma.user.count({ where: whereClause }),
         prisma.post.aggregate({ where: whereClause, _sum: { views: true } }),
@@ -60,6 +61,7 @@ export default class StatService {
 
     const stats = {
       totalPosts,
+      totalProjects,
       totalCategories,
       totalUsers,
       totalViews: totalViewsAggregate._sum.views || 0,

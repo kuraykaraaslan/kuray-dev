@@ -63,6 +63,7 @@ const PostSchema = z.object({
     return arg
   }, z.date().optional()),
   categoryId: z.string(),
+  projectId: z.string().nullable().optional(),
   image: z.string().nullable(),
   status: PostStatusEnum.default('DRAFT'),
   views: z.number().default(0),
@@ -92,6 +93,14 @@ const CategorySchema = z.object({
   deletedAt: z.date().nullable().optional(),
 })
 
+const PostProjectRefSchema = z.object({
+  projectId: z.string(),
+  title: z.string(),
+  slug: z.string(),
+  image: z.string().nullable(),
+  description: z.string().nullable(),
+})
+
 const PostWithDataSchema = PostSchema.extend({
   author: SafeUserSchema.pick({
     userId: true,
@@ -108,6 +117,7 @@ const PostWithDataSchema = PostSchema.extend({
     createdAt: true,
     updatedAt: true,
   }),
+  project: PostProjectRefSchema.nullable().optional(),
   translations: z.array(PostTranslationSchema).optional(),
   seriesEntry: PostSeriesRefSchema.nullable().optional(),
 })

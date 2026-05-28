@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faNewspaper, faFolder, faUsers, faEye, faComment, faRobot, faComments } from '@fortawesome/free-solid-svg-icons'
+import { faNewspaper, faFolder, faUsers, faEye, faComment, faRobot, faComments, faDiagramProject } from '@fortawesome/free-solid-svg-icons'
 import { GeoLocation } from '@/dtos/AnalyticsDTO'
 export interface TrafficDataPoint {
   label: string
@@ -9,7 +9,7 @@ export interface TrafficDataPoint {
 
 // Schemas
 export const StatCardSchema = z.object({
-  key: z.enum(['totalViews', 'totalPosts', 'totalComments', 'totalUsers', 'totalCategories', 'totalChatSessions', 'totalChatMessages']),
+  key: z.enum(['totalViews', 'totalPosts', 'totalProjects', 'totalComments', 'totalUsers', 'totalCategories', 'totalChatSessions', 'totalChatMessages']),
   label: z.string(),
   icon: z.custom<IconDefinition>(),
   href: z.string().nullable(),
@@ -28,6 +28,7 @@ export type StatFrequencyOption = z.infer<typeof StatFrequencyOptionSchema>
 export const STAT_CARDS: StatCard[] = [
   { key: 'totalViews', label: 'Total Views', icon: faEye, href: null },
   { key: 'totalPosts', label: 'Posts', icon: faNewspaper, href: '/admin/posts' },
+  { key: 'totalProjects', label: 'Projects', icon: faDiagramProject, href: '/admin/projects' },
   { key: 'totalComments', label: 'Comments', icon: faComment, href: '/admin/comments' },
   { key: 'totalUsers', label: 'Users', icon: faUsers, href: '/admin/users' },
   { key: 'totalCategories', label: 'Categories', icon: faFolder, href: '/admin/categories' },

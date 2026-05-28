@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
 
     const values = {
       totalPosts: stats.totalPosts || 0,
+      totalProjects: stats.totalProjects || 0,
       totalCategories: stats.totalCategories || 0,
       totalUsers: stats.totalUsers || 0,
       totalViews: stats.totalViews || 0,

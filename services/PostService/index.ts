@@ -29,6 +29,7 @@ export default class PostService {
     image: true,
     authorId: true,
     categoryId: true,
+    projectId: true,
     createdAt: true,
     updatedAt: true,
     status: true,
@@ -46,6 +47,15 @@ export default class PostService {
         keywords: true,
         createdAt: true,
         updatedAt: true,
+      },
+    },
+    project: {
+      select: {
+        projectId: true,
+        title: true,
+        slug: true,
+        image: true,
+        description: true,
       },
     },
     author: {
@@ -131,6 +141,10 @@ export default class PostService {
     slug = this.normalizeSlug(slug)
     ;(data as any).slug = slug
 
+    if ((data as any).projectId === '') {
+      ;(data as any).projectId = null
+    }
+
     // Validate input
     if (!title || !content || !description || !slug || !keywords || !authorId || !categoryId) {
       throw new Error('All fields are required.')
@@ -183,6 +197,7 @@ export default class PostService {
     pageSize: number
     search?: string
     categoryId?: string
+    projectId?: string
     authorId?: string
     status?: string //ALL, PUBLISHED, DRAFT
     postId?: string
@@ -192,7 +207,7 @@ export default class PostService {
     sortKey?: string
     sortDir?: 'asc' | 'desc'
   }): Promise<{ posts: PostWithData[]; total: number }> {
-    const { page, pageSize, search, categoryId, status, authorId, postId, slug, lang, sortKey, sortDir } = data
+    const { page, pageSize, search, categoryId, projectId, status, authorId, postId, slug, lang, sortKey, sortDir } = data
     const { safePage, safePageSize } = this.normalizePagination(page, pageSize)
 
     //ALL, PUBLISHED, DRAFT
@@ -234,6 +249,7 @@ export default class PostService {
         authorId: authorId ? authorId : undefined,
         postId: postId ? postId : undefined,
         categoryId: categoryId ? categoryId : undefined,
+        projectId: projectId ? projectId : undefined,
         status: status ? (status === 'ALL' ? undefined : status) : 'PUBLISHED',
         createdAt: {
           lte: status === 'ALL' ? undefined : now,
@@ -321,6 +337,10 @@ export default class PostService {
     const updateData: any = {
       ...data,
       slug: normalizedSlug,
+    }
+
+    if (updateData.projectId === '') {
+      updateData.projectId = null
     }
 
     delete updateData.postId

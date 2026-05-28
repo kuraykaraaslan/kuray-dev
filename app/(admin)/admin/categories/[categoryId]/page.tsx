@@ -208,7 +208,8 @@ const SingleCategory = () => {
             <ContentScoreBar value={keywords.join(',')} rules={KEYWORDS_SCORE_RULES} label="Anahtar Kelimeler" />
           </div>
           <GenericElement label="Image">
-            <ImageLoad image={image} setImage={setImage} uploadFolder="categories" toast={toast} />
+            <ImageLoad image={image} setImage={setImage} uploadFolder="categories" toast={toast}
+            width={1200} height={627} />
           </GenericElement>
         </>
       )}

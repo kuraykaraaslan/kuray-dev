@@ -214,7 +214,7 @@ const SeriesEditPage = () => {
             <DynamicText label={t('admin.post_series.field_description')} placeholder={t('admin.post_series.field_desc_placeholder')} value={desc} setValue={setDesc} size="md" isTextarea />
 
             <GenericElement label={t('admin.post_series.cover_image_label')}>
-                <ImageLoad image={image} setImage={setImage} uploadFolder="series" toast={toast} />
+                <ImageLoad image={image} setImage={setImage} uploadFolder="series" toast={toast} width={1200} height={627}/>
             </GenericElement>
 
             {/* ── Posts in this series ── */}
