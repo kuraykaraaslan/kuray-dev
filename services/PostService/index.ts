@@ -345,7 +345,6 @@ export default class PostService {
 
     delete updateData.postId
     delete updateData.authorId
-    delete updateData.createdAt
     delete updateData.updatedAt
     delete updateData.deletedAt
 

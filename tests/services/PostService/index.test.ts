@@ -257,6 +257,26 @@ describe('PostService', () => {
       expect(redisMock.del).toHaveBeenCalledWith('sitemap:blog')
     })
 
+    it('persists createdAt when provided', async () => {
+      prismaMock.post.findUnique.mockResolvedValueOnce({
+        postId: 'post-1',
+        authorId: 'a',
+        deletedAt: null,
+      })
+      prismaMock.post.update.mockResolvedValueOnce(mockPost)
+      redisMock.del.mockResolvedValue(1)
+
+      const customDate = new Date('2023-05-15T10:00:00.000Z')
+      await PostService.updatePost({
+        postId: 'post-1', title: 'Updated', content: 'x', description: 'x',
+        slug: 'updated', keywords: ['k'], authorId: 'a', categoryId: 'c',
+        status: 'PUBLISHED', createdAt: customDate,
+      } as any)
+
+      const updateCall = prismaMock.post.update.mock.calls[0][0]
+      expect(updateCall.data.createdAt).toEqual(customDate)
+    })
+
     it('rejects non-owner update when requester is not admin', async () => {
       prismaMock.post.findUnique.mockResolvedValueOnce({
         postId: 'post-1',
