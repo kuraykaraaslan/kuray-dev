@@ -361,7 +361,8 @@
       "scroll_right": "Scroll right",
       "categories": "Categories",
       "latest_posts": "Latest Posts",
-      "posts_by": "Posts by",
+      "posts_by": "Posts by {{authorName}}",
+      "project_posts": "{{projectTitle}} Posts",
       "load_more": "Load more posts",
       "no_more_posts": "No more posts available",
       "read_more": "Read More"

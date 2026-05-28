@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import axiosInstance from '@/libs/axios'
 import { Category } from '@/types/content/BlogTypes'
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 import dynamic from 'next/dynamic'
 import Pagination from '@/components/common/UI/Pagination'
+import { Project } from '@/types/content/ProjectTypes'
 
 const KnowledgeGraph2DButton = dynamic(() => import('../../Knowledge/KnowledgeGraph2D/Button'), {
   ssr: false,
@@ -18,12 +19,13 @@ const KnowledgeGraph2DButton = dynamic(() => import('../../Knowledge/KnowledgeGr
 interface FeedProps {
   category?: Pick<Category, 'categoryId' | 'title'>
   author?: Pick<SafeUser, 'userId' | 'name' | 'userProfile'>
+  project?: Pick<Project, 'projectId' | 'title' | 'slug'>
 }
 
 const PAGE_SIZE = 6
 
 export default function Feed(props: FeedProps) {
-  const { category, author } = props
+  const { category, author, project } = props
   const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const currentPage = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
@@ -34,6 +36,13 @@ export default function Feed(props: FeedProps) {
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
 
+  const title = useMemo(() => {
+    if (category) return category.title
+    if (author) return `${t('frontend.feed.posts_by', { authorName: author.name })}`
+    if (project) return `${t('frontend.feed.project_posts', { projectTitle: project.title })}`
+    return t('frontend.feed.latest_posts')
+  }, [category, author, project, t])
+
   useEffect(() => {
     axiosInstance
       .get(
@@ -41,7 +50,8 @@ export default function Feed(props: FeedProps) {
           `?page=${currentPage - 1}&pageSize=${PAGE_SIZE}&sortDir=desc` +
           (lang ? `&lang=${encodeURIComponent(lang)}` : '') +
           (category ? `&categoryId=${category.categoryId}` : '') +
-          (author ? `&authorId=${author.userId}` : '')
+          (author ? `&authorId=${author.userId}` : '') +
+          (project ? `&projectId=${project.projectId}` : '')
       )
       .then((response) => {
         setFeeds(
@@ -57,7 +67,7 @@ export default function Feed(props: FeedProps) {
       .catch((error) => {
         console.error('Error fetching posts:', error)
       })
-  }, [currentPage, lang, category, author])
+  }, [currentPage, lang, category, author, project])
 
   return (
     <section className="min-h-screen bg-base-100 pt-32" id="blog">
@@ -65,11 +75,7 @@ export default function Feed(props: FeedProps) {
         <div className="mx-auto text-center lg:mb-8 -mt-8 lg:mt-0">
           <div className="mb-8 hidden sm:flex items-center justify-center space-x-4 text-3xl lg:text-4xl tracking-tight font-extrabold">
             <p>
-              {category
-                ? category.title
-                : author
-                  ? `${t('frontend.feed.posts_by')} ${author.userProfile.name}`
-                  : t('frontend.feed.latest_posts')}
+              {title}
             </p>
             <KnowledgeGraph2DButton />
           </div>

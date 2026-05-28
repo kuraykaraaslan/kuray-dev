@@ -8,7 +8,7 @@ import MetadataHelper from '@/helpers/MetadataHelper'
 import Breadcrumb from '@/components/common/Layout/Breadcrumb'
 import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
 import Article from '@/components/frontend/Features/Blog/Article'
-import ProjectPosts from '@/components/frontend/Features/Projects/ProjectPosts'
+import Feed from '@/components/frontend/Features/Blog/Feed'
 import redisInstance from '@/libs/redis'
 import {ProjectTranslation } from '@/types/content/ProjectTypes'
 
@@ -97,8 +97,6 @@ export default async function ProjectPage({ params }: Props) {
 
     if (!project) notFound()
 
-    const { posts: projectPosts } = await ProjectService.getProjectPosts(project.projectId, 0, 12)
-
     const url = `${NEXT_PUBLIC_APPLICATION_HOST}/projects/${project.slug}`
     const description = project.description || project.content.substring(0, 160)
 
@@ -158,7 +156,7 @@ export default async function ProjectPage({ params }: Props) {
             <Breadcrumb items={breadcrumbs} />
             <ProjectHeader {...project} />
             <Article title={project.title} content={project.content} image={project.image ?? ''} />
-            <ProjectPosts posts={projectPosts} />
+            <Feed project={project} />
           </div>
         </section>
         <Newsletter backgroundColor="bg-base-200" />
