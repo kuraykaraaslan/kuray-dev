@@ -34,7 +34,6 @@ export default function DynamicPageEditor() {
 
   const loading = useEditorStore((s) => s.loading)
   const sections = useEditorStore((s) => s.sections)
-  const selectedId = useEditorStore((s) => s.selectedId)
   const storeHandleDragEnd = useEditorStore((s) => s.handleDragEnd)
   const addBlock = useEditorStore((s) => s.addBlock)
   const deleteBlock = useEditorStore((s) => s.deleteBlock)

@@ -566,6 +566,7 @@ model DynamicPageBlock {
   schema       Json     @default("{}")
   defaultProps Json     @default("{}")
   template     String   @default("")
+  script       String?
   isSystem     Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

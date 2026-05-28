@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import type { BlockDefinition } from '../types'
 
 export interface CustomFieldSchema {
@@ -6,9 +7,27 @@ export interface CustomFieldSchema {
   type: 'text' | 'textarea' | 'color' | 'boolean' | 'number' | 'url'
 }
 
+const replaceTokens = (str: string, props: Record<string, unknown>) =>
+  str.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+    const val = props[key]
+    return val !== undefined && val !== null ? String(val) : ''
+  })
+
 function CustomBlockComponent(props: Record<string, unknown>) {
   const template = (props.__template as string) ?? ''
   const schema = (props.__schema as CustomFieldSchema[]) ?? []
+  const script = (props.__script as string) ?? ''
+  const blockId = (props.__blockId as string) ?? 'custom'
+
+  useEffect(() => {
+    if (!script) return
+    const id = `block-script-${blockId}`
+    if (document.getElementById(id)) return
+    const el = document.createElement('script')
+    el.id = id
+    el.textContent = replaceTokens(script, props)
+    document.body.appendChild(el)
+  }, [blockId, script]) // props intentionally omitted — script tokens fixed at first render
 
   if (!template) {
     return (
@@ -50,6 +69,7 @@ export const CustomBlockDefinition: BlockDefinition = {
   defaultProps: {
     __schema: [],
     __template: '',
+    __script: '',
   },
   schema: {},
   Component: CustomBlockComponent,

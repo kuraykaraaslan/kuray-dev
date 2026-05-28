@@ -11,7 +11,7 @@ interface Props {
   collapseButton?: React.ReactNode
 }
 
-type Tab = 'ai' | 'fields' | 'template' | 'values'
+type Tab = 'ai' | 'fields' | 'script' | 'template' | 'values'
 
 const FIELD_TYPES: CustomFieldSchema['type'][] = [
   'text',
@@ -31,6 +31,7 @@ export default function BlockBuilderPanel({ block, onChange, collapseButton }: P
 
   const schema = (block.props.__schema as CustomFieldSchema[]) ?? []
   const template = (block.props.__template as string) ?? ''
+  const script = (block.props.__script as string) ?? ''
 
   const updateSchema = (newSchema: CustomFieldSchema[]) => {
     onChange({ ...block.props, __schema: newSchema })
@@ -38,6 +39,10 @@ export default function BlockBuilderPanel({ block, onChange, collapseButton }: P
 
   const updateTemplate = (newTemplate: string) => {
     onChange({ ...block.props, __template: newTemplate })
+  }
+
+  const updateScript = (newScript: string) => {
+    onChange({ ...block.props, __script: newScript })
   }
 
   const updateValue = (key: string, value: unknown) => {
@@ -99,6 +104,7 @@ export default function BlockBuilderPanel({ block, onChange, collapseButton }: P
   const tabs: { id: Tab; label: string }[] = [
     { id: 'ai', label: '✦ AI' },
     { id: 'fields', label: 'Fields' },
+    { id: 'script', label: 'Script' },
     { id: 'template', label: 'Template' },
     { id: 'values', label: 'Values' },
   ]
@@ -330,6 +336,61 @@ export default function BlockBuilderPanel({ block, onChange, collapseButton }: P
             {schema.length > 0 && (
               <p className="text-[10px] text-center text-base-content/25">
                 Switch to Template tab to use these fields
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* ─── SCRIPT TAB ─── */}
+        {activeTab === 'script' && (
+          <div className="p-4 space-y-4">
+            <div className="rounded-lg p-3 space-y-1.5 bg-warning/5 border border-warning/20">
+              <p className="text-xs font-semibold text-warning/80">JavaScript</p>
+              <p className="text-[11px] text-base-content/40">
+                Blok mount olduğunda çalışır. <span className="font-mono text-primary/50">{'{{key}}'}</span> token'ları props ile değiştirilir.
+                Aynı blok tipinden birden fazla varsa script yalnızca bir kez yüklenir.
+              </p>
+            </div>
+
+            {schema.length > 0 && (
+              <div>
+                <p className="text-[10px] mb-2 text-base-content/35">Kullanılabilir token'lar:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {schema.map((f) => (
+                    <span
+                      key={f.key}
+                      className="px-2 py-0.5 rounded text-[11px] font-mono bg-primary/10 text-primary border border-primary/20"
+                    >
+                      {`{{${f.key}}}`}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-medium mb-1.5 text-base-content/55">
+                JavaScript
+              </label>
+              <textarea
+                value={script}
+                onChange={(e) => updateScript(e.target.value)}
+                rows={20}
+                placeholder={`// Örnek: Carousel başlat
+document.querySelectorAll('.my-carousel').forEach(function(el) {
+  // init logic here
+})
+
+// {{fieldName}} ile prop değerlerine erişebilirsiniz`}
+                className={`${inputCls} resize-y font-mono text-xs`}
+                style={{ lineHeight: '1.6', minHeight: 200 }}
+                spellCheck={false}
+              />
+            </div>
+
+            {script && (
+              <p className="text-[11px] text-base-content/25">
+                Script sayfa yüklendiğinde otomatik çalışır.
               </p>
             )}
           </div>

@@ -23,7 +23,7 @@ function ClientBlock({ block, dbDefs }: { block: BlockData; dbDefs: DynamicPageB
     const { Component } = codeDef
     return (
       <BlockRenderErrorBoundary blockType={block.type}>
-        <Component {...block.props} />
+        <Component {...block.props} __blockId={block.id} />
       </BlockRenderErrorBoundary>
     )
   }
@@ -31,7 +31,7 @@ function ClientBlock({ block, dbDefs }: { block: BlockData; dbDefs: DynamicPageB
   if (!dbDef) return null
   return (
     <BlockRenderErrorBoundary blockType={block.type}>
-      <TemplateBlockRenderer template={dbDef.template} props={block.props} />
+      <TemplateBlockRenderer template={dbDef.template} props={block.props} script={dbDef.script} blockType={block.type} />
     </BlockRenderErrorBoundary>
   )
 }

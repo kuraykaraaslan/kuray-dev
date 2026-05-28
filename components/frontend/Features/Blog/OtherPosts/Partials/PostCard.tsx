@@ -78,7 +78,7 @@ const PostCard = ({ post, similarityScore }: { post: PostWithData; similaritySco
       )}
       <Link
         href={'/blog/' + category.slug + '/' + slug}
-        className="block h-32 border-b-2 border-base-300 overflow-hidden rounded-t-lg relative"
+        className="block aspect-[1200/627] border-b-2 border-base-300 overflow-hidden rounded-t-lg relative"
       >
         <Image
           src={image!}

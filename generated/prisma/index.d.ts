@@ -36322,6 +36322,7 @@ export namespace Prisma {
     category: string | null
     description: string | null
     template: string | null
+    script: string | null
     isSystem: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -36334,6 +36335,7 @@ export namespace Prisma {
     category: string | null
     description: string | null
     template: string | null
+    script: string | null
     isSystem: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -36348,6 +36350,7 @@ export namespace Prisma {
     schema: number
     defaultProps: number
     template: number
+    script: number
     isSystem: number
     createdAt: number
     updatedAt: number
@@ -36362,6 +36365,7 @@ export namespace Prisma {
     category?: true
     description?: true
     template?: true
+    script?: true
     isSystem?: true
     createdAt?: true
     updatedAt?: true
@@ -36374,6 +36378,7 @@ export namespace Prisma {
     category?: true
     description?: true
     template?: true
+    script?: true
     isSystem?: true
     createdAt?: true
     updatedAt?: true
@@ -36388,6 +36393,7 @@ export namespace Prisma {
     schema?: true
     defaultProps?: true
     template?: true
+    script?: true
     isSystem?: true
     createdAt?: true
     updatedAt?: true
@@ -36475,6 +36481,7 @@ export namespace Prisma {
     schema: JsonValue
     defaultProps: JsonValue
     template: string
+    script: string | null
     isSystem: boolean
     createdAt: Date
     updatedAt: Date
@@ -36506,6 +36513,7 @@ export namespace Prisma {
     schema?: boolean
     defaultProps?: boolean
     template?: boolean
+    script?: boolean
     isSystem?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -36520,6 +36528,7 @@ export namespace Prisma {
     schema?: boolean
     defaultProps?: boolean
     template?: boolean
+    script?: boolean
     isSystem?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -36534,6 +36543,7 @@ export namespace Prisma {
     schema?: boolean
     defaultProps?: boolean
     template?: boolean
+    script?: boolean
     isSystem?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -36548,12 +36558,13 @@ export namespace Prisma {
     schema?: boolean
     defaultProps?: boolean
     template?: boolean
+    script?: boolean
     isSystem?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DynamicPageBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"blockId" | "type" | "label" | "category" | "description" | "schema" | "defaultProps" | "template" | "isSystem" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPageBlock"]>
+  export type DynamicPageBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"blockId" | "type" | "label" | "category" | "description" | "schema" | "defaultProps" | "template" | "script" | "isSystem" | "createdAt" | "updatedAt", ExtArgs["result"]["dynamicPageBlock"]>
 
   export type $DynamicPageBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "DynamicPageBlock"
@@ -36567,6 +36578,7 @@ export namespace Prisma {
       schema: Prisma.JsonValue
       defaultProps: Prisma.JsonValue
       template: string
+      script: string | null
       isSystem: boolean
       createdAt: Date
       updatedAt: Date
@@ -37001,6 +37013,7 @@ export namespace Prisma {
     readonly schema: FieldRef<"DynamicPageBlock", 'Json'>
     readonly defaultProps: FieldRef<"DynamicPageBlock", 'Json'>
     readonly template: FieldRef<"DynamicPageBlock", 'String'>
+    readonly script: FieldRef<"DynamicPageBlock", 'String'>
     readonly isSystem: FieldRef<"DynamicPageBlock", 'Boolean'>
     readonly createdAt: FieldRef<"DynamicPageBlock", 'DateTime'>
     readonly updatedAt: FieldRef<"DynamicPageBlock", 'DateTime'>
@@ -40096,6 +40109,7 @@ export namespace Prisma {
     schema: 'schema',
     defaultProps: 'defaultProps',
     template: 'template',
+    script: 'script',
     isSystem: 'isSystem',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -42550,6 +42564,7 @@ export namespace Prisma {
     schema?: JsonFilter<"DynamicPageBlock">
     defaultProps?: JsonFilter<"DynamicPageBlock">
     template?: StringFilter<"DynamicPageBlock"> | string
+    script?: StringNullableFilter<"DynamicPageBlock"> | string | null
     isSystem?: BoolFilter<"DynamicPageBlock"> | boolean
     createdAt?: DateTimeFilter<"DynamicPageBlock"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPageBlock"> | Date | string
@@ -42564,6 +42579,7 @@ export namespace Prisma {
     schema?: SortOrder
     defaultProps?: SortOrder
     template?: SortOrder
+    script?: SortOrderInput | SortOrder
     isSystem?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42581,6 +42597,7 @@ export namespace Prisma {
     schema?: JsonFilter<"DynamicPageBlock">
     defaultProps?: JsonFilter<"DynamicPageBlock">
     template?: StringFilter<"DynamicPageBlock"> | string
+    script?: StringNullableFilter<"DynamicPageBlock"> | string | null
     isSystem?: BoolFilter<"DynamicPageBlock"> | boolean
     createdAt?: DateTimeFilter<"DynamicPageBlock"> | Date | string
     updatedAt?: DateTimeFilter<"DynamicPageBlock"> | Date | string
@@ -42595,6 +42612,7 @@ export namespace Prisma {
     schema?: SortOrder
     defaultProps?: SortOrder
     template?: SortOrder
+    script?: SortOrderInput | SortOrder
     isSystem?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42615,6 +42633,7 @@ export namespace Prisma {
     schema?: JsonWithAggregatesFilter<"DynamicPageBlock">
     defaultProps?: JsonWithAggregatesFilter<"DynamicPageBlock">
     template?: StringWithAggregatesFilter<"DynamicPageBlock"> | string
+    script?: StringNullableWithAggregatesFilter<"DynamicPageBlock"> | string | null
     isSystem?: BoolWithAggregatesFilter<"DynamicPageBlock"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"DynamicPageBlock"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DynamicPageBlock"> | Date | string
@@ -45201,6 +45220,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: string
+    script?: string | null
     isSystem?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45215,6 +45235,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: string
+    script?: string | null
     isSystem?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45229,6 +45250,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: StringFieldUpdateOperationsInput | string
+    script?: NullableStringFieldUpdateOperationsInput | string | null
     isSystem?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45243,6 +45265,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: StringFieldUpdateOperationsInput | string
+    script?: NullableStringFieldUpdateOperationsInput | string | null
     isSystem?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45257,6 +45280,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: string
+    script?: string | null
     isSystem?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -45271,6 +45295,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: StringFieldUpdateOperationsInput | string
+    script?: NullableStringFieldUpdateOperationsInput | string | null
     isSystem?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -45285,6 +45310,7 @@ export namespace Prisma {
     schema?: JsonNullValueInput | InputJsonValue
     defaultProps?: JsonNullValueInput | InputJsonValue
     template?: StringFieldUpdateOperationsInput | string
+    script?: NullableStringFieldUpdateOperationsInput | string | null
     isSystem?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -47168,6 +47194,7 @@ export namespace Prisma {
     schema?: SortOrder
     defaultProps?: SortOrder
     template?: SortOrder
+    script?: SortOrder
     isSystem?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -47180,6 +47207,7 @@ export namespace Prisma {
     category?: SortOrder
     description?: SortOrder
     template?: SortOrder
+    script?: SortOrder
     isSystem?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -47192,6 +47220,7 @@ export namespace Prisma {
     category?: SortOrder
     description?: SortOrder
     template?: SortOrder
+    script?: SortOrder
     isSystem?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder

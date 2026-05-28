@@ -328,7 +328,6 @@ export default class PostService {
     delete updateData.createdAt
     delete updateData.updatedAt
     delete updateData.deletedAt
-    delete updateData.publishedAt
 
     // Update the post
     const post = await prisma.post.update({

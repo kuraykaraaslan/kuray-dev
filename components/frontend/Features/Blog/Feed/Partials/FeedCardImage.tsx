@@ -67,7 +67,7 @@ const FeedCardImage = (props: FeedCardProps) => {
       }
     >
       <Link
-        className="col-span-12 justify-center flex border-b-2 border-base-300 rounded-t-lg select-none h-60 relative"
+        className="col-span-12 justify-center flex border-b-2 border-base-300 rounded-t-lg select-none aspect-[1200/627] relative"
         href={'/blog/' + props?.category?.slug + '/' + props.slug}
       >
         <Image

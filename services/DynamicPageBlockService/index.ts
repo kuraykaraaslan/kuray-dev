@@ -11,6 +11,7 @@ function toRecord(raw: {
   schema: unknown
   defaultProps: unknown
   template: string
+  script: string | null
   isSystem: boolean
 }): DynamicPageBlockRecord {
   return {
@@ -22,6 +23,7 @@ function toRecord(raw: {
     schema: (raw.schema as Record<string, FieldSchema>) ?? {},
     defaultProps: (raw.defaultProps as Record<string, unknown>) ?? {},
     template: raw.template,
+    script: raw.script ?? undefined,
     isSystem: raw.isSystem,
   }
 }
@@ -51,6 +53,7 @@ export default class DynamicPageBlockService {
         schema: data.schema as object,
         defaultProps: data.defaultProps as object,
         template: data.template,
+        script: data.script ?? null,
         isSystem: data.isSystem,
       },
     })
@@ -68,6 +71,7 @@ export default class DynamicPageBlockService {
         ...(data.schema !== undefined && { schema: data.schema as object }),
         ...(data.defaultProps !== undefined && { defaultProps: data.defaultProps as object }),
         ...(data.template !== undefined && { template: data.template }),
+        ...(data.script !== undefined && { script: data.script || null }),
       },
     })
     return toRecord(row)

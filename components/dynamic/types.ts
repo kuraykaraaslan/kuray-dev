@@ -58,5 +58,6 @@ export interface DynamicPageBlockRecord {
   schema: Record<string, FieldSchema>
   defaultProps: Record<string, unknown>
   template: string
+  script?: string
   isSystem: boolean
 }

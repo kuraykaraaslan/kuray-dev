@@ -467,6 +467,7 @@ exports.Prisma.DynamicPageBlockScalarFieldEnum = {
   schema: 'schema',
   defaultProps: 'defaultProps',
   template: 'template',
+  script: 'script',
   isSystem: 'isSystem',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
