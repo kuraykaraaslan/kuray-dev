@@ -24,6 +24,8 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { useTranslation } from 'react-i18next'
 
 const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY || ''
+// When no site key is configured, reCAPTCHA is disabled and the form is treated as verified.
+const captchaEnabled = !!recaptchaSiteKey
 
 const Form = dynamic(() => import('./Partials/Form'), { ssr: false })
 
@@ -48,14 +50,9 @@ const Contact = (props: ContactProps) => {
 
   const [phoneNumbers, setPhoneNumbers] = useState<Phone[]>([])
   const [mails, setMails] = useState<Mail[]>([])
-  const [token, setToken] = useState<string>('x')
+  const [token, setToken] = useState<string>(captchaEnabled ? '' : 'disabled')
 
   const recaptchaRef = useRef<ReCAPTCHA>(null)
-
-  useEffect(() => {
-    const token = recaptchaRef.current?.getValue()
-    setToken(token as string)
-  }, [])
 
   useEffect(() => {
     if (token === '') {
@@ -181,7 +178,13 @@ const Contact = (props: ContactProps) => {
                     </>
                   ) : (
                     <>
-                      <ReCAPTCHA ref={recaptchaRef} size="normal" sitekey={recaptchaSiteKey} />
+                      <ReCAPTCHA
+                        ref={recaptchaRef}
+                        size="normal"
+                        sitekey={recaptchaSiteKey}
+                        onChange={(value) => setToken(value || '')}
+                        onExpired={() => setToken('')}
+                      />
                     </>
                   )}
                 </div>

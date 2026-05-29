@@ -63,7 +63,7 @@ const RegisterPage = () => {
     }
 
     const recaptchaToken = recaptchaRef.current?.getValue() || ''
-    if (!recaptchaToken) {
+    if (recaptchaSiteKey && !recaptchaToken) {
       toast.error(t('auth.register.captcha_required'))
       return
     }

@@ -12,7 +12,7 @@ import i18n from '@/libs/localize/localize'
 const ContactForm = (props: { className?: string; token: string }) => {
   const { t } = i18n
   //React states
-  const [token, setToken] = useState<string>('')
+  const token = props.token
   const [name, setName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [phone, setPhone] = useState<any>('')
@@ -133,11 +133,6 @@ const ContactForm = (props: { className?: string; token: string }) => {
       alert(t('pages.contact.form.error'))
     }
   }
-
-  useEffect(() => {
-    const token = props.token
-    setToken(token as string)
-  }, [])
 
   return (
     <div className={claases}>
