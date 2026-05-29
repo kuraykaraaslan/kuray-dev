@@ -1,5 +1,5 @@
 import { DEFAULT_LANGUAGE, getOgLocale } from '@/types/common/I18nTypes'
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 const HOST = SITE_URL
 

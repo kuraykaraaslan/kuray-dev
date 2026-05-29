@@ -13,7 +13,7 @@
 import { NextResponse } from 'next/server'
 import PostService from '@/services/PostService'
 import ProjectService from '@/services/ProjectService'
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 3600

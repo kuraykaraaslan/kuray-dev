@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 

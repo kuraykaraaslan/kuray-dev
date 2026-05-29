@@ -3,7 +3,7 @@ import { prisma } from '@/libs/prisma'
 import { MetadataRoute } from 'next'
 import redisInstance from '@/libs/redis'
 import IndexNowService from '@/services/IndexNowService'
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 export default class PostService {
   private static CACHE_KEY = 'sitemap:blog'

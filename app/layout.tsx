@@ -8,7 +8,7 @@ import ThemeSyncScript from '@/components/common/UI/ThemeSyncScript'
 import type { Metadata, Viewport } from 'next'
 import { cookies } from 'next/headers'
 import type { AppTheme } from '@/types/ui/UITypes'
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],

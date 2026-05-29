@@ -61,6 +61,37 @@ export default class DynamicPageService {
     return { pages, total }
   }
 
+  /** Published page slugs for the sitemap, cached under `sitemap:pages`. */
+  static async getSitemapSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
+    const cacheKey = 'sitemap:pages'
+
+    try {
+      const cached = await redisInstance.get(cacheKey)
+      if (cached) {
+        return (JSON.parse(cached) as { slug: string; updatedAt: string }[]).map((p) => ({
+          slug: p.slug,
+          updatedAt: new Date(p.updatedAt),
+        }))
+      }
+    } catch {
+      // ignore cache read errors and fall through to the DB
+    }
+
+    const pages = await prisma.dynamicPage.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: 'desc' },
+    })
+
+    try {
+      await redisInstance.set(cacheKey, JSON.stringify(pages), 'EX', 60 * 60)
+    } catch {
+      // ignore cache write errors
+    }
+
+    return pages
+  }
+
   static async mergeParams(params: DynamicPageParams): Promise<string> {
     const { dynamicSlugA, dynamicSlugB, dynamicSlugC, dynamicSlugD, dynamicSlugE, dynamicSlugF } = params
     return [dynamicSlugA, dynamicSlugB, dynamicSlugC, dynamicSlugD, dynamicSlugE, dynamicSlugF]

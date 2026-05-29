@@ -1,6 +1,6 @@
 // helpers/SitemapGenerator.ts
 import type { SitemapUrl } from '@/types/common/SitemapTypes'
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 export type ChangeFreq = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 

@@ -1,4 +1,4 @@
-import { SITE_URL } from '@/lib/seo/siteUrl'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 /**
  * IndexNow protocol — instantly notifies Bing/Yandex/Seznam/Naver of URL changes.
