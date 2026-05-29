@@ -104,6 +104,10 @@ export default class MailService {
     port: Number(MailService.MAIL_PORT),
     secure: Number(MailService.MAIL_PORT) === 465,
     auth: { user: MailService.MAIL_USER, pass: MailService.MAIL_PASS },
+    // Bağlanılamayan SMTP sunucusunda sonsuza kadar takılmayı önle
+    connectionTimeout: 10_000, // TCP bağlantısı için max bekleme
+    greetingTimeout: 10_000, // SMTP greeting (220) için max bekleme
+    socketTimeout: 10_000, // veri akışı için max bekleme
   })
 
   // Add job to queue
