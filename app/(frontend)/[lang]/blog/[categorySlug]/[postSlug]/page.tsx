@@ -103,7 +103,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       type: 'article',
       url: canonical,
-      images: [{ url: image, width: 2400, height: 1260, alt: post.title }],
+      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
       locale: getOgLocale(lang),
       siteName: 'Kuray Karaaslan',
       publishedTime: post.createdAt?.toISOString(),

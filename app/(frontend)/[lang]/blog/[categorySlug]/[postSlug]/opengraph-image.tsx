@@ -2,7 +2,7 @@ import PostService from '@/services/PostService'
 import PostCoverService from '@/services/PostService/PostCoverService'
 
 export const alt = 'Blog Post Cover'
-export const size = { width: 2400, height: 1260 }
+export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 async function getPost(postSlug: string) {
