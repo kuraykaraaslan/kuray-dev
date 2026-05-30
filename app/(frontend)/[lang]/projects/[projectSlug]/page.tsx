@@ -18,6 +18,15 @@ const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 const FRONTEND_PROJECT_CACHE_TTL = 60 // Cache for 60 seconds
 const FRONTEND_PROJECT_CACHE_KEY_PREFIX = 'frontend:project:'
 
+/** Plain-text excerpt for meta/OG descriptions — strips HTML tags and collapses whitespace. */
+function toPlainExcerpt(html: string, max = 160): string {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, max)
+}
+
 type Props = {
   params: Promise<{ lang: string; projectSlug: string }>
 }
@@ -53,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const translation = lang !== 'en' ? project.translations?.find((t: ProjectTranslation) => t.lang === lang) : null
   const title = translation?.title ?? project.title
-  const description = translation?.description ?? project.description ?? project.content.substring(0, 160)
+  const description = translation?.description ?? project.description ?? toPlainExcerpt(project.content)
   const image = project.image || `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`
 
   const path = `/projects/${projectSlug}`
@@ -99,7 +108,7 @@ export default async function ProjectPage({ params }: Props) {
     if (!project) notFound()
 
     const url = `${NEXT_PUBLIC_APPLICATION_HOST}/projects/${project.slug}`
-    const description = project.description || project.content.substring(0, 160)
+    const description = project.description || toPlainExcerpt(project.content)
 
     const metadata: Metadata = {
       title: `${project.title} | Kuray Karaaslan`,

@@ -23,6 +23,15 @@ const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 const FRONTEND_CACHE_TTL = 60 // Cache for 60 seconds
 const FRONTEND_CACHE_KEY_PREFIX = 'frontend:blogpost:'
 
+/** Plain-text excerpt for meta/OG descriptions — strips HTML tags and collapses whitespace. */
+function toPlainExcerpt(html: string, max = 160): string {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, max)
+}
+
 type Props = {
   params: Promise<{ lang: string; categorySlug: string; postSlug: string }>
 }
@@ -70,7 +79,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const path = `/blog/${categorySlug}/${postSlug}`
   const image = post.image || `${NEXT_PUBLIC_APPLICATION_HOST}/blog/${categorySlug}/${postSlug}/opengraph-image`
-  const description = post.description || post.content.substring(0, 150)
+  const description = post.description || toPlainExcerpt(post.content)
 
   const availableLangs = ['en', ...(post.translations?.map((t) => t.lang) ?? [])]
   const { canonical, languages } = buildAlternates(lang, path, availableLangs)
@@ -141,10 +150,10 @@ export default async function BlogPost({ params }: Props) {
     // Metadata for JSON-LD
     const metadata: Metadata = {
       title: `${post.title} | Kuray Karaaslan`,
-      description: post.description || post.content.substring(0, 150),
+      description: post.description || toPlainExcerpt(post.content),
       openGraph: {
         title: `${post.title} | Kuray Karaaslan`,
-        description: post.description || post.content.substring(0, 150),
+        description: post.description || toPlainExcerpt(post.content),
         type: 'article',
         url,
         images: [image],
@@ -244,7 +253,7 @@ export default async function BlogPost({ params }: Props) {
           isNewsArticle,
           blogPosting: {
             title: post.title,
-            description: post.description || post.content.substring(0, 150),
+            description: post.description || toPlainExcerpt(post.content),
             url,
             image,
             datePublished: post.createdAt?.toISOString() || new Date().toISOString(),
