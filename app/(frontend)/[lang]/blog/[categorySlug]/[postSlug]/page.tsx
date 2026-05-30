@@ -17,8 +17,9 @@ import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
 import SeriesNav from '@/components/frontend/Features/Blog/SeriesNav'
 import redisInstance from '@/libs/redis'
 import { PostWithData, PostWithDataSchema } from '@/types/content/BlogTypes'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
+const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 const FRONTEND_CACHE_TTL = 60 // Cache for 60 seconds
 const FRONTEND_CACHE_KEY_PREFIX = 'frontend:blogpost:'
 

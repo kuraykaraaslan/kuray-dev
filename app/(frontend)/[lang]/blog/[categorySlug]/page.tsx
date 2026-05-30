@@ -6,8 +6,9 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import MetadataHelper from '@/helpers/MetadataHelper'
 import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
+const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 
 type Props = {
   params: Promise<{ lang: string; categorySlug: string }>

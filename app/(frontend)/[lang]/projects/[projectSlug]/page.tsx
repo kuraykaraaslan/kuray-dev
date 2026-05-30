@@ -11,9 +11,10 @@ import Article from '@/components/frontend/Features/Blog/Article'
 import Feed from '@/components/frontend/Features/Blog/Feed'
 import redisInstance from '@/libs/redis'
 import {ProjectTranslation } from '@/types/content/ProjectTypes'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
+const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 const FRONTEND_PROJECT_CACHE_TTL = 60 // Cache for 60 seconds
 const FRONTEND_PROJECT_CACHE_KEY_PREFIX = 'frontend:project:'
 

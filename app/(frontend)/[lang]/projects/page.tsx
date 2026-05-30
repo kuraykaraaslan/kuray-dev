@@ -5,8 +5,9 @@ import MetadataHelper from '@/helpers/MetadataHelper'
 import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
 import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
 import { getPageMetadata } from '@/libs/localize/getDictionary'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
+const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 
 type Props = {
   params: Promise<{ lang: string }>

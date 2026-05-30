@@ -12,8 +12,9 @@ import OfflineIndicator from '@/components/common/UI/Indicators/OfflineIndicator
 import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
 import { buildAlternates, buildLangUrl, getOgLocale } from '@/helpers/HreflangHelper'
 import { getPageMetadata } from '@/libs/localize/getDictionary'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
+const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 
 type Props = {
   params: Promise<{ lang: string }>
