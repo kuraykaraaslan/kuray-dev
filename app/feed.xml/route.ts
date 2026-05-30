@@ -55,7 +55,7 @@ export async function GET() {
   </channel>
 </rss>`
 
-  // 3. Redis'e yaz
+  // 3. Write to Redis
   await redisInstance.set(CACHE_KEY, xml, 'EX', CACHE_TTL)
 
   return new NextResponse(xml, {
