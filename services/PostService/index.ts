@@ -467,6 +467,7 @@ export default class PostService {
       authorName: string
       createdAt: Date
       updatedAt: Date | null
+      langs: string[]
     }[]
   > {
     const posts = await prisma.post.findMany({
@@ -495,6 +496,11 @@ export default class PostService {
             userProfile: true,
           },
         },
+        translations: {
+          select: {
+            lang: true,
+          },
+        },
       },
     })
 
@@ -508,6 +514,7 @@ export default class PostService {
       authorName: (post.author?.userProfile as { name?: string } | null)?.name || 'Kuray Karaaslan',
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
+      langs: post.translations.map((t) => t.lang),
     }))
   }
 }
