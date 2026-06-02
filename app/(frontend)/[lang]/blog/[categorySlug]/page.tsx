@@ -5,7 +5,7 @@ import PostService from '@/services/PostService'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import MetadataHelper from '@/helpers/MetadataHelper'
-import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
+import { buildAlternates, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import { SITE_URL } from '@/libs/seo/siteUrl'
 
 const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
@@ -31,12 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = category.image || `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`
 
   const availableLangs = ['en', ...(category.translations?.map((t) => t.lang) ?? [])]
-  const { canonical, languages } = buildAlternates(lang, path, availableLangs)
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, path, availableLangs)
+  // Only index this language if the category is actually translated to it.
+  const indexable = indexableLangs.includes(lang)
 
   return {
     title: `${category.title} | Kuray Karaaslan`,
     description,
-    robots: { index: true, follow: true },
+    keywords: category.keywords?.length ? category.keywords : [category.title],
+    robots: robotsFor(indexable),
     authors: [{ name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000' }],
     openGraph: {
       title: `${category.title} | Kuray Karaaslan`,

@@ -103,9 +103,10 @@ const Navbar = ({ menuItems }: { menuItems: MenuItem[] }) => {
           </ul>
         </div>
         <div className="">
-          <ul className="menu menu-horizontal gap-1 hidden lg:flex">
+          {/* Not a list — a single auth control; <ul> with a non-<li> child trips the a11y `list` audit. */}
+          <div className="hidden lg:flex items-center gap-1">
             <NavbarAuthButton />
-          </ul>
+          </div>
         </div>
       </div>
       <ReadingProgressBar />

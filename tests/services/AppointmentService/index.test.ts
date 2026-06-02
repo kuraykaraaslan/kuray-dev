@@ -139,7 +139,7 @@ describe('AppointmentService', () => {
     })
 
     it('allows only one of two concurrent booking attempts (race guard)', async () => {
-      const appointment = makeAppointment()
+      const appointment = makeAppointment({ startTime: new Date('2027-06-01T10:00:00Z') })
       const slot = makeSlot(1)
 
       redisMock.set
@@ -189,7 +189,11 @@ describe('AppointmentService', () => {
     })
 
     it('allows admin override for ownership check', async () => {
-      const appointment = makeAppointment({ email: 'owner@example.com', status: 'BOOKED' })
+      const appointment = makeAppointment({
+        email: 'owner@example.com',
+        status: 'BOOKED',
+        startTime: new Date('2027-06-01T10:00:00Z'),
+      })
 
       redisMock.set.mockResolvedValueOnce('OK')
       redisMock.del.mockResolvedValue(1)

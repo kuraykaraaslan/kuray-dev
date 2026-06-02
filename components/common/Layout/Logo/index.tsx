@@ -1,5 +1,4 @@
 'use client'
-import { useTranslation } from 'react-i18next'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import Link from '@/libs/i18n/Link'
@@ -16,10 +15,12 @@ const Logo = ({
   iconClassName = 'text-2xl w-6',
   textClassName = 'text-lg font-bold',
 }: LogoProps) => {
-  const { t } = useTranslation()
+  // No aria-label: the visible "kuray.dev" text is the accessible name. An
+  // aria-label like "Go to homepage" would not contain the visible text and
+  // trips the label-content-name-mismatch a11y audit.
   return (
-    <Link className={className + ' !flex-row'} href={href} onClick={() => window.scrollTo(0, 0)} aria-label={t('common.go_to_homepage')} dir="ltr">
-      <FontAwesomeIcon icon={faCode} className={iconClassName} />
+    <Link className={className + ' !flex-row'} href={href} onClick={() => window.scrollTo(0, 0)} dir="ltr">
+      <FontAwesomeIcon icon={faCode} className={iconClassName} aria-hidden="true" />
       <span className={textClassName + ' ml-1 select-none'}>kuray.dev</span>
     </Link>
   )

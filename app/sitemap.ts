@@ -94,13 +94,17 @@ async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
   let dynamicPageEntries: MetadataRoute.Sitemap = []
   try {
     const pages = await DynamicPageService.getSitemapSlugs()
-    dynamicPageEntries = pages.map((p) => ({
-      url: `${SITE_URL}/${p.slug}`,
-      lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-      alternates: altLanguages(`/${p.slug}`, ['en', ...p.langs]),
-    }))
+    dynamicPageEntries = pages
+      // guard against empty / malformed slugs that produced junk URLs like
+      // `${SITE_URL}/` or `${SITE_URL}/&` in Search Console
+      .filter((p) => p.slug && /^[a-z0-9][a-z0-9/_-]*$/i.test(p.slug))
+      .map((p) => ({
+        url: `${SITE_URL}/${p.slug}`,
+        lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+        alternates: altLanguages(`/${p.slug}`, ['en', ...p.langs]),
+      }))
   } catch {
     dynamicPageEntries = []
   }

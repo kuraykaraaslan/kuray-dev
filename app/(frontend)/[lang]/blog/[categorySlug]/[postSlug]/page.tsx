@@ -9,11 +9,12 @@ import OtherPosts from '@/components/frontend/Features/Blog/OtherPosts'
 import Newsletter from '@/components/frontend/Features/Newsletter'
 import PostHeader from '@/components/frontend/Features/Blog/PostHeader'
 import LiveViewerCount from '@/components/frontend/UI/LiveViewerCount'
+import PostViewBeacon from '@/components/frontend/Features/Blog/PostViewBeacon'
 import MetadataHelper from '@/helpers/MetadataHelper'
 import ShareButtons from '@/components/frontend/Features/Blog/ShareButtons'
 import TableOfContents from '@/components/frontend/Features/Blog/TableOfContents'
 import Breadcrumb from '@/components/common/Layout/Breadcrumb'
-import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
+import { buildAlternates, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import SeriesNav from '@/components/frontend/Features/Blog/SeriesNav'
 import redisInstance from '@/libs/redis'
 import { PostWithData, PostWithDataSchema } from '@/types/content/BlogTypes'
@@ -82,21 +83,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = post.description || toPlainExcerpt(post.content)
 
   const availableLangs = ['en', ...(post.translations?.map((t) => t.lang) ?? [])]
-  const { canonical, languages } = buildAlternates(lang, path, availableLangs)
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, path, availableLangs)
+  // Only index this language if the post is actually translated to it
+  // (post is guaranteed PUBLISHED here — non-published returns {} above).
+  const indexable = indexableLangs.includes(lang)
 
   return {
     // bare title — layout's "%s | Kuray Karaaslan" template adds the suffix
     title: post.title,
     description,
     keywords: post.keywords?.length ? post.keywords : [post.category.title],
-    robots: {
-      index: post.status === 'PUBLISHED',
-      follow: true,
-      googleBot: {
-        index: post.status === 'PUBLISHED',
-        follow: true,
-      },
-    },
+    robots: robotsFor(indexable),
     authors: [{ name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000' }],
     openGraph: {
       title: `${post.title} | Kuray Karaaslan`,
@@ -140,8 +137,9 @@ export default async function BlogPost({ params }: Props) {
       notFound()
     }
 
-    await PostService.incrementViewCount(post.postId)
-    post.views++
+    // View counting runs client-side via <PostViewBeacon> (see JSX below) — it
+    // tracks real page loads (not bot/prefetch HTML fetches) and keeps this render
+    // free of side effects.
 
     const url = `${NEXT_PUBLIC_APPLICATION_HOST}/blog/${post.category.slug}/${post.slug}`
     const image =
@@ -264,6 +262,7 @@ export default async function BlogPost({ params }: Props) {
             articleSection: post.category.title,
           },
         })}
+        <PostViewBeacon postId={post.postId} />
         <section className="min-h-screen bg-base-100 pt-32" id="blog">
           <div className="container mx-auto px-4 lg:px-8 mb-8 flex-grow flex-col max-w-7xl">
             <Breadcrumb items={breadcrumbs} />

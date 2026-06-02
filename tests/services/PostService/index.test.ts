@@ -796,6 +796,7 @@ describe('PostService.getAllPostSlugs', () => {
         updatedAt,
         category: { slug: 'tech', title: 'Tech' },
         author: { userProfile: { name: 'Author Name' } },
+        translations: [{ lang: 'tr' }],
       },
     ])
 
@@ -812,6 +813,7 @@ describe('PostService.getAllPostSlugs', () => {
       authorName: 'Author Name',
       createdAt,
       updatedAt,
+      langs: ['tr'],
     })
     expect(prismaMock.post.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -831,6 +833,7 @@ describe('PostService.getAllPostSlugs', () => {
         updatedAt: null,
         category: { slug: 'cat', title: 'Cat' },
         author: null,
+        translations: [],
       },
     ])
 
@@ -849,6 +852,7 @@ describe('PostService.getAllPostSlugs', () => {
         updatedAt: null,
         category: null,
         author: { userProfile: { name: 'Author' } },
+        translations: [],
       },
     ])
 

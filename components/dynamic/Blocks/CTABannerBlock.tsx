@@ -17,9 +17,13 @@ function CTABannerBlock(rawProps: Record<string, unknown>) {
   const textColor = (rawProps.textColor as string) || '#282626'
   const btnBg = (rawProps.buttonBgColor as string) || '#282626'
   const btnText = (rawProps.buttonTextColor as string) || '#ffffff'
+  // Banner needs its own (light) background or the dark default text is invisible
+  // on the page's base background — see the color-contrast a11y audit.
+  const backgroundColor = (rawProps.backgroundColor as string) || '#FFC107'
 
   return (
     <BaseBlock {...baseProps}>
+      <div className="rounded-2xl px-6 py-14 md:py-16" style={{ backgroundColor }}>
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <h2
           className="text-4xl md:text-5xl mb-8 leading-tight"
@@ -44,6 +48,7 @@ function CTABannerBlock(rawProps: Record<string, unknown>) {
           </Link>
         )}
       </div>
+      </div>
     </BaseBlock>
   )
 }
@@ -59,6 +64,7 @@ export const CTABannerBlockDefinition: BlockDefinition = {
     ctaLabel: 'Talk to an Expert',
     ctaHref: '/contact',
     textColor: '#282626',
+    backgroundColor: '#FFC107',
     buttonBgColor: '#282626',
     buttonTextColor: '#ffffff',
     blockClass: 'py-20 px-6 md:px-12 lg:px-20',
@@ -71,6 +77,7 @@ export const CTABannerBlockDefinition: BlockDefinition = {
     ctaLabel: { label: 'Button Label', type: 'text' },
     ctaHref: { label: 'Button URL', type: 'url' },
     textColor: { label: 'Text Color', type: 'color' },
+    backgroundColor: { label: 'Banner Background', type: 'color' },
     buttonBgColor: { label: 'Button Background', type: 'color' },
     buttonTextColor: { label: 'Button Text Color', type: 'color' },
     ...BASE_BLOCK_SCHEMA_FIELDS,

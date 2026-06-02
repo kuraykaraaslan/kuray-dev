@@ -9,8 +9,8 @@ import ProjectService from '@/services/ProjectService'
 import ToastContainerClient from '@/components/common/UI/Toast/ToastContainerClient'
 import 'react-toastify/dist/ReactToastify.css'
 import OfflineIndicator from '@/components/common/UI/Indicators/OfflineIndicator'
-import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
-import { buildAlternates, buildLangUrl, getOgLocale } from '@/helpers/HreflangHelper'
+import { INDEXABLE_LANGUAGES } from '@/types/common/I18nTypes'
+import { buildAlternates, buildLangUrl, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import { getPageMetadata } from '@/libs/localize/getDictionary'
 import { SITE_URL } from '@/libs/seo/siteUrl'
 
@@ -38,7 +38,8 @@ const DEFAULT_HOME_KEYWORDS = [
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const { canonical, languages } = buildAlternates(lang, '', [...AVAILABLE_LANGUAGES])
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, '', INDEXABLE_LANGUAGES)
+  const indexable = indexableLangs.includes(lang)
   const dictMeta = await getPageMetadata(lang, 'home')
   const title = dictMeta.title || DEFAULT_HOME_TITLE
   const description = dictMeta.description || DEFAULT_HOME_DESCRIPTION
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { absolute: title },
     description,
     keywords,
-    robots: { index: true, follow: true },
+    robots: robotsFor(indexable),
     authors: [{ name: 'Kuray Karaaslan', url: `${NEXT_PUBLIC_APPLICATION_HOST}` }],
     openGraph: {
       title,

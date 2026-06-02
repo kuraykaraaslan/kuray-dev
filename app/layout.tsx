@@ -6,8 +6,9 @@ import WebVitals from '@/components/frontend/WebVitals'
 import ServiceWorkerRegistrar from '@/components/common/PWA/ServiceWorkerRegistrar'
 import ThemeSyncScript from '@/components/common/UI/ThemeSyncScript'
 import type { Metadata, Viewport } from 'next'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import type { AppTheme } from '@/types/ui/UITypes'
+import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE, getDirection, type AppLanguage } from '@/types/common/I18nTypes'
 import { SITE_URL } from '@/libs/seo/siteUrl'
 
 const inter = Inter({
@@ -119,12 +120,21 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const cookieStore = await cookies()
+  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()])
   const themeCookie = cookieStore.get('theme')?.value as AppTheme | undefined
   const theme: AppTheme = themeCookie === 'light' ? 'light' : 'dark'
 
+  // `x-lang` is set by middleware.ts from the first path segment; the root layout
+  // is the only place that can render <html>, so the locale travels via header.
+  const headerLang = headerStore.get('x-lang')
+  const lang: AppLanguage =
+    headerLang && (AVAILABLE_LANGUAGES as readonly string[]).includes(headerLang)
+      ? (headerLang as AppLanguage)
+      : DEFAULT_LANGUAGE
+  const dir = getDirection(lang)
+
   return (
-    <html lang="en" data-theme={theme} className={`${inter.variable} antialiased scroll-smooth focus:scroll-auto`}>
+    <html lang={lang} dir={dir} data-theme={theme} className={`${inter.variable} antialiased scroll-smooth focus:scroll-auto`}>
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />

@@ -168,6 +168,21 @@ export default class AppointmentService {
     }
 
     const existing = await this.getAppointmentByIdOrThrow(appointmentId)
+
+    // Authorization first: a non-owner must not learn anything about the
+    // appointment's status or timing, so the ownership/admin check precedes
+    // the status and date business-rule guards below.
+    const requesterEmail = options?.requesterEmail?.trim().toLowerCase()
+    const ownerEmail = existing.email.trim().toLowerCase()
+    if (!options?.isAdmin && requesterEmail && requesterEmail !== ownerEmail) {
+      try {
+        await redis.del(lockKey)
+      } catch {
+      }
+      Logger.warn(`Cancellation conflict for ${appointmentId}: forbidden requester ${requesterEmail}`)
+      throw new Error('Forbidden: cannot cancel another user appointment')
+    }
+
     if (existing.status === 'CANCELLED') {
       try {
         await redis.del(lockKey)
@@ -191,17 +206,6 @@ export default class AppointmentService {
       }
       Logger.warn(`Cancellation conflict for ${appointmentId}: time boundary reached`)
       throw new Error('Cannot cancel past or ongoing appointment')
-    }
-
-    const requesterEmail = options?.requesterEmail?.trim().toLowerCase()
-    const ownerEmail = existing.email.trim().toLowerCase()
-    if (!options?.isAdmin && requesterEmail && requesterEmail !== ownerEmail) {
-      try {
-        await redis.del(lockKey)
-      } catch {
-      }
-      Logger.warn(`Cancellation conflict for ${appointmentId}: forbidden requester ${requesterEmail}`)
-      throw new Error('Forbidden: cannot cancel another user appointment')
     }
 
     const { date, time } = separateDateTimeWithTimeZone(existing.startTime)

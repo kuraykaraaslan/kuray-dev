@@ -5,6 +5,7 @@ import { prisma } from '@/libs/prisma'
 jest.mock('@/libs/prisma', () => ({
   prisma: {
     post: { count: jest.fn(), aggregate: jest.fn() },
+    project: { count: jest.fn() },
     category: { count: jest.fn() },
     user: { count: jest.fn() },
     comment: { count: jest.fn() },
@@ -41,6 +42,7 @@ describe('StatService', () => {
       redisMock.set.mockResolvedValue('OK')
       prismaMock.$transaction.mockResolvedValueOnce([
         5,        // totalPosts
+        3,        // totalProjects
         2,        // totalCategories
         20,       // totalUsers
         { _sum: { views: 500 } },  // totalViewsAggregate
@@ -49,7 +51,9 @@ describe('StatService', () => {
 
       const result = await StatService.getAllStats('all-time')
       expect(result.totalPosts).toBe(5)
+      expect(result.totalProjects).toBe(3)
       expect(result.totalViews).toBe(500)
+      expect(result.totalComments).toBe(10)
       expect(result.totalChatSessions).toBe(5)
       expect(redisMock.set).toHaveBeenCalledWith(
         'stats:global:all-time',
@@ -63,7 +67,7 @@ describe('StatService', () => {
       redisMock.get.mockResolvedValueOnce(null)
       redisMock.set.mockResolvedValue('OK')
       prismaMock.$transaction.mockResolvedValueOnce([
-        0, 0, 0, { _sum: { views: null } }, 0,
+        0, 0, 0, 0, { _sum: { views: null } }, 0,
       ])
 
       const result = await StatService.getAllStats('all-time')
@@ -73,13 +77,18 @@ describe('StatService', () => {
     it('applies daily frequency filter', async () => {
       redisMock.get.mockResolvedValueOnce(null)
       redisMock.set.mockResolvedValue('OK')
-      prismaMock.$transaction.mockResolvedValueOnce([1, 1, 1, { _sum: { views: 10 } }, 1])
+      prismaMock.$transaction.mockResolvedValueOnce([1, 1, 1, 1, { _sum: { views: 10 } }, 1])
 
       await StatService.getAllStats('daily')
 
-      const [[queries]] = prismaMock.$transaction.mock.calls
-      // First query should have a createdAt.gte filter
-      expect(queries).toBeDefined()
+      // Each count/aggregate should be invoked with a createdAt.gte filter ~1 day back.
+      const whereArg = prismaMock.post.count.mock.calls[0][0]
+      expect(whereArg.where.createdAt.gte).toBeInstanceOf(Date)
+      const now = Date.now()
+      const gte = whereArg.where.createdAt.gte.getTime()
+      // gte should be roughly 1 day in the past (allow a generous window for clock skew).
+      expect(now - gte).toBeGreaterThan(20 * 60 * 60 * 1000) // > 20h
+      expect(now - gte).toBeLessThan(28 * 60 * 60 * 1000)    // < 28h
       expect(redisMock.set).toHaveBeenCalledWith(
         'stats:global:daily',
         expect.any(String),
@@ -113,8 +122,8 @@ describe('StatService – cache key isolation per frequency', () => {
     redisMock.get.mockResolvedValueOnce(null).mockResolvedValueOnce(null)
     redisMock.set.mockResolvedValueOnce('OK').mockResolvedValueOnce('OK')
     prismaMock.$transaction
-      .mockResolvedValueOnce([0, 0, 0, { _sum: { views: 0 } }, 0])
-      .mockResolvedValueOnce([0, 0, 0, { _sum: { views: 0 } }, 0])
+      .mockResolvedValueOnce([0, 0, 0, 0, { _sum: { views: 0 } }, 0])
+      .mockResolvedValueOnce([0, 0, 0, 0, { _sum: { views: 0 } }, 0])
 
     await StatService.getAllStats('daily')
     await StatService.getAllStats('weekly')
@@ -131,7 +140,7 @@ describe('StatService – cache key isolation per frequency', () => {
     // First call: cache miss → queries DB and populates cache
     redisMock.get.mockResolvedValueOnce(null)
     redisMock.set.mockResolvedValueOnce('OK')
-    prismaMock.$transaction.mockResolvedValueOnce([7, 2, 15, { _sum: { views: 200 } }, 5])
+    prismaMock.$transaction.mockResolvedValueOnce([7, 3, 2, 15, { _sum: { views: 200 } }, 5])
     await StatService.getAllStats('monthly')
 
     // Second call: cache hit → should not touch DB
@@ -153,10 +162,11 @@ describe('StatService – zero-count scenarios', () => {
   it('returns zeros for all counts when DB is empty', async () => {
     redisMock.get.mockResolvedValueOnce(null)
     redisMock.set.mockResolvedValue('OK')
-    prismaMock.$transaction.mockResolvedValueOnce([0, 0, 0, { _sum: { views: null } }, 0])
+    prismaMock.$transaction.mockResolvedValueOnce([0, 0, 0, 0, { _sum: { views: null } }, 0])
 
     const result = await StatService.getAllStats('all-time')
     expect(result.totalPosts).toBe(0)
+    expect(result.totalProjects).toBe(0)
     expect(result.totalCategories).toBe(0)
     expect(result.totalUsers).toBe(0)
     expect(result.totalViews).toBe(0)
@@ -166,7 +176,7 @@ describe('StatService – zero-count scenarios', () => {
   it('returns zero totalViews when aggregate _sum.views is null (no posts have views)', async () => {
     redisMock.get.mockResolvedValueOnce(null)
     redisMock.set.mockResolvedValue('OK')
-    prismaMock.$transaction.mockResolvedValueOnce([1, 1, 1, { _sum: { views: null } }, 0])
+    prismaMock.$transaction.mockResolvedValueOnce([1, 1, 1, 1, { _sum: { views: null } }, 0])
 
     const result = await StatService.getAllStats('all-time')
     expect(result.totalViews).toBe(0)
@@ -184,7 +194,7 @@ describe('StatService – frequency filter branch coverage', () => {
     async (freq) => {
       redisMock.get.mockResolvedValueOnce(null)
       redisMock.set.mockResolvedValue('OK')
-      prismaMock.$transaction.mockResolvedValueOnce([1, 1, 1, { _sum: { views: 10 } }, 1])
+      prismaMock.$transaction.mockResolvedValueOnce([1, 1, 1, 1, { _sum: { views: 10 } }, 1])
 
       await StatService.getAllStats(freq)
 
@@ -200,7 +210,7 @@ describe('StatService – frequency filter branch coverage', () => {
   it('falls through to no date filter for an unknown frequency string', async () => {
     redisMock.get.mockResolvedValueOnce(null)
     redisMock.set.mockResolvedValue('OK')
-    prismaMock.$transaction.mockResolvedValueOnce([3, 2, 10, { _sum: { views: 50 } }, 4])
+    prismaMock.$transaction.mockResolvedValueOnce([3, 1, 2, 10, { _sum: { views: 50 } }, 4])
 
     const result = await StatService.getAllStats('all-time')
     expect(result.totalPosts).toBe(3)

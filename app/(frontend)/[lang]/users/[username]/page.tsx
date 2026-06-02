@@ -6,8 +6,8 @@ import UserService from '@/services/UserService'
 import ToastContainerClient from '@/components/common/UI/Toast/ToastContainerClient'
 import 'react-toastify/dist/ReactToastify.css'
 import Feed from '@/components/frontend/Features/Blog/Feed'
-import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
-import { buildAlternates, buildLangUrl, getOgLocale } from '@/helpers/HreflangHelper'
+import { INDEXABLE_LANGUAGES } from '@/types/common/I18nTypes'
+import { buildAlternates, buildLangUrl, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import { getDictionary } from '@/libs/localize/getDictionary'
 import { SITE_URL } from '@/libs/seo/siteUrl'
 
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const slug = getProfileSlug(user)
   const path = `/users/${slug}`
-  const { canonical, languages } = buildAlternates(lang, path, [...AVAILABLE_LANGUAGES])
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, path, INDEXABLE_LANGUAGES)
   const dict = await getDictionary(lang)
   const postsBy = getDictString(dict, ['frontend', 'feed', 'posts_by'], 'Posts by')
   const displayName = resolveDisplayName(user)
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     robots: hideFromIndex
       ? { index: false, follow: false }
-      : { index: true, follow: true },
+      : robotsFor(indexableLangs.includes(lang)),
     authors: [{ name: displayName, url: canonical }],
     openGraph: {
       title: `${displayName} | Kuray Karaaslan`,
@@ -142,7 +142,14 @@ export default async function UserProfilePage({ params }: Props) {
 
     return (
       <>
-        {MetadataHelper.generateJsonLdScripts(jsonLdMeta)}
+        {MetadataHelper.generateJsonLdScripts(jsonLdMeta, {
+          personProfile: {
+            name: displayName,
+            url,
+            image: user.userProfile?.profilePicture || undefined,
+            description,
+          },
+        })}
         <Feed author={feedAuthor} />
         <Newsletter />
         <ToastContainerClient />

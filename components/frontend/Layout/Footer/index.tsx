@@ -59,7 +59,7 @@ const Footer = () => {
 
         {/* Quick links column */}
         <nav aria-label={t('footer.quick_links')}>
-          <h3 className="font-semibold text-xs uppercase tracking-widest text-base-content/40 mb-4">
+          <h3 className="font-semibold text-xs uppercase tracking-widest text-base-content/70 mb-4">
             {t('footer.quick_links')}
           </h3>
           <ul className="flex flex-col gap-2">
@@ -78,7 +78,7 @@ const Footer = () => {
 
         {/* Connect column */}
         <div>
-          <h3 className="font-semibold text-xs uppercase tracking-widest text-base-content/40 mb-4">
+          <h3 className="font-semibold text-xs uppercase tracking-widest text-base-content/70 mb-4">
             {t('footer.connect')}
           </h3>
           <ul className="flex flex-col gap-3">
@@ -96,7 +96,6 @@ const Footer = () => {
                 href="https://github.com/kuraykaraaslan"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={t('footer.github_profile')}
                 className="flex items-center gap-2 text-sm text-base-content/70 hover:text-base-content transition-colors"
               >
                 <FontAwesomeIcon icon={faGithub} className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -109,7 +108,6 @@ const Footer = () => {
                 href="https://www.linkedin.com/in/kuraykaraaslan/"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={t('footer.linkedin_profile')}
                 className="flex items-center gap-2 text-sm text-base-content/70 hover:text-base-content transition-colors"
               >
                 <FontAwesomeIcon icon={faLinkedin} className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -120,9 +118,9 @@ const Footer = () => {
             <li>
               <Link
                 href="/#contact"
-                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-base-content hover:underline transition-colors"
               >
-                <FontAwesomeIcon icon={faBriefcase} className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <FontAwesomeIcon icon={faBriefcase} className="w-4 h-4 shrink-0 text-primary" aria-hidden="true" />
                 {t('footer.available_for_freelance')}
               </Link>
             </li>
@@ -133,11 +131,11 @@ const Footer = () => {
       {/* ── Bottom bar ────────────────────────────────────────── */}
       <div className="border-t border-base-content/10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-3 flex-wrap">
-          <span className="text-xs text-base-content/40 select-all">
+          <span className="text-xs text-base-content/70 select-all">
             © {new Date().getFullYear()} Kuray Karaaslan.&nbsp;{t('shared.footer.all_rights_reserved')}
           </span>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-base-content/30">{t('footer.built_with')}</span>
+            <span className="text-xs text-base-content/60">{t('footer.built_with')}</span>
             <SystemStatusButton />
             <GeoHeatmapButton />
           </div>

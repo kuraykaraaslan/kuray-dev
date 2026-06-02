@@ -110,6 +110,32 @@ export default class MetadataHelper {
     }
   }
 
+  // Generic ProfilePage/Person for an ARBITRARY author's /users/[username] page.
+  // (getProfilePageJsonLd above is hardcoded to the site owner's personal brand and
+  //  must not be reused for other authors.)
+  public static getPersonProfilePageJsonLd(options: {
+    name: string
+    url: string
+    image?: string
+    description?: string
+    sameAs?: string[]
+  }) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      dateModified: new Date().toISOString(),
+      mainEntity: {
+        '@type': 'Person',
+        '@id': `${options.url}#person`,
+        name: options.name,
+        url: options.url,
+        ...(options.image ? { image: options.image } : {}),
+        ...(options.description ? { description: options.description } : {}),
+        ...(options.sameAs?.length ? { sameAs: options.sameAs } : {}),
+      },
+    }
+  }
+
   // ItemList schema for the homepage portfolio section (Google project carousel)
   public static getPortfolioItemListJsonLd(items: { name: string; url: string; image?: string }[]) {
     if (!items?.length) return null
@@ -490,6 +516,13 @@ export default class MetadataHelper {
       }
       includeWebSite?: boolean
       includeProfilePage?: boolean
+      personProfile?: {
+        name: string
+        url: string
+        image?: string
+        description?: string
+        sameAs?: string[]
+      }
       isNewsArticle?: boolean
       collectionPage?: {
         url: string
@@ -536,6 +569,9 @@ export default class MetadataHelper {
     const orgJsonLd = MetadataHelper.getOrganizationJsonLd()
     const profilePageJsonLd = options?.includeProfilePage
       ? MetadataHelper.getProfilePageJsonLd()
+      : null
+    const personProfileJsonLd = options?.personProfile
+      ? MetadataHelper.getPersonProfilePageJsonLd(options.personProfile)
       : null
     const articleJsonLd =
       options?.articleData?.commentCount !== undefined
@@ -584,6 +620,12 @@ export default class MetadataHelper {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageJsonLd) }}
+          />
+        )}
+        {personProfileJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(personProfileJsonLd) }}
           />
         )}
         {softwareAppJsonLd && (

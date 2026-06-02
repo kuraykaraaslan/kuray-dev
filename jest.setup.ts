@@ -13,6 +13,15 @@ process.env.OTP_RATE_LIMIT_SECONDS = '60'
 process.env.BCRYPT_SALT_ROUNDS = '1'
 process.env.TOTP_ISSUER = 'TestApp'
 
+// i18n / SEO config — AVAILABLE_LANGUAGES & INDEXABLE_LANGUAGES are derived from
+// these at module load. Jest does not load .env, so set them here (mirroring .env)
+// or the i18n/hreflang/sitemap tests collapse to a single 'en' language. Respect
+// any value already exported by the shell/CI.
+process.env.NEXT_PUBLIC_I18N_LANGUAGES =
+  process.env.NEXT_PUBLIC_I18N_LANGUAGES || 'en,tr,de,el,et,mt,nl,fr,it,es,fi'
+process.env.NEXT_PUBLIC_INDEXABLE_LANGUAGES =
+  process.env.NEXT_PUBLIC_INDEXABLE_LANGUAGES || 'en,tr'
+
 // Prevent real Redis/BullMQ resources from keeping Jest alive.
 jest.mock('ioredis', () => {
   class MockRedis {
@@ -80,6 +89,15 @@ jest.mock('@/libs/redis', () => ({
     expire: jest.fn(),
     rpush: jest.fn(),
   },
+}))
+
+// @xenova/transformers ships ESM that ts-jest can't transpile; no test needs real
+// embeddings, so stub the pipeline. Fixes suites that transitively import
+// LocalEmbedService / ChatbotRAGService (e.g. CronService).
+jest.mock('@xenova/transformers', () => ({
+  __esModule: true,
+  pipeline: jest.fn(async () => async () => ({ data: new Float32Array(384) })),
+  env: {},
 }))
 
 jest.mock('@/libs/logger', () => ({

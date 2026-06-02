@@ -152,14 +152,20 @@ async function handleI18n(request: NextRequest) {
       url.pathname = rest ? `/${rest}` : '/'
       return NextResponse.redirect(url)
     }
-    
-    return NextResponse.next()
+
+    // Forward the active locale so the root layout can render <html lang dir>
+    // (only the root layout may render <html>, but the locale lives in [lang]).
+    const headers = new Headers(request.headers)
+    headers.set('x-lang', lang)
+    return NextResponse.next({ request: { headers } })
   }
 
-  // no prefix → rewrite internally to /en/...
+  // no prefix → rewrite internally to /en/... and tag the request as English
   const url = request.nextUrl.clone()
   url.pathname = `/${DEFAULT_LANGUAGE}${pathname}`
-  return NextResponse.rewrite(url)
+  const headers = new Headers(request.headers)
+  headers.set('x-lang', DEFAULT_LANGUAGE)
+  return NextResponse.rewrite(url, { request: { headers } })
 }
 
 export const config = {

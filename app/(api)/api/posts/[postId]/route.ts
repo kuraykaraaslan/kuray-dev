@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import PostService from '@/services/PostService'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 import KnowledgeGraphService from '@/services/KnowledgeGraphService'
@@ -54,6 +55,10 @@ export async function DELETE(
 
     await PostService.deletePost(postId)
 
+    // Invalidate the Next route cache for blog post pages (no-op while they render
+    // dynamically; forward-compatible if they're ever made cacheable).
+    revalidatePath('/[lang]/blog/[categorySlug]/[postSlug]', 'page')
+
     if (post.status === 'PUBLISHED') {
       ActivityPubService.notifyFollowersOfPostDelete(post).catch((err) => {
         Logger.error(`[ActivityPub] Failed to notify followers of post deletion ${postId}: ${String(err)}`)
@@ -102,6 +107,10 @@ export async function PUT(
     }
 
     const post = await PostService.updatePost(parsedData.data)
+
+    // Invalidate the Next route cache for blog post pages (forward-compatible if
+    // these pages are ever made cacheable).
+    revalidatePath('/[lang]/blog/[categorySlug]/[postSlug]', 'page')
 
     await KnowledgeGraphService.queueUpdatePost(post.postId)
 

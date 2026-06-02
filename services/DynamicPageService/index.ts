@@ -81,7 +81,8 @@ export default class DynamicPageService {
     }
 
     const pages = await prisma.dynamicPage.findMany({
-      where: { status: 'PUBLISHED' },
+      // exclude empty slugs — they would emit a duplicate of the home URL
+      where: { status: 'PUBLISHED', slug: { not: '' } },
       select: {
         slug: true,
         updatedAt: true,

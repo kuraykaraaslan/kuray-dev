@@ -20,7 +20,16 @@ function ImageWithFallback({ src, alt, className }: { src: string; alt: string; 
       </div>
     )
   }
-  return <img src={src} alt={alt} className={className} onError={() => setDidError(true)} />
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      className={className}
+      onError={() => setDidError(true)}
+    />
+  )
 }
 
 function AboutHeroBlock(rawProps: Record<string, unknown>) {

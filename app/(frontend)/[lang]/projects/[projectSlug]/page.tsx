@@ -6,7 +6,7 @@ import ProjectService from '@/services/ProjectService'
 import ProjectHeader from '@/components/frontend/Features/Projects/ProjectHeader'
 import MetadataHelper from '@/helpers/MetadataHelper'
 import Breadcrumb from '@/components/common/Layout/Breadcrumb'
-import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
+import { buildAlternates, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import Article from '@/components/frontend/Features/Blog/Article'
 import Feed from '@/components/frontend/Features/Blog/Feed'
 import redisInstance from '@/libs/redis'
@@ -67,14 +67,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const path = `/projects/${projectSlug}`
   const availableLangs = ['en', ...(project.translations?.map((t: ProjectTranslation) => t.lang) ?? [])]
-  const { canonical, languages } = buildAlternates(lang, path, availableLangs)
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, path, availableLangs)
+  // Only index this language if the project is actually translated to it.
+  const indexable = indexableLangs.includes(lang)
 
   return {
     // bare title — layout's "%s | Kuray Karaaslan" template adds the suffix
     title,
     description,
     keywords: project.technologies,
-    robots: { index: true, follow: true },
+    robots: robotsFor(indexable),
     authors: [{ name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000' }],
     openGraph: {
       title: `${title} | Kuray Karaaslan`,

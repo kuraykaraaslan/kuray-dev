@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import Newsletter from '@/components/frontend/Features/Newsletter'
 import ProjectsFeed from '@/components/frontend/Features/Projects/Feed'
+import ProjectService from '@/services/ProjectService'
 import MetadataHelper from '@/helpers/MetadataHelper'
-import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
-import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
+import { INDEXABLE_LANGUAGES } from '@/types/common/I18nTypes'
+import { buildAlternates, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import { getPageMetadata } from '@/libs/localize/getDictionary'
 import { SITE_URL } from '@/libs/seo/siteUrl'
 
@@ -15,7 +16,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const { canonical, languages } = buildAlternates(lang, '/projects', [...AVAILABLE_LANGUAGES])
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, '/projects', INDEXABLE_LANGUAGES)
+  const indexable = indexableLangs.includes(lang)
   const { title, description, keywords } = await getPageMetadata(lang, 'projects')
 
   return {
@@ -23,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { absolute: title },
     description,
     keywords,
-    robots: { index: true, follow: true },
+    robots: robotsFor(indexable),
     authors: [{ name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000' }],
     openGraph: {
       title,
@@ -75,9 +77,35 @@ export default async function ProjectsPage({ params }: Props) {
     { name: 'Projects', url: canonical },
   ]
 
+  // ItemList (project carousel) + CollectionPage so the listing earns rich results
+  // instead of breadcrumbs only.
+  let portfolioItems: { name: string; url: string; image?: string }[] = []
+  try {
+    const projects = await ProjectService.getAllProjectSlugs()
+    portfolioItems = projects.slice(0, 20).map((p: any) => ({
+      name: p.title,
+      url: `${NEXT_PUBLIC_APPLICATION_HOST}/projects/${p.slug}`,
+      image: p.image || undefined,
+    }))
+  } catch {
+    portfolioItems = []
+  }
+
   return (
     <>
-      {MetadataHelper.generateJsonLdScripts(jsonLdMetadata, { breadcrumbs })}
+      {MetadataHelper.generateJsonLdScripts(jsonLdMetadata, {
+        breadcrumbs,
+        portfolioItems,
+        collectionPage:
+          portfolioItems.length > 0
+            ? {
+                url: canonical,
+                name: title,
+                description,
+                posts: portfolioItems.map((p) => ({ title: p.name, url: p.url })),
+              }
+            : undefined,
+      })}
       <ProjectsFeed />
       <Newsletter backgroundColor="bg-base-200" />
     </>

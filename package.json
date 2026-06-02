@@ -10,6 +10,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:seo": "jest tests/helpers/HreflangHelper.test.ts tests/helpers/HreflangHelper.seo.test.ts tests/helpers/MetadataHelper.test.ts tests/app/sitemap.test.ts tests/app/robots.test.ts",
+    "lhci": "CHROME_PATH=\"${CHROME_PATH:-$(ls -d $HOME/.cache/puppeteer/chrome/linux-*/chrome-linux64/chrome 2>/dev/null | sort -V | tail -1)}\" lhci autorun --config=lighthouserc.cjs",
+    "audit:seo": "tsx scripts/seo-audit.ts",
+    "audit:full": "next build && (next start -p 3000 & SERVER=$!; sleep 6; AUDIT_BASE_URL=http://localhost:3000 tsx scripts/seo-audit.ts; CODE=$?; kill $SERVER; exit $CODE)",
     "migrate": "npx prisma migrate dev -n \"init\"",
     "generate": "npx prisma generate",
     "postinstall": "npx prisma generate",
@@ -93,6 +97,7 @@
     "zustand": "5.0.9"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@next/bundle-analyzer": "16.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/bcrypt": "^5.0.2",

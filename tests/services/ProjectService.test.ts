@@ -340,18 +340,18 @@ describe('ProjectService.generateSiteMap', () => {
 describe('ProjectService.getAllProjectSlugs', () => {
   it('returns title and slug pairs for published projects', async () => {
     ;(prismaMock.project.findMany as jest.Mock).mockResolvedValue([
-      { title: 'My Project', slug: 'my-project' },
-      { title: 'Another Project', slug: 'another-project' },
+      { title: 'My Project', slug: 'my-project', translations: [{ lang: 'tr' }] },
+      { title: 'Another Project', slug: 'another-project', translations: [] },
     ])
 
     const result = await ProjectService.getAllProjectSlugs()
 
     expect(result).toHaveLength(2)
-    expect(result[0]).toEqual({ title: 'My Project', slug: 'my-project' })
+    expect(result[0]).toEqual({ title: 'My Project', slug: 'my-project', langs: ['tr'] })
     expect(prismaMock.project.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ status: 'PUBLISHED', deletedAt: null }),
-        select: { title: true, slug: true },
+        select: { title: true, slug: true, translations: { select: { lang: true } } },
       }),
     )
   })

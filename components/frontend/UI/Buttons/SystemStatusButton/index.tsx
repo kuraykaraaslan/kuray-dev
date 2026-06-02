@@ -13,11 +13,12 @@ export default function SystemStatusButton() {
     <>
       <button onClick={modal.openModal}
         className="flex items-center gap-1 text-sm hover:text-primary transition-colors"
-        aria-label={i18n.t('shared.status.open_status')}
+        aria-label={i18n.t('shared.status.title')}
       >
         <FontAwesomeIcon
           icon={faServer}
            className="text-base"
+           aria-hidden="true"
         />
         <span className="text-sm hidden md:inline">{i18n.t('shared.status.title')}</span>
       </button>

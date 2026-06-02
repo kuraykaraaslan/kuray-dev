@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { Project } from '@/generated/prisma'
 import ProjectService from '@/services/ProjectService'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
@@ -66,6 +67,9 @@ export async function POST(request: NextRequest) {
 
     const project = (await ProjectService.createProject(parsedData.data)) as Project
 
+    // Invalidate the Next route cache for project pages (forward-compatible).
+    revalidatePath('/[lang]/projects/[projectSlug]', 'page')
+
     return NextResponse.json({ project })
   } catch (error: any) {
     console.error(error.message)
@@ -96,6 +100,9 @@ export async function PUT(request: NextRequest) {
     }
 
     const project = await ProjectService.updateProject(parsedData.data as Project)
+
+    // Invalidate the Next route cache for project pages (forward-compatible).
+    revalidatePath('/[lang]/projects/[projectSlug]', 'page')
 
     return NextResponse.json({ project })
   } catch (error: any) {

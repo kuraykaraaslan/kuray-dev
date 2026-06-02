@@ -11,8 +11,8 @@ export default function KnowledgeGraph2DButton() {
 
   return (
     <div className="">
-      <button onClick={openModal} className="">
-        <FontAwesomeIcon icon={faProjectDiagram} className="me-2 text-lg" />
+      <button onClick={openModal} className="" aria-label={t('frontend.knowledge_graph.title_3d')}>
+        <FontAwesomeIcon icon={faProjectDiagram} className="me-2 text-lg" aria-hidden="true" />
       </button>
 
       <HeadlessModal

@@ -130,10 +130,18 @@ const BASE_STREAM_ARGS = {
   model:         'gpt-4o',
 }
 
-/** Build a mock AI provider that emits the given chunks via streamText. */
+/**
+ * Build a mock AI provider that emits the given chunks. The service consumes
+ * the prompt-message array via streamMessages(), so that is the generator the
+ * chunks must come from; streamText() is mocked too for parity with the real
+ * provider interface (used by the RAG compression path via generateText()).
+ */
 function makeAIProvider(chunks: string[] = ['Hello', ' world']) {
   return {
     streamText: jest.fn().mockImplementation(async function* () {
+      for (const chunk of chunks) yield chunk
+    }),
+    streamMessages: jest.fn().mockImplementation(async function* () {
       for (const chunk of chunks) yield chunk
     }),
     generateText: jest.fn().mockResolvedValue('summary'),
@@ -288,6 +296,10 @@ describe('ChatbotService.chatStream()', () => {
   it('yields an error event and stops when the AI streamText throws', async () => {
     setupRAGMocks()
     const provider = {
+      streamMessages: jest.fn().mockImplementation(async function* () {
+        yield 'partial'
+        throw new Error('AI network error')
+      }),
       streamText: jest.fn().mockImplementation(async function* () {
         yield 'partial'
         throw new Error('AI network error')

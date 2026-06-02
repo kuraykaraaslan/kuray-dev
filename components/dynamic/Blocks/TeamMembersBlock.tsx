@@ -67,7 +67,13 @@ function TeamMembersBlock(rawProps: Record<string, unknown>) {
             >
               {member.image && (
                 <div className="relative w-full h-64">
-                  <Image src={member.image} alt={member.name} fill className="object-cover" />
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
+                    className="object-cover"
+                  />
                 </div>
               )}
               <div className="p-6">

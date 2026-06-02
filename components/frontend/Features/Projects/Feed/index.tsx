@@ -105,7 +105,7 @@ export default function ProjectsFeed() {
         )}
 
         {!loading && !hasMore && visible.length > 0 && (
-          <div className="flex justify-center mt-10 mb-6 text-base-content/40 text-sm">
+          <div className="flex justify-center mt-10 mb-6 text-base-content/70 text-sm">
             {t('pages.projects.all_loaded', { filter: filter ? `${filter} ` : '' })}
           </div>
         )}

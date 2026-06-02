@@ -98,11 +98,18 @@ const FeedCardImage = (props: FeedCardProps) => {
           <span className="text-primary ml-2 hidden xl:flex">{props.views} views</span>
         </div>
         <div className="flex items-center gap-1">
-          <Link href={'/blog/' + props.category.slug + '/' + props.slug} className="text-primary">
+          <Link
+            href={'/blog/' + props.category.slug + '/' + props.slug}
+            className="text-primary"
+          >
             Read More
+            {/* sr-only title makes the link's text content descriptive for the
+                SEO link-text audit (which reads text content, not aria-label). */}
+            <span className="sr-only">: {props.title}</span>
             <FontAwesomeIcon
               icon={faCaretRight}
               className="text-primary mt-1"
+              aria-hidden="true"
               style={{ height: '1rem', width: '1rem' }}
             />
           </Link>

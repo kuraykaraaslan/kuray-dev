@@ -4,6 +4,9 @@ import type { BlockData } from '@/components/dynamic/types'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { DynamicPageParams } from '@/dtos/DynamicPageDTO'
+import MetadataHelper from '@/helpers/MetadataHelper'
+import { buildAlternates, buildLangUrl, robotsFor, getOgLocale } from '@/helpers/HreflangHelper'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 interface Props {
     params: Promise<DynamicPageParams>
@@ -23,20 +26,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const page = DynamicPageService.applyTranslation(rawPage, lang)
-
-    const host = process.env.NEXT_PUBLIC_APPLICATION_HOST
     const meta = (page.metadata as Record<string, unknown> | null) || {}
+
+    // A lang-prefixed dynamic page is indexable only if it actually has a
+    // translation for that language; otherwise it serves the English fallback.
+    const path = `/${page.slug}`
+    const contentLangs = ['en', ...(rawPage.translations?.map((t) => t.lang) ?? [])]
+    const { canonical, languages, indexableLangs } = buildAlternates(lang, path, contentLangs)
+    const indexable = indexableLangs.includes(lang)
 
     return {
         // bare title — layout template "%s | Kuray Karaaslan" adds the suffix
         title: page.title,
         description: page.description,
         keywords: page.keywords,
-        alternates: { canonical: `${host}/${page.slug}` },
+        authors: [{ name: 'Kuray Karaaslan', url: SITE_URL }],
+        alternates: { canonical, languages },
+        robots: robotsFor(indexable),
         openGraph: {
             title: (meta.ogTitle as string) || `${page.title} | Kuray Karaaslan`,
             description: (meta.ogDescription as string) || page.description || '',
-            url: `${host}/${page.slug}`,
+            url: canonical,
             images: [
                 {
                     url: (meta.ogImage as string) || '/assets/img/og.png',
@@ -44,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                     height: 630,
                 },
             ],
-            locale: 'en_US',
+            locale: getOgLocale(lang),
             siteName: 'Kuray Karaaslan',
         },
         twitter: {
@@ -72,8 +82,28 @@ export async function Page({ params }: Props) {
     const page = DynamicPageService.applyTranslation(rawPage, lang)
     const sections = Array.isArray(page.sections) ? (page.sections as unknown as BlockData[]) : []
 
+    // Structured data: WebSite + Organization + BreadcrumbList. Dynamic pages
+    // previously emitted no JSON-LD at all.
+    const url = buildLangUrl(lang, `/${page.slug}`)
+    const meta = (page.metadata as Record<string, unknown> | null) || {}
+    const jsonLdMeta: Metadata = {
+        title: page.title,
+        description: page.description,
+        openGraph: {
+            title: page.title,
+            description: page.description || '',
+            url,
+            images: [(meta.ogImage as string) || `${SITE_URL}/assets/img/og.png`],
+        },
+    }
+    const breadcrumbs = [
+        { name: 'Home', url: buildLangUrl(lang, '') },
+        { name: page.title, url },
+    ]
+
     return (
         <main className="min-h-screen bg-base-100">
+            {MetadataHelper.generateJsonLdScripts(jsonLdMeta, { breadcrumbs })}
             <DynamicPageRenderer sections={sections} />
         </main>
     )

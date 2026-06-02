@@ -39,7 +39,7 @@ export default function CookieConsentBanner({ privacyPolicyHref = '/privacy-poli
               {t('cookieConsent.message')}{' '}
               <Link
                 href={privacyPolicyHref}
-                className="text-primary underline underline-offset-2 hover:text-primary-focus transition-colors"
+                className="text-base-content font-medium underline underline-offset-2 hover:text-primary transition-colors"
               >
                 {t('cookieConsent.privacy_policy')}
               </Link>

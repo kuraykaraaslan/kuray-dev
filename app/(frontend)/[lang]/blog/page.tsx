@@ -4,8 +4,8 @@ import CategoryBullets from '@/components/frontend/Features/CategoryBullets'
 import type { Metadata } from 'next'
 import MetadataHelper from '@/helpers/MetadataHelper'
 import PostService from '@/services/PostService'
-import { AVAILABLE_LANGUAGES } from '@/types/common/I18nTypes'
-import { buildAlternates, getOgLocale } from '@/helpers/HreflangHelper'
+import { INDEXABLE_LANGUAGES } from '@/types/common/I18nTypes'
+import { buildAlternates, getOgLocale, robotsFor } from '@/helpers/HreflangHelper'
 import { getPageMetadata } from '@/libs/localize/getDictionary'
 import { SITE_URL } from '@/libs/seo/siteUrl'
 
@@ -17,7 +17,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
-  const { canonical, languages } = buildAlternates(lang, '/blog', [...AVAILABLE_LANGUAGES])
+  const { canonical, languages, indexableLangs } = buildAlternates(lang, '/blog', INDEXABLE_LANGUAGES)
+  const indexable = indexableLangs.includes(lang)
   const { title, description, keywords } = await getPageMetadata(lang, 'blog')
 
   return {
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { absolute: title },
     description,
     keywords,
-    robots: { index: true, follow: true },
+    robots: robotsFor(indexable),
     authors: [{ name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000' }],
     openGraph: {
       title,

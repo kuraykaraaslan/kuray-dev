@@ -22,6 +22,22 @@ export type AppLanguage = z.infer<typeof AppLanguageEnum>
 export const AVAILABLE_LANGUAGES = AppLanguageEnum.options
 export const DEFAULT_LANGUAGE: AppLanguage = 'en'
 
+// ─── Indexable languages (SEO) ──────────────────────────────────────────────
+// Global allowlist for content WITHOUT per-item translations (static listings,
+// user profiles). Content that DOES have translation records (posts, projects,
+// categories, dynamic pages) is gated per-item instead. Subset of
+// AVAILABLE_LANGUAGES; env-overridable, defaults to the genuinely-maintained set.
+const parsedIndexable = process.env.NEXT_PUBLIC_INDEXABLE_LANGUAGES
+  ?.split(',')
+  .map((l) => l.trim().toLowerCase())
+  .filter(Boolean)
+
+export const INDEXABLE_LANGUAGES: AppLanguage[] = (
+  (parsedIndexable && parsedIndexable.length > 0 ? parsedIndexable : ['en', 'tr']).filter((l) =>
+    (AVAILABLE_LANGUAGES as readonly string[]).includes(l)
+  ) as AppLanguage[]
+)
+
 // ─── RTL support ──────────────────────────────────────────────────────────────
 /** Languages that use Right-to-Left script direction */
 export const RTL_LANGUAGES: readonly AppLanguage[] = ['he', 'ar'] as const

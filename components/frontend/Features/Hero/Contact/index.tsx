@@ -192,8 +192,8 @@ const Contact = (props: ContactProps) => {
                 <div className="space-y-4 mt-4">
                   <h3 className="text-xl font-bold">{t('pages.contact.social_media')}</h3>
 
-                  <p className="flex items-center text-green-500 animate-pulse">
-                    <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5 mr-2 sm:mr-6" />
+                  <p className="flex items-center animate-pulse">
+                    <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5 mr-2 sm:mr-6 text-green-500" aria-hidden="true" />
                     <Link
                       href="https://wa.me/905459223554"
                       target="_blank"
