@@ -12,7 +12,7 @@ import type { UserProfile } from '@/types/user/UserProfileTypes'
  * @param context - Contains the URL parameters, including userId
  * @returns A NextResponse containing the user data or an error message
  */
-export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
     const { userId } = await params
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest, { params }: { params: { userId: 
  * @param context - Contains the URL parameters, including userId
  * @returns A NextResponse containing a success message or an error message
  */
-export async function DELETE(request: NextRequest, { params }: { params: { userId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })
 
@@ -62,7 +62,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { userI
  * @param context - Contains the URL parameters, including userId
  * @returns A NextResponse containing the updated user data or an error message
  */
-export async function PUT(request: NextRequest, { params }: { params: { userId: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })
 

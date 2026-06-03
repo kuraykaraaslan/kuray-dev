@@ -5,7 +5,7 @@ import CampaignMessages from '@/messages/CampaignMessages'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { campaignId: string } }
+  { params }: { params: Promise<{ campaignId: string }> }
 ) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })

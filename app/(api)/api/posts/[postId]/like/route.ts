@@ -4,7 +4,7 @@ import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 import PostMessages from '@/messages/PostMessages'
 import { LikePostRequestSchema } from '@/dtos/PostInteractionDTO'
 
-export async function POST(request: NextRequest, { params }: { params: { postId: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'GUEST' })
 

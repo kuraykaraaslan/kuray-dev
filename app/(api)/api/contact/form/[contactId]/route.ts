@@ -5,7 +5,7 @@ import ContactMessages from '@/messages/ContactMessages'
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { contactId: string } }
+  { params }: { params: Promise<{ contactId: string }> }
 ) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })

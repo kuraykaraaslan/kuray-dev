@@ -3,7 +3,7 @@ import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 import CommentService from '@/services/CommentService'
 import CommentMessages from '@/messages/CommentMessages'
 
-export async function DELETE(request: NextRequest, { params }: { params: { commentId: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ commentId: string }> }) {
   try {
     // Authenticate user session
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })

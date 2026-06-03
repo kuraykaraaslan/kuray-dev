@@ -5,7 +5,7 @@ import { SubscriptionMessages } from '@/messages/SubscriptionMessages'
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { email: string } }
+  { params }: { params: Promise<{ email: string }> }
 ) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })

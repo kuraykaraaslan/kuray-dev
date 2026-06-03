@@ -1,16 +1,17 @@
 import { NextResponse } from 'next/server'
 import SlotTemplateService from '@/services/AppointmentService/SlotTemplateService'
-import { Day, DayEnum, SlotSchema } from '@/types/features/CalendarTypes'
+import { DayEnum, SlotSchema } from '@/types/features/CalendarTypes'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 import SlotMessages from '@/messages/SlotMessages'
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ day: Day }> }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ day: string }> }) {
   try {
     const { day } = await params
-    if (!day) {
+    const dayResult = DayEnum.safeParse(day)
+    if (!dayResult.success) {
       return NextResponse.json({ message: SlotMessages.DAY_REQUIRED }, { status: 400 })
     }
-    const slotsTemplate = await SlotTemplateService.getSlotTemplate(day)
+    const slotsTemplate = await SlotTemplateService.getSlotTemplate(dayResult.data)
 
     return NextResponse.json({ message: SlotMessages.SLOT_TEMPLATE_RETRIEVED, data: slotsTemplate })
   } catch (error: any) {

@@ -10,10 +10,6 @@ import ContactMessages from '@/messages/ContactMessages'
 import { checkForSpam, verifyRecaptcha } from '@/helpers/SpamProtection'
 import Logger from '@/libs/logger'
 
-type ResponseData = {
-  message: string
-}
-
 export async function GET(request: NextRequest) {
   try {
     await AuthMiddleware.authenticateUserByRequest({ request, requiredUserRole: 'ADMIN' })
@@ -38,7 +34,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest, _response: NextResponse<ResponseData>) {
+export async function POST(request: NextRequest) {
   const body = await request.json()
 
   const parsedData = ContactFormRequestSchema.safeParse(body)

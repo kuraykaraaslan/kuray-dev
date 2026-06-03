@@ -1,17 +1,6 @@
 import { NextResponse } from 'next/server'
 
-type ResponseData = {
-  message: string
-  phones: Array<{
-    CountryCode: string
-    PhoneNumber: string
-    noSpacePhoneNumber: string
-    hasTelegram: boolean
-    hasWhatsapp: boolean
-  }>
-}
-
-export async function GET(_request: NextRequest, _response: NextResponse<ResponseData>) {
+export async function GET(_request: NextRequest) {
   const phones = [
     {
       CountryCode: 'tr',

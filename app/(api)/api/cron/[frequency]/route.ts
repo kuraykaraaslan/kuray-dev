@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import CronService from '@/services/CronService'
 import Logger from '@/libs/logger'
-import { StatFrequency, StatFrequencySchema } from '@/types/common/StatTypes'
+import { StatFrequencySchema } from '@/types/common/StatTypes'
 
 const CRON_SECRET = process.env.CRON_SECRET || ''
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { frequency: StatFrequency } }
+  { params }: { params: Promise<{ frequency: string }> }
 ) {
   const secret = request.headers.get('x-cron-secret')
 
@@ -21,7 +21,7 @@ export async function GET(
   const frequency = StatFrequencySchema.safeParse(_params.frequency)
 
   if (!frequency.success) {
-    Logger.error(`Invalid cron frequency: ${params.frequency}`)
+    Logger.error(`Invalid cron frequency: ${_params.frequency}`)
     return NextResponse.json({ message:'Invalid frequency' }, { status: 400 })
   }
 

@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server'
 
-type ResponseData = {
-  message: string
-  mails: Array<{
-    mail: string
-  }>
-}
-
-export async function GET(_request: NextRequest, _response: NextResponse<ResponseData>) {
+export async function GET(_request: NextRequest) {
   const mails = [
     {
       mail: 'kuraykaraaslan@gmail.com',
