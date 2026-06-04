@@ -127,7 +127,8 @@ prisma/.env
 #next
 
 # chatbot datasets
-services/ChatbotService/datasets/
+services/ChatbotService/datasets/*
+!services/ChatbotService/datasets/README.md
 next-env.d.ts
 
 #lighthouse
