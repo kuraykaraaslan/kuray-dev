@@ -9,6 +9,7 @@ const MyImage = () => {
           alt="kuray karaaslan"
           width={256}
           height={256}
+          priority
           className="transition duration-500 transform w-full h-auto"
           sizes="(max-width: 640px) 6rem, (max-width: 768px) 12rem, 16rem"
         />
@@ -19,17 +20,20 @@ const MyImage = () => {
             <span className="text-2xl font-bold text-black ml-[0.4rem]">A</span>
             <Image
               src="/assets/svg/spades.svg"
-              alt="kuray karaaslan"
+              alt=""
+              width={32}
+              height={32}
               className="h-8 w-8 transition"
+              aria-hidden="true"
             />
           </div>
           <div className="fixed flex flex-col uppercase mt-2 ml-2 right-2 bottom-2 transform rotate-180">
             <span className="text-2xl font-bold text-black ml-[0.4rem]">A</span>
-            <Image src="/assets/svg/spades.svg" alt="spade icon" className="h-8 w-8 transition" />
+            <Image src="/assets/svg/spades.svg" alt="" width={32} height={32} className="h-8 w-8 transition" aria-hidden="true" />
           </div>
 
           <div className="relative flex flex-col items-center justify-center w-full h-full">
-            <Image src="/assets/svg/spades.svg" alt="spade icon" className="h-16 w-16 transition" />
+            <Image src="/assets/svg/spades.svg" alt="" width={64} height={64} className="h-16 w-16 transition" aria-hidden="true" />
           </div>
         </div>
       </div>
