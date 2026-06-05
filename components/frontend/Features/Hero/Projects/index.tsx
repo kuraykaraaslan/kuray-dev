@@ -47,23 +47,6 @@ const ProjectsHero = () => {
       })
   }, [page, pageSize, search])
 
-  const continueOnGitHub: Project = {
-    projectId: '',
-    title: 'Other Projects',
-    description:
-      'For other projects, check my GitHub profile. You can find various projects that I have worked on.',
-    slug: 'https://github.com/kuraykaraaslan/',
-    image: '/assets/img/projects/github-wallpaper-scaled.png',
-    status: '',
-    platforms: [],
-    technologies: [],
-    content: '',
-    keywords: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    projectLinks: ['https://github.com/kuraykaraaslan/'],
-  }
-
   const filteredProjects = projects.filter((project) => {
     if (filter === '') {
       return true
