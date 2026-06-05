@@ -67,8 +67,22 @@
   }
 }
 
-/* ─── Component layer: RTL layout overrides ─── */
+/* ─── Component layer: overflow, RTL layout overrides ─── */
 @layer components {
+  /* Prevent horizontal overflow from prose tables on small screens */
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  /* Prevent horizontal overflow from prose pre/code on small screens */
+  .prose pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+
   /* Flip gradients in RTL */
   [dir="rtl"] .bg-gradient-to-r {
     --tw-gradient-direction: to left;
@@ -121,6 +135,8 @@
   /* Prevent content from hiding behind notches in standalone PWA mode */
   body {
     padding-bottom: env(safe-area-inset-bottom, 0px);
+    /* Prevent horizontal scroll caused by oversized children */
+    overflow-x: clip;
   }
 }
 
