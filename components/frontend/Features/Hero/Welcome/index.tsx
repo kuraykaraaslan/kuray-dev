@@ -41,7 +41,7 @@ const Welcome = () => {
             <h1 className="sr-only">
               Kuray Karaaslan — Full-Stack Developer Building SaaS, IoT & BIM Platforms
             </h1>
-            <p className="hero-tagline font-bold relative overflow-hidden animate-shake text-5xl leading-normal h-32 md:h-16">
+            <p className="hero-tagline font-bold relative overflow-hidden animate-shake text-fluid-hero h-32 md:h-16">
               <TypingEffect />
             </p>
             <p className="py-3 pb-6 leading-7 text-lg">

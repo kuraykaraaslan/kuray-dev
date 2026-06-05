@@ -66,7 +66,7 @@ const Services = () => {
           ref={container}
         >
           <div className="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 -mt-8 lg-mt-0">
-            <h2 className="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold">{t('pages.hero.services.title')}</h2>
+            <h2 className="mb-4 text-fluid-section tracking-tight font-extrabold">{t('pages.hero.services.title')}</h2>
             <p className="font-light sm:text-xl">
               {t('pages.hero.services.description')}
             </p>

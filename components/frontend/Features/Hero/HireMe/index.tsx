@@ -68,7 +68,7 @@ const HireMe = () => {
           <div className="hero-content">
             <div className="flex-1 max-w-2xl">
               <div className="max-w-lg me-4">
-                <h2 className="text-5xl font-bold">{t('pages.hero.hire_me.heading')}</h2>
+                <h2 className="text-fluid-hero font-bold">{t('pages.hero.hire_me.heading')}</h2>
                 <p className="py-6">
                   {t('pages.hero.hire_me.description')}
                 </p>

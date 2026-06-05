@@ -92,6 +92,16 @@
   }
 }
 
+/* ─── Fluid typography utilities ─── */
+@utility text-fluid-hero {
+  font-size: clamp(1.875rem, 4vw + 1rem, 3rem);
+  line-height: 1.2;
+}
+
+@utility text-fluid-section {
+  font-size: clamp(1.5rem, 3vw + 0.75rem, 2.25rem);
+}
+
 /* Cookie Consent Banner slide-up animation — keyframes live outside layers */
 @keyframes slideUp {
   from {

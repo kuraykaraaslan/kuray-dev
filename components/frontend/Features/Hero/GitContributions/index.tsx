@@ -12,7 +12,7 @@ const GitContributions = () => {
       <div className="hero min-h-screen bg-base-100 hidden lg:flex items-center justify-center">
         <div className="hero-content text-center">
           <div className="">
-            <h2 className="text-5xl font-bold">{t('pages.hero.git_contributions.title')}</h2>
+            <h2 className="text-fluid-hero font-bold">{t('pages.hero.git_contributions.title')}</h2>
             <p className="py-6">
               {t('pages.hero.git_contributions.description')}
             </p>

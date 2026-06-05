@@ -32,7 +32,7 @@ const Testimonials = () => {
       <div className="container px-6 py-4 mx-auto mx-4 pb-0 md:pb-20">
         <div className="grid items-center gap-4 xl:grid-cols-5">
           <div className="max-w-2xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
-            <h2 className="text-4xl font-bold">{t('pages.hero.testimonials.title')}</h2>
+            <h2 className="text-fluid-section font-bold">{t('pages.hero.testimonials.title')}</h2>
             <p className="">
               {t('pages.hero.testimonials.description')}
             </p>
