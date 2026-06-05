@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const translation = lang !== 'en' ? project.translations?.find((t: ProjectTranslation) => t.lang === lang) : null
   const title = translation?.title ?? project.title
   const description = translation?.description ?? project.description ?? toPlainExcerpt(project.content)
-  const image = project.image || `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`
+  const image = project.image || `${NEXT_PUBLIC_APPLICATION_HOST}/projects/${projectSlug}/opengraph-image`
 
   const path = `/projects/${projectSlug}`
   const availableLangs = ['en', ...(project.translations?.map((t: ProjectTranslation) => t.lang) ?? [])]
