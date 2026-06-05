@@ -46,8 +46,26 @@ function FAQBlock(rawProps: Record<string, unknown>) {
 
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
+  const faqSchema = faqs.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+        })),
+      }
+    : null
+
   return (
     <BaseBlock {...baseProps}>
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <div className="relative z-10 max-w-3xl mx-auto">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
