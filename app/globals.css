@@ -33,6 +33,29 @@
     }
   }
 
+  /* Eliminate 300ms tap delay on touch devices */
+  a,
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"],
+  label[for],
+  select {
+    touch-action: manipulation;
+  }
+
+  /* Minimum 48px tap target on coarse-pointer (touch) devices */
+  @media (pointer: coarse) {
+    .btn-sm {
+      min-height: 3rem;
+    }
+    .btn-xs {
+      min-height: 3rem;
+      font-size: 0.75rem;
+    }
+  }
+
   /* iOS zoom prevention: inputs must be ≥16px */
   /* iOS Safari zooms in whenever a focused input has font-size < 16px. */
   @media (max-width: 767px) {
