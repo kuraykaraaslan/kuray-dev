@@ -92,9 +92,11 @@ function FAQBlock(rawProps: Record<string, unknown>) {
 
                   <span
                     className={`shrink-0 transition-transform duration-200 text-primary ${isOpen ? 'rotate-180' : ''}`}
+                    aria-hidden="true"
                   >
                     ▼
                   </span>
+                  <span className="sr-only">{isOpen ? 'Collapse' : 'Expand'}</span>
                 </button>
 
                 <div
