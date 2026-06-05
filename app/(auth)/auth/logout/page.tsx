@@ -1,40 +1,11 @@
-'use client'
-import axiosInstance from '@/libs/axios'
-import { useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { useUserStore } from '@/libs/zustand'
-import { useRouter } from 'next/navigation'
+import type { Metadata } from 'next'
+import LogoutClient from './LogoutClient'
 
-const LogoutPage = () => {
-  const { setUser } = useUserStore()
-  const router = useRouter()
-
-  const handleLogout = async () => {
-    await axiosInstance
-      .post(`/api/auth/logout`)
-      .then((res) => {
-        if (res.status === 200) {
-          toast.success(res.data.message)
-        }
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message)
-      })
-      .finally(() => {
-        setUser(null)
-        localStorage.removeItem('user')
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-        localStorage.removeItem('userSession')
-        router.push('/')
-      })
-  }
-
-  useEffect(() => {
-    handleLogout()
-  }, [])
-
-  return <></>
+export const metadata: Metadata = {
+  title: 'Sign Out',
+  robots: { index: false, follow: false },
 }
 
-export default LogoutPage
+export default function LogoutPage() {
+  return <LogoutClient />
+}

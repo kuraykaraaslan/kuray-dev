@@ -1,0 +1,194 @@
+'use client'
+import { MouseEvent, useEffect, useState } from 'react'
+import axiosInstance from '@/libs/axios'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
+import { useSearchParams } from 'next/navigation'
+
+const ForgotPasswordPage = () => {
+  const { t } = useTranslation()
+  const searchParams = useSearchParams()
+
+  const emailRegex = /\S+@\S+\.\S+/
+
+  const [email, setEmail] = useState('')
+  const [resetToken, setResetToken] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
+  useEffect(() => {
+    //resetToken and email are passed as query params
+    const resetToken = searchParams.get('resetToken')
+    const email = searchParams.get('email')
+
+    if (!resetToken || !email) {
+      return
+    }
+
+    setResetToken(resetToken)
+    setEmail(email)
+
+    //set step to 2 if resetToken is present
+    setStep(2)
+  }, [searchParams])
+
+  const [step, setStep] = useState(1)
+
+  async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault()
+
+    if (step === 1) {
+      if (!email || emailRegex.test(email) === false) {
+        toast.error(t('auth.forgot_password.email_required'))
+        return
+      }
+
+      await axiosInstance
+        .post(`/api/auth/forgot-password`, {
+          email: email,
+        })
+        .then(async (res) => {
+          if (res.data.error) {
+            console.error(res.data.error)
+            return
+          }
+          toast.success(t('auth.forgot_password.code_sent'))
+          setStep(2)
+        })
+        .catch((error) => {
+          toast.error(error.response.data.error)
+        })
+
+      setStep(2)
+    } else {
+      // Reset password
+      if (password !== confirmPassword) {
+        console.error('Passwords do not match')
+        return
+      }
+
+      await axiosInstance
+        .post(`/api/auth/reset-password`, {
+          email: email,
+          resetToken: resetToken,
+          password: password,
+        })
+        .then(async (res) => {
+          if (res.data.error) {
+            console.error(res.data.error)
+            return
+          }
+          toast.success(t('auth.reset_password.success'))
+        })
+        .catch((error) => {
+          toast.error(error.response.data.error)
+        })
+    }
+  }
+
+  return (
+    <>
+      {step === 1 ? (
+        <>
+          <div className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium leading-6">
+                {t('auth.forgot_password.email_label')}
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-primary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 p-4"
+                />
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="block w-full py-2.5 bg-primary font-semibold rounded-lg shadow-md text-white"
+                onClick={handleSubmit}
+              >
+                {t('auth.forgot_password.send_code')}
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="space-y-6">
+          <div>
+            <label htmlFor="verificationCode" className="block text-sm font-medium leading-6">
+              {t('auth.forgot_password.verification_code_label')}
+            </label>
+            <div className="mt-2">
+              <input
+                id="verificationCode"
+                name="verificationCode"
+                value={resetToken}
+                onChange={(e) => setResetToken(e.target.value)}
+                type="text"
+                required
+                autoComplete="verificationCode"
+                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-primary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 p-4"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium leading-6">
+              {t('auth.reset_password.new_password_label')}
+            </label>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 p-4"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium leading-6">
+              {t('auth.reset_password.confirm_password_label')}
+            </label>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 p-4"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="block w-full py-2.5 bg-primary font-semibold rounded-lg shadow-md text-white"
+              onClick={handleSubmit}
+            >
+              {t('auth.reset_password.button')}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+export default ForgotPasswordPage
