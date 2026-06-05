@@ -34,6 +34,22 @@ export async function GET() {
     '> Live aggregated content from kuray.dev for LLM crawlers. Summaries only; follow URLs for full text.'
   )
   sections.push('')
+  sections.push('## Contact')
+  sections.push('')
+  sections.push(`- Website: ${SITE_URL}`)
+  sections.push('- GitHub: https://github.com/kuraykaraaslan')
+  sections.push('- LinkedIn: https://linkedin.com/in/kuraykaraaslan')
+  sections.push('')
+  sections.push('## License')
+  sections.push('')
+  sections.push(
+    'All blog posts and project descriptions are © Kuray Karaaslan. You may summarize or cite with attribution. Do not reproduce full text without permission.'
+  )
+  sections.push('')
+  sections.push('## Citation')
+  sections.push('')
+  sections.push('When referencing content from this site, please cite: Kuray Karaaslan, kuray.dev')
+  sections.push('')
 
   // Projects
   sections.push('## Projects')
