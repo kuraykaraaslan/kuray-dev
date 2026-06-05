@@ -37,21 +37,17 @@ const ContactForm = (props: { className?: string; token: string }) => {
   //Timer
   const [isSending, setIsSending] = useState<boolean>(false)
 
-  function getCountry() {
+  useEffect(() => {
+    if (geoInfo.length > 0) return
+    const controller = new AbortController()
     axios
-      .get('https://ipapi.co/json/')
+      .get('https://ipapi.co/json/', { signal: controller.signal, timeout: 5000 })
       .then((response) => {
         setGeoInfo(response.data)
         setDefaultCountry(response.data.country)
       })
       .catch(() => {})
-  }
-
-  useEffect(() => {
-    if (geoInfo.length > 0) {
-      return
-    }
-    getCountry()
+    return () => controller.abort()
   }, [])
 
   const claases = props.className
