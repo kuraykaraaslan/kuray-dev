@@ -19,13 +19,14 @@ import Link from '@/libs/i18n/Link'
 //axios
 import axios from 'axios'
 
-//reCAPTCHA
-import ReCAPTCHA from 'react-google-recaptcha'
 import { useTranslation } from 'react-i18next'
 
 const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY || ''
 // When no site key is configured, reCAPTCHA is disabled and the form is treated as verified.
 const captchaEnabled = !!recaptchaSiteKey
+
+// Lazy-load reCAPTCHA — defers the 200-500ms render-blocking iframe until needed
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false })
 
 const Form = dynamic(() => import('./Partials/Form'), { ssr: false })
 

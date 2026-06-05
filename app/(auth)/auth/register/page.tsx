@@ -6,9 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from '@/libs/i18n/Link'
 import { useState, useRef, MouseEvent } from 'react'
 import { toast } from 'react-toastify'
-import ReCAPTCHA from 'react-google-recaptcha'
+import dynamic from 'next/dynamic'
 
 const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY || ''
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false })
 
 const RegisterPage = () => {
   const { t } = useTranslation()
@@ -18,7 +19,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmpassword, setConfirmpassword] = useState<string>('')
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
+  const recaptchaRef = useRef<any>(null)
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
