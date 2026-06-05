@@ -153,6 +153,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         {/* GA/GTM are non-blocking — dns-prefetch is sufficient */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        {/* Speculation Rules API — instant prefetch of likely-next navigations (Chrome 123+) */}
+        <script
+          type="speculationrules"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              prefetch: [
+                { source: 'list', urls: ['/blog', '/projects', '/about'] },
+              ],
+            }),
+          }}
+        />
       </head>
       <body className="min-h-screen">
         <a
