@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import DOMPurify from 'isomorphic-dompurify'
 
 interface Props {
   template: string
@@ -35,5 +36,5 @@ export default function TemplateBlockRenderer({ template, props, script, blockTy
   }
 
   const html = replaceTokens(template, props)
-  return <div dangerouslySetInnerHTML={{ __html: html }} />
+  return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
 }

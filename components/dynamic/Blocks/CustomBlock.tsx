@@ -1,4 +1,6 @@
+'use client'
 import { useEffect } from 'react'
+import DOMPurify from 'isomorphic-dompurify'
 import type { BlockDefinition } from '../types'
 
 export interface CustomFieldSchema {
@@ -58,7 +60,7 @@ function CustomBlockComponent(props: Record<string, unknown>) {
     return val !== undefined && val !== null ? String(val) : ''
   })
 
-  return <div dangerouslySetInnerHTML={{ __html: html }} />
+  return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
 }
 
 export const CustomBlockDefinition: BlockDefinition = {

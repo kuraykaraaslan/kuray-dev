@@ -1,5 +1,6 @@
 'use client'
 
+import DOMPurify from 'isomorphic-dompurify'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendar, faClock, faEye, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -89,7 +90,7 @@ function BlogPostBlock(rawProps: Record<string, unknown>) {
 
             <div
               className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
             />
           </div>
         </div>

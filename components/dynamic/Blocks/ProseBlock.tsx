@@ -1,4 +1,5 @@
 'use client'
+import DOMPurify from 'isomorphic-dompurify'
 import BaseBlock, { BASE_BLOCK_DEFAULT_PROPS, BASE_BLOCK_SCHEMA_FIELDS, parseBaseBlockProps } from '../partials/BaseBlock'
 import { usePreviewMode } from '../partials/PreviewContext'
 import type { BlockDefinition } from '../types'
@@ -22,7 +23,7 @@ function ProseBlock(rawProps: Record<string, unknown>) {
         {content && (
           <div
             className="prose prose-base max-w-none"
-            dangerouslySetInnerHTML={{ __html: content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
           />
         )}
       </div>
