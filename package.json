@@ -6,7 +6,7 @@
     "dev": "npm run boot && npx next dev",
     "build": "next build",
     "start": "npm run boot && next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

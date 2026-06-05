@@ -1,0 +1,23 @@
+import nextConfig from 'eslint-config-next/core-web-vitals'
+
+/** @type {import('eslint').Linter.Config[]} */
+const config = [
+  ...nextConfig,
+  {
+    rules: {
+      '@next/next/no-img-element': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
+      'jsx-a11y/anchor-is-valid': 'warn',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
+      'jsx-a11y/no-noninteractive-element-interactions': 'warn',
+      'jsx-a11y/label-has-associated-control': 'warn',
+      'jsx-a11y/no-autofocus': 'warn',
+    },
+  },
+]
+
+export default config
