@@ -38,8 +38,30 @@ function VideoGalleryBlock(rawProps: Record<string, unknown>) {
   const subtitle = (rawProps.subtitle as string) || ''
   const videos = parseVideos(rawProps.videos)
 
+  const videoSchemas = videos
+    .filter((v) => extractYouTubeId(v.videoUrl))
+    .map((v) => {
+      const ytId = extractYouTubeId(v.videoUrl)!
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'VideoObject',
+        name: v.title,
+        description: v.description || v.title,
+        embedUrl: `https://www.youtube.com/embed/${ytId}`,
+        thumbnailUrl: `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`,
+        url: `https://www.youtube.com/watch?v=${ytId}`,
+      }
+    })
+
   return (
     <BaseBlock {...baseProps}>
+      {videoSchemas.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-20">
         {(heading || subtitle) && (
           <div className="text-center mb-16">
