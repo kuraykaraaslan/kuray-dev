@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <>
       <div className="drawer">
-        <input id="my-drawer" type="checkbox" className="drawer-toggle" aria-label="Toggle navigation drawer" />
+        <input id="my-drawer" type="checkbox" className="drawer-toggle" aria-hidden="true" tabIndex={-1} />
         <div className="relative drawer-content flex flex-col min-h-screen bg-base-200 h-full">
           {/* Navbar */}
           <Navbar menuItems={MenuItems} />
