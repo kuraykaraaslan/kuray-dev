@@ -59,6 +59,16 @@
   right: 1rem;
 }
 
+/* ─── iOS zoom prevention: inputs must be ≥16px ─── */
+/* iOS Safari zooms in whenever a focused input has font-size < 16px. */
+@media (max-width: 767px) {
+  input,
+  textarea,
+  select {
+    font-size: max(1rem, 16px);
+  }
+}
+
 /* ─── Cookie Consent Banner slide-up animation ─── */
 @keyframes slideUp {
   from {
