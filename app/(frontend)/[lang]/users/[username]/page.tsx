@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, username } = await params
   const user = await getUser(username)
 
-  if (!user) return {}
+  if (!user) return { robots: { index: false, follow: false } }
 
   const slug = getProfileSlug(user)
   const path = `/users/${slug}`
