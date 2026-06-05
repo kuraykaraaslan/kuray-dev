@@ -234,11 +234,12 @@ export default class ProjectService {
     })
   }
 
-  static async getAllProjectSlugs(): Promise<{ title: string; slug: string; langs: string[] }[]> {
+  static async getAllProjectSlugs(): Promise<{ title: string; slug: string; langs: string[]; updatedAt: Date }[]> {
     const projects = await prisma.project.findMany({
       select: {
         title: true,
         slug: true,
+        updatedAt: true,
         translations: {
           select: {
             lang: true,
@@ -254,6 +255,7 @@ export default class ProjectService {
     return projects.map((project) => ({
       title: project.title,
       slug: project.slug,
+      updatedAt: project.updatedAt,
       langs: project.translations.map((t) => t.lang),
     }))
   }
