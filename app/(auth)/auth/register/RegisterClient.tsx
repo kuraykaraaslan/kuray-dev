@@ -19,6 +19,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmpassword, setConfirmpassword] = useState<string>('')
+  const [captchaReady, setCaptchaReady] = useState(false)
   const recaptchaRef = useRef<any>(null)
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -115,6 +116,7 @@ const RegisterPage = () => {
               autoComplete="email"
               value={email as string}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setCaptchaReady(true)}
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               placeholder={t('auth.register.email_placeholder')}
               aria-required="true"
@@ -176,7 +178,7 @@ const RegisterPage = () => {
           </div>
         </div>
 
-        {recaptchaSiteKey && (
+        {recaptchaSiteKey && captchaReady && (
           <div className="flex justify-center">
             <ReCAPTCHA ref={recaptchaRef} sitekey={recaptchaSiteKey} />
           </div>
