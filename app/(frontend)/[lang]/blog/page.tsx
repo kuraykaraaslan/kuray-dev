@@ -13,12 +13,17 @@ const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 
 type Props = {
   params: Promise<{ lang: string }>
+  searchParams: Promise<{ page?: string; search?: string; [key: string]: string | string[] | undefined }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { lang } = await params
+  const sp = await searchParams
+  const page = parseInt((sp.page as string) || '1', 10)
+  const isPaginated = page > 1
+
   const { canonical, languages, indexableLangs } = buildAlternates(lang, '/blog', INDEXABLE_LANGUAGES)
-  const indexable = indexableLangs.includes(lang)
+  const indexable = indexableLangs.includes(lang) && !isPaginated
   const { title, description, keywords } = await getPageMetadata(lang, 'blog')
 
   return {
@@ -57,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const BlogPage = async ({ params }: Props) => {
+const BlogPage = async ({ params }: { params: Promise<{ lang: string }> }) => {
   const { lang } = await params
   const { title, description } = await getPageMetadata(lang, 'blog')
 

@@ -12,14 +12,17 @@ const NEXT_PUBLIC_APPLICATION_HOST = SITE_URL
 
 type Props = {
   params: Promise<{ lang: string; categorySlug: string }>
+  searchParams: Promise<{ page?: string; [key: string]: string | string[] | undefined }>
 }
 
 async function getCategory(categorySlug: string, lang: string) {
   return await CategoryService.getCategoryBySlug(categorySlug, lang)
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { categorySlug, lang } = await params
+  const sp = await searchParams
+  const isPaginated = parseInt((sp.page as string) || '1', 10) > 1
   const category = await getCategory(categorySlug, lang)
 
   if (!category) {
@@ -32,8 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const availableLangs = ['en', ...(category.translations?.map((t) => t.lang) ?? [])]
   const { canonical, languages, indexableLangs } = buildAlternates(lang, path, availableLangs)
-  // Only index this language if the category is actually translated to it.
-  const indexable = indexableLangs.includes(lang)
+  // Only index this language if the category is actually translated to it, and not a paginated view.
+  const indexable = indexableLangs.includes(lang) && !isPaginated
 
   return {
     title: `${category.title} | Kuray Karaaslan`,
