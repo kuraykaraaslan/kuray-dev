@@ -175,6 +175,17 @@ export const config = {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Enforce HTTPS in production — redirect plain HTTP before any other logic
+  if (
+    process.env.NODE_ENV === 'production' &&
+    request.headers.get('x-forwarded-proto') === 'http'
+  ) {
+    const url = request.nextUrl.clone()
+    url.protocol = 'https:'
+    url.port = ''
+    return NextResponse.redirect(url, 301)
+  }
+
   // API
   if (pathname.startsWith('/api')) return handleApi(request)
 
