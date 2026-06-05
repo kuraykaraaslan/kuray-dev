@@ -131,12 +131,12 @@ async function handleI18n(request: NextRequest) {
   const segments = pathname.split('/').filter(Boolean)
   const first = segments[0]
 
-  // /en/... → redirect to canonical URL without /en
+  // /en/... → permanent redirect to canonical URL without /en
   if (first === DEFAULT_LANGUAGE) {
     const rest = segments.slice(1).join('/')
     const url = request.nextUrl.clone()
     url.pathname = rest ? `/${rest}` : '/'
-    return NextResponse.redirect(url)
+    return NextResponse.redirect(url, 301)
   }
 
   // /tr/... /de/... → pass through (with geo-exclusive check)
@@ -150,7 +150,7 @@ async function handleI18n(request: NextRequest) {
       const rest = segments.slice(1).join('/')
       const url = request.nextUrl.clone()
       url.pathname = rest ? `/${rest}` : '/'
-      return NextResponse.redirect(url)
+      return NextResponse.redirect(url, 301)
     }
 
     // Forward the active locale so the root layout can render <html lang dir>
