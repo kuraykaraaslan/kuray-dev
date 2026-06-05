@@ -36,19 +36,18 @@ const Navbar = ({ menuItems }: { menuItems: MenuItem[] }) => {
   }, [])
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      if (window?.scrollY > 40) {
-        setIsTopReached(false)
-      } else {
-        setIsTopReached(true)
-      }
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        setIsTopReached(window.scrollY <= 40)
+        ticking = false
+      })
     }
 
-    window?.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window?.removeEventListener('scroll', handleScroll)
-    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const scrollTo100IfNot = () => {

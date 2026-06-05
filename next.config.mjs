@@ -41,6 +41,7 @@ const nextConfig = {
       '@fortawesome/free-solid-svg-icons',
       '@fortawesome/free-regular-svg-icons',
       'lucide-react',
+      'date-fns',
     ],
   },
 
@@ -85,6 +86,14 @@ const nextConfig = {
             value: 'same-origin-allow-popups'
           }
         ]
+      },
+      {
+        source: '/sitemap.xml',
+        headers: [{ key: 'Cache-Control', value: 's-maxage=3600, stale-while-revalidate=86400' }]
+      },
+      {
+        source: '/robots.txt',
+        headers: [{ key: 'Cache-Control', value: 's-maxage=3600, stale-while-revalidate=86400' }]
       },
       {
         source: '/api/(.*)',
