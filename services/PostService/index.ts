@@ -465,6 +465,7 @@ export default class PostService {
       description: string | null
       content: string
       authorName: string
+      image: string | null
       createdAt: Date
       updatedAt: Date | null
       langs: string[]
@@ -483,6 +484,7 @@ export default class PostService {
         slug: true,
         description: true,
         content: true,
+        image: true,
         createdAt: true,
         updatedAt: true,
         category: {
@@ -512,6 +514,7 @@ export default class PostService {
       description: post.description,
       content: post.content,
       authorName: (post.author?.userProfile as { name?: string } | null)?.name || 'Kuray Karaaslan',
+      image: post.image ?? null,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       langs: post.translations.map((t) => t.lang),

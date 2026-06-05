@@ -72,6 +72,7 @@ async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.7,
       alternates: altLanguages(`/projects/${p.slug}`, ['en', ...p.langs]),
+      ...(p.image ? { images: [p.image] } : {}),
     }))
   } catch {
     projectEntries = []
@@ -86,6 +87,7 @@ async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.6,
       alternates: altLanguages(`/blog/${post.categorySlug}/${post.slug}`, ['en', ...post.langs]),
+      ...(post.image ? { images: [post.image] } : {}),
     }))
   } catch {
     postEntries = []
