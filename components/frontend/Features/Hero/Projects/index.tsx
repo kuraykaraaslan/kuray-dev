@@ -53,7 +53,7 @@ const ProjectsHero = () => {
     description:
       'For other projects, check my GitHub profile. You can find various projects that I have worked on.',
     slug: 'https://github.com/kuraykaraaslan/',
-    image: '/assets/img/projects/github-wallpaper-scaled.webp',
+    image: '/assets/img/projects/github-wallpaper-scaled.png',
     status: '',
     platforms: [],
     technologies: [],
