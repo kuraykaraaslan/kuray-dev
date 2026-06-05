@@ -61,11 +61,19 @@ export default function BaseBlock({
       }
     : {}
 
+  // content-visibility:auto defers paint/layout for off-screen sections.
+  // containIntrinsicSize gives the browser an estimated height to avoid
+  // scroll-jank when the section is skipped and later revealed.
+  const contentVisStyle: React.CSSProperties = {
+    contentVisibility: 'auto',
+    containIntrinsicSize: '0 600px',
+  }
+
   return (
     <Tag
       className={`relative ${blockClass}`.trim()}
       id={sectionId || undefined}
-      style={{ ...style, ...heightStyle }}
+      style={{ ...contentVisStyle, ...style, ...heightStyle }}
     >
       <BlockBackground {...bgProps} />
       {children}
