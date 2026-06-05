@@ -74,6 +74,7 @@ const FeedCardImage = (props: FeedCardProps) => {
           src={props.image!}
           alt={`Thumbnail for blog post: ${props.title}`}
           fill
+          loading="lazy"
           className="object-cover rounded-t-lg"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
           quality={100}

@@ -78,6 +78,7 @@ const SingleArticle = (props: PostWithData) => {
             width={1920}
             height={1080}
             alt={`Thumbnail for: ${props.title}`}
+            loading="lazy"
             className="w-full object-cover rounded-t-lg"
           />
         ) : (
