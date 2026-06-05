@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(postSlug, lang)
 
   if (!post || post.status !== 'PUBLISHED') {
-    return {}
+    return { robots: { index: false, follow: false } }
   }
 
   const path = `/blog/${categorySlug}/${postSlug}`

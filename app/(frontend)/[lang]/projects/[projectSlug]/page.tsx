@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, projectSlug } = await params
   const project = await getProject(projectSlug, lang)
 
-  if (!project) return {}
+  if (!project) return { robots: { index: false, follow: false } }
 
   const translation = lang !== 'en' ? project.translations?.find((t: ProjectTranslation) => t.lang === lang) : null
   const title = translation?.title ?? project.title

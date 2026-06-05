@@ -26,7 +26,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const category = await getCategory(categorySlug, lang)
 
   if (!category) {
-    return {}
+    return { robots: { index: false, follow: false } }
   }
 
   const path = `/blog/${categorySlug}`
