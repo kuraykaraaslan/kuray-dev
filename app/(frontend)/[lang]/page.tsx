@@ -85,7 +85,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const HomePage = async ({ params }: Props) => {
   const { lang } = await params
   const url = buildLangUrl(lang, '')
-  const dictMeta = await getPageMetadata(lang, 'home')
+
+  const [dictMeta, projects] = await Promise.all([
+    getPageMetadata(lang, 'home'),
+    ProjectService.getAllProjectSlugs().catch(() => []),
+  ])
+
   const title = dictMeta.title || DEFAULT_HOME_TITLE
   const description = dictMeta.description || DEFAULT_HOME_DESCRIPTION
 
@@ -103,17 +108,11 @@ const HomePage = async ({ params }: Props) => {
 
   const breadcrumbs = [{ name: 'Home', url }]
 
-  let portfolioItems: { name: string; url: string; image?: string }[] = []
-  try {
-    const projects = await ProjectService.getAllProjectSlugs()
-    portfolioItems = projects.slice(0, 10).map((p: any) => ({
-      name: p.title,
-      url: `${NEXT_PUBLIC_APPLICATION_HOST}/projects/${p.slug}`,
-      image: p.image || undefined,
-    }))
-  } catch {
-    portfolioItems = []
-  }
+  const portfolioItems = projects.slice(0, 10).map((p: any) => ({
+    name: p.title,
+    url: `${NEXT_PUBLIC_APPLICATION_HOST}/projects/${p.slug}`,
+    image: p.image || undefined,
+  }))
 
   return (
     <>
