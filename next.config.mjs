@@ -12,6 +12,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false
   },
+  productionBrowserSourceMaps: false,
 
   serverExternalPackages: ['@xenova/transformers', 'pg', 'openai'],
 
