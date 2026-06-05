@@ -60,7 +60,7 @@ const config: Config = {
         lg: '0 8px 16px var(--tw-shadow-color)',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji'],
       },
     },
   },
