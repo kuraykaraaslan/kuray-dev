@@ -2,6 +2,7 @@ import Link from '@/libs/i18n/Link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faListUl, faCheckCircle, faCircle, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import type { PostSeriesRef } from '@/types/content/SeriesTypes'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 
 interface SeriesNavProps {
     seriesRef: PostSeriesRef
@@ -16,7 +17,28 @@ export default function SeriesNav({ seriesRef, currentPostId }: SeriesNavProps) 
     const prevEntry = entries.find((e) => e.order === currentOrder - 1)
     const nextEntry = entries.find((e) => e.order === currentOrder + 1)
 
+    const seriesUrl = `${SITE_URL}/blog/series/${series.slug}`
+    const publishedEntries = entries.filter((e) => e.post.status === 'PUBLISHED')
+    const collectionSchema = publishedEntries.length > 0 ? {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: `Series: ${series.title}`,
+        url: seriesUrl,
+        hasPart: publishedEntries.map((e) => ({
+            '@type': 'BlogPosting',
+            headline: e.post.title,
+            url: `${SITE_URL}/blog/${e.post.category.slug}/${e.post.slug}`,
+        })),
+    } : null
+
     return (
+        <>
+        {collectionSchema && (
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+            />
+        )}
         <aside className="my-8 rounded-2xl border border-base-300 bg-base-200 overflow-hidden">
             {/* Header */}
             <div className="flex items-center gap-3 px-5 py-4 border-b border-base-300">
@@ -94,5 +116,6 @@ export default function SeriesNav({ seriesRef, currentPostId }: SeriesNavProps) 
                 </div>
             )}
         </aside>
+        </>
     )
 }
