@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/libs/seo/siteUrl'
 import {
   faGithub,
   faInstagram,
@@ -12,23 +13,20 @@ import { faSnowman } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from '@/libs/i18n/Link'
 
-const NEXT_PUBLIC_APPLICATION_HOST = process.env.NEXT_PUBLIC_APPLICATION_HOST
-
 export const metadata: Metadata = {
   title: 'Links | Kuray Karaaslan',
   description:
-    'Find all of Kuray Karaaslan\'s social media profiles and links in one place — GitHub, LinkedIn, YouTube, Instagram, X, Twitch, and TikTok.',
+    "Find all of Kuray Karaaslan's social media profiles and links in one place — GitHub, LinkedIn, YouTube, Instagram, X, Twitch, and TikTok.",
   robots: { index: true, follow: true },
-  authors: [{ name: 'Kuray Karaaslan', url: `${NEXT_PUBLIC_APPLICATION_HOST}` }],
+  authors: [{ name: 'Kuray Karaaslan', url: SITE_URL }],
   openGraph: {
     title: 'Links | Kuray Karaaslan',
-    description:
-      'Find all of Kuray Karaaslan\'s social media profiles and links in one place.',
+    description: "Find all of Kuray Karaaslan's social media profiles and links in one place.",
     type: 'website',
-    url: `${NEXT_PUBLIC_APPLICATION_HOST}/my-links`,
+    url: `${SITE_URL}/my-links`,
     images: [
       {
-        url: `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`,
+        url: `${SITE_URL}/assets/img/og.png`,
         width: 1200,
         height: 630,
         alt: 'Kuray Karaaslan - Links',
@@ -42,11 +40,11 @@ export const metadata: Metadata = {
     site: '@kuraykaraaslan',
     creator: '@kuraykaraaslan',
     title: 'Links | Kuray Karaaslan',
-    description: 'Find all of Kuray Karaaslan\'s social media profiles and links in one place.',
-    images: [`${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`],
+    description: "Find all of Kuray Karaaslan's social media profiles and links in one place.",
+    images: [`${SITE_URL}/assets/img/og.png`],
   },
   alternates: {
-    canonical: `${NEXT_PUBLIC_APPLICATION_HOST}/my-links`,
+    canonical: `${SITE_URL}/my-links`,
   },
 }
 
