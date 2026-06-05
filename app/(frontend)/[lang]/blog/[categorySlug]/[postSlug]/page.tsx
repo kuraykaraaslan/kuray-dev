@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     keywords: post.keywords?.length ? post.keywords : [post.category.title],
     robots: robotsFor(indexable),
-    authors: [{ name: 'Kuray Karaaslan', url: NEXT_PUBLIC_APPLICATION_HOST || 'http://localhost:3000' }],
+    authors: [{ name: 'Kuray Karaaslan', url: `${NEXT_PUBLIC_APPLICATION_HOST}/about` }],
     openGraph: {
       title: `${post.title} | Kuray Karaaslan`,
       description,
@@ -106,6 +106,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: post.createdAt?.toISOString(),
       modifiedTime: post.updatedAt?.toISOString(),
       authors: ['Kuray Karaaslan'],
+      section: post.category.title,
+      tags: post.keywords?.length ? post.keywords : undefined,
     },
     twitter: {
       card: 'summary_large_image',

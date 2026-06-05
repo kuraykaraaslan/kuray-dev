@@ -14,7 +14,7 @@ export default class MetadataHelper {
       url: NEXT_PUBLIC_APPLICATION_HOST,
       description:
         'Software developer, tech blogger, and open-source enthusiast sharing coding tutorials and insights.',
-      inLanguage: 'en-US',
+      inLanguage: 'en',
       publisher: {
         '@type': 'Person',
         name: 'Kuray Karaaslan',
@@ -197,7 +197,7 @@ export default class MetadataHelper {
       '@type': 'BlogPosting',
       headline: options.title,
       description: options.description,
-      image: options.image,
+      image: { '@type': 'ImageObject', url: options.image },
       mainEntityOfPage: { '@type': 'WebPage', '@id': options.url },
       url: options.url,
       datePublished: options.datePublished,
@@ -205,7 +205,7 @@ export default class MetadataHelper {
       author: {
         '@type': 'Person',
         name: options.authorName ?? 'Kuray Karaaslan',
-        url: NEXT_PUBLIC_APPLICATION_HOST,
+        url: `${NEXT_PUBLIC_APPLICATION_HOST}/about`,
       },
       publisher: {
         '@type': 'Organization',
@@ -262,7 +262,7 @@ export default class MetadataHelper {
       '@type': 'Article',
       headline: title,
       description: description,
-      image: image,
+      image: { '@type': 'ImageObject', url: image },
       author: {
         '@type': 'Person',
         name: articleData?.authorName || 'Kuray Karaaslan',
@@ -353,21 +353,23 @@ export default class MetadataHelper {
   ) {
     if (!comments || comments.length === 0) return null
 
-    return comments.map((comment) => ({
+    return {
       '@context': 'https://schema.org',
-      '@type': 'Comment',
-      '@id': `${articleUrl}#comment-${comment.commentId}`,
-      text: comment.content,
-      dateCreated:
-        typeof comment.createdAt === 'string' ? comment.createdAt : comment.createdAt.toISOString(),
-      author: {
-        '@type': 'Person',
-        name: comment.name || 'Anonymous',
-      },
-      about: {
-        '@id': articleUrl,
-      },
-    }))
+      '@graph': comments.map((comment) => ({
+        '@type': 'Comment',
+        '@id': `${articleUrl}#comment-${comment.commentId}`,
+        text: comment.content,
+        dateCreated:
+          typeof comment.createdAt === 'string' ? comment.createdAt : comment.createdAt.toISOString(),
+        author: {
+          '@type': 'Person',
+          name: comment.name || 'Anonymous',
+        },
+        about: {
+          '@id': articleUrl,
+        },
+      })),
+    }
   }
 
   // Generate Article JSON-LD with comment count
@@ -676,7 +678,7 @@ export default class MetadataHelper {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
           />
         )}
-        {commentsJsonLd && commentsJsonLd.length > 0 && (
+        {commentsJsonLd && (
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(commentsJsonLd) }}
