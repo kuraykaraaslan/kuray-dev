@@ -1,5 +1,21 @@
 import Image from 'next/image'
 
+const SPADES_SRC = '/assets/svg/spades.svg'
+
+function SpadeIcon({ size }: { size: 8 | 16 }) {
+  const px = size === 8 ? 32 : 64
+  return (
+    <Image
+      src={SPADES_SRC}
+      alt=""
+      width={px}
+      height={px}
+      className={`h-${size} w-${size} transition`}
+      aria-hidden="true"
+    />
+  )
+}
+
 const MyImage = () => {
   return (
     <div className="relative flex-none hidden sm:block group">
@@ -18,22 +34,14 @@ const MyImage = () => {
         <div className="relative w-full h-full flex flex-col">
           <div className="fixed flex flex-col uppercase left-2 top-2">
             <span className="text-2xl font-bold text-black ml-[0.4rem]">A</span>
-            <Image
-              src="/assets/svg/spades.svg"
-              alt=""
-              width={32}
-              height={32}
-              className="h-8 w-8 transition"
-              aria-hidden="true"
-            />
+            <SpadeIcon size={8} />
           </div>
           <div className="fixed flex flex-col uppercase mt-2 ml-2 right-2 bottom-2 transform rotate-180">
             <span className="text-2xl font-bold text-black ml-[0.4rem]">A</span>
-            <Image src="/assets/svg/spades.svg" alt="" width={32} height={32} className="h-8 w-8 transition" aria-hidden="true" />
+            <SpadeIcon size={8} />
           </div>
-
           <div className="relative flex flex-col items-center justify-center w-full h-full">
-            <Image src="/assets/svg/spades.svg" alt="" width={64} height={64} className="h-16 w-16 transition" aria-hidden="true" />
+            <SpadeIcon size={16} />
           </div>
         </div>
       </div>
