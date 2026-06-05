@@ -8,6 +8,7 @@
   "lang": "en",
   "dir": "ltr",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
   "orientation": "portrait-primary",
   "background_color": "#1d2a35",
   "theme_color": "#1d2a35",
