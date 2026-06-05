@@ -120,7 +120,11 @@ export default async function ProjectPage({ params }: Props) {
         description,
         type: 'website',
         url,
-        images: [project.image || `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`],
+        images: [{ url: project.image || `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`, width: 1200, height: 630, alt: project.title }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        images: [{ url: project.image || `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`, alt: project.title }],
       },
     }
 

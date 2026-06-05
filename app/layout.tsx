@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     creator: '@kuraykaraaslan',
     title: 'Kuray Karaaslan | Full-Stack Developer',
     description: 'Full-Stack Developer (React, Next.js, Java). Available for freelance.',
-    images: ['/assets/img/og.png'],
+    images: [{ url: '/assets/img/og.png', alt: 'Kuray Karaaslan - Full-Stack Developer' }],
   },
   robots: {
     index: true,
