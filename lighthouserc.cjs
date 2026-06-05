@@ -19,6 +19,8 @@ module.exports = {
         `${BASE}/projects`,
         `${BASE}/about`,
         `${BASE}/tr`, // localized home — verifies <html lang="tr"> in the server HTML
+        `${BASE}/auth/login`,
+        `${BASE}/auth/register`,
       ],
       numberOfRuns: 1,
       settings: {
