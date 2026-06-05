@@ -1,8 +1,7 @@
 import './globals.css'
 import { ReactNode } from 'react'
 import { Inter } from 'next/font/google'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import WebVitals from '@/components/frontend/WebVitals'
+import ConsentedAnalytics from '@/components/frontend/ConsentedAnalytics'
 import ServiceWorkerRegistrar from '@/components/common/PWA/ServiceWorkerRegistrar'
 import ThemeSyncScript from '@/components/common/UI/ThemeSyncScript'
 import type { Metadata, Viewport } from 'next'
@@ -16,8 +15,6 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-sans',
 })
-
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -174,10 +171,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </a>
         <ThemeSyncScript />
         <ServiceWorkerRegistrar />
-        <WebVitals />
+        <ConsentedAnalytics />
         <main id="main-content">{children}</main>
-
-        {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   )
