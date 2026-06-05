@@ -24,6 +24,15 @@
     }
   }
 
+  /* Touch devices: ensure buttons/links show active feedback (not just hover) */
+  @media (hover: none) {
+    button:active,
+    [role="button"]:active,
+    a:active {
+      opacity: 0.75;
+    }
+  }
+
   /* iOS zoom prevention: inputs must be ≥16px */
   /* iOS Safari zooms in whenever a focused input has font-size < 16px. */
   @media (max-width: 767px) {

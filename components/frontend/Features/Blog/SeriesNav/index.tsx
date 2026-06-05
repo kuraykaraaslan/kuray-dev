@@ -67,7 +67,7 @@ export default function SeriesNav({ seriesRef, currentPostId }: SeriesNavProps) 
                                     </span>
                                 </div>
                             ) : isPublished ? (
-                                <Link href={href} className="flex items-center gap-3 px-5 py-3 hover:bg-base-300 transition-colors group">
+                                <Link href={href} className="flex items-center gap-3 px-5 py-3 hover:bg-base-300 active:bg-base-300 transition-colors group">
                                     <FontAwesomeIcon icon={faCircle} className="text-base-content/20 group-hover:text-primary shrink-0 text-xs" />
                                     <span className="text-sm text-base-content/70 group-hover:text-base-content">
                                         {entry.order + 1}. {entry.post.title}
@@ -93,7 +93,7 @@ export default function SeriesNav({ seriesRef, currentPostId }: SeriesNavProps) 
                     {prevEntry?.post.status === 'PUBLISHED' ? (
                         <Link
                             href={`/blog/${prevEntry.post.category.slug}/${prevEntry.post.slug}`}
-                            className="flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
+                            className="flex items-center gap-2 text-sm text-base-content/60 hover:text-primary active:text-primary transition-colors"
                         >
                             <FontAwesomeIcon icon={faArrowLeft} />
                             <span className="truncate max-w-[180px]">{prevEntry.post.title}</span>

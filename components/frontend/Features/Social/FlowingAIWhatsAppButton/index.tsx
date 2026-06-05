@@ -51,7 +51,7 @@ const FlowingAIWhatsAppButton = () => {
       <button
         aria-label={t('frontend.open_ai_assistant')}
         onClick={toggleChatbot}
-        className="w-1/2 h-full flex items-center justify-center bg-accent hover:bg-accent/70 relative"
+        className="w-1/2 h-full flex items-center justify-center bg-accent hover:bg-accent/70 active:bg-accent/70 relative"
       >
         <FontAwesomeIcon icon={faRobot} className="w-5 h-5 text-white" />
 
@@ -64,7 +64,7 @@ const FlowingAIWhatsAppButton = () => {
       <button
         aria-label={t('frontend.chat_on_whatsapp')}
         onClick={() => window.open('https://wa.me/905459223554')}
-        className="w-1/2 h-full flex items-center justify-center bg-[#25D366] hover:bg-[#25D366]/70"
+        className="w-1/2 h-full flex items-center justify-center bg-[#25D366] hover:bg-[#25D366]/70 active:bg-[#25D366]/70"
       >
         <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5 text-white" />
       </button>

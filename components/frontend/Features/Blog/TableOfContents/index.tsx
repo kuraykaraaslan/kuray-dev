@@ -87,7 +87,7 @@ const TableOfContents = ({ content, className = '' }: TableOfContentsProps) => {
       <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
         <button
           onClick={() => setIsCollapsed((prev) => !prev)}
-          className="p-1 rounded hover:bg-base-300 transition"
+          className="p-1 rounded hover:bg-base-300 active:bg-base-300 transition"
           aria-label={t('frontend.toc.toggle')}
         >
           <FontAwesomeIcon
@@ -112,7 +112,7 @@ const TableOfContents = ({ content, className = '' }: TableOfContentsProps) => {
               onClick={(e) => handleClick(e, heading.id)}
               className={`
                 block py-1 px-2 rounded transition-colors duration-200
-                hover:bg-base-300 hover:text-primary
+                hover:bg-base-300 hover:text-primary active:bg-base-300 active:text-primary
                 ${
                   activeId === heading.id
                     ? 'bg-primary/10 text-primary font-medium border-l-2 border-primary'
