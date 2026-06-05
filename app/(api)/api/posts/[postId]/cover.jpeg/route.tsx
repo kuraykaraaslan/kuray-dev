@@ -39,7 +39,6 @@ const FALLBACK_JPEG = Buffer.from(
 // Module-scope font cache. First request warms it; subsequent requests reuse.
 type FontBundle = {
   interRegular: ArrayBuffer
-  interBold: ArrayBuffer
   interExtraBold: ArrayBuffer
   monoRegular: ArrayBuffer
   monoSemiBold: ArrayBuffer
@@ -67,15 +66,14 @@ async function fetchFont(family: string, weight: number): Promise<ArrayBuffer> {
 async function loadFonts(): Promise<FontBundle> {
   if (!fontPromise) {
     fontPromise = (async () => {
-      const [interRegular, interBold, interExtraBold, monoRegular, monoSemiBold] =
+      const [interRegular, interExtraBold, monoRegular, monoSemiBold] =
         await Promise.all([
           fetchFont('Inter', 400),
-          fetchFont('Inter', 700),
           fetchFont('Inter', 800),
           fetchFont('JetBrains Mono', 400),
           fetchFont('JetBrains Mono', 600),
         ])
-      return { interRegular, interBold, interExtraBold, monoRegular, monoSemiBold }
+      return { interRegular, interExtraBold, monoRegular, monoSemiBold }
     })().catch((err) => {
       // Reset so a transient failure doesn't poison the cache forever.
       fontPromise = null
@@ -208,7 +206,6 @@ async function renderJpeg(
     height: HEIGHT,
     fonts: [
       { name: 'Inter', data: fonts.interRegular, weight: 400, style: 'normal' },
-      { name: 'Inter', data: fonts.interBold, weight: 700, style: 'normal' },
       { name: 'Inter', data: fonts.interExtraBold, weight: 800, style: 'normal' },
       { name: 'JetBrainsMono', data: fonts.monoRegular, weight: 400, style: 'normal' },
       { name: 'JetBrainsMono', data: fonts.monoSemiBold, weight: 600, style: 'normal' },
