@@ -46,7 +46,7 @@ export function corsPreflightMiddleware(request: NextRequest): MiddlewareResult 
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': isAllowed ? origin || '*' : '',
+      'Access-Control-Allow-Origin': isAllowed && origin ? origin : '',
       'Access-Control-Allow-Methods': ALLOWED_METHODS,
       'Access-Control-Allow-Headers': ALLOWED_HEADERS,
       'Access-Control-Allow-Credentials': 'true',
