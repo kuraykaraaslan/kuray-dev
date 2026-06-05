@@ -4,6 +4,7 @@ import { Project } from '@/generated/prisma'
 import ProjectService from '@/services/ProjectService'
 import AuthMiddleware from '@/services/AuthService/AuthMiddleware'
 import { CreateProjectRequestSchema, UpdateProjectRequestSchema } from '@/dtos/ProjectDTO'
+import { invalidateSitemapCache } from '@/libs/cache/invalidateSitemap'
 
 /**
  * GET handler for retrieving all projects with optional pagination and search.
@@ -67,8 +68,8 @@ export async function POST(request: NextRequest) {
 
     const project = (await ProjectService.createProject(parsedData.data)) as Project
 
-    // Invalidate the Next route cache for project pages (forward-compatible).
     revalidatePath('/[lang]/projects/[projectSlug]', 'page')
+    await invalidateSitemapCache()
 
     return NextResponse.json({ project })
   } catch (error: any) {
@@ -101,8 +102,8 @@ export async function PUT(request: NextRequest) {
 
     const project = await ProjectService.updateProject(parsedData.data as Project)
 
-    // Invalidate the Next route cache for project pages (forward-compatible).
     revalidatePath('/[lang]/projects/[projectSlug]', 'page')
+    await invalidateSitemapCache()
 
     return NextResponse.json({ project })
   } catch (error: any) {
