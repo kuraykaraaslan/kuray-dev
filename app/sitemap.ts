@@ -68,7 +68,7 @@ async function buildSitemap(): Promise<MetadataRoute.Sitemap> {
     const projects = await ProjectService.getAllProjectSlugs()
     projectEntries = projects.map((p) => ({
       url: `${SITE_URL}/projects/${p.slug}`,
-      lastModified: now,
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
       alternates: altLanguages(`/projects/${p.slug}`, ['en', ...p.langs]),
