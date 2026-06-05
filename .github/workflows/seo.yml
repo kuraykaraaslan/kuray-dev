@@ -59,3 +59,5 @@ jobs:
           AUDIT_BASE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
+      - name: Bundle-size gate (≤5% growth)
+        run: npm run audit:bundle
