@@ -201,10 +201,10 @@ export default async function BlogPost({ params }: Props) {
         status: 'PUBLISHED',
         lang,
       })
-      relatedLinks = relatedResponse.posts
+      const relatedPosts = relatedResponse.posts
         .filter((p) => p.postId !== post.postId)
         .slice(0, 5)
-        .map((p) => `${NEXT_PUBLIC_APPLICATION_HOST}/blog/${p.category.slug}/${p.slug}`)
+      relatedLinks = relatedPosts.map((p) => `${NEXT_PUBLIC_APPLICATION_HOST}/blog/${p.category.slug}/${p.slug}`)
       articleData.relatedLinks = relatedLinks
     } catch (error) {
       console.error('Error fetching related posts for schema:', error)
@@ -267,6 +267,23 @@ export default async function BlogPost({ params }: Props) {
             articleSection: post.category.title,
           },
         })}
+        {relatedLinks.length > 0 && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'ItemList',
+                name: 'Related Articles',
+                itemListElement: relatedLinks.map((href, i) => ({
+                  '@type': 'ListItem',
+                  position: i + 1,
+                  url: href,
+                })),
+              }),
+            }}
+          />
+        )}
         <PostViewBeacon postId={post.postId} />
         <section className="min-h-screen bg-base-100 pt-32" id="blog">
           <div className="container mx-auto px-4 lg:px-8 mb-8 flex-grow flex-col max-w-7xl">
