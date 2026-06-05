@@ -21,6 +21,17 @@ export default function GlobalError({
     } else {
       sessionStorage.removeItem('_chunkReloads')
     }
+
+    // Report to error-collect endpoint; sendBeacon is fire-and-forget
+    const payload = JSON.stringify({
+      message: error.message,
+      name: error.name,
+      digest: error.digest,
+      url: window.location.href,
+    })
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/error-collect', new Blob([payload], { type: 'application/json' }))
+    }
   }, [error])
 
   return (
