@@ -118,6 +118,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [image],
     },
     alternates: { canonical, languages },
+    other: availableLangs.length > 1
+      ? { 'og:locale:alternate': availableLangs.filter((l) => l !== lang).map((l) => getOgLocale(l)) }
+      : undefined,
   }
 }
 
