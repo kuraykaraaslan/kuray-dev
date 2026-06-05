@@ -199,61 +199,67 @@ const Contact = (props: ContactProps) => {
                       href="https://wa.me/905459223554"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="block py-2 min-w-[44px]"
                     >
-                      <span>Whatsapp</span>
+                      Whatsapp
                     </Link>
                   </p>
 
                   <p className="flex items-center">
-                    <FontAwesomeIcon icon={faTelegram} className="w-5 h-5 mr-2 sm:mr-6" />
+                    <FontAwesomeIcon icon={faTelegram} className="w-5 h-5 mr-2 sm:mr-6" aria-hidden="true" />
                     <Link
                       href="https://t.me/kuraykaraaslan"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="block py-2 min-w-[44px]"
                     >
-                      <span>Telegram</span>
+                      Telegram
                     </Link>
                   </p>
 
                   <p className="flex items-center">
-                    <FontAwesomeIcon icon={faLinkedin} className="w-5 h-5 mr-2 sm:mr-6" />
+                    <FontAwesomeIcon icon={faLinkedin} className="w-5 h-5 mr-2 sm:mr-6" aria-hidden="true" />
                     <Link
                       href="https://www.linkedin.com/in/kuraykaraaslan"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="block py-2 min-w-[44px]"
                     >
-                      <span>LinkedIn</span>
+                      LinkedIn
                     </Link>
                   </p>
 
                   <div className="flex items-center">
-                    <FontAwesomeIcon icon={faXTwitter} className="w-5 h-5 mr-2 sm:mr-6" />
+                    <FontAwesomeIcon icon={faXTwitter} className="w-5 h-5 mr-2 sm:mr-6" aria-hidden="true" />
                     <Link
                       href="https://twitter.com/kuraykaraaslan"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="block py-2 min-w-[44px]"
                     >
-                      <span>X</span>
+                      X (Twitter)
                     </Link>
                   </div>
                   <div className="flex items-center">
-                    <FontAwesomeIcon icon={faFacebook} className="w-5 h-5 mr-2 sm:mr-6" />
+                    <FontAwesomeIcon icon={faFacebook} className="w-5 h-5 mr-2 sm:mr-6" aria-hidden="true" />
                     <Link
                       href="https://www.facebook.com/kuraykaraaslan"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="block py-2 min-w-[44px]"
                     >
-                      <span>Facebook</span>
+                      Facebook
                     </Link>
                   </div>
                   <div className="flex items-center">
-                    <FontAwesomeIcon icon={faInstagram} className="w-5 h-5 mr-2 sm:mr-6" />
+                    <FontAwesomeIcon icon={faInstagram} className="w-5 h-5 mr-2 sm:mr-6" aria-hidden="true" />
                     <Link
                       href="https://www.instagram.com/kuraykaraaslan"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="block py-2 min-w-[44px]"
                     >
-                      <span>Instagram</span>
+                      Instagram
                     </Link>
                   </div>
                 </div>

@@ -63,7 +63,8 @@ const Welcome = () => {
               href="https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={t('pages.hero.resume')}
+              aria-hidden="true"
+              tabIndex={-1}
               className="hidden"
             >
               <p className="btn btn-ghost ms-2 lowercase hidden">

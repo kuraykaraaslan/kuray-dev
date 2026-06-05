@@ -11,7 +11,7 @@ const SingleProject = ({ project }: { project: Project }) => {
     <article
       className={`rounded-lg border from-base-100 to-base-300 bg-gradient-to-b shadow-lg border-base-200 text-base-900`}
     >
-      <Link className="shadow-md rounded-t-lg" href={url} target="_blank" rel="noopener noreferrer">
+      <Link className="shadow-md rounded-t-lg" href={url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabIndex={-1}>
         <Image
           width="1000"
           height="1000"
@@ -27,7 +27,7 @@ const SingleProject = ({ project }: { project: Project }) => {
         ))}
       </div>
       <h2 className="px-6 mb-2 text-2xl font-bold tracking-tight">
-        <Link href={url} target="_blank" rel="noopener noreferrer">
+        <Link href={url} target="_blank" rel="noopener noreferrer" className="block py-2">
           {project.title}
         </Link>
       </h2>

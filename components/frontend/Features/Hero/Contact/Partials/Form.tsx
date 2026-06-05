@@ -158,7 +158,7 @@ const ContactForm = (props: { className?: string; token: string }) => {
           type="text"
           id="name"
           className={
-            'block p-3 w-full text-sm rounded-lg border border-1 border-gray-500 bg-gray-200 text-black ' +
+            'block p-3 w-full text-sm rounded-lg border border-1 border-gray-500 bg-gray-200 text-black placeholder:text-gray-600 ' +
             (isNameValid ? '' : 'text-red-500')
           }
           placeholder={t('pages.contact.form.enter_your_name')}
@@ -174,7 +174,7 @@ const ContactForm = (props: { className?: string; token: string }) => {
           type="email"
           id="email"
           className={
-            'block p-3 w-full text-sm rounded-lg border border-1 bg-gray-200 text-black ' +
+            'block p-3 w-full text-sm rounded-lg border border-1 bg-gray-200 text-black placeholder:text-gray-600 ' +
             (isEmailValid ? '' : 'text-red-500')
           }
           placeholder={t('pages.contact.form.enter_your_email')}
@@ -188,8 +188,9 @@ const ContactForm = (props: { className?: string; token: string }) => {
         </label>
         <PhoneInput
           international
+          id="phone"
           className={
-            'block pl-3 w-full text-sm rounded-lg border border-1 border-gray-500 bg-gray-200 p-3 text-black ' +
+            'block pl-3 w-full text-sm rounded-lg border border-1 border-gray-500 bg-gray-200 p-3 text-black [&_.PhoneInputInput]:min-h-[44px] [&_.PhoneInputInput]:placeholder:text-gray-600 ' +
             (isPhoneValid ? '' : 'text-red-500')
           }
           placeholder={t('pages.contact.form.enter_your_phone')}
@@ -206,7 +207,7 @@ const ContactForm = (props: { className?: string; token: string }) => {
         <textarea
           id="message"
           className={
-            'block p-2.5 w-full text-sm rounded-lg border border-1 border-gray-500 min-h-[150px] bg-gray-200 resize-none text-black ' +
+            'block p-2.5 w-full text-sm rounded-lg border border-1 border-gray-500 min-h-[150px] bg-gray-200 resize-none text-black placeholder:text-gray-600 ' +
             (isMessageValid ? '' : 'text-red-500')
           }
           placeholder={t('pages.contact.form.enter_your_message')}
