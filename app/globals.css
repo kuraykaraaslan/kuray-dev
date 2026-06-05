@@ -84,6 +84,14 @@
   }
 }
 
+/* ─── Safe area for notched devices (iOS PWA, Dynamic Island) ─── */
+@layer base {
+  /* Prevent content from hiding behind notches in standalone PWA mode */
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
 /* Cookie Consent Banner slide-up animation — keyframes live outside layers */
 @keyframes slideUp {
   from {

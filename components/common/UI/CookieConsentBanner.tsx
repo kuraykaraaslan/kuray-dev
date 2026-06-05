@@ -26,8 +26,8 @@ export default function CookieConsentBanner({ privacyPolicyHref = '/privacy-poli
       role="dialog"
       aria-modal="false"
       aria-label={t('cookieConsent.title')}
-      style={{ contain: 'layout style', willChange: 'transform' }}
-      className="fixed bottom-0 left-0 right-0 z-[9998] p-4 md:p-6 animate-[slideUp_0.3s_ease-out] max-h-[30vh] overflow-y-auto"
+      style={{ contain: 'layout style', willChange: 'transform', paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
+      className="fixed bottom-0 left-0 right-0 z-[9998] px-4 pt-4 md:px-6 md:pt-6 animate-[slideUp_0.3s_ease-out] max-h-[30vh] overflow-y-auto"
     >
       <div className="max-w-4xl mx-auto bg-base-200 border border-base-300 rounded-2xl shadow-2xl p-5 md:p-6">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
