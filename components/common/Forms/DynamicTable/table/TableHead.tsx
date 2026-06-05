@@ -21,18 +21,20 @@ function TableHead() {
     <thead className="bg-base-300 h-12">
       <tr className="h-12">
         {bulkActions && bulkActions.length > 0 && (
-          <th className="w-10">
+          <th scope="col" className="w-10">
             <input
               type="checkbox"
               className="checkbox checkbox-sm"
               checked={isAllSelected}
               onChange={toggleSelectAll}
+              aria-label={t('common.select_all')}
             />
           </th>
         )}
         {visibleColumns.map((col: ColumnDef<any>) => (
           <th
             key={col.key}
+            scope="col"
             className={[
               col.className || '',
               col.hideOnMobile ? 'hidden md:table-cell' : '',
@@ -46,7 +48,7 @@ function TableHead() {
             </span>
           </th>
         ))}
-        {actions && actions.length > 0 && <th>{t('common.action')}</th>}
+        {actions && actions.length > 0 && <th scope="col">{t('common.action')}</th>}
       </tr>
     </thead>
   )

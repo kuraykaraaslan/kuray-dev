@@ -44,16 +44,19 @@ function ComparisonBlock(rawProps: Record<string, unknown>) {
         )}
 
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full" role="table">
+            {heading && (
+              <caption className="sr-only">{heading} — feature comparison between {ourName} and {competitorName}</caption>
+            )}
             <thead>
               <tr>
-                <th className="text-left py-4 px-4 font-bold bg-base-300 text-base-content/70">
+                <th scope="col" className="text-left py-4 px-4 font-bold bg-base-300 text-base-content/70">
                   Features
                 </th>
-                <th className="text-center py-4 px-4 font-bold bg-primary text-primary-content">
+                <th scope="col" className="text-center py-4 px-4 font-bold bg-primary text-primary-content">
                   {ourName}
                 </th>
-                <th className="text-center py-4 px-4 font-bold bg-base-300 text-base-content/70">
+                <th scope="col" className="text-center py-4 px-4 font-bold bg-base-300 text-base-content/70">
                   {competitorName}
                 </th>
               </tr>
@@ -61,9 +64,9 @@ function ComparisonBlock(rawProps: Record<string, unknown>) {
             <tbody>
               {comparisons.map((comp, i) => (
                 <tr key={i} className="border-b border-base-300">
-                  <td className="py-4 px-4 text-base-content">
+                  <th scope="row" className="py-4 px-4 text-base-content font-normal text-left">
                     {comp.feature}
-                  </td>
+                  </th>
                   <td className="text-center py-4 px-4 bg-primary/10 text-primary">
                     {comp.us === '✓' || comp.us === 'true' ? '✓' : comp.us}
                   </td>
