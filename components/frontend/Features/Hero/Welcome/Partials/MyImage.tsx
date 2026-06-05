@@ -5,11 +5,12 @@ const MyImage = () => {
     <div className="relative flex-none hidden sm:block group">
       <div className="shadow-2xl max-w-24 sm:max-w-48 md:max-w-64 transition duration-500 transform group-hover:rotate-y-180 bg-primary">
         <Image
-          width="0"
-          height="0"
           src="/assets/img/kuraykaraaslan.jpg"
           alt="kuray karaaslan"
-          className="transition duration-500 transform"
+          width={256}
+          height={256}
+          className="transition duration-500 transform w-full h-auto"
+          sizes="(max-width: 640px) 6rem, (max-width: 768px) 12rem, 16rem"
         />
       </div>
       <div className="absolute top-0 shadow-2xl max-w-24 sm:max-w-48 md:max-w-64 transition duration-500 transform rotate-y-180 group-hover:rotate-y-0 bg-primary w-full h-full opacity-0 group-hover:opacity-100">

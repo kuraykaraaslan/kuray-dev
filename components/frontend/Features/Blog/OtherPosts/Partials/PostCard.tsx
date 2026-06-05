@@ -86,6 +86,7 @@ const PostCard = ({ post, similarityScore }: { post: PostWithData; similaritySco
           fill
           className="object-cover"
           sizes="(max-width: 768px) 50vw, 200px"
+          loading="lazy"
         />
       </Link>
       <div className="p-4">
