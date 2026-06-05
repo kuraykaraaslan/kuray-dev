@@ -1,7 +1,9 @@
 'use client'
 import { createRef, useState } from 'react'
-import ReactPlayer from 'react-player'
+import dynamic from 'next/dynamic'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false })
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import HeadlessModal, { useModal } from '@/components/common/Modal'
 

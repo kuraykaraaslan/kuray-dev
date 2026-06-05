@@ -1,7 +1,9 @@
 'use client'
+import dynamic from 'next/dynamic'
 import HeadlessModal, { useModal } from '@/components/common/Modal'
-import KnowledgeGraph3D from './index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const KnowledgeGraph3D = dynamic(() => import('./index'), { ssr: false })
 import { faProjectDiagram } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 
