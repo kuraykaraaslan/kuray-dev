@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            cd ${{ secrets.APP_DIR }}
+
+            echo "==> Pulling latest changes..."
+            git pull origin main
+
+            echo "==> Installing dependencies..."
+            npm ci --omit=dev
+
+            echo "==> Generating Prisma client..."
+            npx prisma generate
+
+            echo "==> Running database migrations..."
+            npx prisma migrate deploy
+
+            echo "==> Building application..."
+            npm run build
+
+            echo "==> Restarting PM2 process..."
+            pm2 startOrRestart ecosystem.config.js --update-env
+
+            echo "==> Deploy complete."
