@@ -42,7 +42,7 @@ const PostHeader = (post: PostWithData & { children?: ReactNode }) => {
         <span className="text-primary hidden md:inline">•</span>
         <span className="hidden md:inline">
           {t('frontend.post.by')}{' '}
-          <Link href={'/users/' + post.authorId} className="text-primary">
+          <Link href={'/users/' + post.authorId} className="text-primary" rel="author">
             {post.author.userProfile?.name || t('frontend.post.unknown_author')}
           </Link>
         </span>
