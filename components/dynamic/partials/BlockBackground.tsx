@@ -25,6 +25,7 @@ export default function BlockBackground({ bgType, bgImage, bgVideo, bgColor, bgO
         aria-hidden
         className="object-cover z-0 pointer-events-none"
         style={{ opacity }}
+        sizes="100vw"
         unoptimized={bgImage.startsWith('http')}
         priority={false}
       />

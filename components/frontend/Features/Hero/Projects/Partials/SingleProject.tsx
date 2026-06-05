@@ -13,11 +13,12 @@ const SingleProject = ({ project }: { project: Project }) => {
     >
       <Link className="shadow-md rounded-t-lg" href={url} target="_blank" rel="noopener noreferrer" aria-hidden="true" tabIndex={-1}>
         <Image
-          width="1000"
-          height="1000"
-          unoptimized={true}
+          width={1000}
+          height={1000}
           src={project.image ? project.image : ''}
           alt={project.title}
+          loading="lazy"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="w-full h-48 object-cover object-top rounded-t-lg"
         />
       </Link>
