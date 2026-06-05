@@ -137,12 +137,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          title="Kuray Karaaslan Blog"
-          href="/feed.xml"
-        />
+        <link rel="alternate" type="application/rss+xml" title="Kuray Karaaslan Blog (RSS)" href="/feed.xml" />
+        <link rel="alternate" type="application/atom+xml" title="Kuray Karaaslan Blog (Atom)" href="/feed.atom" />
+        <link rel="alternate" type="application/feed+json" title="Kuray Karaaslan Blog (JSON Feed)" href="/feed.json" />
         {/* CORS origins need crossorigin so the browser shares the connection */}
         <link rel="preconnect" href="https://kuray-dev.s3.amazonaws.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.gravatar.com" crossOrigin="anonymous" />
