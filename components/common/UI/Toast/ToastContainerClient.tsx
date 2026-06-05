@@ -17,6 +17,8 @@ export default function ToastContainerClient({ options }: ToastContainerClientPr
       pauseOnFocusLoss
       draggable
       pauseOnHover
+      role="status"
+      aria-label="Notifications"
       {...options}
     />
   )
