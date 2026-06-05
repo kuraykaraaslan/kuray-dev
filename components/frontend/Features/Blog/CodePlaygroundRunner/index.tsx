@@ -51,7 +51,8 @@ async function runCode(code: string, lang: string): Promise<string[]> {
     }, 5000)
 
     const onMsg = (ev: MessageEvent) => {
-      if (!ev.data || ev.data.pgId !== id) return
+      // srcdoc sandbox iframes have opaque origin ("null"); reject all other sources
+      if (ev.origin !== 'null' || !ev.data || ev.data.pgId !== id) return
       clearTimeout(timer)
       window.removeEventListener('message', onMsg)
       iframe.remove()
