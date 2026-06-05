@@ -112,6 +112,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
   colorScheme: 'dark light',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
@@ -145,14 +146,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           title="Kuray Karaaslan Blog"
           href="/feed.xml"
         />
-        <link rel="preconnect" href="https://kuray-dev.s3.amazonaws.com" />
-        <link rel="preconnect" href="https://www.gravatar.com" />
-        <link rel="preconnect" href="https://avatars.githubusercontent.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://kuray-dev.s3.amazonaws.com" />
-        <link rel="dns-prefetch" href="https://www.gravatar.com" />
-        <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
+        {/* CORS origins need crossorigin so the browser shares the connection */}
+        <link rel="preconnect" href="https://kuray-dev.s3.amazonaws.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.gravatar.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://avatars.githubusercontent.com" crossOrigin="anonymous" />
+        {/* GA/GTM are non-blocking — dns-prefetch is sufficient */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body className="min-h-screen">
