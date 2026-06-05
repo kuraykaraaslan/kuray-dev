@@ -26,7 +26,9 @@ export default function RootLayout({
         <input id="my-drawer" type="checkbox" className="drawer-toggle" aria-hidden="true" tabIndex={-1} />
         <div className="relative drawer-content flex flex-col min-h-screen bg-base-200 h-full">
           {/* Navbar */}
-          <Navbar menuItems={MenuItems} />
+          <header role="banner">
+            <Navbar menuItems={MenuItems} />
+          </header>
           {/* Page content here */}
           {children}
 
