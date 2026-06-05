@@ -121,7 +121,6 @@ const ProjectsHero = () => {
             {filteredProjects.map((project: Project, index: number) => (
               <SingleProject key={index} project={project} />
             ))}
-            <SingleProject key={filteredProjects.length} project={continueOnGitHub} />
           </div>
         </div>
 
