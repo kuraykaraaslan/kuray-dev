@@ -2,7 +2,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import axiosInstance from '@/libs/axios'
-import Editor from '@/components/common/Forms/Editor'
+import dynamic from 'next/dynamic'
+const Editor = dynamic(() => import('@/components/common/Forms/Editor'), { ssr: false })
 import { toast } from 'react-toastify'
 import ImageLoad from '@/components/common/UI/Images/ImageLoad'
 import AIPrompt from '@/components/admin/Features/AIPrompt'

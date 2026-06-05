@@ -151,6 +151,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         {/* reCAPTCHA is deferred until form interaction — dns-prefetch warms the connection */}
         <link rel="dns-prefetch" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://www.gstatic.com" />
+        {/* TinyMCE CDN — admin-only, dns-prefetch is enough */}
+        <link rel="dns-prefetch" href="https://cdn.tinymce.com" />
         {/* Speculation Rules API — instant prefetch of likely-next navigations (Chrome 123+) */}
         <script
           type="speculationrules"

@@ -8,7 +8,8 @@ import FormHeader from '@/components/common/Forms/FormHeader'
 import DynamicText from '@/components/common/Forms/DynamicText'
 import GenericElement from '@/components/common/Forms/GenericElement'
 import Form from '@/components/common/Forms/Form'
-import Editor from '@/components/common/Forms/Editor'
+import dynamic from 'next/dynamic'
+const Editor = dynamic(() => import('@/components/common/Forms/Editor'), { ssr: false })
 import { Campaign } from '@/types/common/CampaignTypes'
 
 const statusBadge = (status: Campaign['status']) => {
