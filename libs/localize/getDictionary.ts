@@ -1,4 +1,5 @@
 import 'server-only'
+import { cache } from 'react'
 
 const enabledLanguages = (process.env.NEXT_PUBLIC_I18N_LANGUAGES ?? 'en')
   .split(',')
@@ -15,10 +16,11 @@ async function loadDict(lang: string): Promise<Record<string, unknown>> {
   }
 }
 
-export async function getDictionary(lang: string): Promise<Record<string, unknown>> {
+// cache() deduplicates repeated calls within the same request (generateMetadata + render)
+export const getDictionary = cache(async (lang: string): Promise<Record<string, unknown>> => {
   const resolved = enabledLanguages.includes(lang) ? lang : 'en'
   return loadDict(resolved)
-}
+})
 
 export async function getPageMetadata(lang: string, page: string) {
   const dict = await getDictionary(lang)

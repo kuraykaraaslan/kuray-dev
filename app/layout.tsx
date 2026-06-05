@@ -12,6 +12,7 @@ import { SITE_URL } from '@/libs/seo/siteUrl'
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   variable: '--font-sans',
 })
