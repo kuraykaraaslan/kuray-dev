@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       creator: '@kuraykaraaslan',
       title,
       description,
-      images: [`${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`],
+      images: [{ url: `${NEXT_PUBLIC_APPLICATION_HOST}/assets/img/og.png`, alt: 'Kuray Karaaslan Projects' }],
     },
     alternates: { canonical, languages },
   }

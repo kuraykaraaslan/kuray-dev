@@ -93,7 +93,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       creator: '@kuraykaraaslan',
       title: `${title} | Kuray Karaaslan`,
       description,
-      images: [image],
+      images: [{ url: image, alt: title }],
     },
     alternates: { canonical, languages },
   }
