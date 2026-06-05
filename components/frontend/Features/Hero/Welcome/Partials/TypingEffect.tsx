@@ -41,7 +41,8 @@ const TypingEffect = () => {
       } else if (isDeleting && letterIndex > 0) {
         setLetterIndex((i) => i - 1)
       } else if (!isDeleting && letterIndex === current.length) {
-        setTimeout(() => setIsDeleting(true), pauseAfterFull)
+        const t = setTimeout(() => setIsDeleting(true), pauseAfterFull)
+        return () => clearTimeout(t)
       } else if (isDeleting && letterIndex === 0) {
         setIsDeleting(false)
         setTextsIndex((i) => (i + 1) % texts.length)
