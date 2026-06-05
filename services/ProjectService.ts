@@ -256,7 +256,7 @@ export default class ProjectService {
     return projects.map((project) => ({
       title: project.title,
       slug: project.slug,
-      updatedAt: project.updatedAt,
+      updatedAt: project.updatedAt ?? new Date(0),
       image: project.image ?? null,
       langs: project.translations.map((t) => t.lang),
     }))

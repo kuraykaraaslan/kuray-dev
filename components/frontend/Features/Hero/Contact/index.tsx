@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -52,8 +52,6 @@ const Contact = (props: ContactProps) => {
   const [phoneNumbers, setPhoneNumbers] = useState<Phone[]>([])
   const [mails, setMails] = useState<Mail[]>([])
   const [token, setToken] = useState<string>(captchaEnabled ? '' : 'disabled')
-
-  const recaptchaRef = useRef<ReCAPTCHA>(null)
 
   useEffect(() => {
     if (token === '') {
@@ -180,7 +178,6 @@ const Contact = (props: ContactProps) => {
                   ) : (
                     <>
                       <ReCAPTCHA
-                        ref={recaptchaRef}
                         size="normal"
                         sitekey={recaptchaSiteKey}
                         onChange={(value) => setToken(value || '')}

@@ -4,7 +4,7 @@ import { addHeadingIds } from '@/helpers/tocUtils'
 function injectImgAttributes(html: string): string {
   // Add loading="lazy" to every <img> that doesn't already have it.
   // Also inject width/height="auto" so browsers reserve space and CLS is reduced.
-  return html.replace(/<img\b([^>]*)>/gi, (match, attrs) => {
+  return html.replace(/<img\b([^>]*)>/gi, (_match, attrs) => {
     let out = attrs
     if (!/\bloading=/.test(attrs)) out += ' loading="lazy"'
     if (!/\bwidth=/.test(attrs)) out += ' width="800"'

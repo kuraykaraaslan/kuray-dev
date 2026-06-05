@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from '@/libs/i18n/Link'
-import { useState, useRef, MouseEvent } from 'react'
+import { useState, MouseEvent, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import dynamic from 'next/dynamic'
 
@@ -20,7 +20,9 @@ const RegisterPage = () => {
   const [password, setPassword] = useState<string>('')
   const [confirmpassword, setConfirmpassword] = useState<string>('')
   const [captchaReady, setCaptchaReady] = useState(false)
-  const recaptchaRef = useRef<any>(null)
+  const [captchaToken, setCaptchaToken] = useState<string>('')
+
+  const handleEmailFocus = useCallback(() => { setCaptchaReady(true) }, [])
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -64,8 +66,7 @@ const RegisterPage = () => {
       return
     }
 
-    const recaptchaToken = recaptchaRef.current?.getValue() || ''
-    if (recaptchaSiteKey && !recaptchaToken) {
+    if (recaptchaSiteKey && !captchaToken) {
       toast.error(t('auth.register.captcha_required'))
       return
     }
@@ -76,7 +77,7 @@ const RegisterPage = () => {
       .post(`/api/auth/register`, {
         email: email,
         password: password,
-        recaptchaToken,
+        recaptchaToken: captchaToken,
       })
       .then((res) => {
         if (res.data.error) {
@@ -116,7 +117,7 @@ const RegisterPage = () => {
               autoComplete="email"
               value={email as string}
               onChange={(e) => setEmail(e.target.value)}
-              onFocus={() => setCaptchaReady(true)}
+              onFocus={handleEmailFocus}
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               placeholder={t('auth.register.email_placeholder')}
               aria-required="true"
@@ -180,7 +181,7 @@ const RegisterPage = () => {
 
         {recaptchaSiteKey && captchaReady && (
           <div className="flex justify-center">
-            <ReCAPTCHA ref={recaptchaRef} sitekey={recaptchaSiteKey} />
+            <ReCAPTCHA sitekey={recaptchaSiteKey} onChange={(token) => setCaptchaToken(token ?? '')} />
           </div>
         )}
 
