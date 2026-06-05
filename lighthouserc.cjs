@@ -38,11 +38,10 @@ module.exports = {
         // best-practices' is-on-https audit dings localhost-over-http:
         'categories:performance': ['warn', { minScore: 0.9 }],
         'categories:best-practices': ['warn', { minScore: 0.9 }],
-        // CWV metric budgets — warn-only in lab (machine-dependent); tighten to
-        // 'error' once field CrUX P75 data (#137) confirms stable baselines:
-        'largest-contentful-paint': ['warn', { maxNumericValue: 2500 }],
-        'cumulative-layout-shift': ['warn', { maxNumericValue: 0.1 }],
-        'total-blocking-time': ['warn', { maxNumericValue: 300 }],
+        // CWV metric gates — lab values; INP is a field-only metric so TBT proxies it here.
+        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
+        'total-blocking-time': ['error', { maxNumericValue: 300 }],
         // Individual SEO/a11y audits that must pass outright:
         'document-title': 'error',
         'meta-description': 'error',
