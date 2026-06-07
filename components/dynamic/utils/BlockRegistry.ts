@@ -80,6 +80,7 @@ import { TeamHorizontalBlockDefinition } from '../Blocks/TeamHorizontalBlock'
 import { ContentSliderBlockDefinition } from '../Blocks/ContentSliderBlock'
 import { CookieConsentBlockDefinition } from '../Blocks/CookieConsentBlock'
 import { WorldMapBlockDefinition } from '../Blocks/WorldMapBlock'
+import { UsesBlockDefinition } from '../Blocks/UsesBlock'
 
 // Code-level blocks (special / built-in)
 const CODE_BLOCKS: Record<string, BlockDefinition> = {
@@ -164,6 +165,7 @@ const CODE_BLOCKS: Record<string, BlockDefinition> = {
   [ContentSliderBlockDefinition.type]: ContentSliderBlockDefinition,
   [CookieConsentBlockDefinition.type]: CookieConsentBlockDefinition,
   [WorldMapBlockDefinition.type]: WorldMapBlockDefinition,
+  [UsesBlockDefinition.type]: UsesBlockDefinition,
 }
 
 export function getCodeBlock(type: string): BlockDefinition | undefined {
