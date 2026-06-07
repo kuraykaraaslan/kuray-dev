@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 export type { BlockData } from '@/types/content/PageTypes'
 
-export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'multi-select' | 'json' | 'img' | 'repeater' | 'icon' | 'rich-text'
+export type FieldType = 'text' | 'url' | 'textarea' | 'color' | 'boolean' | 'number' | 'select' | 'multi-select' | 'json' | 'img' | 'repeater' | 'icon' | 'rich-text' | 'datetime' | 'file'
 
 /** Select option — either a plain string (value === label) or an object with distinct label/value */
 export type FieldOption = string | { label: string; value: string }

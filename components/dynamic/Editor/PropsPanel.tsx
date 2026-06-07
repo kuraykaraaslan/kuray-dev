@@ -190,6 +190,15 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
         />
       )}
 
+      {field.type === 'datetime' && (
+        <input
+          type="datetime-local"
+          value={(localProps[key] as string) ?? (field.value as string) ?? ''}
+          onChange={(e) => update(key, e.target.value)}
+          className={inputCls}
+        />
+      )}
+
       {field.type === 'img' && (
         <div className="space-y-3">
           <div
@@ -258,6 +267,32 @@ export default function PropsPanel({ block, onChange, collapseButton }: Props) {
             className={inputCls}
           />
 
+          <p className="text-[11px] text-base-content/35">
+            {uploadingKey === key ? 'Uploading...' : 'Upload a file to S3 or keep using a URL.'}
+          </p>
+        </div>
+      )}
+
+      {field.type === 'file' && (
+        <div className="space-y-2">
+          <input
+            type="text"
+            value={(localProps[key] as string) ?? (field.value as string) ?? ''}
+            placeholder={field.placeholder || 'Paste file URL or upload below'}
+            onChange={(e) => update(key, e.target.value)}
+            className={inputCls}
+          />
+          <input
+            type="file"
+            accept={field.accept}
+            onChange={async (e) => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              await uploadImage(key, file, field.uploadFolder || 'files')
+              e.currentTarget.value = ''
+            }}
+            className={inputCls}
+          />
           <p className="text-[11px] text-base-content/35">
             {uploadingKey === key ? 'Uploading...' : 'Upload a file to S3 or keep using a URL.'}
           </p>
