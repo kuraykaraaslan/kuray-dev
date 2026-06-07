@@ -2,7 +2,7 @@ jest.mock('@/services/PostService', () => ({ __esModule: true, default: { getAll
 jest.mock('@/services/ProjectService', () => ({ __esModule: true, default: { getAllProjectSlugs: jest.fn() } }))
 jest.mock('@/services/DynamicPageService', () => ({ __esModule: true, default: { getSitemapSlugs: jest.fn() } }))
 
-import sitemap from '@/app/sitemap'
+import { getSitemapEntries as sitemap } from '@/helpers/SitemapData'
 import PostService from '@/services/PostService'
 import ProjectService from '@/services/ProjectService'
 import DynamicPageService from '@/services/DynamicPageService'
@@ -52,8 +52,9 @@ describe('app/sitemap', () => {
   it('degrades gracefully when a data source throws', async () => {
     ;(PostService.getAllPostSlugs as jest.Mock).mockRejectedValue(new Error('db down'))
     const entries = await sitemap()
-    // Still returns the static + project + dynamic-page entries.
+    // Still returns the static + project + dynamic-page entries. The homepage
+    // <loc> is SITE_URL with no trailing slash so it matches the page canonical.
     expect(entries.length).toBeGreaterThan(0)
-    expect(entries.some((e) => e.url === `${SITE_URL}/`)).toBe(true)
+    expect(entries.some((e) => e.url === SITE_URL)).toBe(true)
   })
 })

@@ -20,6 +20,7 @@ const STATIC_FILES = new Set([
   '/favicon.ico',
   '/robots.txt',
   '/sitemap.xml',
+  '/sitemap.xsl',
   '/opensearch.xml',
   '/site.webmanifest',
   // LLM / AI crawler indexes — must not be redirected through i18n
@@ -27,6 +28,11 @@ const STATIC_FILES = new Set([
   // route handler at app/llms-full.txt/route.ts)
   '/llms.txt',
   '/llms-full.txt',
+  // Syndication feeds — route handlers at app/feed.{atom,xml,json}/route.ts.
+  // Must skip i18n or they get rewritten to /en/feed.* and 404.
+  '/feed.atom',
+  '/feed.xml',
+  '/feed.json',
 ])
 
 const SKIP_PREFIXES = [
