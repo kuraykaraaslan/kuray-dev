@@ -2,7 +2,7 @@
 import { useEffect, useState, ReactNode } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import axiosInstance from '@/libs/axios'
 import { useUserStore, useLanguageStore } from '@/libs/zustand'
@@ -14,7 +14,12 @@ const Navbar = dynamic(() => import('@/components/admin/Layout/Navbar'), { ssr: 
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
+  const pathname = usePathname()
   const { setUser } = useUserStore()
+
+  // Block/page editors are full-screen tools — let them break out of the
+  // centered, max-width admin container so they can use the full viewport width.
+  const isFullWidth = /^\/admin\/blocks\/[^/]+$/.test(pathname ?? '')
   const lang = useLanguageStore((s) => s.lang)
   const [isAuthChecked, setIsAuthChecked] = useState(false)
 
@@ -72,7 +77,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <Navbar />
       <div
         style={{ flex: 1 }}
-        className="container mx-auto px-4 pt-4 md:pt-12 lg:px-8 max-w-8xl mb-8 mt- flex flex-col md:flex-row gap-4"
+        className={
+          isFullWidth
+            ? 'w-full'
+            : 'container mx-auto px-4 pt-4 md:pt-12 lg:px-8 max-w-8xl mb-8 mt- flex flex-col md:flex-row gap-4'
+        }
       >
         {/* [children] */}
         {children}

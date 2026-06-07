@@ -21,6 +21,7 @@ import { AppDownloadBlockDefinition } from '../Blocks/AppDownloadBlock'
 import { BenefitsGridBlockDefinition } from '../Blocks/BenefitsGridBlock'
 import { BlogGridBlockDefinition } from '../Blocks/BlogGridBlock'
 import { BlogPostBlockDefinition } from '../Blocks/BlogPostBlock'
+import { BookshelfBlockDefinition } from '../Blocks/BookshelfBlock'
 import { CardGridBlockDefinition } from '../Blocks/CardGridBlock'
 import { CaseStudyBlockDefinition } from '../Blocks/CaseStudyBlock'
 import { ChallengeGridBlockDefinition } from '../Blocks/ChallengeGridBlock'
@@ -72,6 +73,13 @@ import { TagCloudBlockDefinition } from '../Blocks/TagCloudBlock'
 import { TeamMembersBlockDefinition } from '../Blocks/TeamMembersBlock'
 import { TextStatsBlockDefinition } from '../Blocks/TextStatsBlock'
 import { VideoGalleryBlockDefinition } from '../Blocks/VideoGalleryBlock'
+import { PopupModalBlockDefinition } from '../Blocks/PopupModalBlock'
+import { PresentationViewerBlockDefinition } from '../Blocks/PresentationViewerBlock'
+import { ImageSliderBlockDefinition } from '../Blocks/ImageSliderBlock'
+import { TeamHorizontalBlockDefinition } from '../Blocks/TeamHorizontalBlock'
+import { ContentSliderBlockDefinition } from '../Blocks/ContentSliderBlock'
+import { CookieConsentBlockDefinition } from '../Blocks/CookieConsentBlock'
+import { WorldMapBlockDefinition } from '../Blocks/WorldMapBlock'
 
 // Code-level blocks (special / built-in)
 const CODE_BLOCKS: Record<string, BlockDefinition> = {
@@ -97,6 +105,7 @@ const CODE_BLOCKS: Record<string, BlockDefinition> = {
   [BenefitsGridBlockDefinition.type]: BenefitsGridBlockDefinition,
   [BlogGridBlockDefinition.type]: BlogGridBlockDefinition,
   [BlogPostBlockDefinition.type]: BlogPostBlockDefinition,
+  [BookshelfBlockDefinition.type]: BookshelfBlockDefinition,
   [CardGridBlockDefinition.type]: CardGridBlockDefinition,
   [CaseStudyBlockDefinition.type]: CaseStudyBlockDefinition,
   [ChallengeGridBlockDefinition.type]: ChallengeGridBlockDefinition,
@@ -148,6 +157,13 @@ const CODE_BLOCKS: Record<string, BlockDefinition> = {
   [TeamMembersBlockDefinition.type]: TeamMembersBlockDefinition,
   [TextStatsBlockDefinition.type]: TextStatsBlockDefinition,
   [VideoGalleryBlockDefinition.type]: VideoGalleryBlockDefinition,
+  [PopupModalBlockDefinition.type]: PopupModalBlockDefinition,
+  [PresentationViewerBlockDefinition.type]: PresentationViewerBlockDefinition,
+  [ImageSliderBlockDefinition.type]: ImageSliderBlockDefinition,
+  [TeamHorizontalBlockDefinition.type]: TeamHorizontalBlockDefinition,
+  [ContentSliderBlockDefinition.type]: ContentSliderBlockDefinition,
+  [CookieConsentBlockDefinition.type]: CookieConsentBlockDefinition,
+  [WorldMapBlockDefinition.type]: WorldMapBlockDefinition,
 }
 
 export function getCodeBlock(type: string): BlockDefinition | undefined {

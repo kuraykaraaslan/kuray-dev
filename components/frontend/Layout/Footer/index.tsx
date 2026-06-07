@@ -5,7 +5,6 @@ import { faEnvelope, faBriefcase, faArrowUpRightFromSquare } from '@fortawesome/
 import Link from '@/libs/i18n/Link'
 import { useTranslation } from 'react-i18next'
 import SystemStatusButton from '../../UI/Buttons/SystemStatusButton'
-import GeoHeatmapButton from '../../UI/Buttons/GeoHeatmapButton'
 import Logo from '@/components/common/Layout/Logo'
 
 const SOCIAL_LINKS = [
@@ -139,7 +138,6 @@ const Footer = () => {
           <div className="flex items-center gap-2">
             <span className="text-xs text-base-content/70">{t('footer.built_with')}</span>
             <SystemStatusButton />
-            <GeoHeatmapButton />
           </div>
         </div>
       </div>

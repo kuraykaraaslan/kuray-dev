@@ -6,6 +6,7 @@
     "dev": "npm run boot && npx next dev",
     "build": "next build",
     "start": "npm run boot && next start",
+    "deploy": "bash scripts/deploy.sh",
     "lint": "eslint .",
     "test": "jest",
     "test:watch": "jest --watch",

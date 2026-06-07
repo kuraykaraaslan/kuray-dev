@@ -293,7 +293,7 @@ export default function SingleBlock() {
         </div>
 
         {/* Right: PropsPanel (for schema-driven fields) + raw edit form */}
-        <div className="w-80 flex-shrink-0 border-l border-base-content/10 bg-base-200 overflow-y-auto flex flex-col">
+        <div className="w-96 xl:w-[34rem] flex-shrink-0 border-l border-base-content/10 bg-base-200 overflow-y-auto flex flex-col">
           {/* PropsPanel for schema fields */}
           {block && Object.keys((() => { try { return JSON.parse(schemaStr) } catch { return {} } })()).length > 0 && (
             <PropsPanel
