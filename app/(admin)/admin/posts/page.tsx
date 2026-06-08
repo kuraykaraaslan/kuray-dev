@@ -33,6 +33,8 @@ const PostPage = () => {
     { key: 'title', header: 'common.title', accessor: (p) => p.title, },
     { key: 'slug', header: 'common.slug', accessor: (p) => p.slug },
     { key: 'status', header: 'common.status', accessor: (p) => p.status },
+    {     key: 'category',     header: 'common.category',     accessor: (p) => p.category.title,  hideOnMobile: true,   },
+    {     key: 'project',     header: 'common.project',     accessor: (p) => p.project?.title || <span className="text-base-content/30 text-xs">—</span>,  hideOnMobile: true,   },
     {
       key: 'translations',
       header: 'common.translations',
