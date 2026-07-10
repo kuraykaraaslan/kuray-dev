@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "Sélectionner une catégorie",
-      "select_user": "Sélectionner un utilisateur"
+      "select_user": "Sélectionner un utilisateur",
+      "select_option": "Sélectionner",
+      "select_post": "Sélectionner un article",
+      "select_project": "Sélectionner un projet",
+      "select_role": "Sélectionner un rôle",
+      "select_status": "Sélectionner un statut"
     },
     "slots": {
       "add": "Ajouter",
@@ -450,7 +455,9 @@
       "visits": "{{count}} visites",
       "appointments": "Rendez-vous",
       "geo_stats": "Statistiques géographiques",
-      "no_geo_data": "Aucune donnée géographique disponible."
+      "no_geo_data": "Aucune donnée géographique disponible.",
+      "no_projects": "Pas encore de projets.",
+      "recent_projects": "Projets récents"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Double-cliquez pour éditer",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Pages"
     },
     "notifications": {
       "all_caught_up": "Tout est à jour !",
@@ -867,7 +875,8 @@
       "scroll_left": "Faites défiler vers la gauche",
       "scroll_right": "Faites défiler vers la droite",
       "smart_recommendations": "Recommandé pour vous",
-      "smart_recommendations_description": "Ces articles ont été sélectionnés par l'IA en fonction d'une analyse de similarité de contenu."
+      "smart_recommendations_description": "Ces articles ont été sélectionnés par l'IA en fonction d'une analyse de similarité de contenu.",
+      "project_posts": "Articles de {{projectTitle}}"
     },
     "knowledge_graph": {
       "title_2d": "Graphique de connaissances 2D",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "J'ai travaillé avec des personnes et des entreprises formidables. Voici ce qu'ils disent de moi.",
         "title": "Ce Que Disent Les Gens"
-      }
+      },
+      "cta_primary": "Explorer les systèmes sélectionnés",
+      "cta_secondary": "Discuter d'un projet complexe",
+      "eyebrow": "Architecte logiciel · Ingénieur produit · Constructeur de systèmes"
     },
     "projects": {
       "description": "Mes portfolios professionnels sur lesquels j'ai travaillé.",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL & Modélisation des données",
         "testing_cicd": "Tests & CI/CD"
       },
-      "title": "La créativité nécessite beaucoup d'outils"
+      "title": "La créativité nécessite beaucoup d'outils",
+      "capabilities": {
+        "architecture": {
+          "description": "Concevoir les limites du système, les responsabilités des services, les modèles de domaine, les structures de permission, les fondations multi-locataires et les chemins d'évolution à long terme.",
+          "title": "Architecture produit et plateforme"
+        },
+        "backend": {
+          "description": "Construire des services sécurisés, observables et maintenables pour les flux de travail transactionnels, la communication en temps réel, le traitement en arrière-plan, les intégrations et les flux de données à haut volume.",
+          "title": "Systèmes backend et distribués"
+        },
+        "bim": {
+          "description": "Traduire les flux de travail d'ingénierie en modèles d'exécution web, d'automatisation et de cloud tout en préservant la justesse du domaine et l'intégrité du modèle.",
+          "title": "Logiciels BIM & Ingénierie"
+        },
+        "infrastructure": {
+          "description": "Créer des environnements de production déployables, observables, sécurisés et compréhensibles par les équipes responsables de leur exploitation.",
+          "title": "Infrastructure & Opérations"
+        },
+        "interfaces": {
+          "description": "Concevoir des interfaces pour des produits opérationnels complexes où la clarté, la performance, les autorisations et la densité des données comptent plus que l'UI décorative.",
+          "title": "Interfaces Produit"
+        },
+        "iot": {
+          "description": "Connecter des appareils, des protocoles de messagerie, des tableaux de bord en temps réel, des moteurs de règles, de la télémétrie, de la configuration et des flux de travail opérationnels en une plateforme cohérente.",
+          "title": "IoT & Systèmes Temps Réel"
+        },
+        "payments": {
+          "description": "Construire des flux de travail d'abonnement, de facturation, de package, d'abstraction de fournisseur, d'annulation, de droits et de facturation comme infrastructure produit de base.",
+          "title": "Paiements & Systèmes Commerciaux"
+        },
+        "security": {
+          "description": "Concevoir l'authentification, l'autorisation, l'isolation des locataires, les cycles de vie des jetons, les intégrations de fournisseurs, l'auditabilité et les frontières de services sécurisées.",
+          "title": "Sécurité & Identité"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Avant de choisir des frameworks, je définis la responsabilité, le flux de données, les limites de défaillance et les endroits où le changement est le plus probable.",
+          "title": "Commencer par les limites du système"
+        },
+        "complexity": {
+          "description": "Je ne distribue pas de systèmes, n'introduis pas d'abstractions, ni n'ajoute d'infrastructure sans raison concrète de produit ou opérationnelle.",
+          "title": "Garder la complexité intentionnelle"
+        },
+        "explainable": {
+          "description": "Une bonne architecture doit être compréhensible à travers ses contraintes, compromis et évolution prévue, et non par la complexité seule.",
+          "title": "Rendre les décisions explicables"
+        },
+        "foundations": {
+          "description": "L'orchestration réutilisable, l'authentification partagée, les modèles de données communs et les limites cohérentes réduisent le coût de livraison futur.",
+          "title": "Construire des fondations qui se renforcent"
+        },
+        "operation": {
+          "description": "Le déploiement, l'observabilité, les permissions, la récupération et la maintenance font partie de l'architecture, et non des étapes qui viennent après.",
+          "title": "Concevoir pour l'opération"
+        },
+        "providers": {
+          "description": "Les fournisseurs de paiement, d'identité, de notification, de stockage et d'infrastructure ne doivent pas dicter le modèle central du produit.",
+          "title": "Séparer la logique de domaine des fournisseurs"
+        }
+      },
+      "title": "Ma démarche en ingénierie"
+    },
+    "leadership": {
+      "description": "Ma contribution ne se limite pas aux tâches d'implémentation individuelles. J'aide à orienter la direction du système, à réduire l'ambiguïté technique, à établir des fondations réutilisables et à faciliter le travail complexe pour les ingénieurs qui me succèdent.",
+      "points": {
+        "point1": "Traduire des exigences produit ambiguës en limites techniques exécutables",
+        "point2": "Définir une architecture partagée et des fondations de plateforme réutilisables",
+        "point3": "Identifier des chemins de migration qui préservent la valeur commerciale existante",
+        "point4": "Évaluer le risque technique avant qu'il ne devienne une dette de production",
+        "point5": "Mentorer les ingénieurs à travers l'implémentation et le raisonnement architectural",
+        "point6": "Créer des standards qui réduisent la prise de décision répétée",
+        "point7": "Connecter les préoccupations de produit, de domaine, d'infrastructure et d'implémentation",
+        "point8": "Améliorer les systèmes sans introduire de complexité opérationnelle inutile"
+      },
+      "title": "Leadership technique"
     }
   },
   "settings": {

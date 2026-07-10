@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "Valitse kategoria",
-      "select_user": "Valitse käyttäjä"
+      "select_user": "Valitse käyttäjä",
+      "select_option": "Valitse",
+      "select_post": "Valitse viesti",
+      "select_project": "Valitse projekti",
+      "select_role": "Valitse rooli",
+      "select_status": "Valitse tila"
     },
     "slots": {
       "add": "Lisää",
@@ -450,7 +455,9 @@
       "visits": "{{count}} käyntiä",
       "appointments": "Tapaamiset",
       "geo_stats": "Maantieteelliset tilastot",
-      "no_geo_data": "Ei maantieteellisiä tietoja saatavilla."
+      "no_geo_data": "Ei maantieteellisiä tietoja saatavilla.",
+      "no_projects": "Ei projekteja vielä.",
+      "recent_projects": "Viimeisimmät projektit"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Kaksoisnapsauta muokataksesi",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Sivut"
     },
     "notifications": {
       "all_caught_up": "Kaikki ajan tasalla!",
@@ -867,7 +875,8 @@
       "scroll_left": "Vieritä vasemmalle",
       "scroll_right": "Vieritä oikealle",
       "smart_recommendations": "Suositeltu sinulle",
-      "smart_recommendations_description": "Nämä artikkelit valittiin tekoälyn toimesta sisällön samankaltaisuusanalyysin perusteella."
+      "smart_recommendations_description": "Nämä artikkelit valittiin tekoälyn toimesta sisällön samankaltaisuusanalyysin perusteella.",
+      "project_posts": "{{projectTitle}} viestit"
     },
     "knowledge_graph": {
       "title_2d": "2D Tietokaavio",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "Olen työskennellyt upeiden ihmisten ja yritysten kanssa. Tässä on, mitä he sanovat minusta.",
         "title": "Mitä ihmiset sanovat"
-      }
+      },
+      "cta_primary": "Tutustu valittuihin järjestelmiin",
+      "cta_secondary": "Keskustele monimutkaisesta projektista",
+      "eyebrow": "Ohjelmistoarkkitehti · Tuoteinsinööri · Järjestelmien rakentaja"
     },
     "projects": {
       "description": "Ammatilliset portfolioni, joissa olen työskennellyt.",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL ja tietomallinnus",
         "testing_cicd": "Testaus ja CI/CD"
       },
-      "title": "Luovuus tarvitsee paljon työkaluja"
+      "title": "Luovuus tarvitsee paljon työkaluja",
+      "capabilities": {
+        "architecture": {
+          "description": "Suunnitella järjestelmän rajat, palveluiden vastuut, toimialamallit, oikeusrakenteet, monivuokralaisperustat ja pitkän aikavälin kehityspolut.",
+          "title": "Tuote- ja Alusta-arkkitehtuuri"
+        },
+        "backend": {
+          "description": "Rakentaa turvallisia, havaittavia ja ylläpidettäviä palveluita transaktiotyönkulkuihin, reaaliaikaiseen viestintään, taustaprosessointiin, integraatioihin ja suurivolyymisiin tietovirtoihin.",
+          "title": "Taustajärjestelmät ja Hajautetut Järjestelmät"
+        },
+        "bim": {
+          "description": "Kääntää insinöörityönkulut verkko-, automaatio- ja pilvitoteutusmalleiksi säilyttäen toimialan oikeellisuuden ja mallin eheyden.",
+          "title": "BIM & suunnitteluohjelmisto"
+        },
+        "infrastructure": {
+          "description": "Tuotantoympäristöjen luominen, jotka ovat käyttöönotettavia, havainnoitavia, turvallisia ja niiden käyttöä ymmärtävät tiimit voivat hallita niitä.",
+          "title": "Infrastruktuuri & toiminnot"
+        },
+        "interfaces": {
+          "description": "Käyttöliittymien suunnittelu monimutkaisille operatiivisille tuotteille, joissa selkeys, suorituskyky, käyttöoikeudet ja datatiheys ovat tärkeämpiä kuin koristeellinen käyttöliittymä.",
+          "title": "Tuotteen käyttöliittymät"
+        },
+        "iot": {
+          "description": "Laitteiden yhdistäminen, viestintäprotokollat, reaaliaikaiset kojelaudat, sääntömoottorit, telemetria, konfigurointi ja operatiiviset työnkulut yhdeksi yhtenäiseksi alustaksi.",
+          "title": "IoT & reaaliaikaiset järjestelmät"
+        },
+        "payments": {
+          "description": "Tilauksen, laskutuksen, pakettien, palveluntarjoajan abstraktion, peruutuksen, oikeuksien ja laskutustyönkulkujen rakentaminen ydintuotteen infrastruktuuriksi.",
+          "title": "Maksut & kaupalliset järjestelmät"
+        },
+        "security": {
+          "description": "Autentikoinnin, valtuutuksen, vuokralaisen eristämisen, tunnusten elinkaaren, palveluntarjoajan integraatioiden, auditoinnin ja turvallisten palvelurajojen suunnittelu.",
+          "title": "Turvallisuus & identiteetti"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Ennen kuin valitsen kehyksiä, määrittelen omistajuuden, tietovirran, virherajat ja missä muutokset todennäköisimmin tapahtuvat.",
+          "title": "Aloita järjestelmän rajoista"
+        },
+        "complexity": {
+          "description": "En jaa järjestelmiä, ota käyttöön abstraktioita tai lisää infrastruktuuria ilman konkreettista tuotetta tai operatiivista syytä.",
+          "title": "Pidä monimutkaisuus tarkoituksellisena"
+        },
+        "explainable": {
+          "description": "Hyvän arkkitehtuurin tulisi olla ymmärrettävää sen rajoitusten, kompromissien ja suunnitellun kehityksen kautta - ei pelkästään monimutkaisuuden kautta.",
+          "title": "Tee päätöksistä selitettäviä"
+        },
+        "foundations": {
+          "description": "Uudelleenkäytettävä orkestrointi, jaettu todennus, yhteiset tietomallit ja johdonmukaiset rajat vähentävät tulevia toimituskustannuksia.",
+          "title": "Rakenna perustuksia, jotka kasvavat"
+        },
+        "operation": {
+          "description": "Käyttöönotto, havaittavuus, oikeudet, palautus ja ylläpito ovat osa arkkitehtuuria - eivät vaiheita, jotka tulevat sen jälkeen.",
+          "title": "Suunnittele käyttöä varten"
+        },
+        "providers": {
+          "description": "Maksu-, identiteetti-, ilmoitus-, tallennus- ja infrastruktuuripalveluntarjoajien ei pitäisi sanella tuotteen ydintä mallia.",
+          "title": "Erota toimialalogiikka palveluntarjoajista"
+        }
+      },
+      "title": "Miten Lähestyn Tekniikkaa"
+    },
+    "leadership": {
+      "description": "Panokseni ei rajoitu yksittäisiin toteutustehtäviin. Autan muotoilemaan järjestelmän suuntaa, vähentämään teknistä epäselvyyttä, luomaan uudelleenkäytettäviä perustuksia ja tekemään monimutkaisesta työstä helpompaa insinööreille, jotka jatkavat jälkeeni.",
+      "points": {
+        "point1": "Kääntää epäselvät tuotevaatimukset toteutettaviksi teknisiksi rajoiksi",
+        "point2": "Määrittää jaetun arkkitehtuurin ja uudelleenkäytettävät alustaperustat",
+        "point3": "Tunnistaa siirtopolut, jotka säilyttävät olemassa olevan liiketoiminta-arvon",
+        "point4": "Arvioi teknistä riskiä ennen kuin siitä tulee tuotantovelkaa",
+        "point5": "Mentoroi insinöörejä toteutuksen ja arkkitehtuurisen ajattelun kautta",
+        "point6": "Luo standardeja, jotka vähentävät toistuvaa päätöksentekoa",
+        "point7": "Yhdistää tuotteen, toimialan, infrastruktuurin ja toteutuksen huolenaiheet",
+        "point8": "Parantaa järjestelmiä ilman tarpeetonta operatiivista monimutkaisuutta"
+      },
+      "title": "Tekninen Johtajuus"
     }
   },
   "settings": {

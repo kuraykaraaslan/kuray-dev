@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "Kateqoriya Seç",
-      "select_user": "İstifadəçi Seç"
+      "select_user": "İstifadəçi Seç",
+      "select_option": "Seçin",
+      "select_post": "Post Seçin",
+      "select_project": "Layihə Seçin",
+      "select_role": "Rolu Seçin",
+      "select_status": "Statusu Seçin"
     },
     "slots": {
       "add": "Əlavə et",
@@ -450,7 +455,9 @@
       "visits": "{{count}} ziyarət",
       "appointments": "Görüşlər",
       "geo_stats": "Coğrafi Statistikalar",
-      "no_geo_data": "Coğrafi məlumat mövcud deyil."
+      "no_geo_data": "Coğrafi məlumat mövcud deyil.",
+      "no_projects": "Hələ layihə yoxdur.",
+      "recent_projects": "Son Layihələr"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Redaktə etmək üçün iki dəfə vurun",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Səhifələr"
     },
     "notifications": {
       "all_caught_up": "Hamısı tamamlandı!",
@@ -867,7 +875,8 @@
       "scroll_left": "Sola sürüşdür",
       "scroll_right": "Sağa sürüşdür",
       "smart_recommendations": "Sizin üçün tövsiyə olunur",
-      "smart_recommendations_description": "Bu məqalələr məzmun oxşarlığı analizi əsasında AI tərəfindən seçilmişdir."
+      "smart_recommendations_description": "Bu məqalələr məzmun oxşarlığı analizi əsasında AI tərəfindən seçilmişdir.",
+      "project_posts": "{{projectTitle}} Postlar"
     },
     "knowledge_graph": {
       "title_2d": "2D Bilik Qrafiki",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "Mən bəzi möhtəşəm insanlarla və şirkətlərlə işlədim. Onların mənim haqqımda nə dediklərinə baxın.",
         "title": "İnsanlar Nə Deyir"
-      }
+      },
+      "cta_primary": "Seçilmiş Sistemləri Araşdırın",
+      "cta_secondary": "Mürəkkəb Layihəni Müzakirə Edin",
+      "eyebrow": "Proqram Arxitektoru · Məhsul Mühəndisi · Sistem Qurucusu"
     },
     "projects": {
       "description": "Üzərində işlədiyim peşəkar portfoliolarım.",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL və Məlumat Modelləşdirmə",
         "testing_cicd": "Test və CI/CD"
       },
-      "title": "Yaradıcılıq çoxlu alətlər tələb edir"
+      "title": "Yaradıcılıq çoxlu alətlər tələb edir",
+      "capabilities": {
+        "architecture": {
+          "description": "Sistem sərhədləri, xidmət məsuliyyətləri, domen modelləri, icazə strukturları, çox kirayəçi təməlləri və uzunmüddətli təkamül yollarını dizayn etmək.",
+          "title": "Məhsul və Platforma Arxitekturası"
+        },
+        "backend": {
+          "description": "Əməliyyat iş axınları, real vaxt ünsiyyəti, arxa plan işlənməsi, inteqrasiyalar və yüksək həcmli məlumat axınları üçün təhlükəsiz, müşahidə edilə bilən və saxlanıla bilən xidmətlər qurmaq.",
+          "title": "Arxa Plan və Paylanmış Sistemlər"
+        },
+        "bim": {
+          "description": "Mühəndislik iş axınlarını veb, avtomatlaşdırma və bulud icra modellərinə çevirmək, domen düzgünlüyünü və model bütövlüyünü qorumaq.",
+          "title": "BIM və Mühəndislik Proqramı"
+        },
+        "infrastructure": {
+          "description": "İstismar edən komandalar tərəfindən yerləşdirilə bilən, müşahidə edilə bilən, təhlükəsiz və başa düşülən istehsal mühitləri yaratmaq.",
+          "title": "İnfrastruktur və Əməliyyatlar"
+        },
+        "interfaces": {
+          "description": "Dekorativ UI-dən daha çox aydınlıq, performans, icazələr və məlumat sıxlığının əhəmiyyət kəsb etdiyi mürəkkəb əməliyyat məhsulları üçün interfeyslər dizayn etmək.",
+          "title": "Məhsul İnterfeysləri"
+        },
+        "iot": {
+          "description": "Cihazları, mesajlaşma protokollarını, real vaxt tablosunu, qayda mühərriklərini, telemetriyanı, konfiqurasiyanı və əməliyyat iş axınlarını bir vahid platformaya birləşdirmək.",
+          "title": "IoT və Real Vaxt Sistemləri"
+        },
+        "payments": {
+          "description": "Abunəlik, ödəniş, paket, provayder abstraksiyası, ləğv, hüquq və faktura iş axınlarını əsas məhsul infrastrukturu kimi qurmaq.",
+          "title": "Ödənişlər və Ticarət Sistemləri"
+        },
+        "security": {
+          "description": "Doğrulama, icazə, tenant izolyasiyası, token həyat dövrləri, provayder inteqrasiyaları, audit imkanı və təhlükəsiz xidmət sərhədlərini dizayn etmək.",
+          "title": "Təhlükəsizlik və Şəxsiyyət"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Çərçivələri seçməzdən əvvəl, mülkiyyət, məlumat axını, uğursuzluq sərhədlərini və dəyişikliklərin ən çox ehtimal olunduğu yerləri müəyyən edirəm.",
+          "title": "Sistem sərhədləri ilə başlayın"
+        },
+        "complexity": {
+          "description": "Məhsul və ya əməliyyat səbəbi olmadan sistemləri yaymıram, abstraksiyalar təqdim etmirəm və ya infrastruktur əlavə etmirəm.",
+          "title": "Mürəkkəbliyi məqsədli saxlayın"
+        },
+        "explainable": {
+          "description": "Yaxşı arxitektura, yalnız mürəkkəbliklə deyil, məhdudiyyətləri, kompromisləri və nəzərdə tutulan təkamülü ilə başa düşülməlidir.",
+          "title": "Qərarları izah edilə bilən edin"
+        },
+        "foundations": {
+          "description": "Təkrar istifadə edilə bilən orkestrasiya, ortaq autentifikasiya, ümumi məlumat modelləri və ardıcıl sərhədlər gələcək çatdırılma xərclərini azaldır.",
+          "title": "Birləşən təməl qurun"
+        },
+        "operation": {
+          "description": "Yerləşdirmə, müşahidə, icazələr, bərpa və texniki xidmət arxitekturanın bir hissəsidir - ondan sonra gələn addımlar deyil.",
+          "title": "Əməliyyat üçün dizayn edin"
+        },
+        "providers": {
+          "description": "Ödəniş, şəxsiyyət, bildiriş, saxlama və infrastruktur təminatçıları məhsulun əsas modelini müəyyən etməməlidir.",
+          "title": "Domen məntiqini təminatçılardan ayırın"
+        }
+      },
+      "title": "Mühəndisliyə Yanaşmam"
+    },
+    "leadership": {
+      "description": "Mənim töhfəm yalnız fərdi tətbiqetmə tapşırıqları ilə məhdudlaşmır. Sistem istiqamətini formalaşdırmağa, texniki qeyri-müəyyənliyi azaltmağa, təkrar istifadə edilə bilən təməl yaratmağa və məndən sonra gələn mühəndislər üçün mürəkkəb işi asanlaşdırmağa kömək edirəm.",
+      "points": {
+        "point1": "Qeyri-müəyyən məhsul tələblərini icra edilə bilən texniki sərhədlərə çevirmək",
+        "point2": "Ortaq arxitektura və təkrar istifadə edilə bilən platforma təməllərini müəyyən etmək",
+        "point3": "Mövcud biznes dəyərini qoruyan miqrasiya yollarını müəyyən etmək",
+        "point4": "Texniki riskləri istehsal borcuna çevrilmədən əvvəl nəzərdən keçirmək",
+        "point5": "Mühəndislərə tətbiqetmə və arxitektura düşüncəsi ilə mentorluq etmək",
+        "point6": "Təkrar qərar qəbul etməyi azaldan standartlar yaratmaq",
+        "point7": "Məhsul, domen, infrastruktur və tətbiqetmə məsələlərini birləşdirmək",
+        "point8": "Lazımsız əməliyyat mürəkkəbliyi əlavə etmədən sistemləri təkmilləşdirmək"
+      },
+      "title": "Texniki Liderlik"
     }
   },
   "settings": {

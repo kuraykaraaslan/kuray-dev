@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "Seleziona Categoria",
-      "select_user": "Seleziona Utente"
+      "select_user": "Seleziona Utente",
+      "select_option": "Seleziona",
+      "select_post": "Seleziona Post",
+      "select_project": "Seleziona Progetto",
+      "select_role": "Seleziona Ruolo",
+      "select_status": "Seleziona Stato"
     },
     "slots": {
       "add": "Aggiungi",
@@ -450,7 +455,9 @@
       "visits": "{{count}} visite",
       "appointments": "Appuntamenti",
       "geo_stats": "Statistiche Geografiche",
-      "no_geo_data": "Nessun dato geografico disponibile."
+      "no_geo_data": "Nessun dato geografico disponibile.",
+      "no_projects": "Nessun progetto ancora.",
+      "recent_projects": "Progetti Recenti"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Doppio clic per modificare",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Pagine"
     },
     "notifications": {
       "all_caught_up": "Tutto aggiornato!",
@@ -867,7 +875,8 @@
       "scroll_left": "Scorri a sinistra",
       "scroll_right": "Scorri a destra",
       "smart_recommendations": "Consigliati per te",
-      "smart_recommendations_description": "Questi articoli sono stati selezionati dall'IA in base all'analisi della somiglianza dei contenuti."
+      "smart_recommendations_description": "Questi articoli sono stati selezionati dall'IA in base all'analisi della somiglianza dei contenuti.",
+      "project_posts": "Post di {{projectTitle}}"
     },
     "knowledge_graph": {
       "title_2d": "Grafico della conoscenza 2D",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "Ho lavorato con persone e aziende straordinarie. Ecco cosa dicono di me.",
         "title": "Cosa Dicono"
-      }
+      },
+      "cta_primary": "Esplora Sistemi Selezionati",
+      "cta_secondary": "Discuti un Progetto Complesso",
+      "eyebrow": "Architetto Software · Ingegnere di Prodotto · Costruttore di Sistemi"
     },
     "projects": {
       "description": "I miei portafogli professionali su cui ho lavorato.",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL e Modellazione Dati",
         "testing_cicd": "Testing e CI/CD"
       },
-      "title": "La creatività ha bisogno di molti strumenti"
+      "title": "La creatività ha bisogno di molti strumenti",
+      "capabilities": {
+        "architecture": {
+          "description": "Progettare confini di sistema, responsabilità dei servizi, modelli di dominio, strutture di permessi, fondamenta multi-tenant e percorsi di evoluzione a lungo termine.",
+          "title": "Architettura di Prodotto e Piattaforma"
+        },
+        "backend": {
+          "description": "Costruire servizi sicuri, osservabili e manutenibili per flussi di lavoro transazionali, comunicazione in tempo reale, elaborazione in background, integrazioni e flussi di dati ad alto volume.",
+          "title": "Backend e Sistemi Distribuiti"
+        },
+        "bim": {
+          "description": "Tradurre flussi di lavoro ingegneristici in modelli di esecuzione web, automazione e cloud preservando la correttezza del dominio e l'integrità del modello.",
+          "title": "Software BIM & Ingegneria"
+        },
+        "infrastructure": {
+          "description": "Creare ambienti di produzione che siano distribuibili, osservabili, sicuri e comprensibili dai team responsabili della loro gestione.",
+          "title": "Infrastruttura & Operazioni"
+        },
+        "interfaces": {
+          "description": "Progettare interfacce per prodotti operativi complessi dove chiarezza, prestazioni, permessi e densità dei dati contano più di un'interfaccia utente decorativa.",
+          "title": "Interfacce di Prodotto"
+        },
+        "iot": {
+          "description": "Collegare dispositivi, protocolli di messaggistica, dashboard in tempo reale, motori di regole, telemetria, configurazione e flussi di lavoro operativi in un'unica piattaforma coerente.",
+          "title": "IoT & Sistemi in Tempo Reale"
+        },
+        "payments": {
+          "description": "Costruire flussi di lavoro per abbonamenti, fatturazione, pacchetti, astrazione dei fornitori, cancellazione, diritti e fatture come infrastruttura principale del prodotto.",
+          "title": "Pagamenti & Sistemi Commerciali"
+        },
+        "security": {
+          "description": "Progettare autenticazione, autorizzazione, isolamento dei tenant, cicli di vita dei token, integrazioni con fornitori, auditabilità e confini di servizio sicuri.",
+          "title": "Sicurezza & Identità"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Prima di scegliere i framework, definisco la proprietà, il flusso dei dati, i limiti di errore e dove è più probabile che avvengano cambiamenti.",
+          "title": "Inizia con i confini del sistema"
+        },
+        "complexity": {
+          "description": "Non distribuisco sistemi, introduco astrazioni o aggiungo infrastrutture senza una ragione concreta di prodotto o operativa.",
+          "title": "Mantieni la complessità intenzionale"
+        },
+        "explainable": {
+          "description": "Una buona architettura dovrebbe essere comprensibile attraverso i suoi vincoli, compromessi e l'evoluzione prevista, non solo attraverso la complessità.",
+          "title": "Rendi le decisioni spiegabili"
+        },
+        "foundations": {
+          "description": "Orchestrazione riutilizzabile, autenticazione condivisa, modelli di dati comuni e confini coerenti riducono i costi di consegna futuri.",
+          "title": "Costruisci fondamenta che si accumulano"
+        },
+        "operation": {
+          "description": "Distribuzione, osservabilità, permessi, recupero e manutenzione fanno parte dell'architettura, non sono passaggi che vengono dopo.",
+          "title": "Progetta per l'operatività"
+        },
+        "providers": {
+          "description": "I fornitori di pagamento, identità, notifiche, archiviazione e infrastruttura non dovrebbero dettare il modello principale del prodotto.",
+          "title": "Separa la logica di dominio dai fornitori"
+        }
+      },
+      "title": "Come Affronto l'Ingegneria"
+    },
+    "leadership": {
+      "description": "Il mio contributo non si limita ai compiti di implementazione individuale. Aiuto a definire la direzione del sistema, ridurre l'ambiguità tecnica, stabilire fondamenta riutilizzabili e rendere il lavoro complesso più facile per gli ingegneri che continuano dopo di me.",
+      "points": {
+        "point1": "Tradurre requisiti di prodotto ambigui in confini tecnici eseguibili",
+        "point2": "Definire architettura condivisa e fondamenta di piattaforma riutilizzabili",
+        "point3": "Identificare percorsi di migrazione che preservano il valore aziendale esistente",
+        "point4": "Revisionare il rischio tecnico prima che diventi debito di produzione",
+        "point5": "Mentorare gli ingegneri attraverso l'implementazione e il ragionamento architettonico",
+        "point6": "Creare standard che riducono le decisioni ripetute",
+        "point7": "Collegare preoccupazioni di prodotto, dominio, infrastruttura e implementazione",
+        "point8": "Migliorare i sistemi senza introdurre complessità operativa non necessaria"
+      },
+      "title": "Leadership Tecnica"
     }
   },
   "settings": {

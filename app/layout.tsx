@@ -20,21 +20,21 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Kuray Karaaslan | Full-Stack Developer (React, Next.js, Java)',
+    default: 'Kuray Karaaslan | Software Architect & Product Engineer',
     template: '%s | Kuray Karaaslan',
   },
   description:
-    'Product-focused Full-Stack Developer with 3+ years of experience. Specialized in React, Next.js, Node.js, Java Spring Boot, and multi-tenant SaaS architectures. Available for freelance.',
+    'Software architect and product engineer designing production-grade SaaS, IoT, BIM, integration, and real-time platforms across architecture, backend, frontend, and infrastructure.',
   keywords: [
-    'full-stack developer',
-    'react developer',
+    'software architect',
+    'product engineer',
+    'platform engineer',
+    'saas architecture',
+    'iot platform',
+    'bim automation',
+    'real-time systems',
+    'systems builder',
     'next.js',
-    'node.js',
-    'java spring boot',
-    'react native',
-    'typescript',
-    'saas developer',
-    'freelance developer',
     'kuray karaaslan',
   ],
   authors: [{ name: 'Kuray Karaaslan', url: SITE_URL }],
@@ -47,15 +47,15 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: SITE_URL,
     siteName: 'Kuray Karaaslan',
-    title: 'Kuray Karaaslan | Full-Stack Developer',
+    title: 'Kuray Karaaslan — Software Architect & Product Engineer',
     description:
-      'Full-Stack Developer building scalable SaaS, IoT, and BIM platforms with React, Next.js, and Java Spring Boot.',
+      'Architecture and end-to-end engineering for complex SaaS, IoT, BIM, integration, and real-time software platforms.',
     images: [
       {
         url: '/assets/img/og.png',
         width: 1200,
         height: 630,
-        alt: 'Kuray Karaaslan - Full-Stack Developer',
+        alt: 'Kuray Karaaslan - Software Architect & Product Engineer',
         type: 'image/png',
       },
     ],
@@ -64,9 +64,12 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@kuraykaraaslan',
     creator: '@kuraykaraaslan',
-    title: 'Kuray Karaaslan | Full-Stack Developer',
-    description: 'Full-Stack Developer (React, Next.js, Java). Available for freelance.',
-    images: [{ url: '/assets/img/og.png', alt: 'Kuray Karaaslan - Full-Stack Developer' }],
+    title: 'Kuray Karaaslan — Software Architect & Product Engineer',
+    description:
+      'Architecture and end-to-end engineering for complex SaaS, IoT, BIM, and real-time platforms.',
+    images: [
+      { url: '/assets/img/og.png', alt: 'Kuray Karaaslan - Software Architect & Product Engineer' },
+    ],
   },
   robots: {
     index: true,

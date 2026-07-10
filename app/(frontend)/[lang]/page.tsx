@@ -20,19 +20,19 @@ type Props = {
   params: Promise<{ lang: string }>
 }
 
-const DEFAULT_HOME_TITLE = 'Kuray Karaaslan | Full-Stack Developer (React, Next.js, Java)'
+const DEFAULT_HOME_TITLE = 'Kuray Karaaslan | Software Architect & Product Engineer'
 const DEFAULT_HOME_DESCRIPTION =
-  'Product-focused Full-Stack Developer with 3+ years of experience. Specialized in React, Next.js, Node.js, Java Spring Boot, and multi-tenant SaaS architectures. Available for freelance.'
+  'Software architect and product engineer designing production-grade SaaS, IoT, BIM, integration, and real-time platforms across architecture, backend, frontend, and infrastructure.'
 const DEFAULT_HOME_KEYWORDS = [
-  'full-stack developer',
-  'react developer',
+  'software architect',
+  'product engineer',
+  'platform engineer',
+  'saas architecture',
+  'iot platform',
+  'bim automation',
+  'real-time systems',
+  'systems builder',
   'next.js',
-  'node.js',
-  'java spring boot',
-  'react native',
-  'typescript',
-  'saas developer',
-  'freelance developer',
   'kuray karaaslan',
 ]
 

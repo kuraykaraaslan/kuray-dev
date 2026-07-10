@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "選擇類別",
-      "select_user": "選擇使用者"
+      "select_user": "選擇使用者",
+      "select_option": "選擇",
+      "select_post": "選擇文章",
+      "select_project": "選擇專案",
+      "select_role": "選擇角色",
+      "select_status": "選擇狀態"
     },
     "slots": {
       "add": "新增",
@@ -450,7 +455,9 @@
       "visits": "{{count}} 次訪問",
       "appointments": "預約",
       "geo_stats": "地理統計",
-      "no_geo_data": "沒有可用的地理數據。"
+      "no_geo_data": "沒有可用的地理數據。",
+      "no_projects": "尚無專案。",
+      "recent_projects": "最近的專案"
     },
     "dynamic_comma_text": {
       "double_click_edit": "雙擊編輯",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "頁面"
     },
     "notifications": {
       "all_caught_up": "全部完成！",
@@ -867,7 +875,8 @@
       "scroll_left": "向左滾動",
       "scroll_right": "向右滾動",
       "smart_recommendations": "為您推薦",
-      "smart_recommendations_description": "這些文章是由 AI 根據內容相似性分析選出的。"
+      "smart_recommendations_description": "這些文章是由 AI 根據內容相似性分析選出的。",
+      "project_posts": "{{projectTitle}} 文章"
     },
     "knowledge_graph": {
       "title_2d": "2D 知識圖譜",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "我曾與一些了不起的人和公司合作。以下是他們對我的評價。",
         "title": "客戶評價"
-      }
+      },
+      "cta_primary": "探索精選系統",
+      "cta_secondary": "討論複雜專案",
+      "eyebrow": "軟體架構師 · 產品工程師 · 系統構建者"
     },
     "projects": {
       "description": "我參與過的專業作品集。",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL與數據建模",
         "testing_cicd": "測試與CI/CD"
       },
-      "title": "創意需要很多工具"
+      "title": "創意需要很多工具",
+      "capabilities": {
+        "architecture": {
+          "description": "設計系統邊界、服務責任、領域模型、權限結構、多租戶基礎和長期演化路徑。",
+          "title": "產品與平台架構"
+        },
+        "backend": {
+          "description": "構建安全、可觀察和可維護的服務，用於交易工作流、實時通信、背景處理、集成和高容量數據流。",
+          "title": "後端與分佈式系統"
+        },
+        "bim": {
+          "description": "將工程工作流轉化為網絡、自動化和雲執行模型，同時保持領域正確性和模型完整性。",
+          "title": "BIM 與工程軟體"
+        },
+        "infrastructure": {
+          "description": "創建可部署、可觀察、安全且易於負責運營的團隊理解的生產環境。",
+          "title": "基礎設施與運營"
+        },
+        "interfaces": {
+          "description": "設計複雜操作產品的介面，其中清晰度、性能、權限和數據密度比裝飾性 UI 更重要。",
+          "title": "產品介面"
+        },
+        "iot": {
+          "description": "將設備、消息協議、實時儀表板、規則引擎、遙測、配置和操作工作流程整合為一個連貫的平台。",
+          "title": "物聯網與實時系統"
+        },
+        "payments": {
+          "description": "構建訂閱、計費、套餐、供應商抽象、取消、授權和發票工作流程作為核心產品基礎設施。",
+          "title": "支付與商業系統"
+        },
+        "security": {
+          "description": "設計身份驗證、授權、租戶隔離、令牌生命周期、供應商集成、可審計性和安全服務邊界。",
+          "title": "安全與身份"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "在選擇框架之前，我會定義所有權、資料流、失敗邊界以及變更最有可能發生的地方。",
+          "title": "從系統邊界開始"
+        },
+        "complexity": {
+          "description": "我不會在沒有具體產品或運營理由的情況下分散系統、引入抽象或增加基礎設施。",
+          "title": "保持複雜性有意圖"
+        },
+        "explainable": {
+          "description": "良好的架構應該通過其限制、權衡和預期的演化來理解，而不是僅僅通過複雜性。",
+          "title": "讓決策可解釋"
+        },
+        "foundations": {
+          "description": "可重用的協作、共享的身份驗證、通用的數據模型和一致的邊界可以降低未來的交付成本。",
+          "title": "建立能夠複利的基礎"
+        },
+        "operation": {
+          "description": "部署、可觀察性、權限、恢復和維護是架構的一部分，而不是之後的步驟。",
+          "title": "為運營而設計"
+        },
+        "providers": {
+          "description": "支付、身份、通知、存儲和基礎設施提供商不應該決定產品的核心模型。",
+          "title": "將領域邏輯與提供商分開"
+        }
+      },
+      "title": "我如何進行工程"
+    },
+    "leadership": {
+      "description": "我的貢獻不限於個別的實施任務。我幫助塑造系統方向，減少技術模糊性，建立可重用的基礎，並使後續工程師的複雜工作變得更容易。",
+      "points": {
+        "point1": "將模糊的產品需求轉化為可執行的技術邊界",
+        "point2": "定義共享架構和可重用的平台基礎",
+        "point3": "識別保留現有業務價值的遷移路徑",
+        "point4": "在技術風險成為生產債務之前進行審查",
+        "point5": "通過實施和架構推理指導工程師",
+        "point6": "創建減少重複決策的標準",
+        "point7": "連接產品、領域、基礎設施和實施問題",
+        "point8": "在不引入不必要的運營複雜性的情況下改進系統"
+      },
+      "title": "技術領導力"
     }
   },
   "settings": {

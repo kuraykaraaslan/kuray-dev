@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "选择类别",
-      "select_user": "选择用户"
+      "select_user": "选择用户",
+      "select_option": "选择",
+      "select_post": "选择帖子",
+      "select_project": "选择项目",
+      "select_role": "选择角色",
+      "select_status": "选择状态"
     },
     "slots": {
       "add": "添加",
@@ -450,7 +455,9 @@
       "visits": "{{count}} 次访问",
       "appointments": "预约",
       "geo_stats": "地理统计",
-      "no_geo_data": "没有可用的地理数据。"
+      "no_geo_data": "没有可用的地理数据。",
+      "no_projects": "尚无项目。",
+      "recent_projects": "最近的项目"
     },
     "dynamic_comma_text": {
       "double_click_edit": "双击编辑",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "页面"
     },
     "notifications": {
       "all_caught_up": "全部完成！",
@@ -867,7 +875,8 @@
       "scroll_left": "向左滚动",
       "scroll_right": "向右滚动",
       "smart_recommendations": "为你推荐",
-      "smart_recommendations_description": "这些文章是由AI根据内容相似性分析选择的。"
+      "smart_recommendations_description": "这些文章是由AI根据内容相似性分析选择的。",
+      "project_posts": "{{projectTitle}} 帖子"
     },
     "knowledge_graph": {
       "title_2d": "2D 知识图谱",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "我与一些了不起的人和公司合作过。以下是他们对我的评价。",
         "title": "客户评价"
-      }
+      },
+      "cta_primary": "探索精选系统",
+      "cta_secondary": "讨论复杂项目",
+      "eyebrow": "软件架构师 · 产品工程师 · 系统构建者"
     },
     "projects": {
       "description": "我参与过的专业作品集。",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL与数据建模",
         "testing_cicd": "测试与CI/CD"
       },
-      "title": "创造力需要很多工具"
+      "title": "创造力需要很多工具",
+      "capabilities": {
+        "architecture": {
+          "description": "设计系统边界、服务职责、领域模型、权限结构、多租户基础和长期演变路径。",
+          "title": "产品与平台架构"
+        },
+        "backend": {
+          "description": "构建安全、可观测和可维护的服务，用于事务工作流、实时通信、后台处理、集成和大数据流。",
+          "title": "后端与分布式系统"
+        },
+        "bim": {
+          "description": "将工程工作流转化为网页、自动化和云执行模型，同时保持领域正确性和模型完整性。",
+          "title": "BIM 与工程软件"
+        },
+        "infrastructure": {
+          "description": "创建可部署、可观察、安全且团队能够理解的生产环境，以便他们负责操作。",
+          "title": "基础设施与运营"
+        },
+        "interfaces": {
+          "description": "为复杂的操作产品设计界面，其中清晰度、性能、权限和数据密度比装饰性 UI 更重要。",
+          "title": "产品界面"
+        },
+        "iot": {
+          "description": "将设备、消息协议、实时仪表板、规则引擎、遥测、配置和操作工作流连接成一个连贯的平台。",
+          "title": "物联网与实时系统"
+        },
+        "payments": {
+          "description": "构建订阅、计费、套餐、提供者抽象、取消、授权和发票工作流作为核心产品基础设施。",
+          "title": "支付与商业系统"
+        },
+        "security": {
+          "description": "设计身份验证、授权、租户隔离、令牌生命周期、提供者集成、可审计性和安全服务边界。",
+          "title": "安全与身份"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "在选择框架之前，我会定义所有权、数据流、故障边界以及变化最可能发生的地方。",
+          "title": "从系统边界开始"
+        },
+        "complexity": {
+          "description": "没有具体的产品或运营原因，我不会分布系统、引入抽象或增加基础设施。",
+          "title": "保持复杂性有意为之"
+        },
+        "explainable": {
+          "description": "好的架构应通过其约束、权衡和预期演变来理解，而不是仅通过复杂性。",
+          "title": "让决策可解释"
+        },
+        "foundations": {
+          "description": "可重用的编排、共享的认证、通用的数据模型和一致的边界可以降低未来的交付成本。",
+          "title": "构建可复利的基础"
+        },
+        "operation": {
+          "description": "部署、可观测性、权限、恢复和维护是架构的一部分，而不是其后的步骤。",
+          "title": "为操作而设计"
+        },
+        "providers": {
+          "description": "支付、身份、通知、存储和基础设施提供商不应决定产品的核心模型。",
+          "title": "将领域逻辑与提供商分离"
+        }
+      },
+      "title": "我如何进行工程设计"
+    },
+    "leadership": {
+      "description": "我的贡献不限于个人实施任务。我帮助塑造系统方向，减少技术模糊性，建立可重用的基础，并使后续工程师的复杂工作变得更容易。",
+      "points": {
+        "point1": "将模糊的产品需求转化为可执行的技术边界",
+        "point2": "定义共享架构和可重用的平台基础",
+        "point3": "识别保留现有业务价值的迁移路径",
+        "point4": "在技术风险成为生产债务之前进行评估",
+        "point5": "通过实施和架构推理指导工程师",
+        "point6": "创建减少重复决策的标准",
+        "point7": "连接产品、领域、基础设施和实施问题",
+        "point8": "在不引入不必要的操作复杂性的情况下改进系统"
+      },
+      "title": "技术领导力"
     }
   },
   "settings": {

@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "Kategoriyani tanlang",
-      "select_user": "Foydalanuvchini tanlang"
+      "select_user": "Foydalanuvchini tanlang",
+      "select_option": "Tanlang",
+      "select_post": "Postni tanlang",
+      "select_project": "Loyihani tanlang",
+      "select_role": "Rolni tanlang",
+      "select_status": "Holatni tanlang"
     },
     "slots": {
       "add": "Qo'shish",
@@ -450,7 +455,9 @@
       "visits": "{{count}} tashriflar",
       "appointments": "Uchrashuvlar",
       "geo_stats": "Geografik statistika",
-      "no_geo_data": "Geografik ma'lumotlar mavjud emas."
+      "no_geo_data": "Geografik ma'lumotlar mavjud emas.",
+      "no_projects": "Hozircha loyihalar yo'q.",
+      "recent_projects": "So'nggi loyihalar"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Tahrirlash uchun ikki marta bosing",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Sahifalar"
     },
     "notifications": {
       "all_caught_up": "Hammasi bajarildi!",
@@ -867,7 +875,8 @@
       "scroll_left": "Chapga aylantiring",
       "scroll_right": "O'ngga aylantiring",
       "smart_recommendations": "Siz uchun tavsiya etilgan",
-      "smart_recommendations_description": "Ushbu maqolalar AI tomonidan kontent o'xshashligi tahliliga asoslangan holda tanlangan."
+      "smart_recommendations_description": "Ushbu maqolalar AI tomonidan kontent o'xshashligi tahliliga asoslangan holda tanlangan.",
+      "project_posts": "{{projectTitle}} Postlar"
     },
     "knowledge_graph": {
       "title_2d": "2D Bilimlar grafigi",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "Men ajoyib insonlar va kompaniyalar bilan ishlaganman. Ular men haqimda nima deyishlarini ko'ring.",
         "title": "Odamlar Nima Deydi"
-      }
+      },
+      "cta_primary": "Tanlangan tizimlarni o'rganing",
+      "cta_secondary": "Murakkab loyiha haqida muhokama qiling",
+      "eyebrow": "Dasturiy ta'minot arxitektori · Mahsulot muhandisi · Tizimlar yaratuvchisi"
     },
     "projects": {
       "description": "Mening professional portfellarim, men ishlagan loyihalar.",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL va Ma'lumotlarni Modellashtirish",
         "testing_cicd": "Testlash va CI/CD"
       },
-      "title": "Ijodkorlik ko'p vositalarni talab qiladi"
+      "title": "Ijodkorlik ko'p vositalarni talab qiladi",
+      "capabilities": {
+        "architecture": {
+          "description": "Tizim chegaralari, xizmat mas'uliyatlari, domen modellari, ruxsatlar tuzilmalari, ko'p ijarachi asoslar va uzoq muddatli evolyutsiya yo'llarini loyihalash.",
+          "title": "Mahsulot va platforma arxitekturasi"
+        },
+        "backend": {
+          "description": "Tranzaksion ish jarayonlari, real vaqt muloqoti, fon ishlov berish, integratsiyalar va yuqori hajmli ma'lumotlar oqimlari uchun xavfsiz, kuzatiladigan va texnik xizmat ko'rsatiladigan xizmatlarni yaratish.",
+          "title": "Backend va tarqatilgan tizimlar"
+        },
+        "bim": {
+          "description": "Muhandislik ish jarayonlarini veb, avtomatlashtirish va bulutli ijro modellari bilan tarjima qilish, domen to'g'riligi va model yaxlitligini saqlab qolish.",
+          "title": "BIM va Muhandislik Dasturlari"
+        },
+        "infrastructure": {
+          "description": "Jamoalar tomonidan boshqariladigan, joylashtiriladigan, kuzatiladigan, xavfsiz va tushunarli ishlab chiqarish muhitlarini yaratish.",
+          "title": "Infratuzilma va Operatsiyalar"
+        },
+        "interfaces": {
+          "description": "Murakkab operatsion mahsulotlar uchun interfeyslarni loyihalash, bu yerda aniqlik, ishlash, ruxsatlar va ma'lumot zichligi dekorativ UI'dan ko'ra muhimroq.",
+          "title": "Mahsulot Interfeyslari"
+        },
+        "iot": {
+          "description": "Qurilmalarni ulash, xabar almashish protokollari, real vaqtli boshqaruv panellari, qoidalar dvigatellari, telemetriya, konfiguratsiya va operatsion ish jarayonlarini bir butun platformaga birlashtirish.",
+          "title": "IoT va Real Vaqt Tizimlari"
+        },
+        "payments": {
+          "description": "Obuna, hisob-kitob, paket, provayder abstraksiyasi, bekor qilish, huquq berish va hisob-faktura ish jarayonlarini asosiy mahsulot infratuzilmasi sifatida yaratish.",
+          "title": "To'lovlar va Tijorat Tizimlari"
+        },
+        "security": {
+          "description": "Autentifikatsiya, avtorizatsiya, tenant izolyatsiyasi, token hayotiy tsikllari, provayder integratsiyalari, audit qobiliyati va xavfsiz xizmat chegaralarini loyihalash.",
+          "title": "Xavfsizlik va Identifikatsiya"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Frameworklarni tanlashdan oldin, men egalik, ma'lumotlar oqimi, muvaffaqiyatsizlik chegaralari va o'zgarish ehtimoli yuqori bo'lgan joylarni aniqlayman.",
+          "title": "Tizim chegaralaridan boshlang"
+        },
+        "complexity": {
+          "description": "Men aniq mahsulot yoki operatsion sabab bo'lmasa, tizimlarni tarqatmayman, abstraksiyalar kiritmayman yoki infratuzilma qo'shmayman.",
+          "title": "Murakkablikni maqsadli saqlang"
+        },
+        "explainable": {
+          "description": "Yaxshi arxitektura faqat murakkablik orqali emas, balki uning cheklovlari, savdolari va mo'ljallangan evolyutsiyasi orqali tushunarli bo'lishi kerak.",
+          "title": "Qarorlarni tushuntirish mumkin qiling"
+        },
+        "foundations": {
+          "description": "Qayta ishlatiladigan orkestratsiya, umumiy autentifikatsiya, umumiy ma'lumotlar modellari va izchil chegaralar kelajakdagi yetkazib berish xarajatlarini kamaytiradi.",
+          "title": "Murakkab asoslar yarating"
+        },
+        "operation": {
+          "description": "Joylashtirish, kuzatish, ruxsatlar, tiklash va texnik xizmat ko'rsatish arxitekturaning bir qismi - bu keyin keladigan qadamlar emas.",
+          "title": "Operatsiya uchun loyihalash"
+        },
+        "providers": {
+          "description": "To'lov, identifikatsiya, xabarnoma, saqlash va infratuzilma provayderlari mahsulotning asosiy modelini belgilamasligi kerak.",
+          "title": "Domen mantiqini provayderlardan ajrating"
+        }
+      },
+      "title": "Mening muhandislik yondashuvim"
+    },
+    "leadership": {
+      "description": "Mening hissam individual amalga oshirish vazifalari bilan cheklanmaydi. Men tizim yo'nalishini shakllantirishga yordam beraman, texnik noaniqlikni kamaytiraman, qayta ishlatiladigan asoslarni o'rnataman va mendan keyin davom etadigan muhandislar uchun murakkab ishni osonlashtiraman.",
+      "points": {
+        "point1": "Noaniq mahsulot talablarini bajariladigan texnik chegaralarga tarjima qilish",
+        "point2": "Umumiy arxitektura va qayta ishlatiladigan platforma asoslarini aniqlash",
+        "point3": "Mavjud biznes qiymatini saqlab qoladigan migratsiya yo'llarini aniqlash",
+        "point4": "Texnik xavfni ishlab chiqarish qarziga aylanishidan oldin ko'rib chiqish",
+        "point5": "Muhandislarni amalga oshirish va arxitektura mantiqi orqali o'qitish",
+        "point6": "Takroriy qaror qabul qilishni kamaytiradigan standartlarni yaratish",
+        "point7": "Mahsulot, domen, infratuzilma va amalga oshirish masalalarini bog'lash",
+        "point8": "Keraksiz operatsion murakkablikni kiritmasdan tizimlarni yaxshilash"
+      },
+      "title": "Texnik yetakchilik"
     }
   },
   "settings": {

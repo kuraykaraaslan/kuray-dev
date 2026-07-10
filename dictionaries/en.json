@@ -23,7 +23,7 @@
     "x_profile": "X (formerly Twitter) profile (opens in new tab)",
     "github_profile": "GitHub profile (opens in new tab)",
     "linkedin_profile": "LinkedIn profile (opens in new tab)",
-    "tagline": "Full-stack developer & tech blogger. Building web, mobile, and backend solutions — sharing what I learn along the way.",
+    "tagline": "Software architect and product engineer building production-grade SaaS, IoT, BIM, and real-time platforms.",
     "quick_links": "Quick Links",
     "connect": "Connect",
     "available_for_freelance": "Open to selective opportunities — full-time, contract, or advisory.",
@@ -60,6 +60,20 @@
         "Node.js",
         "Java",
         "React Native"
+      ]
+    },
+    "freelance": {
+      "title": "Freelance Software Architect & Product Engineer | Kuray Karaaslan",
+      "description": "Available for selective freelance engagements — architecture, platform engineering, and end-to-end delivery for complex SaaS, IoT, BIM, integration, and real-time products.",
+      "keywords": [
+        "freelance software architect",
+        "freelance product engineer",
+        "saas architecture consultant",
+        "iot platform engineer",
+        "bim automation",
+        "technical advisory",
+        "fractional architect",
+        "kuray karaaslan"
       ]
     },
     "now": {
@@ -220,18 +234,21 @@
   },
   "pages": {
     "hero": {
-      "description": "<bold>Product-focused Full-Stack Developer</bold> with <bold>3+ years of experience</bold> delivering robust, scalable software solutions across <bold>frontend, backend, mobile in BIM and IoT domains.</bold> Specialized in <bold>Java Spring Boot, React, Next.js, Node.js, and PostgreSQL</bold>. Adept at architecting <bold>multi-tenant SaaS platforms, real-time systems, and payment integrations.</bold> Combines strong engineering fundamentals with <bold>creative problem-solving</bold> and a <bold>clean, systematic coding approach.</bold>",
+      "description": "<bold>I architect and deliver production-grade platforms</bold> across <bold>SaaS, IoT, BIM, and real-time systems.</bold> I work across architecture, backend, product engineering, infrastructure, and integrations to turn <bold>complex domain requirements</bold> into reliable software products. My focus is not limited to shipping features — I design <bold>system boundaries, data models, security flows, and operational foundations</bold> that let products scale without becoming fragile.",
+      "eyebrow": "Software Architect · Product Engineer · Systems Builder",
       "typing_effect": {
-        "prefix": "I'm ready to",
+        "prefix": "I architect",
         "suffix": "",
-        "text1": "solve problems",
-        "text2": "build products",
-        "text3": "create solutions",
-        "text4": "make a difference",
-        "text5": "be challenged",
-        "text6": "freelance"
+        "text1": "SaaS platforms",
+        "text2": "IoT systems",
+        "text3": "BIM automation",
+        "text4": "real-time services",
+        "text5": "integration layers",
+        "text6": "developer platforms"
       },
       "contact_me": "Contact me",
+      "cta_primary": "Explore Selected Systems",
+      "cta_secondary": "Discuss a Complex Project",
       "resume": "Resume",
       "platforms": {
         "subtitle": "Active on different platforms",
@@ -267,8 +284,42 @@
       }
     },
     "toolbox": {
-      "title": "Creativity needs a lot of tools",
-      "description": "Have a lot of tools in my toolbox, and i'm always learning new ones.",
+      "title": "Tools & Technologies",
+      "description": "The core stack behind the platforms I build.",
+      "capabilities": {
+        "architecture": {
+          "title": "Product & Platform Architecture",
+          "description": "Designing system boundaries, service responsibilities, domain models, permission structures, multi-tenant foundations, and long-term evolution paths."
+        },
+        "backend": {
+          "title": "Backend & Distributed Systems",
+          "description": "Building secure, observable, and maintainable services for transactional workflows, real-time communication, background processing, integrations, and high-volume data flows."
+        },
+        "interfaces": {
+          "title": "Product Interfaces",
+          "description": "Designing interfaces for complex operational products where clarity, performance, permissions, and data density matter more than decorative UI."
+        },
+        "infrastructure": {
+          "title": "Infrastructure & Operations",
+          "description": "Creating production environments that are deployable, observable, secure, and understandable by the teams responsible for operating them."
+        },
+        "security": {
+          "title": "Security & Identity",
+          "description": "Designing authentication, authorization, tenant isolation, token lifecycles, provider integrations, auditability, and secure service boundaries."
+        },
+        "payments": {
+          "title": "Payments & Commercial Systems",
+          "description": "Building subscription, billing, package, provider abstraction, cancellation, entitlement, and invoice workflows as core product infrastructure."
+        },
+        "iot": {
+          "title": "IoT & Real-Time Systems",
+          "description": "Connecting devices, messaging protocols, real-time dashboards, rule engines, telemetry, configuration, and operational workflows into one coherent platform."
+        },
+        "bim": {
+          "title": "BIM & Engineering Software",
+          "description": "Translating engineering workflows into web, automation, and cloud execution models while preserving domain correctness and model integrity."
+        }
+      },
       "frontend": "Frontend",
       "backend": "Backend",
       "skills": {
@@ -309,8 +360,8 @@
       }
     },
     "projects": {
-      "title": "Portfolio",
-      "description": "My professional portfolios that I have worked on.",
+      "title": "Selected Systems",
+      "description": "Complex systems shaped from architecture and implementation through deployment and operation.",
       "feed_title": "My Projects",
       "feed_description": "Explore my portfolio of web, mobile, desktop, and other software projects.",
       "filter_all": "All",
@@ -319,8 +370,8 @@
       "all_loaded": "All {{filter}}projects loaded"
     },
     "contact": {
-      "title": "Contact",
-      "description": "Good things happen when we talk.",
+      "title": "Bring me the difficult part.",
+      "description": "I am most interested in products where architecture, integrations, real-time systems, domain complexity, or platform foundations are central to the problem.",
       "phone_and_mail": "Phone and Email",
       "social_media": "Social Media",
       "send_a_message": "Send a message",
@@ -341,6 +392,72 @@
         "error": "An error occurred while sending your message. Please try again later.",
         "please_fill_in_all_fields": "Please fill in all fields.",
         "loading": "Sending your message..."
+      }
+    },
+    "approach": {
+      "title": "How I Approach Engineering",
+      "principles": {
+        "boundaries": {
+          "title": "Start with system boundaries",
+          "description": "Before choosing frameworks, I define ownership, data flow, failure boundaries, and where change is most likely to occur."
+        },
+        "operation": {
+          "title": "Design for operation",
+          "description": "Deployment, observability, permissions, recovery, and maintenance are part of the architecture—not steps that come after it."
+        },
+        "complexity": {
+          "title": "Keep complexity intentional",
+          "description": "I do not distribute systems, introduce abstractions, or add infrastructure without a concrete product or operational reason."
+        },
+        "providers": {
+          "title": "Separate domain logic from providers",
+          "description": "Payment, identity, notification, storage, and infrastructure providers should not dictate the product's core model."
+        },
+        "foundations": {
+          "title": "Build foundations that compound",
+          "description": "Reusable orchestration, shared authentication, common data models, and consistent boundaries reduce future delivery cost."
+        },
+        "explainable": {
+          "title": "Make decisions explainable",
+          "description": "Good architecture should be understandable through its constraints, trade-offs, and intended evolution—not through complexity alone."
+        }
+      }
+    },
+    "leadership": {
+      "title": "Technical Leadership",
+      "description": "My contribution is not limited to individual implementation tasks. I help shape system direction, reduce technical ambiguity, establish reusable foundations, and make complex work easier for the engineers who continue after me.",
+      "points": {
+        "point1": "Translating ambiguous product requirements into executable technical boundaries",
+        "point2": "Defining shared architecture and reusable platform foundations",
+        "point3": "Identifying migration paths that preserve existing business value",
+        "point4": "Reviewing technical risk before it becomes production debt",
+        "point5": "Mentoring engineers through implementation and architectural reasoning",
+        "point6": "Creating standards that reduce repeated decision-making",
+        "point7": "Connecting product, domain, infrastructure, and implementation concerns",
+        "point8": "Improving systems without introducing unnecessary operational complexity"
+      }
+    },
+    "freelance": {
+      "hero": {
+        "eyebrow": "Freelance · Software Architecture & Product Engineering",
+        "title": "Bring me the difficult part.",
+        "subtitle": "I take ownership of complex software systems across architecture, backend, frontend, infrastructure, integrations, and production operations. I am most effective in SaaS, IoT, BIM, real-time, and platform-oriented products where technical decisions must support both immediate delivery and long-term system evolution.",
+        "availability": "Open to selective engagements — full-time, contract, or advisory.",
+        "cta_primary": "Discuss a Complex Project",
+        "cta_secondary": "View Selected Systems"
+      },
+      "capabilities_title": "Engineering Capabilities",
+      "capabilities_subtitle": "Capabilities shaped around system outcomes—not isolated technologies.",
+      "engagement": {
+        "title": "How We Can Work Together",
+        "description": "I work best on products that require clear architecture, strong technical ownership, and the ability to connect product decisions with implementation reality.",
+        "advisory_title": "Architecture & Advisory",
+        "advisory_description": "Architecture reviews, system design, technology and migration strategy, and de-risking technical decisions before they become production debt.",
+        "build_title": "Build & Delivery",
+        "build_description": "End-to-end delivery of platforms and services—from data models and backend systems to product interfaces, integrations, and production infrastructure.",
+        "platform_title": "Platform Foundations",
+        "platform_description": "Reusable foundations: multi-tenant SaaS, authentication and permissions, provider-independent billing, and operational tooling that compounds over time.",
+        "cta": "Start a Technical Conversation"
       }
     }
   },

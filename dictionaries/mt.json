@@ -228,7 +228,10 @@
       "testimonials": {
         "description": "Ħdimt ma' xi nies u kumpaniji tal-għaġeb. Hawn dak li għandhom xi jgħidu dwari.",
         "title": "X'Jgħidu Nies"
-      }
+      },
+      "cta_primary": "Esplora Sistemi Magħżula",
+      "cta_secondary": "Iddiskuti Proġett Kumpless",
+      "eyebrow": "Arkitett tas-Softwer · Inġinier tal-Prodott · Bennej tas-Sistemi"
     },
     "toolbox": {
       "title": "Il-kreattività teħtieġ ħafna għodod",
@@ -248,7 +251,41 @@
         "domain_driven_design": "Disinn Driven mill-Domain"
       },
       "backend": "Backend",
-      "frontend": "Frontend"
+      "frontend": "Frontend",
+      "capabilities": {
+        "architecture": {
+          "description": "Iddisinjar tal-konfini tas-sistema, ir-responsabbiltajiet tas-servizz, il-mudelli tad-dominju, l-istrutturi tal-permessi, il-fondazzjonijiet multi-tenant, u l-mogħdijiet ta' evoluzzjoni fit-tul.",
+          "title": "Arkitettura tal-Prodott u Pjattaforma"
+        },
+        "backend": {
+          "description": "Bini ta' servizzi siguri, osservabbli, u li jistgħu jinżammu għal flussi tax-xogħol transazzjonali, komunikazzjoni f'ħin reali, ipproċessar ta' sfond, integrazzjonijiet, u flussi ta' data ta' volum għoli.",
+          "title": "Sistemi ta' Backend u Distribwiti"
+        },
+        "bim": {
+          "description": "Traduzzjoni ta' flussi tax-xogħol tal-inġinerija f'mudelli ta' eżekuzzjoni tal-web, awtomazzjoni, u sħab filwaqt li tippreserva l-korrettezza tad-dominju u l-integrità tal-mudell.",
+          "title": "Softwer BIM & Inġinerija"
+        },
+        "infrastructure": {
+          "description": "Ħolqien ta' ambjenti ta' produzzjoni li jistgħu jiġu implimentati, osservabbli, siguri, u li jistgħu jinftiehmu mit-timijiet responsabbli għall-operat tagħhom.",
+          "title": "Infrastruttura & Operazzjonijiet"
+        },
+        "interfaces": {
+          "description": "Iddisinjar ta' interfaces għal prodotti operattivi kumplessi fejn il-kjarità, il-prestazzjoni, il-permessi, u d-densità tad-data huma aktar importanti minn UI dekorattiva.",
+          "title": "Interfaces tal-Prodott"
+        },
+        "iot": {
+          "description": "Qabbad apparati, protokolli ta' messaġġi, dashboards f'ħin reali, magni tar-regoli, telemetry, konfigurazzjoni, u flussi tax-xogħol operattivi f'pjattaforma koerenti waħda.",
+          "title": "Sistemi IoT & Ħin Reali"
+        },
+        "payments": {
+          "description": "Bini ta' abbonamenti, fatturazzjoni, pakketti, astrazzjoni tal-fornitur, kanċellazzjoni, drittijiet, u flussi tax-xogħol tal-fatturi bħala infrastruttura tal-prodott ewlieni.",
+          "title": "Pagamenti & Sistemi Kummerċjali"
+        },
+        "security": {
+          "description": "Iddisinjar ta' awtentikazzjoni, awtorizzazzjoni, iżolament tal-kerrej, ċikli tal-ħajja tat-tokens, integrazzjonijiet tal-fornitur, awditabilità, u konfini tas-servizz sigur.",
+          "title": "Sigurtà & Identità"
+        }
+      }
     },
     "timeline": {
       "title": "Il-Vjaġġ Tiegħi",
@@ -306,6 +343,49 @@
         "please_fill_in_all_fields": "Jekk jogħġbok imla l-oqsma kollha.",
         "loading": "Qed nibgħat il-messaġġ tiegħek..."
       }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Qabel ma nagħżel frameworks, niddetermina s-sjieda, il-fluss tad-data, il-konfini tal-falliment, u fejn il-bidla hija l-aktar probabbli li sseħħ.",
+          "title": "Ibda bil-konfini tas-sistema"
+        },
+        "complexity": {
+          "description": "Ma niddistribwixxix sistemi, ma nintroduċix astrazzjonijiet, jew ma nżidx infrastruttura mingħajr raġuni konkreta ta' prodott jew operattiva.",
+          "title": "Żomm il-kumplessità intenzjonata"
+        },
+        "explainable": {
+          "description": "Arkitettura tajba għandha tkun tifhimha permezz tal-limitazzjonijiet tagħha, il-kompromessi, u l-evoluzzjoni intenzjonata—mhux permezz tal-kumplessità biss.",
+          "title": "Agħmel id-deċiżjonijiet spjegabbli"
+        },
+        "foundations": {
+          "description": "Orkestrazzjoni riutilizzabbli, awtentikazzjoni kondiviża, mudelli tad-data komuni, u konfini konsistenti jnaqqsu l-ispiża tal-kunsinna futura.",
+          "title": "Ibni fondazzjonijiet li jikkumpawndjaw"
+        },
+        "operation": {
+          "description": "Id-distribuzzjoni, l-osservabbiltà, il-permessi, l-irkupru, u l-manutenzjoni huma parti mill-arkitettura—mhux passi li jiġu wara.",
+          "title": "Iddisinja għall-operazzjoni"
+        },
+        "providers": {
+          "description": "Il-ħlas, l-identità, in-notifika, il-ħażna, u l-fornituri tal-infrastruttura m'għandhomx jiddettaw il-mudell ewlieni tal-prodott.",
+          "title": "Separaw il-loġika tad-dominju mill-fornituri"
+        }
+      },
+      "title": "Kif Nersaq lejn l-Inġinerija"
+    },
+    "leadership": {
+      "description": "Il-kontribuzzjoni tiegħi mhix limitata għal kompiti ta' implimentazzjoni individwali. Ngħin niffurma d-direzzjoni tas-sistema, inaqqas l-ambigwità teknika, nistabbilixxi fondazzjonijiet riutilizzabbli, u nagħmel ix-xogħol kumpless aktar faċli għall-inġiniera li jkomplu wara tiegħi.",
+      "points": {
+        "point1": "Traduzzjoni ta' rekwiżiti tal-prodott ambigwi f'konfini tekniċi eżekuttivi",
+        "point2": "Definizzjoni ta' arkitettura kondiviża u fondazzjonijiet tal-pjattaforma riutilizzabbli",
+        "point3": "Identifikazzjoni ta' mogħdijiet ta' migrazzjoni li jippreservaw il-valur eżistenti tan-negozju",
+        "point4": "Reviżjoni tar-riskju tekniku qabel ma jsir dejn tal-produzzjoni",
+        "point5": "Mentoring tal-inġiniera permezz ta' implimentazzjoni u raġunament arkitetturali",
+        "point6": "Ħolqien ta' standards li jnaqqsu d-deċiżjoni ripetuta",
+        "point7": "Konnessjoni tal-prodott, id-dominju, l-infrastruttura, u l-kwistjonijiet ta' implimentazzjoni",
+        "point8": "Titjib tas-sistemi mingħajr ma tintroduċi kumplessità operattiva mhux meħtieġa"
+      },
+      "title": "Tmexxija Teknika"
     }
   },
   "frontend": {
@@ -323,7 +403,8 @@
       "scroll_left": "Skrollja lejn ix-xellug",
       "scroll_right": "Skrollja lejn il-lemin",
       "smart_recommendations": "Rakkomandat Għalik",
-      "smart_recommendations_description": "Dawn l-artikli ġew magħżula mill-AI bbażata fuq analiżi ta' xebh tal-kontenut."
+      "smart_recommendations_description": "Dawn l-artikli ġew magħżula mill-AI bbażata fuq analiżi ta' xebh tal-kontenut.",
+      "project_posts": "Posts ta' {{projectTitle}}"
     },
     "post": {
       "by": "minn",
@@ -850,7 +931,12 @@
     },
     "selects": {
       "select_user": "Agħżel Utent",
-      "select_category": "Agħżel Kategorija"
+      "select_category": "Agħżel Kategorija",
+      "select_option": "Agħżel",
+      "select_post": "Agħżel Post",
+      "select_project": "Agħżel Proġett",
+      "select_role": "Agħżel Rwol",
+      "select_status": "Agħżel Status"
     },
     "appointments": {
       "all_statuses": "L-Istatuti Kollha",
@@ -1146,7 +1232,9 @@
       "visits": "{{count}} żjarat",
       "appointments": "Appuntamenti",
       "geo_stats": "Statistiċi Ġeografiċi",
-      "no_geo_data": "M'hemmx data ġeografika disponibbli."
+      "no_geo_data": "M'hemmx data ġeografika disponibbli.",
+      "no_projects": "Għad m'hemmx proġetti.",
+      "recent_projects": "Proġetti Riċenti"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Ikklikkja darbtejn biex teditja",
@@ -1186,7 +1274,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Paġni"
     },
     "notifications": {
       "all_caught_up": "Kollox aġġornat!",

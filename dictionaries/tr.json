@@ -44,6 +44,19 @@
         "React Native"
       ]
     },
+    "freelance": {
+      "title": "Freelance Yazılım Mimarı & Ürün Mühendisi | Kuray Karaaslan",
+      "description": "Seçili freelance işler için uygun — karmaşık SaaS, IoT, BIM, entegrasyon ve gerçek zamanlı ürünler için mimari, platform mühendisliği ve uçtan uca teslim.",
+      "keywords": [
+        "freelance yazılım mimarı",
+        "freelance ürün mühendisi",
+        "saas mimari danışmanı",
+        "iot platform mühendisi",
+        "bim otomasyonu",
+        "teknik danışmanlık",
+        "kuray karaaslan"
+      ]
+    },
     "now": {
       "title": "Şimdi | Kuray Karaaslan",
       "description": "Kuray Karaaslan'ın şu anda odaklandığı konular — iş, yan projeler, öğrenme ve yaşam.",
@@ -184,18 +197,21 @@
   },
   "pages": {
     "hero": {
-      "description": "<bold>Ürün odaklı bir Full-Stack Geliştirici</bold> olarak, <bold>3+ yıllık deneyimimle</bold> BIM ve IoT alanlarında <bold>ön yüz, arka yüz ve mobil platformlar</bold> için sağlam ve ölçeklenebilir yazılım çözümleri geliştiriyorum. <bold>Java Spring Boot, React, Next.js, Node.js ve PostgreSQL</bold> teknolojilerinde uzmanım. <bold>SaaS platformları</bold>, <bold>gerçek zamanlı sistemler</bold> ve <bold>ödeme entegrasyonları</bold> mimarileri üzerinde deneyim sahibiyim. <bold>Güçlü mühendislik temelleri</bold> ile <bold>yaratıcı problem çözme becerisini</bold> ve <bold>temiz, sistematik bir kod yaklaşımını</bold> bir araya getiriyorum.",
+      "description": "<bold>SaaS, IoT, BIM ve gerçek zamanlı sistemler</bold> genelinde <bold>üretim seviyesinde platformlar tasarlıyor ve teslim ediyorum.</bold> Mimari, backend, ürün mühendisliği, altyapı ve entegrasyonlar boyunca çalışarak <bold>karmaşık alan gereksinimlerini</bold> güvenilir yazılım ürünlerine dönüştürüyorum. Odağım yalnızca özellik geliştirmek değil — ürünlerin kırılganlaşmadan ölçeklenmesini sağlayan <bold>sistem sınırları, veri modelleri, güvenlik akışları ve operasyonel temelleri</bold> tasarlıyorum.",
+      "eyebrow": "Yazılım Mimarı · Ürün Mühendisi · Sistem Kurucusu",
       "typing_effect": {
-        "prefix": "Ben",
-        "suffix": "hazırım.",
-        "text1": "sorunları çözmeye",
-        "text2": "ürünler geliştirmeye",
-        "text3": "çözümler üretmeye",
-        "text4": "fark yaratmaya",
-        "text5": "imkansızı başarmaya",
-        "text6": "freelance çalışmaya"
+        "prefix": "",
+        "suffix": "tasarlıyorum",
+        "text1": "SaaS platformları",
+        "text2": "IoT sistemleri",
+        "text3": "BIM otomasyonu",
+        "text4": "gerçek zamanlı servisler",
+        "text5": "entegrasyon katmanları",
+        "text6": "geliştirici platformları"
       },
       "contact_me": "Benimle iletişime geç",
+      "cta_primary": "Seçili Sistemleri İncele",
+      "cta_secondary": "Zorlu Bir Proje Konuşalım",
       "resume": "Özgeçmiş",
       "git_contributions": {
         "aria_label": "GitHub profilimi görüntüle (yeni sekmede açılır)",
@@ -231,8 +247,42 @@
       }
     },
     "toolbox": {
-      "title": "Yaratıcılık çok fazla araç ister",
-      "description": "Araç kutumda birçok araç var ve her zaman yenilerini öğreniyorum.",
+      "title": "Araçlar & Teknolojiler",
+      "description": "Kurduğum platformların ardındaki temel teknoloji yığını.",
+      "capabilities": {
+        "architecture": {
+          "title": "Ürün & Platform Mimarisi",
+          "description": "Sistem sınırlarını, servis sorumluluklarını, alan modellerini, yetki yapılarını, çok kiracılı temelleri ve uzun vadeli evrim yollarını tasarlamak."
+        },
+        "backend": {
+          "title": "Backend & Dağıtık Sistemler",
+          "description": "İşlemsel akışlar, gerçek zamanlı iletişim, arka plan işleme, entegrasyonlar ve yüksek hacimli veri akışları için güvenli, gözlemlenebilir ve sürdürülebilir servisler kurmak."
+        },
+        "interfaces": {
+          "title": "Ürün Arayüzleri",
+          "description": "Dekoratif arayüzden çok; netlik, performans, yetkiler ve veri yoğunluğunun önemli olduğu karmaşık operasyonel ürünler için arayüzler tasarlamak."
+        },
+        "infrastructure": {
+          "title": "Altyapı & Operasyon",
+          "description": "Dağıtılabilir, gözlemlenebilir, güvenli ve onu işleten ekipler tarafından anlaşılabilir üretim ortamları oluşturmak."
+        },
+        "security": {
+          "title": "Güvenlik & Kimlik",
+          "description": "Kimlik doğrulama, yetkilendirme, kiracı izolasyonu, token yaşam döngüleri, sağlayıcı entegrasyonları, denetlenebilirlik ve güvenli servis sınırlarını tasarlamak."
+        },
+        "payments": {
+          "title": "Ödeme & Ticari Sistemler",
+          "description": "Abonelik, faturalama, paket, sağlayıcı soyutlaması, iptal, hak ediş ve fatura akışlarını temel ürün altyapısı olarak kurmak."
+        },
+        "iot": {
+          "title": "IoT & Gerçek Zamanlı Sistemler",
+          "description": "Cihazları, mesajlaşma protokollerini, gerçek zamanlı panoları, kural motorlarını, telemetriyi, yapılandırmayı ve operasyonel akışları tek bir tutarlı platformda birleştirmek."
+        },
+        "bim": {
+          "title": "BIM & Mühendislik Yazılımı",
+          "description": "Mühendislik akışlarını; alan doğruluğunu ve model bütünlüğünü koruyarak web, otomasyon ve bulut yürütme modellerine taşımak."
+        }
+      },
       "frontend": "Frontend",
       "backend": "Backend",
       "skills": {
@@ -273,8 +323,8 @@
       }
     },
     "projects": {
-      "title": "Portföy",
-      "description": "Üzerinde çalıştığım profesyonel portföy projelerim.",
+      "title": "Seçili Sistemler",
+      "description": "Mimari ve uygulamadan dağıtım ve operasyona kadar şekillenen karmaşık sistemler.",
       "all_loaded": "Tüm {{filter}}projeler yüklendi",
       "feed_description": "Web, mobil, masaüstü ve diğer yazılım projelerimden oluşan portföyümü keşfedin.",
       "feed_title": "Projelerim",
@@ -283,8 +333,8 @@
       "no_projects": "Proje bulunamadı."
     },
     "contact": {
-      "title": "İletişim",
-      "description": "Güzel şeyler konuşunca başlar.",
+      "title": "Zor kısmı bana getirin.",
+      "description": "En çok; mimari, entegrasyonlar, gerçek zamanlı sistemler, alan karmaşıklığı veya platform temellerinin problemin merkezinde olduğu ürünlerle ilgileniyorum.",
       "phone_and_mail": "Telefon ve E-posta",
       "social_media": "Sosyal Medya",
       "send_a_message": "Mesaj gönder",
@@ -305,6 +355,72 @@
         "error": "Mesaj gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
         "please_fill_in_all_fields": "Lütfen tüm alanları doldurun.",
         "loading": "Mesajınız gönderiliyor..."
+      }
+    },
+    "approach": {
+      "title": "Mühendisliğe Yaklaşımım",
+      "principles": {
+        "boundaries": {
+          "title": "Sistem sınırlarıyla başla",
+          "description": "Framework seçmeden önce sahipliği, veri akışını, hata sınırlarını ve değişimin en olası olduğu yeri tanımlarım."
+        },
+        "operation": {
+          "title": "Operasyon için tasarla",
+          "description": "Dağıtım, gözlemlenebilirlik, yetkiler, kurtarma ve bakım; mimarinin bir parçasıdır—sonradan gelen adımlar değil."
+        },
+        "complexity": {
+          "title": "Karmaşıklığı bilinçli tut",
+          "description": "Somut bir ürün ya da operasyonel gerekçe olmadan sistemleri dağıtmam, soyutlama eklemem veya altyapı büyütmem."
+        },
+        "providers": {
+          "title": "Alan mantığını sağlayıcılardan ayır",
+          "description": "Ödeme, kimlik, bildirim, depolama ve altyapı sağlayıcıları ürünün çekirdek modelini belirlememelidir."
+        },
+        "foundations": {
+          "title": "Biriken temeller kur",
+          "description": "Yeniden kullanılabilir orkestrasyon, ortak kimlik doğrulama, ortak veri modelleri ve tutarlı sınırlar gelecekteki teslim maliyetini düşürür."
+        },
+        "explainable": {
+          "title": "Kararları açıklanabilir kıl",
+          "description": "İyi mimari; yalnızca karmaşıklığıyla değil, kısıtları, ödünleşimleri ve amaçlanan evrimiyle anlaşılabilmelidir."
+        }
+      }
+    },
+    "leadership": {
+      "title": "Teknik Liderlik",
+      "description": "Katkım yalnızca bireysel uygulama görevleriyle sınırlı değildir. Sistem yönünü şekillendirmeye, teknik belirsizliği azaltmaya, yeniden kullanılabilir temeller kurmaya ve benden sonra devam eden mühendisler için karmaşık işi kolaylaştırmaya yardımcı olurum.",
+      "points": {
+        "point1": "Belirsiz ürün gereksinimlerini uygulanabilir teknik sınırlara çevirmek",
+        "point2": "Ortak mimari ve yeniden kullanılabilir platform temelleri tanımlamak",
+        "point3": "Mevcut iş değerini koruyan geçiş yolları belirlemek",
+        "point4": "Teknik riski üretim borcuna dönüşmeden önce gözden geçirmek",
+        "point5": "Mühendislere uygulama ve mimari muhakeme konusunda mentorluk yapmak",
+        "point6": "Tekrarlayan karar almayı azaltan standartlar oluşturmak",
+        "point7": "Ürün, alan, altyapı ve uygulama kaygılarını birbirine bağlamak",
+        "point8": "Gereksiz operasyonel karmaşıklık eklemeden sistemleri iyileştirmek"
+      }
+    },
+    "freelance": {
+      "hero": {
+        "eyebrow": "Freelance · Yazılım Mimarisi & Ürün Mühendisliği",
+        "title": "Zor kısmı bana getirin.",
+        "subtitle": "Karmaşık yazılım sistemlerinin sahipliğini mimari, backend, frontend, altyapı, entegrasyonlar ve üretim operasyonları boyunca üstlenirim. En çok; teknik kararların hem anlık teslimi hem de uzun vadeli sistem evrimini desteklemesi gereken SaaS, IoT, BIM, gerçek zamanlı ve platform odaklı ürünlerde etkiliyim.",
+        "availability": "Seçili işlere açığım — tam zamanlı, sözleşmeli veya danışmanlık.",
+        "cta_primary": "Zorlu Bir Proje Konuşalım",
+        "cta_secondary": "Seçili Sistemleri Gör"
+      },
+      "capabilities_title": "Mühendislik Yetkinlikleri",
+      "capabilities_subtitle": "İzole teknolojiler değil, sistem sonuçları etrafında şekillenen yetkinlikler.",
+      "engagement": {
+        "title": "Birlikte Nasıl Çalışabiliriz",
+        "description": "En iyi; net mimari, güçlü teknik sahiplik ve ürün kararlarını uygulama gerçekliğiyle bağlama gerektiren ürünlerde çalışırım.",
+        "advisory_title": "Mimari & Danışmanlık",
+        "advisory_description": "Mimari incelemeler, sistem tasarımı, teknoloji ve geçiş stratejisi; teknik kararları üretim borcuna dönüşmeden önce risksizleştirmek.",
+        "build_title": "Kurulum & Teslim",
+        "build_description": "Platform ve servislerin uçtan uca teslimi—veri modellerinden ve backend sistemlerinden ürün arayüzlerine, entegrasyonlara ve üretim altyapısına.",
+        "platform_title": "Platform Temelleri",
+        "platform_description": "Yeniden kullanılabilir temeller: çok kiracılı SaaS, kimlik doğrulama ve yetkiler, sağlayıcıdan bağımsız faturalama ve zamanla biriken operasyonel araçlar.",
+        "cta": "Teknik Bir Görüşme Başlat"
       }
     }
   },
@@ -328,7 +444,8 @@
       "posts_by": "Yazar:",
       "load_more": "Daha fazla gönderi yükle",
       "no_more_posts": "Daha fazla gönderi bulunmuyor",
-      "read_more": "Devamını Oku"
+      "read_more": "Devamını Oku",
+      "project_posts": "{{projectTitle}} Gönderileri"
     },
     "post": {
       "by": "yazan",
@@ -946,7 +1063,12 @@
     },
     "selects": {
       "select_user": "Kullanıcı Seç",
-      "select_category": "Kategori Seç"
+      "select_category": "Kategori Seç",
+      "select_option": "Seç",
+      "select_post": "Gönderi Seç",
+      "select_project": "Proje Seç",
+      "select_role": "Rol Seç",
+      "select_status": "Durum Seç"
     },
     "appointments": {
       "all_statuses": "Tüm Durumlar",
@@ -1242,7 +1364,9 @@
       "visits": "{{count}} ziyaret",
       "appointments": "Randevular",
       "geo_stats": "Coğrafi İstatistikler",
-      "no_geo_data": "Mevcut coğrafi veri yok."
+      "no_geo_data": "Mevcut coğrafi veri yok.",
+      "no_projects": "Henüz proje yok.",
+      "recent_projects": "Son Projeler"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Düzenlemek için çift tıklayın",
@@ -1282,7 +1406,8 @@
       "item_users": "Kullanıcılar",
       "group_system": "Sistem",
       "item_settings": "Ayarlar",
-      "item_short_links": "Kısa Bağlantılar"
+      "item_short_links": "Kısa Bağlantılar",
+      "item_pages": "Sayfalar"
     },
     "notifications": {
       "all_caught_up": "Hepsi tamamlandı!",
@@ -1453,7 +1578,7 @@
     "site_footer": "Site altbilgisi",
     "social_media_links": "Sosyal medya bağlantıları",
     "x_profile": "X (eski adıyla Twitter) profili (yeni sekmede açılır)",
-    "tagline": "Full-stack geliştirici ve teknoloji blog yazarı. Web, mobil ve backend çözümler üretiyorum — öğrendiklerimi paylaşıyorum.",
+    "tagline": "SaaS, IoT, BIM ve gerçek zamanlı platformlar geliştiren yazılım mimarı ve ürün mühendisi.",
     "quick_links": "Hızlı Bağlantılar",
     "connect": "İletişim",
     "available_for_freelance": "Seçici fırsatlara açık — tam zamanlı, sözleşmeli veya danışmanlık.",

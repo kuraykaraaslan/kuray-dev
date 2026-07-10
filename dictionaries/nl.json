@@ -228,7 +228,10 @@
       "testimonials": {
         "description": "Ik heb met geweldige mensen en bedrijven gewerkt. Dit is wat ze over mij te zeggen hebben.",
         "title": "Wat Mensen Zeggen"
-      }
+      },
+      "cta_primary": "Verken geselecteerde systemen",
+      "cta_secondary": "Bespreek een complex project",
+      "eyebrow": "Software Architect · Product Engineer · Systeem Bouwer"
     },
     "toolbox": {
       "title": "Creativiteit heeft veel tools nodig",
@@ -248,7 +251,41 @@
         "domain_driven_design": "Domain-Driven Design"
       },
       "backend": "Backend",
-      "frontend": "Frontend"
+      "frontend": "Frontend",
+      "capabilities": {
+        "architecture": {
+          "description": "Ontwerpen van systeemgrenzen, serviceresponsibilities, domeinmodellen, permissiestructuren, multi-tenant fundamenten en langetermijnevolutie paden.",
+          "title": "Product- & Platformarchitectuur"
+        },
+        "backend": {
+          "description": "Bouwen van veilige, observeerbare en onderhoudbare diensten voor transactionele workflows, realtime communicatie, achtergrondverwerking, integraties en hoge datastromen.",
+          "title": "Backend & Gedistribueerde Systemen"
+        },
+        "bim": {
+          "description": "Vertalen van engineeringworkflows naar web-, automatiserings- en clouduitvoeringsmodellen terwijl domeincorrectheid en modelintegriteit behouden blijven.",
+          "title": "BIM & Engineering Software"
+        },
+        "infrastructure": {
+          "description": "Productieomgevingen creëren die inzetbaar, observeerbaar, veilig en begrijpelijk zijn voor de teams die verantwoordelijk zijn voor hun werking.",
+          "title": "Infrastructuur & Operaties"
+        },
+        "interfaces": {
+          "description": "Interfaces ontwerpen voor complexe operationele producten waar duidelijkheid, prestaties, permissies en datadichtheid belangrijker zijn dan decoratieve UI.",
+          "title": "Productinterfaces"
+        },
+        "iot": {
+          "description": "Apparaten, berichtenprotocollen, realtime dashboards, regelengines, telemetrie, configuratie en operationele workflows verbinden tot één samenhangend platform.",
+          "title": "IoT & Realtime Systemen"
+        },
+        "payments": {
+          "description": "Abonnementen, facturatie, pakketten, providerabstractie, annulering, rechten en factuurworkflows bouwen als kernproductinfrastructuur.",
+          "title": "Betalingen & Commerciële Systemen"
+        },
+        "security": {
+          "description": "Authenticatie, autorisatie, tenantisolatie, tokenlevenscycli, providerintegraties, auditmogelijkheden en veilige dienstgrenzen ontwerpen.",
+          "title": "Beveiliging & Identiteit"
+        }
+      }
     },
     "timeline": {
       "title": "Mijn Reis",
@@ -306,6 +343,49 @@
         "please_fill_in_all_fields": "Vul alstublieft alle velden in.",
         "loading": "Uw bericht wordt verzonden..."
       }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Voordat ik frameworks kies, definieer ik eigenaarschap, gegevensstroom, faalgrenzen en waar verandering het meest waarschijnlijk is.",
+          "title": "Begin met systeemgrenzen"
+        },
+        "complexity": {
+          "description": "Ik verspreid geen systemen, introduceer geen abstracties of voeg geen infrastructuur toe zonder een concreet product- of operationeel motief.",
+          "title": "Houd complexiteit intentioneel"
+        },
+        "explainable": {
+          "description": "Goede architectuur moet begrijpelijk zijn door zijn beperkingen, afwegingen en beoogde evolutie—niet alleen door complexiteit.",
+          "title": "Maak beslissingen verklaarbaar"
+        },
+        "foundations": {
+          "description": "Hergebruikbare orkestratie, gedeelde authenticatie, gemeenschappelijke datamodellen en consistente grenzen verlagen toekomstige leveringskosten.",
+          "title": "Bouw fundamenten die samengroeien"
+        },
+        "operation": {
+          "description": "Implementatie, observeerbaarheid, permissies, herstel en onderhoud maken deel uit van de architectuur—niet stappen die erna komen.",
+          "title": "Ontwerp voor operatie"
+        },
+        "providers": {
+          "description": "Betalings-, identiteits-, notificatie-, opslag- en infrastructuurproviders mogen het kernmodel van het product niet dicteren.",
+          "title": "Scheid domeinlogica van providers"
+        }
+      },
+      "title": "Hoe ik engineering benader"
+    },
+    "leadership": {
+      "description": "Mijn bijdrage is niet beperkt tot individuele implementatietaken. Ik help de richting van het systeem vorm te geven, technische ambiguïteit te verminderen, herbruikbare fundamenten te vestigen en complex werk gemakkelijker te maken voor de ingenieurs die na mij komen.",
+      "points": {
+        "point1": "Vertaalt vage productvereisten naar uitvoerbare technische grenzen",
+        "point2": "Definieert gedeelde architectuur en herbruikbare platformfundamenten",
+        "point3": "Identificeert migratiepaden die bestaande bedrijfswaarde behouden",
+        "point4": "Beoordeelt technisch risico voordat het productieproblemen worden",
+        "point5": "Begeleidt ingenieurs door implementatie en architectonisch redeneren",
+        "point6": "Creëert standaarden die herhaalde besluitvorming verminderen",
+        "point7": "Verbindt product-, domein-, infrastructuur- en implementatiekwesties",
+        "point8": "Verbeteren van systemen zonder onnodige operationele complexiteit toe te voegen"
+      },
+      "title": "Technisch Leiderschap"
     }
   },
   "frontend": {
@@ -323,7 +403,8 @@
       "scroll_left": "Scroll naar links",
       "scroll_right": "Scroll naar rechts",
       "smart_recommendations": "Aanbevolen voor jou",
-      "smart_recommendations_description": "Deze artikelen zijn geselecteerd door AI op basis van inhoudsanalyse."
+      "smart_recommendations_description": "Deze artikelen zijn geselecteerd door AI op basis van inhoudsanalyse.",
+      "project_posts": "{{projectTitle}} Berichten"
     },
     "post": {
       "by": "door",
@@ -850,7 +931,12 @@
     },
     "selects": {
       "select_user": "Gebruiker selecteren",
-      "select_category": "Categorie selecteren"
+      "select_category": "Categorie selecteren",
+      "select_option": "Selecteer",
+      "select_post": "Selecteer bericht",
+      "select_project": "Selecteer project",
+      "select_role": "Selecteer rol",
+      "select_status": "Selecteer status"
     },
     "appointments": {
       "all_statuses": "Alle statussen",
@@ -1146,7 +1232,9 @@
       "visits": "{{count}} bezoeken",
       "appointments": "Afspraken",
       "geo_stats": "Geografische Statistieken",
-      "no_geo_data": "Geen geografische gegevens beschikbaar."
+      "no_geo_data": "Geen geografische gegevens beschikbaar.",
+      "no_projects": "Nog geen projecten.",
+      "recent_projects": "Recente projecten"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Dubbelklik om te bewerken",
@@ -1186,7 +1274,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Pagina's"
     },
     "notifications": {
       "all_caught_up": "Alles bijgewerkt!",

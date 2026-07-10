@@ -228,7 +228,10 @@
       "testimonials": {
         "description": "Olen töötanud koos imeliste inimeste ja ettevõtetega. Siin on, mida nad minu kohta ütlevad.",
         "title": "Mida inimesed ütlevad"
-      }
+      },
+      "cta_primary": "Uuri valitud süsteeme",
+      "cta_secondary": "Aruta keerulist projekti",
+      "eyebrow": "Tarkvara arhitekt · Tooteinsener · Süsteemide looja"
     },
     "toolbox": {
       "title": "Loovus vajab palju tööriistu",
@@ -248,6 +251,40 @@
         "cloud_infrastructure": "Pilveteenuse infrastruktuur (AWS)",
         "event_driven_architecture": "Sündmusest juhitud arhitektuur",
         "domain_driven_design": "Domeenist juhitud kujundamine"
+      },
+      "capabilities": {
+        "architecture": {
+          "description": "Süsteemi piiride, teenuse vastutuste, domeenimudelite, õiguste struktuuride, mitme rentniku aluste ja pikaajaliste arenguteede kavandamine.",
+          "title": "Toote- ja platvormiarhitektuur"
+        },
+        "backend": {
+          "description": "Turvaliste, jälgitavate ja hooldatavate teenuste loomine tehingute töövoogude, reaalajas suhtluse, taustatöötluse, integratsioonide ja suure mahuga andmevoogude jaoks.",
+          "title": "Taustsüsteemid ja hajutatud süsteemid"
+        },
+        "bim": {
+          "description": "Inseneritöövoogude tõlkimine veebi-, automatiseerimis- ja pilve täitmise mudeliteks, säilitades samal ajal domeeni korrektsuse ja mudeli terviklikkuse.",
+          "title": "BIM ja inseneritarkvara"
+        },
+        "infrastructure": {
+          "description": "Tootmiskeskkondade loomine, mis on juurutatavad, jälgitavad, turvalised ja arusaadavad meeskondadele, kes vastutavad nende käitamise eest.",
+          "title": "Infrastruktuur ja operatsioonid"
+        },
+        "interfaces": {
+          "description": "Liideste kujundamine keerukatele operatiivsetele toodetele, kus selgus, jõudlus, õigused ja andmete tihedus on olulisemad kui dekoratiivne kasutajaliides.",
+          "title": "Tooteliidesed"
+        },
+        "iot": {
+          "description": "Seadmete, sõnumiprotokollide, reaalajas juhtpaneelide, reeglimootorite, telemeetria, konfiguratsiooni ja operatiivsete töövoogude ühendamine ühtseks platvormiks.",
+          "title": "IoT ja reaalajas süsteemid"
+        },
+        "payments": {
+          "description": "Tellimuste, arvelduste, pakettide, teenusepakkujate abstraktsioonide, tühistamiste, õiguste ja arvete töövoogude loomine kui toote põhitaristu.",
+          "title": "Maksed ja kommertssüsteemid"
+        },
+        "security": {
+          "description": "Autentimise, autoriseerimise, rentniku isoleerimise, tokenite elutsüklite, teenusepakkujate integreerimise, auditeeritavuse ja turvaliste teenusepiiride kujundamine.",
+          "title": "Turvalisus ja identiteet"
+        }
       }
     },
     "timeline": {
@@ -306,6 +343,49 @@
         "please_fill_in_all_fields": "Palun täida kõik väljad.",
         "loading": "Sõnumi saatmine..."
       }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Enne raamistikute valimist määratlen omandiõiguse, andmevoo, tõrkepiirid ja kohad, kus muutused on kõige tõenäolisemad.",
+          "title": "Alusta süsteemi piiridest"
+        },
+        "complexity": {
+          "description": "Ma ei jaga süsteeme, ei tutvusta abstraktsioone ega lisa infrastruktuuri ilma konkreetse toote või operatiivse põhjuseta.",
+          "title": "Hoia keerukus tahtlik"
+        },
+        "explainable": {
+          "description": "Hea arhitektuur peaks olema arusaadav oma piirangute, kompromisside ja kavandatud arengu kaudu – mitte ainult keerukuse kaudu.",
+          "title": "Tee otsused seletatavaks"
+        },
+        "foundations": {
+          "description": "Taaskasutatav orkestreerimine, jagatud autentimine, ühised andmemudelid ja järjepidevad piirid vähendavad tulevasi tarnekulusid.",
+          "title": "Loo alused, mis kasvavad"
+        },
+        "operation": {
+          "description": "Juhtimine, jälgitavus, õigused, taastamine ja hooldus on osa arhitektuurist – mitte sammud, mis tulevad pärast seda.",
+          "title": "Kavanda operatsioonide jaoks"
+        },
+        "providers": {
+          "description": "Makse-, identiteedi-, teavitamis-, salvestus- ja infrastruktuuriteenuse pakkujad ei tohiks määratleda toote põhituuma.",
+          "title": "Eralda domeeniloogika teenusepakkujatest"
+        }
+      },
+      "title": "Kuidas ma lähenen inseneeriale"
+    },
+    "leadership": {
+      "description": "Minu panus ei piirdu üksikute rakenduste ülesannetega. Aitan kujundada süsteemi suunda, vähendada tehnilist ebaselgust, luua taaskasutatavaid aluseid ja muuta keeruline töö lihtsamaks inseneridele, kes jätkavad pärast mind.",
+      "points": {
+        "point1": "Ebaselgete tootenõuete tõlkimine teostatavateks tehnilisteks piirideks",
+        "point2": "Jagatud arhitektuuri ja taaskasutatavate platvormialuste määratlemine",
+        "point3": "Rändeteede tuvastamine, mis säilitavad olemasoleva äriväärtuse",
+        "point4": "Tehnilise riski ülevaatamine enne, kui see muutub tootmisvõlaks",
+        "point5": "Inseneride juhendamine rakendamise ja arhitektuurilise põhjenduse kaudu",
+        "point6": "Standardite loomine, mis vähendavad korduvat otsustamist",
+        "point7": "Toote, domeeni, infrastruktuuri ja rakendamise murede ühendamine",
+        "point8": "Süsteemide täiustamine ilma tarbetu operatiivse keerukuse lisamiseta"
+      },
+      "title": "Tehniline juhtimine"
     }
   },
   "frontend": {
@@ -323,7 +403,8 @@
       "scroll_left": "Kerige vasakule",
       "scroll_right": "Kerige paremale",
       "smart_recommendations": "Soovitatav teile",
-      "smart_recommendations_description": "Need artiklid valis AI sisu sarnasuse analüüsi põhjal."
+      "smart_recommendations_description": "Need artiklid valis AI sisu sarnasuse analüüsi põhjal.",
+      "project_posts": "{{projectTitle}} postitused"
     },
     "post": {
       "by": "autor",
@@ -946,7 +1027,12 @@
     },
     "selects": {
       "select_user": "Vali kasutaja",
-      "select_category": "Vali kategooria"
+      "select_category": "Vali kategooria",
+      "select_option": "Vali",
+      "select_post": "Vali postitus",
+      "select_project": "Vali projekt",
+      "select_role": "Vali roll",
+      "select_status": "Vali staatus"
     },
     "appointments": {
       "all_statuses": "Kõik olekud",
@@ -1242,7 +1328,9 @@
       "visits": "{{count}} külastust",
       "appointments": "Kohtumised",
       "geo_stats": "Geograafilised statistika",
-      "no_geo_data": "Geograafilised andmed puuduvad."
+      "no_geo_data": "Geograafilised andmed puuduvad.",
+      "no_projects": "Projekte veel pole.",
+      "recent_projects": "Hiljutised projektid"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Topeltklõps redigeerimiseks",
@@ -1282,7 +1370,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Leheküljed"
     },
     "notifications": {
       "all_caught_up": "Kõik on korras!",

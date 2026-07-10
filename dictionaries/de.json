@@ -228,7 +228,10 @@
       "testimonials": {
         "description": "Ich habe mit einigen großartigen Menschen und Unternehmen zusammengearbeitet. Hier ist, was sie über mich zu sagen haben.",
         "title": "Was die Leute sagen"
-      }
+      },
+      "cta_primary": "Ausgewählte Systeme erkunden",
+      "cta_secondary": "Ein komplexes Projekt besprechen",
+      "eyebrow": "Softwarearchitekt · Produktingenieur · Systembauer"
     },
     "toolbox": {
       "title": "Kreativität braucht viele Werkzeuge",
@@ -248,7 +251,41 @@
         "domain_driven_design": "Domain-Driven Design"
       },
       "backend": "Backend",
-      "frontend": "Frontend"
+      "frontend": "Frontend",
+      "capabilities": {
+        "architecture": {
+          "description": "Systemgrenzen, Dienstverantwortlichkeiten, Domänenmodelle, Berechtigungsstrukturen, Multi-Tenant-Grundlagen und langfristige Entwicklungspfade entwerfen.",
+          "title": "Produkt- & Plattformarchitektur"
+        },
+        "backend": {
+          "description": "Sichere, beobachtbare und wartbare Dienste für transaktionale Workflows, Echtzeitkommunikation, Hintergrundverarbeitung, Integrationen und hochvolumige Datenflüsse erstellen.",
+          "title": "Backend- & Verteilte Systeme"
+        },
+        "bim": {
+          "description": "Ingenieur-Workflows in Web-, Automatisierungs- und Cloud-Ausführungsmodelle übersetzen, während die Domänenkorrektheit und Modellintegrität erhalten bleiben.",
+          "title": "BIM & Engineering Software"
+        },
+        "infrastructure": {
+          "description": "Erstellung von Produktionsumgebungen, die von den Teams, die für ihren Betrieb verantwortlich sind, bereitgestellt, beobachtet, gesichert und verstanden werden können.",
+          "title": "Infrastruktur & Betrieb"
+        },
+        "interfaces": {
+          "description": "Gestaltung von Schnittstellen für komplexe Betriebsprodukte, bei denen Klarheit, Leistung, Berechtigungen und Datendichte wichtiger sind als dekorative Benutzeroberflächen.",
+          "title": "Produkt-Schnittstellen"
+        },
+        "iot": {
+          "description": "Verbindung von Geräten, Nachrichtenprotokollen, Echtzeit-Dashboards, Regel-Engines, Telemetrie, Konfiguration und Betriebsabläufen zu einer kohärenten Plattform.",
+          "title": "IoT & Echtzeitsysteme"
+        },
+        "payments": {
+          "description": "Aufbau von Abonnement-, Abrechnungs-, Paket-, Anbieterabstraktions-, Kündigungs-, Berechtigungs- und Rechnungsabläufen als Kernproduktinfrastruktur.",
+          "title": "Zahlungs- & Handelssysteme"
+        },
+        "security": {
+          "description": "Gestaltung von Authentifizierung, Autorisierung, Mandantentrennung, Token-Lebenszyklen, Anbieterintegrationen, Prüfungsfähigkeit und sicheren Dienstgrenzen.",
+          "title": "Sicherheit & Identität"
+        }
+      }
     },
     "timeline": {
       "title": "Meine Reise",
@@ -306,6 +343,49 @@
         "please_fill_in_all_fields": "Bitte füllen Sie alle Felder aus.",
         "loading": "Nachricht wird gesendet..."
       }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Bevor ich Frameworks auswähle, definiere ich Zuständigkeiten, Datenfluss, Fehlergrenzen und wo Änderungen am wahrscheinlichsten auftreten.",
+          "title": "Beginne mit Systemgrenzen"
+        },
+        "complexity": {
+          "description": "Ich verteile keine Systeme, führe keine Abstraktionen ein oder füge keine Infrastruktur hinzu ohne einen konkreten Produkt- oder Betriebsgrund.",
+          "title": "Komplexität bewusst halten"
+        },
+        "explainable": {
+          "description": "Gute Architektur sollte durch ihre Einschränkungen, Kompromisse und beabsichtigte Entwicklung verständlich sein—nicht nur durch Komplexität.",
+          "title": "Entscheidungen erklärbar machen"
+        },
+        "foundations": {
+          "description": "Wiederverwendbare Orchestrierung, gemeinsame Authentifizierung, gemeinsame Datenmodelle und konsistente Grenzen reduzieren zukünftige Lieferkosten.",
+          "title": "Fundamente schaffen, die sich verstärken"
+        },
+        "operation": {
+          "description": "Bereitstellung, Beobachtbarkeit, Berechtigungen, Wiederherstellung und Wartung sind Teil der Architektur—nicht Schritte, die danach kommen.",
+          "title": "Für den Betrieb entwerfen"
+        },
+        "providers": {
+          "description": "Zahlungs-, Identitäts-, Benachrichtigungs-, Speicher- und Infrastruktur-Anbieter sollten nicht das Kernmodell des Produkts diktieren.",
+          "title": "Domänenlogik von Anbietern trennen"
+        }
+      },
+      "title": "Wie ich Ingenieurwesen angehe"
+    },
+    "leadership": {
+      "description": "Mein Beitrag beschränkt sich nicht auf einzelne Implementierungsaufgaben. Ich helfe, die Systemrichtung zu gestalten, technische Unklarheiten zu reduzieren, wiederverwendbare Grundlagen zu schaffen und komplexe Arbeiten für die Ingenieure, die nach mir kommen, zu erleichtern.",
+      "points": {
+        "point1": "Mehrdeutige Produktanforderungen in ausführbare technische Grenzen übersetzen",
+        "point2": "Gemeinsame Architektur und wiederverwendbare Plattformgrundlagen definieren",
+        "point3": "Migrationspfade identifizieren, die den bestehenden Geschäftswert erhalten",
+        "point4": "Technische Risiken überprüfen, bevor sie zu Produktionsschulden werden",
+        "point5": "Ingenieure durch Implementierung und architektonisches Denken begleiten",
+        "point6": "Standards schaffen, die wiederholte Entscheidungsfindung reduzieren",
+        "point7": "Produkt-, Domänen-, Infrastruktur- und Implementierungsaspekte verbinden",
+        "point8": "Systeme verbessern, ohne unnötige betriebliche Komplexität einzuführen"
+      },
+      "title": "Technische Führung"
     }
   },
   "shared": {
@@ -593,7 +673,12 @@
     },
     "selects": {
       "select_category": "Kategorie auswählen",
-      "select_user": "Benutzer auswählen"
+      "select_user": "Benutzer auswählen",
+      "select_option": "Auswählen",
+      "select_post": "Beitrag auswählen",
+      "select_project": "Projekt auswählen",
+      "select_role": "Rolle auswählen",
+      "select_status": "Status auswählen"
     },
     "slots": {
       "add": "Hinzufügen",
@@ -883,7 +968,9 @@
       "visits": "{{count}} Besuche",
       "appointments": "Termine",
       "geo_stats": "Geografische Statistiken",
-      "no_geo_data": "Keine geografischen Daten verfügbar."
+      "no_geo_data": "Keine geografischen Daten verfügbar.",
+      "no_projects": "Noch keine Projekte.",
+      "recent_projects": "Kürzliche Projekte"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Doppelklicken zum Bearbeiten",
@@ -923,7 +1010,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Seiten"
     },
     "notifications": {
       "all_caught_up": "Alles erledigt!",
@@ -1190,7 +1278,8 @@
       "scroll_left": "Nach links scrollen",
       "scroll_right": "Nach rechts scrollen",
       "smart_recommendations": "Empfohlen für Sie",
-      "smart_recommendations_description": "Diese Artikel wurden von KI basierend auf einer Inhaltsähnlichkeitsanalyse ausgewählt."
+      "smart_recommendations_description": "Diese Artikel wurden von KI basierend auf einer Inhaltsähnlichkeitsanalyse ausgewählt.",
+      "project_posts": "{{projectTitle}} Beiträge"
     },
     "knowledge_graph": {
       "title_2d": "2D-Wissensgraph",

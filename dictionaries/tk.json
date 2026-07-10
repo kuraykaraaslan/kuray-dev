@@ -160,7 +160,12 @@
     },
     "selects": {
       "select_category": "Kategoriýa Saýlaň",
-      "select_user": "Ulanyjy Saýlaň"
+      "select_user": "Ulanyjy Saýlaň",
+      "select_option": "Saýlaň",
+      "select_post": "Posty Saýlaň",
+      "select_project": "Taslamany Saýlaň",
+      "select_role": "Roly Saýlaň",
+      "select_status": "Statusy Saýlaň"
     },
     "slots": {
       "add": "Goşmak",
@@ -450,7 +455,9 @@
       "visits": "{{count}} gezek baryldy",
       "appointments": "Bellenen Wagtlar",
       "geo_stats": "Geografiki Statistikalar",
-      "no_geo_data": "Geografiki maglumat ýok."
+      "no_geo_data": "Geografiki maglumat ýok.",
+      "no_projects": "Heniz taslama ýok.",
+      "recent_projects": "Soňky Taslamalar"
     },
     "dynamic_comma_text": {
       "double_click_edit": "Üýtgetmek üçin iki gezek basyň",
@@ -490,7 +497,8 @@
       "item_users": "Users",
       "group_system": "System",
       "item_settings": "Settings",
-      "item_short_links": "Short Links"
+      "item_short_links": "Short Links",
+      "item_pages": "Sahypalar"
     },
     "notifications": {
       "all_caught_up": "Hemmesi ýerine ýetirildi!",
@@ -867,7 +875,8 @@
       "scroll_left": "Çepe süýşür",
       "scroll_right": "Saga süýşür",
       "smart_recommendations": "Siziň üçin maslahat berilýär",
-      "smart_recommendations_description": "Bu makalalar mazmun meňzeşligini seljermek esasynda AI tarapyndan saýlandy."
+      "smart_recommendations_description": "Bu makalalar mazmun meňzeşligini seljermek esasynda AI tarapyndan saýlandy.",
+      "project_posts": "{{projectTitle}} Postlar"
     },
     "knowledge_graph": {
       "title_2d": "2D Bilik Grafigi",
@@ -1034,7 +1043,10 @@
       "testimonials": {
         "description": "Men ajaýyp adamlar we kompaniýalar bilen işledim. Ine, olar men hakda näme diýýärler.",
         "title": "Adamlar Näme Diýýär"
-      }
+      },
+      "cta_primary": "Saýlanan Ulgamlary Iňňän",
+      "cta_secondary": "Çylşyrymly Taslama Hakynda Gepleşmek",
+      "eyebrow": "Programma Arhitektory · Önüm Inženeri · Ulgamlar Gurujy"
     },
     "projects": {
       "description": "Işleýän hünär portfellerim.",
@@ -1086,7 +1098,84 @@
         "sql_data_modeling": "SQL we Maglumat Modelirleme",
         "testing_cicd": "Synag we CI/CD"
       },
-      "title": "Döredijilik köp gural talap edýär"
+      "title": "Döredijilik köp gural talap edýär",
+      "capabilities": {
+        "architecture": {
+          "description": "Ulgam çäklerini, hyzmat jogapkärçiliklerini, domen modellerini, rugsat gurluşlaryny, köp kärendeli esaslary we uzak möhletleýin ösüş ýollaryny dizaýn etmek.",
+          "title": "Önüm we Platforma Arhitekturasy"
+        },
+        "backend": {
+          "description": "Amaly iş akymlary, hakyky wagt aragatnaşygy, fon işlenişi, integrasiýalar we ýokary göwrümli maglumat akymlary üçin ygtybarly, gözegçilik edilip bilinýän we tehniki hyzmat edilip bilinýän hyzmatlary gurmak.",
+          "title": "Arka Tarap we Paýlanan Ulgamlar"
+        },
+        "bim": {
+          "description": "Inžener iş akymlaryny web, awtomatizasiýa we bulut ýerine ýetiriliş modellerine terjime etmek bilen domen dogrulygyny we model bitewiligini saklamak.",
+          "title": "BIM & Inženerçilik Programmalary"
+        },
+        "infrastructure": {
+          "description": "Öndüriji gurşawlary döretmek, olary işe girizip bolýan, gözegçilik edip bolýan, ygtybarly we olary dolandyrmaga jogapkär toparlar tarapyndan düşnükli etmek.",
+          "title": "Infrastruktura & Operasiýalar"
+        },
+        "interfaces": {
+          "description": "Çylşyrymly operasion önümler üçin interfeýsleri dizaýn etmek, bu ýerde düşnüklilik, öndürijilik, rugsatlar we maglumat dykyzlygy bezegli UI-den has möhümdir.",
+          "title": "Önüm Interfeýsleri"
+        },
+        "iot": {
+          "description": "Enjamlary, habarlaşma protokollaryny, real wagtly paneli, düzgün hereketlendirijilerini, telemetriýany, konfigurasiýany we operasion iş akymlaryny bir bitewi platformada birleşdirmek.",
+          "title": "IoT & Real Wagtly Ulgamlar"
+        },
+        "payments": {
+          "description": "Abuna ýazylmak, hasaplaşyk, paket, üpjün ediji abstraksiýasy, ýatyrmak, ygtyýarlyk we faktura iş akymlaryny esasy önüm infrastrukturasyna gurmak.",
+          "title": "Tölegler & Täjirçilik Ulgamlary"
+        },
+        "security": {
+          "description": "Autentifikasiýa, ygtyýar beriş, kärendeçi izolýasiýasy, token ömri, üpjün ediji integrasiýalary, auditleme we ygtybarly hyzmat araçäklerini dizaýn etmek.",
+          "title": "Howpsuzlyk & Şahsyýet"
+        }
+      }
+    },
+    "approach": {
+      "principles": {
+        "boundaries": {
+          "description": "Çarçuwalary saýlamazdan ozal, eýeçiligi, maglumat akymyny, şowsuzlyk çäklerini we üýtgeşmeleriň iň ähtimal boljak ýerlerini kesgitleýärin.",
+          "title": "Ulgam çäklerinden başlaň"
+        },
+        "complexity": {
+          "description": "Men anyk önüm ýa-da iş sebäbi bolmasa, ulgamlary paýlamaýaryn, abstraksiýalary girizmeýärin ýa-da infrastruktura goşmaýaryn.",
+          "title": "Çylşyrymlylygy maksatly saklaň"
+        },
+        "explainable": {
+          "description": "Gowy arhitektura diňe çylşyrymlylyk bilen däl-de, çäklendirmeleri, söwda amallary we meýilleşdirilen ösüşi bilen düşnükli bolmaly.",
+          "title": "Kararlary düşündirip boljak ediň"
+        },
+        "foundations": {
+          "description": "Gaýtadan ulanylýan orkestrasiýa, umumy autentifikasiýa, umumy maglumat modelleri we yzygiderli çäkler geljekki eltip bermek çykdajylaryny azaldýar.",
+          "title": "Ösýän esaslary dörediň"
+        },
+        "operation": {
+          "description": "Ulgama girizmek, gözegçilik, rugsatlar, dikeltmek we tehniki hyzmat arhitekturaň bir bölegi bolup, ondan soňky ädimler däl.",
+          "title": "Işleýiş üçin dizaýn ediň"
+        },
+        "providers": {
+          "description": "Töleg, şahsyýet, habar beriş, saklama we infrastruktura üpjün edijileri önümiň esasy modelini kesgitlemeli däl.",
+          "title": "Domen logikasyny üpjün edijilerden aýyryň"
+        }
+      },
+      "title": "Inženerlige Nädip Çemeleşýärin"
+    },
+    "leadership": {
+      "description": "Goşandygym diňe bir şahsy ýerine ýetiriş wezipeleri bilen çäklenmeýär. Men ulgamyň ugruny kesgitlemäge, tehniki näbelliligi azaltmaga, gaýtadan ulanylýan esaslary döretmäge we mendan soň dowam edýän inženerler üçin çylşyrymly işleri ýeňilleşdirmäge kömek edýärin.",
+      "points": {
+        "point1": "Näbellilik bilen önüm talaplaryny ýerine ýetirip boljak tehniki çäkler bilen terjime etmek",
+        "point2": "Umumy arhitektura we gaýtadan ulanylýan platforma esaslaryny kesgitlemek",
+        "point3": "Bar bolan iş gymmatyny saklaýan migrasiýa ýollaryny kesgitlemek",
+        "point4": "Önümçilik bergisine öwrülmezden ozal tehniki töwekgelçiligi gözden geçirmek",
+        "point5": "Inženerlere ýerine ýetiriş we arhitektura pikirlenmesi boýunça maslahat bermek",
+        "point6": "Gaýtalanýan kararlary azaltmak üçin standartlar döretmek",
+        "point7": "Önüm, domen, infrastruktura we ýerine ýetiriliş meselelerini baglanyşdyrmak",
+        "point8": "Zerur bolmadyk iş çylşyrymlylygyny girizmezden ulgamlary gowulandyrmak"
+      },
+      "title": "Tehniki Liderlik"
     }
   },
   "settings": {

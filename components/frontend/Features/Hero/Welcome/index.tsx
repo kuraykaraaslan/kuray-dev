@@ -39,7 +39,8 @@ const Welcome = () => {
         <div className="hero-content">
           <div className="flex-1 max-w-2xl md:me-4">
             <h1 className="sr-only">
-              Kuray Karaaslan — Full-Stack Developer Building SaaS, IoT & BIM Platforms
+              Kuray Karaaslan — Software Architect &amp; Product Engineer building SaaS, IoT, BIM &amp;
+              real-time platforms
             </h1>
             <p className="hero-tagline font-bold relative overflow-hidden animate-shake text-fluid-hero h-32 md:h-16">
               <TypingEffect />
@@ -54,10 +55,15 @@ const Welcome = () => {
               />
             </p>
 
-            <Link href="#contact" className="btn btn-primary hidden lg:inline-flex">
-              <FontAwesomeIcon icon={faArrowRight} className="mt-1" style={{ width: '1rem' }} />
-              {t('pages.hero.contact_me')}
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link href="#portfolio" className="btn btn-primary hidden lg:inline-flex">
+                <FontAwesomeIcon icon={faArrowRight} className="mt-1" style={{ width: '1rem' }} />
+                {t('pages.hero.cta_primary')}
+              </Link>
+              <Link href="#contact" className="btn btn-outline hidden lg:inline-flex">
+                {t('pages.hero.cta_secondary')}
+              </Link>
+            </div>
 
             <Link
               href="https://drive.google.com/file/d/17Ya5AC2nvcvccN-bS2pFsKFIm5v8dcWN/view?usp=drive_link"
