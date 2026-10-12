@@ -10,6 +10,11 @@ import ContactMessages from '@/messages/ContactMessages'
 import { checkForSpam, verifyRecaptcha } from '@/helpers/SpamProtection'
 import { getClientIP } from '@/middlewares/rateLimit'
 import Logger from '@/libs/logger'
+import {
+  buildContactDiscordMessage,
+  isContactDiscordDetailsEnabled,
+  isContactSmsAutoReplyEnabled,
+} from '@/helpers/ContactFormNotificationHelper'
 
 export async function GET(request: NextRequest) {
   try {
@@ -86,6 +91,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: ContactMessages.TOO_MANY_REQUESTS }, { status: 429 })
   }
 
+  let contactId: string | undefined
+
   try {
     const data = {
       name: name,
@@ -94,7 +101,8 @@ export async function POST(request: NextRequest) {
       message: message,
     }
 
-    await ContactFormService.createContactForm(data)
+    const created = await ContactFormService.createContactForm(data)
+    contactId = created?.contactId
     InAppNotificationService.pushToAdmins({
       title: 'New Contact Message',
       message: `${name || email} sent you a message`,
@@ -117,22 +125,29 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const discordMessage = `A new message has been received from the contact form.\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`
+    // Personal data goes to Discord only when explicitly enabled (see ContactFormNotificationHelper)
+    const discordMessage = buildContactDiscordMessage(
+      { contactId, name, email, phone, message },
+      isContactDiscordDetailsEnabled()
+    )
     await DiscordService.sendWebhookMessage(discordMessage)
   } catch (error) {
     Logger.error('[ContactForm] Discord Error: ' + error)
   }
 
-  try {
-    const userSMSBody =
-      `Hi ${name},\n\n` +
-      `Thank you for reaching out to us. We have received your message and will get back to you shortly.\n\n` +
-      `Best regards,\n` +
-      `Kuray Karaaslan`
+  // Off by default: the number is unverified, so an open auto-reply lets anyone trigger paid SMS
+  if (isContactSmsAutoReplyEnabled()) {
+    try {
+      const userSMSBody =
+        `Hi ${name},\n\n` +
+        `Thank you for reaching out to us. We have received your message and will get back to you shortly.\n\n` +
+        `Best regards,\n` +
+        `Kuray Karaaslan`
 
-    await SMSService.sendShortMessage({ to: phone, body: userSMSBody })
-  } catch (error) {
-    Logger.error('[ContactForm] SMS Error: ' + error)
+      await SMSService.sendShortMessage({ to: phone, body: userSMSBody })
+    } catch (error) {
+      Logger.error('[ContactForm] SMS Error: ' + error)
+    }
   }
 
   return NextResponse.json({ message: ContactMessages.MESSAGE_SENT_SUCCESSFULLY })

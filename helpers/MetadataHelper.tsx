@@ -88,10 +88,14 @@ export default class MetadataHelper {
           name: 'Turkey',
         },
         knowsLanguage: ['en', 'tr'],
+        // Matches the education entry in the timeline data. TODO(founder): list a second
+        // institution only once completion of that programme is confirmed.
         alumniOf: {
           '@type': 'CollegeOrUniversity',
-          name: 'Istanbul University',
+          name: 'Dokuz Eylül University',
         },
+        // TODO(founder): worksFor, jobTitle and description await the headline and
+        // employment-status wording decision; left unchanged on purpose.
         worksFor: {
           '@type': 'Organization',
           name: 'Freelance',

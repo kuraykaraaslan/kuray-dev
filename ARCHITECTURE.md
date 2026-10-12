@@ -687,6 +687,16 @@ Referrer-Policy: strict-origin-when-cross-origin
 Content-Security-Policy: (configured per environment)
 ```
 
+### Contact form side effects and privacy flags
+
+All flags are off unless set to the literal string `true` (`helpers/ContactFormNotificationHelper.ts`).
+
+| Variable | Default | Effect when `true` |
+|----------|---------|--------------------|
+| `CONTACT_FORM_SMS_AUTOREPLY_ENABLED` | off | Sends an SMS auto-reply to the submitted (unverified) phone number |
+| `CONTACT_FORM_DISCORD_INCLUDE_DETAILS` | off | Discord webhook carries name, email, phone and message; otherwise only the record id |
+| `PRIVACY_NOTICE_DRAFT_ENABLED` | off | Serves the draft privacy notice at `/privacy-policy` (noindex); otherwise 404 |
+
 ---
 
 ## 15. Logging
