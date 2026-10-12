@@ -36,6 +36,10 @@ const nextConfig = {
   },
 
   experimental: {
+    // Next 16.4 type-checks builds with the `tsc` CLI by default, which also checks
+    // tests/**. Keep the Next.js checker (skips *.test.* and __mocks__) as on 16.1
+    // until the test-only type errors are fixed.
+    useTypeScriptCli: false,
     optimizePackageImports: [
       '@fortawesome/free-brands-svg-icons',
       '@fortawesome/free-solid-svg-icons',
@@ -137,9 +141,14 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
+      // Anyone can publish files on raw.githubusercontent.com, and commits pushed to a
+      // fork are reachable through the parent repo by SHA. Pin owner, repo and the
+      // `main` ref so the optimizer only fetches the project images we publish.
       {
         protocol: 'https',
-        hostname: 'raw.githubusercontent.com'
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/kuraykaraaslan/control-view-cube/main/static/**',
+        search: ''
       },
       {
         protocol: 'https',
