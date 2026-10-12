@@ -660,7 +660,7 @@
             "recaptcha": "Spam protection: Google reCAPTCHA on the contact form.",
             "analytics": "Analytics: Google Analytics (only with consent).",
             "geo": "IP-to-location lookup: MaxMind or ip-api.com, used to derive country and city.",
-            "storage": "File storage: Amazon Web Services S3 (EU region) for site media.",
+            "storage": "File storage: Amazon Web Services S3 for site media (TODO: confirm the bucket region before publishing; the code defaults AWS_REGION to us-east-1).",
             "notifications": "Internal notifications: a Discord webhook receives only a notice that a new message has arrived, with an internal reference number; it does not receive your name, contact details or message.",
             "sms": "SMS: the contact form does not send SMS messages. TODO: update this item if an SMS reply with explicit consent is introduced."
           }
