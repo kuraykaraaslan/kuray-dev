@@ -1,20 +1,19 @@
 import Logger from '@/libs/logger'
 
 /**
- * Minimal Odoo 19 client over the External JSON-2 API.
+ * Minimal Odoo client over the external JSON-RPC endpoint (`/jsonrpc`).
  *
- *   POST {ODOO_URL}/json/2/{model}/{method}
- *   Authorization: bearer {ODOO_API_KEY}
- *   X-Odoo-Database: {ODOO_DB}
- *
- * The body is a JSON object of the method's named arguments. The API key
- * belongs to a dedicated integration user, so it only has the access rights
- * that user has in Odoo.
+ * That endpoint exists on Odoo 18 (the production CRM) and still on 19, unlike
+ * the newer `/json/2/...` API which is Odoo 19 only. A call is
+ * `execute_kw(db, uid, api_key, model, method, args, kwargs)`; the uid comes
+ * from `common.authenticate(db, login, api_key)`. The API key belongs to a
+ * dedicated integration user, so it only has the rights that user has in Odoo.
  */
 
 type OdooConfig = {
   url: string
   db: string
+  login: string
   apiKey: string
   leadType: 'lead' | 'opportunity'
   teamId?: number
@@ -35,6 +34,8 @@ const REQUEST_TIMEOUT_MS = 10_000
 export default class OdooService {
   /** utm.source / utm.medium ids are stable, so they're looked up once per process. */
   private static utmCache = new Map<string, number | null>()
+  /** uid per `url|db|login`; an API key change needs a process restart anyway. */
+  private static uidCache = new Map<string, number>()
 
   static isEnabled(env: Record<string, string | undefined> = process.env): boolean {
     return (env.ODOO_SYNC_ENABLED ?? '').trim().toLowerCase() === 'true'
@@ -42,7 +43,7 @@ export default class OdooService {
 
   /** Returns the config, or throws a readable error naming the missing variables. */
   static getConfig(env: Record<string, string | undefined> = process.env): OdooConfig {
-    const missing = ['ODOO_URL', 'ODOO_DB', 'ODOO_API_KEY'].filter((key) => !env[key]?.trim())
+    const missing = ['ODOO_URL', 'ODOO_DB', 'ODOO_LOGIN', 'ODOO_API_KEY'].filter((key) => !env[key]?.trim())
     if (missing.length > 0) {
       throw new Error(`Odoo is not configured, missing: ${missing.join(', ')}`)
     }
@@ -55,6 +56,7 @@ export default class OdooService {
     return {
       url: env.ODOO_URL!.trim().replace(/\/+$/, ''),
       db: env.ODOO_DB!.trim(),
+      login: env.ODOO_LOGIN!.trim(),
       apiKey: env.ODOO_API_KEY!.trim(),
       leadType: env.ODOO_LEAD_TYPE?.trim() === 'opportunity' ? 'opportunity' : 'lead',
       teamId: toId(env.ODOO_LEAD_TEAM_ID),
@@ -64,16 +66,14 @@ export default class OdooService {
     }
   }
 
-  private static async call<T>(config: OdooConfig, model: string, method: string, args: Record<string, unknown>): Promise<T> {
-    const response = await fetch(`${config.url}/json/2/${model}/${method}`, {
+  private static async rpc<T>(config: OdooConfig, service: 'common' | 'object', method: string, args: unknown[]): Promise<T> {
+    const response = await fetch(`${config.url}/jsonrpc`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
-        Authorization: `bearer ${config.apiKey}`,
-        'X-Odoo-Database': config.db,
         'User-Agent': 'kuray-dev-site',
       },
-      body: JSON.stringify(args),
+      body: JSON.stringify({ jsonrpc: '2.0', method: 'call', params: { service, method, args }, id: Date.now() }),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     })
 
@@ -86,11 +86,36 @@ export default class OdooService {
     }
 
     if (!response.ok) {
-      const detail = payload?.message || payload?.name || text.slice(0, 200)
-      throw new Error(`Odoo ${model}.${method} failed (${response.status}): ${detail}`)
+      throw new Error(`Odoo ${service}.${method} failed (${response.status}): ${text.slice(0, 200)}`)
+    }
+    if (payload?.error) {
+      // Odoo reports application errors with HTTP 200 and an `error` object.
+      const detail = payload.error.data?.message || payload.error.message || 'unknown error'
+      throw new Error(`Odoo ${service}.${method} failed: ${detail}`)
+    }
+    if (!payload || !('result' in payload)) {
+      throw new Error(`Odoo ${service}.${method} returned an unexpected response`)
     }
 
-    return payload as T
+    return payload.result as T
+  }
+
+  private static async getUid(config: OdooConfig): Promise<number> {
+    const key = `${config.url}|${config.db}|${config.login}`
+    const cached = this.uidCache.get(key)
+    if (cached) return cached
+
+    const uid = await this.rpc<number | false>(config, 'common', 'authenticate', [config.db, config.login, config.apiKey, {}])
+    if (!uid) {
+      throw new Error('Odoo authentication failed: check ODOO_LOGIN and ODOO_API_KEY')
+    }
+    this.uidCache.set(key, uid)
+    return uid
+  }
+
+  private static async call<T>(config: OdooConfig, model: string, method: string, args: unknown[], kwargs: Record<string, unknown> = {}): Promise<T> {
+    const uid = await this.getUid(config)
+    return this.rpc<T>(config, 'object', 'execute_kw', [config.db, uid, config.apiKey, model, method, args, kwargs])
   }
 
   /** Finds a utm.source / utm.medium by name, creating it when missing. Never throws. */
@@ -100,12 +125,8 @@ export default class OdooService {
     if (cached !== undefined) return cached ?? undefined
 
     try {
-      const found = await this.call<number[]>(config, model, 'search', { domain: [['name', '=', name]], limit: 1 })
-      let id = found[0]
-      if (!id) {
-        const created = await this.call<number[]>(config, model, 'create', { vals_list: [{ name }] })
-        id = created[0]
-      }
+      const found = await this.call<number[]>(config, model, 'search', [[['name', '=', name]]], { limit: 1 })
+      const id = found[0] ?? (await this.call<number>(config, model, 'create', [{ name }]))
       this.utmCache.set(key, id ?? null)
       return id
     } catch (error) {
@@ -129,6 +150,9 @@ export default class OdooService {
   static async createLead(input: OdooLeadInput, env: Record<string, string | undefined> = process.env): Promise<number> {
     const config = this.getConfig(env)
 
+    // Authenticate first so a bad key fails once with a clear message instead of in every utm lookup.
+    await this.getUid(config)
+
     const [sourceId, mediumId] = await Promise.all([
       this.resolveUtm(config, 'utm.source', config.sourceName),
       this.resolveUtm(config, 'utm.medium', config.mediumName),
@@ -147,8 +171,7 @@ export default class OdooService {
     if (sourceId) vals.source_id = sourceId
     if (mediumId) vals.medium_id = mediumId
 
-    const ids = await this.call<number[]>(config, 'crm.lead', 'create', { vals_list: [vals] })
-    const id = ids?.[0]
+    const id = await this.call<number>(config, 'crm.lead', 'create', [vals])
     if (!Number.isInteger(id)) {
       throw new Error('Odoo crm.lead.create returned no id')
     }
