@@ -16538,8 +16538,20 @@ export namespace Prisma {
 
   export type AggregateContactForm = {
     _count: ContactFormCountAggregateOutputType | null
+    _avg: ContactFormAvgAggregateOutputType | null
+    _sum: ContactFormSumAggregateOutputType | null
     _min: ContactFormMinAggregateOutputType | null
     _max: ContactFormMaxAggregateOutputType | null
+  }
+
+  export type ContactFormAvgAggregateOutputType = {
+    odooLeadId: number | null
+    odooSyncAttempts: number | null
+  }
+
+  export type ContactFormSumAggregateOutputType = {
+    odooLeadId: number | null
+    odooSyncAttempts: number | null
   }
 
   export type ContactFormMinAggregateOutputType = {
@@ -16550,6 +16562,11 @@ export namespace Prisma {
     message: string | null
     createdAt: Date | null
     deletedAt: Date | null
+    odooSyncStatus: string | null
+    odooLeadId: number | null
+    odooSyncAttempts: number | null
+    odooSyncError: string | null
+    odooSyncedAt: Date | null
   }
 
   export type ContactFormMaxAggregateOutputType = {
@@ -16560,6 +16577,11 @@ export namespace Prisma {
     message: string | null
     createdAt: Date | null
     deletedAt: Date | null
+    odooSyncStatus: string | null
+    odooLeadId: number | null
+    odooSyncAttempts: number | null
+    odooSyncError: string | null
+    odooSyncedAt: Date | null
   }
 
   export type ContactFormCountAggregateOutputType = {
@@ -16570,9 +16592,24 @@ export namespace Prisma {
     message: number
     createdAt: number
     deletedAt: number
+    odooSyncStatus: number
+    odooLeadId: number
+    odooSyncAttempts: number
+    odooSyncError: number
+    odooSyncedAt: number
     _all: number
   }
 
+
+  export type ContactFormAvgAggregateInputType = {
+    odooLeadId?: true
+    odooSyncAttempts?: true
+  }
+
+  export type ContactFormSumAggregateInputType = {
+    odooLeadId?: true
+    odooSyncAttempts?: true
+  }
 
   export type ContactFormMinAggregateInputType = {
     contactId?: true
@@ -16582,6 +16619,11 @@ export namespace Prisma {
     message?: true
     createdAt?: true
     deletedAt?: true
+    odooSyncStatus?: true
+    odooLeadId?: true
+    odooSyncAttempts?: true
+    odooSyncError?: true
+    odooSyncedAt?: true
   }
 
   export type ContactFormMaxAggregateInputType = {
@@ -16592,6 +16634,11 @@ export namespace Prisma {
     message?: true
     createdAt?: true
     deletedAt?: true
+    odooSyncStatus?: true
+    odooLeadId?: true
+    odooSyncAttempts?: true
+    odooSyncError?: true
+    odooSyncedAt?: true
   }
 
   export type ContactFormCountAggregateInputType = {
@@ -16602,6 +16649,11 @@ export namespace Prisma {
     message?: true
     createdAt?: true
     deletedAt?: true
+    odooSyncStatus?: true
+    odooLeadId?: true
+    odooSyncAttempts?: true
+    odooSyncError?: true
+    odooSyncedAt?: true
     _all?: true
   }
 
@@ -16643,6 +16695,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ContactFormAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContactFormSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ContactFormMinAggregateInputType
@@ -16673,6 +16737,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ContactFormCountAggregateInputType | true
+    _avg?: ContactFormAvgAggregateInputType
+    _sum?: ContactFormSumAggregateInputType
     _min?: ContactFormMinAggregateInputType
     _max?: ContactFormMaxAggregateInputType
   }
@@ -16685,7 +16751,14 @@ export namespace Prisma {
     message: string
     createdAt: Date
     deletedAt: Date | null
+    odooSyncStatus: string
+    odooLeadId: number | null
+    odooSyncAttempts: number
+    odooSyncError: string | null
+    odooSyncedAt: Date | null
     _count: ContactFormCountAggregateOutputType | null
+    _avg: ContactFormAvgAggregateOutputType | null
+    _sum: ContactFormSumAggregateOutputType | null
     _min: ContactFormMinAggregateOutputType | null
     _max: ContactFormMaxAggregateOutputType | null
   }
@@ -16712,6 +16785,11 @@ export namespace Prisma {
     message?: boolean
     createdAt?: boolean
     deletedAt?: boolean
+    odooSyncStatus?: boolean
+    odooLeadId?: boolean
+    odooSyncAttempts?: boolean
+    odooSyncError?: boolean
+    odooSyncedAt?: boolean
   }, ExtArgs["result"]["contactForm"]>
 
   export type ContactFormSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -16722,6 +16800,11 @@ export namespace Prisma {
     message?: boolean
     createdAt?: boolean
     deletedAt?: boolean
+    odooSyncStatus?: boolean
+    odooLeadId?: boolean
+    odooSyncAttempts?: boolean
+    odooSyncError?: boolean
+    odooSyncedAt?: boolean
   }, ExtArgs["result"]["contactForm"]>
 
   export type ContactFormSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -16732,6 +16815,11 @@ export namespace Prisma {
     message?: boolean
     createdAt?: boolean
     deletedAt?: boolean
+    odooSyncStatus?: boolean
+    odooLeadId?: boolean
+    odooSyncAttempts?: boolean
+    odooSyncError?: boolean
+    odooSyncedAt?: boolean
   }, ExtArgs["result"]["contactForm"]>
 
   export type ContactFormSelectScalar = {
@@ -16742,9 +16830,14 @@ export namespace Prisma {
     message?: boolean
     createdAt?: boolean
     deletedAt?: boolean
+    odooSyncStatus?: boolean
+    odooLeadId?: boolean
+    odooSyncAttempts?: boolean
+    odooSyncError?: boolean
+    odooSyncedAt?: boolean
   }
 
-  export type ContactFormOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"contactId" | "name" | "email" | "phone" | "message" | "createdAt" | "deletedAt", ExtArgs["result"]["contactForm"]>
+  export type ContactFormOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"contactId" | "name" | "email" | "phone" | "message" | "createdAt" | "deletedAt" | "odooSyncStatus" | "odooLeadId" | "odooSyncAttempts" | "odooSyncError" | "odooSyncedAt", ExtArgs["result"]["contactForm"]>
 
   export type $ContactFormPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContactForm"
@@ -16757,6 +16850,11 @@ export namespace Prisma {
       message: string
       createdAt: Date
       deletedAt: Date | null
+      odooSyncStatus: string
+      odooLeadId: number | null
+      odooSyncAttempts: number
+      odooSyncError: string | null
+      odooSyncedAt: Date | null
     }, ExtArgs["result"]["contactForm"]>
     composites: {}
   }
@@ -17187,6 +17285,11 @@ export namespace Prisma {
     readonly message: FieldRef<"ContactForm", 'String'>
     readonly createdAt: FieldRef<"ContactForm", 'DateTime'>
     readonly deletedAt: FieldRef<"ContactForm", 'DateTime'>
+    readonly odooSyncStatus: FieldRef<"ContactForm", 'String'>
+    readonly odooLeadId: FieldRef<"ContactForm", 'Int'>
+    readonly odooSyncAttempts: FieldRef<"ContactForm", 'Int'>
+    readonly odooSyncError: FieldRef<"ContactForm", 'String'>
+    readonly odooSyncedAt: FieldRef<"ContactForm", 'DateTime'>
   }
     
 
@@ -36255,7 +36358,12 @@ export namespace Prisma {
     phone: 'phone',
     message: 'message',
     createdAt: 'createdAt',
-    deletedAt: 'deletedAt'
+    deletedAt: 'deletedAt',
+    odooSyncStatus: 'odooSyncStatus',
+    odooLeadId: 'odooLeadId',
+    odooSyncAttempts: 'odooSyncAttempts',
+    odooSyncError: 'odooSyncError',
+    odooSyncedAt: 'odooSyncedAt'
   };
 
   export type ContactFormScalarFieldEnum = (typeof ContactFormScalarFieldEnum)[keyof typeof ContactFormScalarFieldEnum]
@@ -37633,6 +37741,11 @@ export namespace Prisma {
     message?: StringFilter<"ContactForm"> | string
     createdAt?: DateTimeFilter<"ContactForm"> | Date | string
     deletedAt?: DateTimeNullableFilter<"ContactForm"> | Date | string | null
+    odooSyncStatus?: StringFilter<"ContactForm"> | string
+    odooLeadId?: IntNullableFilter<"ContactForm"> | number | null
+    odooSyncAttempts?: IntFilter<"ContactForm"> | number
+    odooSyncError?: StringNullableFilter<"ContactForm"> | string | null
+    odooSyncedAt?: DateTimeNullableFilter<"ContactForm"> | Date | string | null
   }
 
   export type ContactFormOrderByWithRelationInput = {
@@ -37643,6 +37756,11 @@ export namespace Prisma {
     message?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    odooSyncStatus?: SortOrder
+    odooLeadId?: SortOrderInput | SortOrder
+    odooSyncAttempts?: SortOrder
+    odooSyncError?: SortOrderInput | SortOrder
+    odooSyncedAt?: SortOrderInput | SortOrder
   }
 
   export type ContactFormWhereUniqueInput = Prisma.AtLeast<{
@@ -37656,6 +37774,11 @@ export namespace Prisma {
     message?: StringFilter<"ContactForm"> | string
     createdAt?: DateTimeFilter<"ContactForm"> | Date | string
     deletedAt?: DateTimeNullableFilter<"ContactForm"> | Date | string | null
+    odooSyncStatus?: StringFilter<"ContactForm"> | string
+    odooLeadId?: IntNullableFilter<"ContactForm"> | number | null
+    odooSyncAttempts?: IntFilter<"ContactForm"> | number
+    odooSyncError?: StringNullableFilter<"ContactForm"> | string | null
+    odooSyncedAt?: DateTimeNullableFilter<"ContactForm"> | Date | string | null
   }, "contactId">
 
   export type ContactFormOrderByWithAggregationInput = {
@@ -37666,9 +37789,16 @@ export namespace Prisma {
     message?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    odooSyncStatus?: SortOrder
+    odooLeadId?: SortOrderInput | SortOrder
+    odooSyncAttempts?: SortOrder
+    odooSyncError?: SortOrderInput | SortOrder
+    odooSyncedAt?: SortOrderInput | SortOrder
     _count?: ContactFormCountOrderByAggregateInput
+    _avg?: ContactFormAvgOrderByAggregateInput
     _max?: ContactFormMaxOrderByAggregateInput
     _min?: ContactFormMinOrderByAggregateInput
+    _sum?: ContactFormSumOrderByAggregateInput
   }
 
   export type ContactFormScalarWhereWithAggregatesInput = {
@@ -37682,6 +37812,11 @@ export namespace Prisma {
     message?: StringWithAggregatesFilter<"ContactForm"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ContactForm"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"ContactForm"> | Date | string | null
+    odooSyncStatus?: StringWithAggregatesFilter<"ContactForm"> | string
+    odooLeadId?: IntNullableWithAggregatesFilter<"ContactForm"> | number | null
+    odooSyncAttempts?: IntWithAggregatesFilter<"ContactForm"> | number
+    odooSyncError?: StringNullableWithAggregatesFilter<"ContactForm"> | string | null
+    odooSyncedAt?: DateTimeNullableWithAggregatesFilter<"ContactForm"> | Date | string | null
   }
 
   export type SubscriptionWhereInput = {
@@ -39899,6 +40034,11 @@ export namespace Prisma {
     message: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    odooSyncStatus?: string
+    odooLeadId?: number | null
+    odooSyncAttempts?: number
+    odooSyncError?: string | null
+    odooSyncedAt?: Date | string | null
   }
 
   export type ContactFormUncheckedCreateInput = {
@@ -39909,6 +40049,11 @@ export namespace Prisma {
     message: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    odooSyncStatus?: string
+    odooLeadId?: number | null
+    odooSyncAttempts?: number
+    odooSyncError?: string | null
+    odooSyncedAt?: Date | string | null
   }
 
   export type ContactFormUpdateInput = {
@@ -39919,6 +40064,11 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    odooSyncStatus?: StringFieldUpdateOperationsInput | string
+    odooLeadId?: NullableIntFieldUpdateOperationsInput | number | null
+    odooSyncAttempts?: IntFieldUpdateOperationsInput | number
+    odooSyncError?: NullableStringFieldUpdateOperationsInput | string | null
+    odooSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContactFormUncheckedUpdateInput = {
@@ -39929,6 +40079,11 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    odooSyncStatus?: StringFieldUpdateOperationsInput | string
+    odooLeadId?: NullableIntFieldUpdateOperationsInput | number | null
+    odooSyncAttempts?: IntFieldUpdateOperationsInput | number
+    odooSyncError?: NullableStringFieldUpdateOperationsInput | string | null
+    odooSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContactFormCreateManyInput = {
@@ -39939,6 +40094,11 @@ export namespace Prisma {
     message: string
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    odooSyncStatus?: string
+    odooLeadId?: number | null
+    odooSyncAttempts?: number
+    odooSyncError?: string | null
+    odooSyncedAt?: Date | string | null
   }
 
   export type ContactFormUpdateManyMutationInput = {
@@ -39949,6 +40109,11 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    odooSyncStatus?: StringFieldUpdateOperationsInput | string
+    odooLeadId?: NullableIntFieldUpdateOperationsInput | number | null
+    odooSyncAttempts?: IntFieldUpdateOperationsInput | number
+    odooSyncError?: NullableStringFieldUpdateOperationsInput | string | null
+    odooSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ContactFormUncheckedUpdateManyInput = {
@@ -39959,6 +40124,11 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    odooSyncStatus?: StringFieldUpdateOperationsInput | string
+    odooLeadId?: NullableIntFieldUpdateOperationsInput | number | null
+    odooSyncAttempts?: IntFieldUpdateOperationsInput | number
+    odooSyncError?: NullableStringFieldUpdateOperationsInput | string | null
+    odooSyncedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SubscriptionCreateInput = {
@@ -42155,6 +42325,17 @@ export namespace Prisma {
     _max?: NestedEnumCommentStatusFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ContactFormCountOrderByAggregateInput = {
     contactId?: SortOrder
     name?: SortOrder
@@ -42163,6 +42344,16 @@ export namespace Prisma {
     message?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
+    odooSyncStatus?: SortOrder
+    odooLeadId?: SortOrder
+    odooSyncAttempts?: SortOrder
+    odooSyncError?: SortOrder
+    odooSyncedAt?: SortOrder
+  }
+
+  export type ContactFormAvgOrderByAggregateInput = {
+    odooLeadId?: SortOrder
+    odooSyncAttempts?: SortOrder
   }
 
   export type ContactFormMaxOrderByAggregateInput = {
@@ -42173,6 +42364,11 @@ export namespace Prisma {
     message?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
+    odooSyncStatus?: SortOrder
+    odooLeadId?: SortOrder
+    odooSyncAttempts?: SortOrder
+    odooSyncError?: SortOrder
+    odooSyncedAt?: SortOrder
   }
 
   export type ContactFormMinOrderByAggregateInput = {
@@ -42183,6 +42379,32 @@ export namespace Prisma {
     message?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
+    odooSyncStatus?: SortOrder
+    odooLeadId?: SortOrder
+    odooSyncAttempts?: SortOrder
+    odooSyncError?: SortOrder
+    odooSyncedAt?: SortOrder
+  }
+
+  export type ContactFormSumOrderByAggregateInput = {
+    odooLeadId?: SortOrder
+    odooSyncAttempts?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type SubscriptionCountOrderByAggregateInput = {
@@ -42793,17 +43015,6 @@ export namespace Prisma {
     size?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type ApiKeyCountOrderByAggregateInput = {
     apiKeyId?: SortOrder
     userId?: SortOrder
@@ -42854,22 +43065,6 @@ export namespace Prisma {
   export type ApiKeySumOrderByAggregateInput = {
     dailyLimit?: SortOrder
     monthlyLimit?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ActivityPubFollowerCountOrderByAggregateInput = {
@@ -43750,6 +43945,14 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NullableEnumSubscriptionTopicFieldUpdateOperationsInput = {
     set?: $Enums.SubscriptionTopic | null
   }
@@ -43994,14 +44197,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutApiKeysInput, UserUncheckedCreateWithoutApiKeysInput>
     connectOrCreate?: UserCreateOrConnectWithoutApiKeysInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserUpdateOneRequiredWithoutApiKeysNestedInput = {
@@ -44320,6 +44515,33 @@ export namespace Prisma {
     _max?: NestedEnumCommentStatusFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumSubscriptionTopicNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.SubscriptionTopic | EnumSubscriptionTopicFieldRefInput<$PrismaModel> | null
     in?: $Enums.SubscriptionTopic[] | ListEnumSubscriptionTopicFieldRefInput<$PrismaModel> | null
@@ -44385,33 +44607,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumChatSessionStatusFilter<$PrismaModel = never> = {

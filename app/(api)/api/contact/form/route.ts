@@ -41,7 +41,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json()
+  let body: unknown
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ message: 'Invalid request body' }, { status: 400 })
+  }
 
   const parsedData = ContactFormRequestSchema.safeParse(body)
 
@@ -92,6 +97,7 @@ export async function POST(request: NextRequest) {
   }
 
   let contactId: string | undefined
+  let saved = false
 
   try {
     const data = {
@@ -103,6 +109,7 @@ export async function POST(request: NextRequest) {
 
     const created = await ContactFormService.createContactForm(data)
     contactId = created?.contactId
+    saved = true
     InAppNotificationService.pushToAdmins({
       title: 'New Contact Message',
       message: `${name || email} sent you a message`,
@@ -112,10 +119,24 @@ export async function POST(request: NextRequest) {
     Logger.error('[ContactForm] DB Error: ' + error)
   }
 
+  if (saved && contactId) {
+    // Fire-and-forget: the visitor must not wait on Odoo. If this attempt fails the row stays
+    // PENDING/FAILED and the 5-minute cron job (syncContactFormsToOdoo) retries it.
+    ContactFormService.syncToOdoo(contactId).catch((error) =>
+      Logger.error('[ContactForm] Odoo sync error: ' + error)
+    )
+  }
+
   try {
     await MailService.sendContactFormAdminEmail({ name, email, phone, message })
   } catch (error) {
     Logger.error('[ContactForm] Admin Email Error: ' + error)
+  }
+
+  if (!saved) {
+    // Never report success for a message that was not stored. The admin email above is the
+    // fallback record; the visitor is told to retry.
+    return NextResponse.json({ message: ContactMessages.MESSAGE_SAVE_FAILED }, { status: 500 })
   }
 
   try {

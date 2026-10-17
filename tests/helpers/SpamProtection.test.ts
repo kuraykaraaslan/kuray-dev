@@ -74,6 +74,22 @@ describe('SpamProtection', () => {
       expect(hasSpamPatterns('aaaaaaaaaaaaa')).toBe(true)
     })
 
+    it.each([
+      'I need an SEO service for my new online shop, what do you offer?',
+      'We are building a trading platform and want to make the dashboard faster.',
+      'Our fund wants to invest in a customer portal, can you make a quote?',
+    ])('does not flag a genuine enquiry: %s', (message) => {
+      expect(hasSpamPatterns(message)).toBe(false)
+    })
+
+    it.each([
+      'Cheap SEO packages for your website!',
+      'We offer cheap backlinks and guest posts to rank you on the first page of Google',
+      'Bitcoin trading, guaranteed profit every day',
+    ])('still flags cold-pitch spam: %s', (message) => {
+      expect(hasSpamPatterns(message)).toBe(true)
+    })
+
     it('returns false for a single URL', () => {
       expect(hasSpamPatterns('Check my portfolio at https://kuray.dev')).toBe(false)
     })

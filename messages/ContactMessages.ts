@@ -17,6 +17,7 @@ export enum ContactMessages {
   NOT_SUBSCRIBED = 'NOT_SUBSCRIBED',
   INVALID_EMAIL_ADDRESS = 'INVALID_EMAIL_ADDRESS',
   MESSAGE_SENT_SUCCESSFULLY = 'Your message has been sent successfully.',
+  MESSAGE_SAVE_FAILED = 'Your message could not be saved. Please try again in a few minutes.',
   TOO_MANY_REQUESTS = 'You have already submitted a message recently. Please wait before sending another message.',
   CONTACT_NOT_FOUND = 'Contact form not found.',
   CONTACT_DELETED_SUCCESSFULLY = 'Contact form deleted successfully.',

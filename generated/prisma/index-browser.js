@@ -263,7 +263,12 @@ exports.Prisma.ContactFormScalarFieldEnum = {
   phone: 'phone',
   message: 'message',
   createdAt: 'createdAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  odooSyncStatus: 'odooSyncStatus',
+  odooLeadId: 'odooLeadId',
+  odooSyncAttempts: 'odooSyncAttempts',
+  odooSyncError: 'odooSyncError',
+  odooSyncedAt: 'odooSyncedAt'
 };
 
 exports.Prisma.SubscriptionScalarFieldEnum = {

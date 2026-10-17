@@ -263,7 +263,7 @@ const Contact = (props: ContactProps) => {
               </div>
               <div className="flex flex-col py-6 space-y-6 md:py-0 md:px-6">
                 <h2 className="text-fluid-section font-bold">{t('pages.contact.send_a_message')}</h2>
-                <Form token={token} />
+                <Form token={token} onSubmitted={() => setToken(captchaEnabled ? '' : 'disabled')} />
               </div>
             </div>
           </div>

@@ -33,7 +33,13 @@ export const DallEResponseSchema = z.object({
 export const ContactFormRequestSchema = z.object({
   name: z.string().trim().min(1, ContactMessages.NAME_REQUIRED).max(200, ContactMessages.NAME_REQUIRED),
   email: z.string().trim().toLowerCase().email(ContactMessages.INVALID_EMAIL).max(254, ContactMessages.INVALID_EMAIL),
-  phone: z.string().trim().min(1, ContactMessages.PHONE_REQUIRED).max(30, ContactMessages.INVALID_PHONE),
+  // The form submits E.164 (react-phone-number-input), e.g. +905551234567
+  phone: z
+    .string()
+    .trim()
+    .min(1, ContactMessages.PHONE_REQUIRED)
+    .max(30, ContactMessages.INVALID_PHONE)
+    .regex(/^\+[1-9]\d{6,14}$/, ContactMessages.INVALID_PHONE),
   message: z
     .string()
     .trim()

@@ -268,6 +268,16 @@ model ContactForm {
   message   String
   createdAt DateTime  @default(now())
   deletedAt DateTime?
+
+  // Odoo CRM sync (outbox): PENDING -> SYNCED, or FAILED after an error (retried by cron).
+  // SKIPPED marks rows that existed before the integration; they are never pushed.
+  odooSyncStatus   String    @default("PENDING")
+  odooLeadId       Int?
+  odooSyncAttempts Int       @default(0)
+  odooSyncError    String?
+  odooSyncedAt     DateTime?
+
+  @@index([odooSyncStatus, createdAt])
 }
 
 model Subscription {

@@ -19,6 +19,7 @@ jest.mock('@/services/ContactFormService', () => ({
     isRateLimited: jest.fn().mockResolvedValue(false),
     isIPRateLimited: jest.fn().mockResolvedValue(false),
     createContactForm: jest.fn().mockResolvedValue({ contactId: 'c-42' }),
+    syncToOdoo: jest.fn().mockResolvedValue(true),
   },
 }))
 
@@ -56,10 +57,15 @@ jest.mock('@/libs/logger', () => ({
 
 import DiscordService from '@/services/SocialMediaService/DiscordService'
 import SMSService from '@/services/NotificationService/SMSService'
+import ContactFormService from '@/services/ContactFormService'
+import MailService from '@/services/NotificationService/MailService'
 import { POST } from '@/app/(api)/api/contact/form/route'
 
 const discordMock = DiscordService.sendWebhookMessage as jest.Mock
 const smsMock = SMSService.sendShortMessage as jest.Mock
+const createMock = ContactFormService.createContactForm as jest.Mock
+const syncMock = ContactFormService.syncToOdoo as jest.Mock
+const adminMailMock = MailService.sendContactFormAdminEmail as jest.Mock
 
 const BODY = {
   name: 'Test Person',
@@ -116,5 +122,60 @@ describe('POST /api/contact/form', () => {
     await POST(buildRequest(BODY))
 
     expect(discordMock.mock.calls[0][0]).toContain(BODY.email)
+  })
+  describe('storing and the Odoo hand-off', () => {
+    it('triggers the Odoo sync for the stored submission', async () => {
+      await POST(buildRequest(BODY))
+
+      expect(syncMock).toHaveBeenCalledWith('c-42')
+    })
+
+    it('still answers 200 when the Odoo sync rejects', async () => {
+      syncMock.mockRejectedValueOnce(new Error('Odoo down'))
+
+      const response = await POST(buildRequest(BODY))
+
+      expect(response.status).toBe(200)
+    })
+
+    it('does not report success when the message could not be stored', async () => {
+      createMock.mockRejectedValueOnce(new Error('db down'))
+
+      const response = await POST(buildRequest(BODY))
+
+      expect(response.status).toBe(500)
+      expect(syncMock).not.toHaveBeenCalled()
+      // the admin email is the fallback record of the submission
+      expect(adminMailMock).toHaveBeenCalledTimes(1)
+      expect(discordMock).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('request validation', () => {
+    it('answers 400 for a body that is not JSON', async () => {
+      const request = {
+        json: jest.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
+        headers: { get: jest.fn().mockReturnValue(null) },
+      } as unknown as NextRequest
+
+      const response = await POST(request)
+
+      expect(response.status).toBe(400)
+      expect(createMock).not.toHaveBeenCalled()
+    })
+
+    it.each(['05551234567', '+0123456789', '+12', 'call me'])('rejects the non-E.164 phone %p', async (phone) => {
+      const response = await POST(buildRequest({ ...BODY, phone }))
+
+      expect(response.status).toBe(400)
+      expect(createMock).not.toHaveBeenCalled()
+    })
+
+    it('accepts international names such as José O\'Brien-Müller', async () => {
+      const response = await POST(buildRequest({ ...BODY, name: "José O'Brien-Müller" }))
+
+      expect(response.status).toBe(200)
+      expect(createMock).toHaveBeenCalledWith(expect.objectContaining({ name: "José O'Brien-Müller" }))
+    })
   })
 })

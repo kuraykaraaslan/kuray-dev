@@ -1,6 +1,9 @@
 import { ContactForm } from '@/types/features/ContactTypes'
 import { prisma } from '@/libs/prisma'
 import redisInstance from '@/libs/redis'
+import Logger from '@/libs/logger'
+import OdooService from '@/services/OdooService'
+import DiscordService from '@/services/SocialMediaService/DiscordService'
 
 export default class ContactFormService {
   private static sqlInjectionRegex =
@@ -53,6 +56,106 @@ export default class ContactFormService {
     })
 
     return contactForm
+  }
+
+  /** ~5 hours of retries at the 5-minute cron before a submission is parked as FAILED for manual action. */
+  static readonly ODOO_MAX_ATTEMPTS = 60
+
+  /**
+   * Pushes one stored submission to Odoo as a crm.lead.
+   * Safe to call repeatedly and concurrently: a short Redis lock prevents the
+   * request-time attempt and the cron retry from creating the same lead twice,
+   * and only PENDING/FAILED rows below the attempt cap are processed.
+   * Never throws; returns true when the lead exists in Odoo afterwards.
+   */
+  static async syncToOdoo(contactId: string): Promise<boolean> {
+    if (!OdooService.isEnabled()) return false
+
+    const lockKey = `contact_form_odoo_sync:${contactId}`
+    const locked = await redisInstance.set(lockKey, '1', 'EX', 60, 'NX')
+    if (locked !== 'OK') return false
+
+    try {
+      const row = await prisma.contactForm.findFirst({
+        where: {
+          contactId,
+          deletedAt: null,
+          odooSyncStatus: { in: ['PENDING', 'FAILED'] },
+          odooSyncAttempts: { lt: this.ODOO_MAX_ATTEMPTS },
+        },
+      })
+      if (!row) return false
+
+      try {
+        const leadId = await OdooService.createLead({
+          name: row.name,
+          email: row.email,
+          phone: row.phone,
+          message: row.message,
+        })
+        await prisma.contactForm.update({
+          where: { contactId },
+          data: {
+            odooSyncStatus: 'SYNCED',
+            odooLeadId: leadId,
+            odooSyncError: null,
+            odooSyncedAt: new Date(),
+            odooSyncAttempts: { increment: 1 },
+          },
+        })
+        return true
+      } catch (error: any) {
+        const attempts = row.odooSyncAttempts + 1
+        Logger.error(`[ContactForm] Odoo sync failed for ${contactId} (attempt ${attempts}): ${error?.message ?? error}`)
+        await prisma.contactForm.update({
+          where: { contactId },
+          data: {
+            odooSyncStatus: 'FAILED',
+            odooSyncAttempts: attempts,
+            odooSyncError: String(error?.message ?? error).slice(0, 500),
+          },
+        })
+        if (attempts === this.ODOO_MAX_ATTEMPTS) {
+          await DiscordService.sendWebhookMessage(
+            `Odoo sync gave up after ${attempts} attempts for contact form ${contactId}. Create the lead manually from /admin/contacts.`
+          ).catch(() => {})
+        }
+        return false
+      }
+    } finally {
+      try {
+        await redisInstance.del(lockKey)
+      } catch {
+        // The lock expires on its own after 60s
+      }
+    }
+  }
+
+  /**
+   * Retries submissions that have not reached Odoo yet (oldest first).
+   * Called by the 5-minute cron job.
+   */
+  static async syncPendingToOdoo(limit = 20): Promise<{ synced: number; failed: number }> {
+    if (!OdooService.isEnabled()) return { synced: 0, failed: 0 }
+
+    const rows = await prisma.contactForm.findMany({
+      where: {
+        deletedAt: null,
+        odooSyncStatus: { in: ['PENDING', 'FAILED'] },
+        odooSyncAttempts: { lt: this.ODOO_MAX_ATTEMPTS },
+      },
+      orderBy: { createdAt: 'asc' },
+      take: limit,
+      select: { contactId: true },
+    })
+
+    let synced = 0
+    let failed = 0
+    for (const { contactId } of rows) {
+      if (await this.syncToOdoo(contactId)) synced++
+      else failed++
+    }
+    return { synced, failed }
   }
 
   /**

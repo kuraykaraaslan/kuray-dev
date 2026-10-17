@@ -66,9 +66,13 @@ export function hasSpamPatterns(message: string): boolean {
   // Common spam patterns
   const spamPatterns = [
     // Cryptocurrency/financial spam
-    /\b(crypto|bitcoin|btc|ethereum|forex|trading|invest|profit)\b.*\b(earn|make|money|usd|\$)\b/i,
+    // (needs a get-rich phrase, so a client asking for a trading dashboard is not flagged)
+    /\b(crypto|bitcoin|btc|ethereum|forex)\b.*\b(earn|profit|passive income|guaranteed|double your)\b/i,
     // SEO spam
-    /\b(seo|backlink|rank|google|traffic)\b.*\b(service|offer|cheap|best)\b/i,
+    // (cold-pitch phrasing only; "I need an SEO service" or "do you offer link building?" are real enquiries)
+    /\b(backlinks?|guest posts?|link building|first page of google|rank (you|your site|#1))\b[\s\S]*\b(cheap|we offer|guarantee[ds]?|affordable)\b/i,
+    /\b(cheap|we offer|guarantee[ds]?|affordable)\b[\s\S]*\b(backlinks?|guest posts?|link building|first page of google|rank (you|your site|#1))\b/i,
+    /\bcheap seo\b/i,
     // Adult content
     /\b(viagra|cialis|pharmacy|pills|medication)\b/i,
     // Too many URLs

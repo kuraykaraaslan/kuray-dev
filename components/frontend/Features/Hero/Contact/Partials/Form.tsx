@@ -9,7 +9,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHourglass, faMessage } from '@fortawesome/free-solid-svg-icons'
 import i18n from '@/libs/localize/localize'
 
-const ContactForm = (props: { className?: string; token: string }) => {
+// Any Unicode letter (José, Müller, Çelik, 李), plus spaces, apostrophes, dots and hyphens
+const NAME_REGEX = /^[\p{L}\p{M}\s'’.-]{2,80}$/u
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+const MESSAGE_MIN = 10
+const MESSAGE_MAX = 2000
+const isMessageLengthOk = (value: string) => value.trim().length >= MESSAGE_MIN && value.length <= MESSAGE_MAX
+
+const ContactForm = (props: { className?: string; token: string; onSubmitted?: () => void }) => {
   const { t } = i18n
   //React states
   const token = props.token
@@ -21,7 +28,7 @@ const ContactForm = (props: { className?: string; token: string }) => {
   // Honeypot field - bots will fill this, humans won't see it
   const [honeypot, setHoneypot] = useState<string>('')
   // Form load time for timing-based spam detection
-  const [formLoadTime] = useState<number>(Date.now())
+  const [formLoadTime] = useState<number>(() => Date.now())
 
   //Validation states
 
@@ -54,8 +61,7 @@ const ContactForm = (props: { className?: string; token: string }) => {
 
   const onEmailChange = (e: any) => {
     setEmail(e.target.value)
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    setIsEmailValid(regex.test(e.target.value))
+    setIsEmailValid(EMAIL_REGEX.test(e.target.value))
   }
 
   const onPhoneChange = (value: any) => {
@@ -65,26 +71,23 @@ const ContactForm = (props: { className?: string; token: string }) => {
 
   const onNameChange = (e: any) => {
     setName(e.target.value)
-    const regex = /^[a-zA-Z\sçÇğĞıİöÖşŞüÜ]{3,50}$/ // Modify the regex pattern to include Turkish characters
-    setIsNameValid(regex.test(e.target.value))
+    setIsNameValid(NAME_REGEX.test(e.target.value.trim()))
   }
 
   const onMessageChange = (e: any) => {
     setMessage(e.target.value)
-    // minimum 10 characters , maximum 500 characters, no sql injection
-    const regex = /^[a-zA-Z0-9\s\WçÇğĞıİöÖşŞüÜ]{10,500}$/ // Modify the regex pattern to include Turkish characters
-
-    setIsMessageValid(regex.test(e.target.value))
+    setIsMessageValid(isMessageLengthOk(e.target.value))
   }
 
   async function formSubmit() {
+    if (isSending) return
     const date = new Date()
 
     // Validation checks
-    const isNameOk = /^[a-zA-Z\sçÇğĞıİöÖşŞüÜ]{3,50}$/.test(name)
-    const isEmailOk = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    const isNameOk = NAME_REGEX.test(name.trim())
+    const isEmailOk = EMAIL_REGEX.test(email)
     const isPhoneOk = isValidPhoneNumber(phone || '')
-    const isMessageOk = /^[a-zA-Z0-9\s\WçÇğĞıİöÖşŞüÜ]{10,500}$/.test(message)
+    const isMessageOk = isMessageLengthOk(message)
 
     setIsNameValid(isNameOk)
     setIsEmailValid(isEmailOk)
@@ -125,6 +128,14 @@ const ContactForm = (props: { className?: string; token: string }) => {
       setIsSending(false)
       alert(t('pages.contact.form.success'))
 
+      // Clear the form so the same message can't be re-sent by accident, and let the page
+      // discard the single-use reCAPTCHA token.
+      setName('')
+      setEmail('')
+      setPhone('')
+      setMessage('')
+      props.onSubmitted?.()
+
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'generate_lead')
       }
@@ -163,6 +174,8 @@ const ContactForm = (props: { className?: string; token: string }) => {
           }
           placeholder={t('pages.contact.form.enter_your_name')}
           required
+          value={name}
+          maxLength={80}
           onChange={onNameChange}
         />
       </div>
@@ -179,6 +192,8 @@ const ContactForm = (props: { className?: string; token: string }) => {
           }
           placeholder={t('pages.contact.form.enter_your_email')}
           required
+          value={email}
+          maxLength={254}
           onChange={onEmailChange}
         />
       </div>
@@ -195,6 +210,7 @@ const ContactForm = (props: { className?: string; token: string }) => {
           }
           placeholder={t('pages.contact.form.enter_your_phone')}
           required
+          value={phone || undefined}
           // @ts-ignore
           defaultCountry={defaultCountry ? (defaultCountry as string) : 'TR'}
           onChange={onPhoneChange}
@@ -212,6 +228,8 @@ const ContactForm = (props: { className?: string; token: string }) => {
           }
           placeholder={t('pages.contact.form.enter_your_message')}
           required
+          value={message}
+          maxLength={MESSAGE_MAX}
           onChange={onMessageChange}
         ></textarea>
       </div>
