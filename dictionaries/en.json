@@ -620,6 +620,68 @@
         "platform_description": "Reusable foundations: multi-tenant SaaS, authentication and permissions, provider-independent billing, and operational tooling that compounds over time.",
         "cta": "Start a Technical Conversation"
       }
+    },
+    "privacy_notice": {
+      "draft_banner": "DRAFT: needs legal review. This notice has not been reviewed by a lawyer and is not yet in force. Items marked TODO must be completed before publication.",
+      "title": "Privacy and Personal Data Information Notice",
+      "subtitle": "How kuray.dev processes personal data submitted through the contact form, the newsletter and site analytics. This notice is intended to meet the information duty under Turkish Personal Data Protection Law No. 6698 (KVKK), Article 10, and the EU General Data Protection Regulation (GDPR), Articles 13 and 14.",
+      "last_updated": "Draft version, TODO: date of approval",
+      "sections": {
+        "controller": {
+          "title": "1. Data controller",
+          "body": "The data controller for kuray.dev is Kuray Karaaslan, the operator of this website. TODO (legal review): confirm whether the controller is the individual or the operator's company, and add the full legal name, registered address and a contact address for data protection requests. TODO: state whether a VERBIS registration or an EU representative under GDPR Article 27 is required."
+        },
+        "data": {
+          "title": "2. Personal data we process",
+          "body": "We process only the data you give us or that your browser sends when you visit the site:",
+          "items": {
+            "contact": "Contact form: your name, email address, phone number and message, plus the time of submission.",
+            "newsletter": "Newsletter: your email address, the topics you select and a token that lets you unsubscribe.",
+            "technical": "Technical and security data: IP address, browser and device information, and spam-protection signals (reCAPTCHA, rate limits).",
+            "analytics": "Analytics: page views and performance measurements; Google Analytics runs only after you accept analytics cookies in the cookie banner. A coarse location (country and city) is derived from the IP address and stored only as aggregate counts."
+          }
+        },
+        "purposes": {
+          "title": "3. Purposes and legal bases",
+          "body": "We use personal data for the following purposes. TODO (legal review): confirm each legal basis.",
+          "items": {
+            "reply": "Answering your message and taking steps you request before a possible contract: KVKK Art. 5(2)(c) and (f); GDPR Art. 6(1)(b) and (f).",
+            "newsletter": "Sending the newsletter you subscribed to: your consent, which you can withdraw at any time through the unsubscribe link (KVKK Art. 5(1); GDPR Art. 6(1)(a)).",
+            "security": "Protecting the site against spam and abuse and keeping it running: legitimate interest (KVKK Art. 5(2)(f); GDPR Art. 6(1)(f)).",
+            "analytics": "Measuring and improving the site with analytics cookies: your consent given in the cookie banner (GDPR Art. 6(1)(a); KVKK Art. 5(1))."
+          }
+        },
+        "recipients": {
+          "title": "4. Service providers and transfers abroad",
+          "body": "We use the following service providers to run the site. Some of them process data outside Turkey and outside the EU. TODO (legal review): confirm the transfer mechanism for each provider under KVKK Art. 9 (as amended by Law No. 7499) and GDPR Chapter V, and complete the list.",
+          "items": {
+            "hosting": "Hosting and database: a cloud server provider. TODO: name the provider and the server location.",
+            "mail": "Email delivery: our email provider sends the replies to your message and the newsletter. TODO: name the provider.",
+            "recaptcha": "Spam protection: Google reCAPTCHA on the contact form.",
+            "analytics": "Analytics: Google Analytics (only with consent).",
+            "geo": "IP-to-location lookup: MaxMind or ip-api.com, used to derive country and city.",
+            "storage": "File storage: Amazon Web Services S3 for site media (TODO: confirm the bucket region before publishing; the code defaults AWS_REGION to us-east-1).",
+            "notifications": "Internal notifications: a Discord webhook receives only a notice that a new message has arrived, with an internal reference number; it does not receive your name, contact details or message.",
+            "sms": "SMS: the contact form does not send SMS messages. TODO: update this item if an SMS reply with explicit consent is introduced."
+          }
+        },
+        "retention": {
+          "title": "5. How long we keep data",
+          "body": "TODO (legal review): set retention periods. Proposed draft: contact messages for 24 months after the last exchange unless a contract follows; newsletter data until you unsubscribe; aggregate analytics without a time limit because they do not identify you; server security logs for a short, defined period."
+        },
+        "rights": {
+          "title": "6. Your rights",
+          "body": "Under KVKK Article 11 and GDPR Articles 15 to 22 you can ask whether we process your data, get a copy, have it corrected or deleted, restrict or object to processing, receive your data in a portable format (GDPR), withdraw consent at any time without affecting earlier processing, and object to an outcome that results solely from automated analysis (KVKK). You can also complain to the Turkish Personal Data Protection Authority (KVKK) or to the data protection authority in your EU country of residence. TODO: add how to submit a request (address and method) and the response time."
+        },
+        "cookies": {
+          "title": "7. Cookies",
+          "body": "Strictly necessary cookies keep the site working and remember your cookie choice. Analytics cookies are set only after you accept them in the cookie banner, and you can change your choice by clearing the site's cookies. TODO (legal review): list each cookie with its purpose and lifetime."
+        },
+        "changes": {
+          "title": "8. Changes to this notice",
+          "body": "We will update this notice when the way we process personal data changes, and show the date of the latest version at the top of the page."
+        }
+      }
     }
   },
   "frontend": {
